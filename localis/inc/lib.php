@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.30 2003/02/04 06:48:08 mose Exp $
+<?  /* $Id: lib.php,v 1.31 2003/02/04 19:04:34 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -150,6 +150,29 @@ function additem($nom,$email,$desc,$statut,$e,$n) {
 	global $conf,$conn;
 	$query = "insert into points (nom,email,description,statut,date,E,N) values ('$nom','$email','$desc','$statut',now(),$e,$n);";
 	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die($query."<br>".mysql_error());
+}
+
+function addobj($add) {
+	global $conf,$conn;
+	$query = "insert into metadata (title,content,status,date,signature) values ('";
+	$query.= addslashes($add[nom])."','";
+	$query.= addslashes($add[content])."','";
+	$query.= addslashes($add[status])."',now(),";
+	$query.= addslashes($add[signature])."')";
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
+	echo "$query<hr>";
+	$metaid = mysql_insert_id($conn);
+	$query = "insert into object (name,meta) value ('".addslashes($add[nom])."',$metaid)";
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
+	echo "$query<hr>";
+	$objid = mysql_insert_id($conn);
+	$query = "insert into dots (E,N) values ($add[x],$add[y])";
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
+	echo "$query<hr>";
+	$dotid = mysql_insert_id($conn);
+	$query = "insert into objdots (dotid,objectid) values ($dotid,$objid)";
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
+	echo "$query<hr>";
 }
 
 function inc($template) {

@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.50 2003/02/04 08:09:03 mose Exp $
+<? /* $Id: localis.php,v 1.51 2003/02/04 19:04:34 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -25,22 +25,24 @@ include "inc/parseconf.php";
 include "inc/lib.php";
 $glob['version'] = current(file('VERSION'));
 
-$click_x = $HTTP_GET_VARS['x'];
-$click_y = $HTTP_GET_VARS['y'];
-$refx    = ($HTTP_GET_VARS['ref_x']) ? $HTTP_GET_VARS['ref_x'] : $HTTP_GET_VARS['ref.x'];
-$refy    = ($HTTP_GET_VARS['ref_y']) ? $HTTP_GET_VARS['ref_y'] : $HTTP_GET_VARS['ref.y'];
-$scl     = ($HTTP_GET_VARS['forcescale']) ? $HTTP_GET_VARS['forcescale'] : $HTTP_GET_VARS['scale'];
-$lay     = ($HTTP_GET_VARS['layers']) ? $HTTP_GET_VARS['layers'] : array("fond");
-$act     = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
-$city    = $HTTP_GET_VARS['v'];
-$view    = $HTTP_GET_VARS['tpl'];
-$add     = $HTTP_GET_VARS['add'];
-$fzoom   = $HTTP_GET_VARS['fzoom'];
-$fzoomout   = $HTTP_GET_VARS['fzoomout'];
-$fsens   = $HTTP_GET_VARS['fsens'];
-$drawlayer    = $HTTP_GET_VARS['drawlayer'];
-$mode = ereg("MSIE",getenv("HTTP_USER_AGENT")) ? "ie" : "";
-$interface  = ($HTTP_GET_VARS['interface']) ? $HTTP_GET_VARS['interface'] : 'mapImg';
+$click_x   =  $HTTP_GET_VARS['x'];
+$click_y   =  $HTTP_GET_VARS['y'];
+$refx      = ($HTTP_GET_VARS['ref_x']) ? $HTTP_GET_VARS['ref_x'] : $HTTP_GET_VARS['ref.x'];
+$refy      = ($HTTP_GET_VARS['ref_y']) ? $HTTP_GET_VARS['ref_y'] : $HTTP_GET_VARS['ref.y'];
+$scl       = ($HTTP_GET_VARS['forcescale']) ? $HTTP_GET_VARS['forcescale'] : $HTTP_GET_VARS['scale'];
+$lay       = ($HTTP_GET_VARS['layers']) ? $HTTP_GET_VARS['layers'] : array("fond");
+$act       = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
+$city      =  $HTTP_GET_VARS['v'];
+$view      =  $HTTP_GET_VARS['tpl'];
+$add       =  $HTTP_GET_VARS['add'];
+// for pda template
+$fzoom     =  $HTTP_GET_VARS['fzoom'];
+$fzoomout  =  $HTTP_GET_VARS['fzoomout'];
+
+$fsens     =  $HTTP_GET_VARS['fsens'];
+$drawlayer =  $HTTP_GET_VARS['drawlayer'];
+$mode      = ereg("MSIE",getenv("HTTP_USER_AGENT")) ? "ie" : "";
+$interface = ($HTTP_GET_VARS['interface']) ? $HTTP_GET_VARS['interface'] : 'mapImg';
 
 if (strstr($HTTP_GET_VARS['size'],'x')) {
 	list($sizex,$sizey) = split('x',$HTTP_GET_VARS['size']);
@@ -72,6 +74,7 @@ include"$tpl_path/globals.php";
 
 if ($HTTP_GET_VARS['forceextent']) {
 	$ext = split(' ',$conf[map][defext]);
+	if ($act == 'edition') $act = 'travel';
 } elseif ($HTTP_GET_VARS['extent']) {
 	$ext = split(' ',trim($HTTP_GET_VARS['extent']));
 } else {
@@ -85,11 +88,10 @@ $conn = sig_connect();
 
 checkfontlist($conf["map"]['path']);
 
-/*
-if ($addit and ($addtype != 'all')) {
-	additem($add[nom],$add[sign],$add[desc],$add[statut],$add[lat],$add[long]);
+if ($addit and (is_array($add)) {
+	#additem($add[nom],$add[sign],$add[desc],$add[statut],$add[lat],$add[long]);
+	addobj($add);
 }
-*/
 
 $userlayers = layerslist();
 
@@ -155,21 +157,14 @@ if ($act and ($refx and $refy) and (sizeof($ext) > 3)) {
 		$extmap = $zExtent;
 		$clicked = FALSE;
 	}
-	if (!empty($fzoom)) {
+	if ($clicked and (($act == "zoomin") or (!empty($fzoom)))) {
 		$zMap->zoompoint(2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
-	}
-	if (!empty($fzoomout)) {
-		$zMap->zoompoint(-2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
-	}
-	if ($clicked and ($act == "zoomin")) {
-		$zMap->zoompoint(2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
-	} elseif ($clicked and ($act == "zoomout")) {
+	} elseif ($clicked and (($act == "zoomout") or (!empty($fzoomout)))) {
 		$zMap->zoompoint(-2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);		
 	} elseif ($act == "edition") {
 		$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);		
 		$coordx = pix2geo($click_x,$ext[0],$ext[2],$sizex) + $ext[0];
 		$coordy = $ext[3] - pix2geo($click_y,$ext[1],$ext[3],$sizey);
-		#$flagid = dbf_flag($click_x, $click_y, $coordx, $coordy);
 		#$addville = domenu(surrounding($coordx,$coordy,10000),'');
 	} elseif ($clicked and ($act == "travel")) {
 		$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
