@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.59 2003/03/26 22:27:26 mose Exp $
+<? /* $Id: localis.php,v 1.60 2003/03/27 17:16:44 mastre Exp $
 Copyright (C) 2003, Makina Source, http://makina-source.org
 This file is a component of Localis - http://localis.org
 Created by mose <mose@makina-source.org> and mastre <mastre@localis.org>
@@ -302,5 +302,5 @@ echo inc("map");
 echo inc("foot");
 mysql_close($conn);
 
-if (1 or $conf[gui][debug]) { echo "<pre style=font-size:80%;color:#990000>";print_r(get_defined_vars());echo "</pre>"; }
+if (0 or $conf[gui][debug]) { echo "<pre style=font-size:80%;color:#990000>";print_r(get_defined_vars());echo "</pre>"; }
 ?>
