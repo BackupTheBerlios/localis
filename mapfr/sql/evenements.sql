@@ -1,14 +1,4 @@
-# phpMyAdmin MySQL-Dump
-# version 2.3.2
-# http://www.phpmyadmin.net/ (download page)
-#
-# Serveur: localhost
-# Généré le : Mardi 15 Octobre 2002 à 16:24
-# Version du serveur: 3.23.52
-# Version de PHP: 4.2.3
-# Base de données: `evenements`
-# --------------------------------------------------------
-
+# $Id: evenements.sql,v 1.2 2002/10/16 20:39:59 mose Exp $
 #
 # Structure de la table `firstjeudi`
 #
@@ -41,4 +31,15 @@ INSERT INTO firstjeudi VALUES (11, 'Montpellier', 'Les rencontres de Montpellier
 INSERT INTO firstjeudi VALUES (12, 'Paris', 'Les rencontres de Paris ont lieu tous les premiers jeudi de chaque mois à la Taverne des Halles. Chaque mois nous nous retrouvons à une centaine pour discuter de logiciel libre et déguster des préparations houbloniques dans la détente et la bonne humeur.', '2002-10-14 13:42:48');
 INSERT INTO firstjeudi VALUES (13, 'Veynes', 'Les rencontres de Veynes se déroulent tous les quatrièmes mercredi de chaque mois. Elles sont organisées par l\'association Linux Alpes.', '2002-10-14 13:43:29');
 INSERT INTO firstjeudi VALUES (14, 'Veynes', ' Tous les deuxièmes mercredi du mois, venez-donc boire un verre avec les membres de Gulliver ainsi que les autres amateurs de libre de Rennes !', '2002-10-14 13:44:01');
+
+DROP TABLE IF EXISTS lug;
+CREATE TABLE lug (
+  id int(11) NOT NULL auto_increment,
+  ville varchar(255) NOT NULL default '',
+  description varchar(255) NOT NULL default '',
+  date datetime NOT NULL default '0000-00-00 00:00:00',
+  KEY id (id),
+  KEY ville (ville)
+) TYPE=MyISAM;
+
 
