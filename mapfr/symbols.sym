@@ -1,4 +1,10 @@
 SYMBOL
+NAME "tux"
+TYPE pixmap
+IMAGE "images/tux.png"
+END
+
+SYMBOL
 NAME "flagblue"
 TYPE pixmap
 IMAGE "images/flag_blue.png"

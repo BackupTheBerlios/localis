@@ -148,24 +148,52 @@ LAYER
 END
 
 LAYER
+  NAME "communes6"
+  TYPE point 
+  DATA "communes"
+  STATUS off
+	CLASSITEM 'nom'
+	GROUP "fond"
+	LABELITEM 'NOM'
+  CLASS
+		NAME "Communes"
+		SYMBOL ordi
+		LABEL
+			POSITION lc 
+			COLOR 0 60 120
+			FONT arial_bold
+			TYPE truetype
+			MINSIZE 2
+			MAXSIZE 8
+			ANTIALIAS true
+		END
+		OUTLINECOLOR 128 128 128
+		COLOR 255 0 0
+  END
+  TOLERANCE 1
+END
+
+
+LAYER
   NAME "communes3"
   TYPE point 
   DATA "communes"
   STATUS off
 	CLASSITEM 'nom'
 	GROUP "fond"
-	LABELITEM nom
+	LABELITEM 'NOM'
   CLASS
+		NAME "Trolls"
+		SYMBOL troll
 		LABEL
-			POSITION auto 
+			POSITION lc 
 			COLOR 0 60 120
 			FONT arial_bold
 			TYPE truetype
-			SIZE 8
+			MINSIZE 2
+			MAXSIZE 8
 			ANTIALIAS true
 		END
-		NAME "Trolls"
-		SYMBOL troll
 		OUTLINECOLOR 128 128 128
 		COLOR 255 0 0
   END
@@ -218,7 +246,7 @@ LAYER
 			ANTIALIAS true
 		END
 		NAME "First jeudi"
-		SYMBOL ordi 
+		SYMBOL ordi2
 		OUTLINECOLOR 128 128 128
 		COLOR 255 0 0
   END
@@ -243,7 +271,7 @@ LAYER
 			ANTIALIAS true
 		END
 		NAME "LUG"
-		SYMBOL ordi2
+		SYMBOL tux
 		OUTLINECOLOR 128 128 128
 		COLOR 255 0 0
   END
