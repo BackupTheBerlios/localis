@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.7 2002/10/17 02:42:10 mastre Exp $
+<?  /* $Id: lib.php,v 1.8 2002/10/17 14:30:16 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -132,10 +132,10 @@ function build_list($found,$qu,$eff) {
 			$list.= "&v=".urlencode($vres)."&size=400x400&".$layer_query."forcescale=188&$args ";
 			$list.= "class=base>$vres</a></div>";
       foreach ($found[$vres] as $kk) {
-				$list.= "<div class=list><a href=http://#/fiche.asp?id=".$kk['description']." target=_new>";
+				$list.= "<div class=list><a href=http://#?id=".$kk['description']." target=_new>";
         $list.= "<img src=images/mapzoom.png width=8 height=8 hspace=2 vspace=0 border=0 alt='look' align=baseline>&nbsp;";
 				$list.= "$kk[name]</a></div>\n";
-				$maplist[$vres].= "<div class=list>- ".$kk[shortdesc]."<a href=#/fiche.asp?id=".$kk['cid']." target=_new>$kk[name]</a></div>"; 
+				$maplist[$vres].= "<div class=list>- ".$kk[shortdesc]."<a href=#/?id=".$kk['cid']." target=_new>$kk[name]</a></div>"; 
       }
     }
   }
@@ -149,7 +149,7 @@ function geo2pix($x,$minx,$maxx,$size) {
 	return floor($size * ($x - $minx) / ($maxx - $minx));
 }
 
-function dbf_gen($base,$jbase,$vres,$cond,$conn,$pref='') {
+function dbf_gen($base,$jbase,$vres,$cond,$conn,$owh='',$pref='') {
   global $conf, $qinfo, $x, $y, $nature, $ext, $sizex, $sizey;
 	$path = $conf[general][tmp_path];
   $UNIQUE_ID = $pref.uniqid('');
@@ -182,8 +182,6 @@ function dbf_gen($base,$jbase,$vres,$cond,$conn,$pref='') {
 				$tmp = array(trim($v),$qx,$qy);
 				$GLOBALS['coords']["$v"] = array('x'=>$qx, 'y'=>$qy);
 				dbase_add_record($did,$tmp);
-      } else {
-				// echo "$query <br>\n";
 			}
     }
   }

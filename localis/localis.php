@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.10 2002/10/17 02:42:10 mastre Exp $
+<? /* $Id: localis.php,v 1.11 2002/10/17 14:30:16 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -50,8 +50,8 @@ foreach ($conf[form] as $field=>$f) {
 	# If search string, build 'where' clause.
 	if (!empty(${"$field"}) and ereg("^text://.*$",$conf[form][$field])) {
 		$myv = str_replace('/','',strrchr($conf[form][$field],'/'));
-		$mm = explode(',',$myv);
-		foreach($mm as $mmv) {
+			$mm = explode(',',$myv);
+			foreach($mm as $mmv) {
 			$owh[] = "$mmv like '%".${"$field"}."%'";
 			$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($field));
 		}
@@ -178,8 +178,11 @@ if ($view != $conf[gui][list_button]) {
 			$mylayer = str_replace('/','',strrchr($conf[infos][$myc],'/'));
 			$zResult = $zMap->getLayerByName($mylayer);
 			$zResult->set('status',MS_ON);
-			$zResult->set('data',"../../tmp/$id");
+			$zResult->set('data',$conf[general][tmp_path]."/$id");
 			$zResult->draw($zImage);
+			if (!is_file($conf[general][tmp_path]."/$id.shp")) echo "$id.shp not found<br>";
+			if (!is_file($conf[general][tmp_path]."/$id.shx")) echo "$id.shx not found<br>";
+			if (!is_file($conf[general][tmp_path]."/$id.dbf")) echo "$id.dbf not found<br>";
 		}
 	}
 	# Create image, reference map & legend
