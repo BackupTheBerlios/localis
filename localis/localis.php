@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.26 2002/10/24 22:06:04 mose Exp $
+<? /* $Id: localis.php,v 1.27 2002/10/25 08:24:41 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -29,11 +29,6 @@ $act     = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
 $size    = ($HTTP_GET_VARS['size']) ? $HTTP_GET_VARS['size'] : "400x400";
 $type    = ($HTTP_GET_VARS['type']) ? $HTTP_GET_VARS['type'] : "";
 $city    = $HTTP_GET_VARS['v'];
-if ($HTTP_GET_VARS['forceextent.x'] or $HTTP_GET_VARS['forceextent_x']) {
-	$ext     = split(' ',trim($HTTP_GET_VARS['forceextent']));
-} else {
-	$ext     = split(' ',trim($HTTP_GET_VARS['extent']));
-}
 $view    = $HTTP_GET_VARS['tpl'];
 $addcity = $HTTP_GET_VARS['add_city'];
 $addtype = $HTTP_GET_VARS['add_type'];
@@ -57,6 +52,11 @@ $version = current(file('VERSION'));
 # Read configuration file and set array like $conf[section][item]
 if (!is_file('etc/localis.conf')) die("etc/localis.conf not found<br>You need to copy etc/localis.conf.dist and modify it to fit your needs.");
 $conf = parseconf('etc/localis.conf');
+if ($HTTP_GET_VARS['forceextent.x'] or $HTTP_GET_VARS['forceextent_x']) {
+	$ext = array($conf[map][ext_minx],$conf[map][ext_miny],$conf[map][ext_maxx],$conf[map][ext_maxy]);
+} else {
+	$ext = split(' ',trim($HTTP_GET_VARS['extent']));
+}
 $conn = sig_connect();
 # Fetch information from mysql and create menu items and select option.
 # Debugged to preserve selections and adapted to new conf file.
