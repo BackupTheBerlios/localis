@@ -11,6 +11,10 @@ $types[1] = "Pédestre";
 $types[2] = "Equestre";
 $types[3] = "Cyclable";
 $types[4] = "Kayak";
+$icontypes[1] = "/maps/images/p_marche.png";
+$icontypes[2] = "/maps/images/p_cheval.png";
+$icontypes[3] = "/maps/images/p_vtt.png";
+$icontypes[4] = "/maps/images/p_canoe.png";
 $times[1] = "moins d'une demi-heure";
 $times[2] = "moins d'une heure";
 $times[3] = "une à deux heures";
@@ -108,7 +112,6 @@ if (isset($_REQUEST['focusville'])) {
 	} else {
 		$smarty->assign('city_info',$city_info);
 		preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$city_info[0]['xy'],$m);
-		$sf = 6000;
 		$e_rect = ms_newRectObj();
 		$e_rect->setextent(floor($m[1]-$sf),floor($m[2]-$sf),floor($m[1]+$sf),floor($m[2]+$sf));
 		$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
@@ -196,7 +199,6 @@ if (!empty($_REQUEST['p_name']) and $_SESSION['me']) {
 }
 
 if (isset($filtre) and is_array($filtre)) {
-	//$where = "where parcours_type=1";
 	foreach ($filtre as $f=>$v) {
 		if (!empty($v)) {
 			$wh[] = "parcours_$f=$v";
@@ -401,6 +403,10 @@ $extminx = $e_map->extent->minx;
 $extminy = $e_map->extent->miny;
 $extmaxx = $e_map->extent->maxx;
 $extmaxy = $e_map->extent->maxy;
+
+$tracks = $db->get_parcours(array($extminx,$extminy,$extmaxx,$extmaxy),$filtre);
+$smarty->assign('tracks',$tracks);
+
 $smarty->assign('extent',"$extminx $extminy $extmaxx $extmaxy");
 $scale = $e_map->scale;
 $smarty->assign('scale',$scale);
@@ -409,6 +415,7 @@ $smarty->assign('focus',$focus);
 $smarty->assign('map_click',$map_click);
 $smarty->assign('mapimage',$image);
 $smarty->assign('types',$types);
+$smarty->assign('icontypes',$icontypes);
 $smarty->assign('times',$times);
 $smarty->assign('levels',$levels);
 

@@ -126,6 +126,14 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <input type="submit" name="action" value="{tr}Rechercher{/tr}" /><br />
 </div>
 
+<div class="bar">
+{section name=t loop=$tracks}
+{assign var=v value=$tracks[t].parcours_type}
+<img src="{$icontypes.$v}" width="10" height="9" /> {$tracks[t].parcours_name}<br />
+{/section}
+</div>
+
+
 {if $smarty.session.admin}
 {if $smarty.request.do eq "{tr}Enregistrer{/tr}"}
 <div class="bar">{tr}Edition/ajout de tracé{/tr}</div>

@@ -226,6 +226,26 @@ class db {
 		$query = "select nom,code_postal,astext(coords) as xy from communes where nom='$city'";
 		return $this->query($query,true);
 	}
+
+	function get_parcours($ex) {
+		$query = "select parcours_name,parcours_type,AsText(parcours_start) as coord from parcours";
+		$query.= " where parcours_start && GeomFromText('POLYGON(($ex[0] $ex[1],$ex[0] $ex[3],$ex[2] $ex[3],$ex[0] $ex[1]))',-1)";
+		if (isset($_SESSION['filtre'])) {
+			$wh = array();
+			foreach ($_SESSION['filtre'] as $k=>$v) {
+				if (!empty($v)) {
+					$v = addslashes($v);
+					$wh[] = "parcours_$k='$v'";
+				}
+			}
+			if (count($wh)) {
+				$query.= " and ". implode(' and ',$wh);
+			}
+		}
+		return $this->query($query,true);
+		
+	}
+	
 }
 
 if (!is_file(PROOT."/db/local.php")) {
