@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.38 2003/02/05 06:37:34 mose Exp $
+<?  /* $Id: lib.php,v 1.39 2003/02/05 08:40:24 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -141,8 +141,6 @@ function getinfos($table,$id) {
 	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die($query."<br>3".mysql_error());
 	if ($res) {
 		return mysql_fetch_array($res);
-	} else {
-		return false;
 	}
 }
 
@@ -170,30 +168,55 @@ function modlayer($a,$id="") {
 	return mysql_insert_id($conn);
 }
 
+function getobj($id) {
+	global $conf,$conn;
+	$query = "select status, title, content, signature from metadata as m, object as o where o.meta=m.id and o.id=$id";
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die($query."<br>".mysql_error());
+	if ($res) {
+		$status = mysql_result($res,0,'status');
+		$title = mysql_result($res,0,'title');
+		$content = mysql_result($res,0,'content');
+		$sign = mysql_result($res,0,'signature');
+		$query = "select id, E, N from objdots as oj left join dots as d on oj.dotid=d.id where oj.objectid=$id";
+		$res2 = mysql_db_query($conf[database][db_name],$query,$conn) or die($query."<br>".mysql_error());
+		if ($res2) {
+			$e = mysql_result($res2,0,'E');
+			$n = mysql_result($res2,0,'N');
+			$i = mysql_result($res2,0,'id');
+	  	return array($status,$title,$content,$sign,$e,$n,$i);
+		}
+	}
+}
+
 function addobj($add) {
 	global $conf,$conn;
 	$query = "insert into metadata (title,content,status,date,signature) values ('";
 	$query.= addslashes($add[nom])."','";
-	$query.= addslashes($add[content])."','";
+	$query.= addslashes($add[desc])."','";
 	$query.= addslashes($add[status])."',now(),'";
-	$query.= addslashes($add[signature])."')";
+	$query.= addslashes($add[sign])."')";
 	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
-	#echo "$query<hr>";
 	$metaid = mysql_insert_id($conn);
 	$query = "insert into object (name,meta) values ('".addslashes($add[nom])."',$metaid)";
 	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
-	#echo "$query<hr>";
 	$objid = mysql_insert_id($conn);
 	$query = "insert into dots (E,N) values ($add[x],$add[y])";
 	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
-	#echo "$query<hr>";
 	$dotid = mysql_insert_id($conn);
 	$query = "insert into objdots (dotid,objectid) values ($dotid,$objid)";
 	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
-	#echo "$query<hr>";
 	$query = "insert into layerobj (objectid,layerid) values ($objid,$add[layer])";
 	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
-	#echo "$query<hr>";
+}
+
+function modobj($add) {
+	global $conf,$conn;
+	$query = "update metadata set title='".addslashes($add[nom])."', content='".addslashes($add[desc]);
+	$query.= "', status='".addslashes($add[status]).", date=now(), signature='".addslashes($add[sign])."' ";
+	$query.= " where id=$add[id]";
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
+	$query = "update dots set E=$add[x], N=$add[y] where dotid=$add[dotid]";
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());	
 }
 
 function inc($template) {

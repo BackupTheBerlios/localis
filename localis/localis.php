@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.57 2003/02/05 06:18:55 mose Exp $
+<? /* $Id: localis.php,v 1.58 2003/02/05 08:40:24 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -35,6 +35,7 @@ $act       = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
 $city      =  $HTTP_GET_VARS['v'];
 $view      =  $HTTP_GET_VARS['tpl'];
 $add       =  $HTTP_GET_VARS['add'];
+$showid    =  $HTTP_GET_VARS['showid'];
 // for pda template
 $fzoom     =  $HTTP_GET_VARS['fzoom'];
 $fzoomout  =  $HTTP_GET_VARS['fzoomout'];
@@ -223,8 +224,6 @@ $glob["act".$act] = "checked";
 $glob["size".$sizex."x".$sizey] = "selected";
 $glob['sizex'] = $sizex;
 $glob['sizey'] = $sizey;
-$glob['coordx'] = $coordx;
-$glob['coordy'] = $coordy;
 
 if ($ext) {
 	$glob['query'].= "&extent=".urlencode($extexploded);
@@ -240,14 +239,14 @@ if (($drawlayer and ($drawlayer != 'x') and ($drawlayer != 'NEW'))) {
 			$cdx = strtok($where, '/');
 			$cdy = strtok('/');
 			$what[1] = preg_replace("/\r?\n/","<br>",addslashes(str_replace('"',"'",$what[1])));
-			$glob[maplocations].= sprintf($g_maplocations,$where,$where,($cdx-10),($cdy-10),($cdx+10),($cdy+10),$what[1],$what[1],'edit');
+			$editlink = "<a href=localis.php?showid=$what[0]&drawlayer=$drawlayer".$glob['query'].">$texteedit</a>";
+			$glob[maplocations].= sprintf($g_maplocations,$where,$where,($cdx-10),($cdy-10),($cdx+10),($cdy+10),$what[1],$what[1],$editlink);
 			$lst.= sprintf($g_listitem,$drawlayer,$what[0],$glob[query],$what[0],$what[1]);
 		}
 		$list.= sprintf($g_list,$lst);
 	}
 }
 
-mysql_close($conn);
 
 if ($act == "edition") {
 	lcls_drawpoint($coordx,$coordy);
@@ -286,11 +285,18 @@ if ($drawlayer and $dellayer) {
 	$glob['lsymbol'] = domenu($laysymbols,$edlsymbol);
 
 	$glob['right'].= inc("editlayer");
-} elseif ($act == "edition") {
-	$glob['statusmenu'] = domenu(array(0,1,2,3,4,5),0);
+} elseif ($showid or($act == "edition")) {
 	if ($showid) {
-		
+		list($addstatus,$addnom,$adddesc,$addemail,$coordx,$coordy,$dotid) = getobj($showid);
 	}
+	$glob['dotid'] = $dotid;
+	$glob['coordx'] = $coordx;
+	$glob['coordy'] = $coordy;
+	$glob['addnom'] = $addnom;
+	$glob['adddesc'] = $adddesc;
+	$glob['addemail'] = $addemail;
+	$glob['statusmenu'] = domenu($pointstatus,$addstatus);
+	
 	$glob['right'] = $layertop.inc("edit");
 } else {
 	if (($drawlayer and ($drawlayer != 'x') and ($drawlayer != 'NEW'))) {
@@ -299,6 +305,7 @@ if ($drawlayer and $dellayer) {
 }
 echo inc("map");
 echo inc("foot");
+mysql_close($conn);
 
 if (0 or $conf[gui][debug]) { echo "<pre style=font-size:80%;color:#990000>";print_r(get_defined_vars());echo "</pre>"; }
 ?>

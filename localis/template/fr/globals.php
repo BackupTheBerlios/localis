@@ -3,6 +3,7 @@ $GLOBALS['textewarning'] =<<<_END_
 Localis est <b>en cours de developpement</b>, le fonctionnement de cette interface peut parfois etre perturbé.<br>
 Contact: <a href="mailto:mose@makina-corpus.net">mose</a>.
 _END_;
+$GLOBALS['texteedit'] = "Editer";
 $GLOBALS['textelayer'] = "Calque";
 $GLOBALS['textelayeredit'] = "[mod]";
 $GLOBALS['textelayerdelete'] = "[del]";
@@ -33,4 +34,8 @@ $laysize[5] = 5;
 $laysize[10] = 10;
 $laysize[15] = 15;
 $laysize[20] = 20;
+
+$pointstatus[0] = "a confirmer";
+$pointstatus[1] = "vérifié";
+$pointstatus[2] = "obsolète";
 ?>
