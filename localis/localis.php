@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.32 2002/10/28 03:37:23 mose Exp $
+<? /* $Id: localis.php,v 1.33 2002/10/28 03:43:23 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -51,7 +51,12 @@ $version = current(file('VERSION'));
 # Read configuration file and set array like $conf[section][item]
 if (!is_file('etc/localis.conf')) die("etc/localis.conf not found<br>You need to copy etc/localis.conf.dist and modify it to fit your needs.");
 $preconf = parseconf('etc/localis.conf');
-$lang    = ($HTTP_GET_VARS['lang']) ? $HTTP_GET_VARS['lang'] : $preconf["general"]["lang"];
+if ($HTTP_GET_VARS['lang']) {
+	$lang = $HTTP_GET_VARS['lang'];
+	$qlang  ="&lang=$lang";
+} else {
+	$lang = $preconf["general"]["lang"];
+}
 $loc_conf = $preconf["general"]["tpl_path"]."/".$lang."/lang.conf";
 if (is_file($loc_conf)) {
 	$conf = parseconf($loc_conf,$preconf);
