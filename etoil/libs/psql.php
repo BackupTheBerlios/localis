@@ -200,6 +200,22 @@ class db {
     return $this->query($query);
   }
 
+	/* ======== conf admin methods  ======= */
+
+	function add_parcours($name,$user,$type,$geom,$level=0,$time=0) {
+		$line = implode(",",$geom);
+		$query = "insert into parcours (parcours_name,parcours_user,parcours_type,parcours_geom,parcours_level) values ";
+		$query.= "('". addslashes($name)."','". addslashes($user)."','". addslashes($type). "',LinestringFromText('LINESTRING($line)',27572),'". addslashes($level)."');";
+		if (!$this->query($query)) {
+			$this->mes[] = "db error: ". pg_last_error();
+			return false;
+		} else {
+			$query = "update parcours set parcours_length=Length(parcours_geom), parcours_start=StartPoint(parcours_geom);";
+			return $this->query($query);
+		}
+	}
+
+	
 }
 
 if (!is_file(PROOT."/db/local.php")) {

@@ -3,6 +3,22 @@
 <title>{tr}E-Toil{/tr}</title>
 <meta http-equiv="Content-Language" content="{$language}">
 <link rel="StyleSheet" type="text/css" href="etoil.css" />
+<script>
+{literal}
+function toggletool(id) {
+	document.getElementById('tool_edit').style.border='0';
+	document.getElementById('tool_zoomin').style.border='0';
+	document.getElementById('tool_travel').style.border='0';
+	document.getElementById('tool_zoomout').style.border='0';
+	document.getElementById('tool_edit').style.backgroundColor='#eee';
+	document.getElementById('tool_zoomin').style.backgroundColor='#eee';
+	document.getElementById('tool_travel').style.backgroundColor='#eee';
+	document.getElementById('tool_zoomout').style.backgroundColor='#eee';
+	document.getElementById(id).style.border='1px solid #000';
+	document.getElementById(id).style.backgroundColor='#ddd';
+}
+{/literal}
+</script>
 </head>
 <body>
 <table cellpadding="0" cellspacing="0" border="0" width="100%">

@@ -31,27 +31,33 @@ if (isset($_REQUEST['purge']) and $_REQUEST['purge'] == 'all') {
 }
 $lay = array("fond");
 
-$e_map = ms_newMapObj($mapfile);
-$moyens[] = "Pédestre";
-$moyens[] = "Equestre";
-$moyens[] = "Cyclable";
-$moyens[] = "Kayak";
+$moyens[1] = "Pédestre";
+$moyens[2] = "Equestre";
+$moyens[3] = "Cyclable";
+$moyens[4] = "Kayak";
 $smarty->assign('moyens',$moyens);
 
-$durees[] = "moins d'une demi-heure";
-$durees[] = "moins d'une heure";
-$durees[] = "une à deux heures";
-$durees[] = "plus de deux heures";
+$durees[1] = "moins d'une demi-heure";
+$durees[2] = "moins d'une heure";
+$durees[3] = "une à deux heures";
+$durees[4] = "plus de deux heures";
 $smarty->assign('durees',$durees);
 
-$difficultes[] = "1";
-$difficultes[] = "2";
-$difficultes[] = "3";
-$difficultes[] = "4";
-$difficultes[] = "5";
+$difficultes[1] = "1";
+$difficultes[2] = "2";
+$difficultes[3] = "3";
+$difficultes[4] = "4";
+$difficultes[5] = "5";
 $smarty->assign('difficultes',$difficultes);
 
+if (isset($_REQUEST['filtre'])) {
+	$filtre = $_REQUEST['filtre'];
+	$smarty->assign('filtre',$filtre);
+}
+
 // ========================================================================
+
+$e_map = ms_newMapObj($mapfile);
 
 $extminx = $e_map->extent->minx;
 $extminy = $e_map->extent->miny;
@@ -78,6 +84,8 @@ if (isset($_REQUEST['size'])) {
 	$sizecheck["{$sizex}x{$sizey}"] = " selected=\"selected\"";
 }
 
+$e_map->set('width',$sizex);
+$e_map->set('height',$sizey);
 $smarty->assign('sizex',$sizex);
 $smarty->assign('sizey',$sizey);
 $smarty->assign('sizecheck',$sizecheck);
@@ -120,13 +128,44 @@ if ($clicked and isset($_REQUEST['action'])) {
 		$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 		$focus['travel'] = "focus";
 	} elseif ($_REQUEST['action'] == "edit" and $_SESSION['admin']) {
+		$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
+		$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 		$focus['edit'] = "focus";
 		$_SESSION['track'][] = $map_click['x']." ".$map_click['y'];
 	}
 }
 
-if (isset($_REQUEST['p_name'])) {
-	
+if (isset($_REQUEST['p_name']) and $_SESSION['me']) {
+	if (!$db->add_parcours($_REQUEST['p_name'],$_SESSION['me'],$_REQUEST['p_type'],$_SESSION['track'],$_REQUEST['p_difficulte'],$_REQUEST['p_duree'])) {
+		$feedback[] = array('num'=>-1,'msg'=>$db->mes[0]);
+	} else {
+		$_SESSION['track'] = array();
+	}
+}
+
+if (isset($_REQUEST['action']) and $_REQUEST['action'] == tra('Rechercher')) {
+	//$where = "where parcours_type=1";
+	$where = '';
+	$e_layer = ms_newLayerObj($e_map);
+	$e_layer->set('name','parcours');
+	$e_layer->set('status',MS_ON);
+	$e_layer->set('connectiontype',MS_POSTGIS);
+	$e_layer->set('connection',$db->connstr);
+	$e_layer->set('data',"parcours_start from parcours using srid=27572");
+	$e_layer->set('type',MS_LAYER_POINT);
+	$e_layer->set('labelitem','parcours_name');
+	$e_class = ms_newClassObj($e_layer);
+	$e_label = $e_class->label;
+	$e_label->set("position",MS_CC);
+	$e_label->set("type","truetype");
+	$e_label->set("size",9);
+	$e_label->set("font","times_new_roman_bold");
+	$e_label->color->setRGB(128,0,0);
+	$e_label->backgroundcolor->setRGB(255,255,255);
+	$e_style = ms_newStyleObj($e_class);
+	$e_style->set("size",8);
+	$e_style->set("symbolname","circle");
+	$e_style->color->setRGB(128,0,0);
 }
 
 if (!empty($_SESSION['track'])) {
@@ -159,24 +198,7 @@ if (!empty($_SESSION['track'])) {
 	$e_style->color->setRGB(255,255,255);
 	$e_style->set("size",3);
 	$e_style->set("symbolname",'circle');
-
 }
-
-$e_layer = ms_newLayerObj($e_map);
-$e_layer->set('name','tracks');
-$e_layer->set('status',MS_ON);
-$e_layer->set('connectiontype',MS_POSTGIS);
-$e_layer->set('connectiontype',$db->connstr);
-$e_layer->set('data',"parcours_centre from parcours where point_parcours_id=1");
-$e_layer->set('type',MS_LAYER_POINT);
-$e_layer->set('labelitem','point_time');
-$e_layer->set('connectiontype',$db->connstr);
-$e_class = ms_newClassObj($e_layer);
-$e_label = $e_class->label;
-$e_label->set("position",MS_CC);
-$e_style = ms_newStyleObj($e_class);
-$e_style->set("size",8);
-$e_style->outlinecolor->setRGB(128,0,0);
 
 $e_image = $e_map->draw();
 $image = $e_image->saveWebImage();

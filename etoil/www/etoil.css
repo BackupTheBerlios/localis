@@ -164,9 +164,10 @@ a:hover {
 }
 
 .toolfocus {
-	background: #efefef;
-	border : 1px inset;
+	background-color : #ddd;
+	border : 1px solid #000;
 }
 .tool {
-	background: #FFFFFF;
+	background-color : #eee;
+	border : 0;
 }
