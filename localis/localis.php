@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.43 2002/12/19 11:44:33 ramzi Exp $
+<? /* $Id: localis.php,v 1.44 2003/02/02 08:42:07 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -19,30 +19,31 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
 USA.
 */
+
 $click_x = $HTTP_GET_VARS['x'];
 $click_y = $HTTP_GET_VARS['y'];
 $refx    = ($HTTP_GET_VARS['ref_x']) ? $HTTP_GET_VARS['ref_x'] : $HTTP_GET_VARS['ref.x'];
 $refy    = ($HTTP_GET_VARS['ref_y']) ? $HTTP_GET_VARS['ref_y'] : $HTTP_GET_VARS['ref.y'];
 $scl     = ($HTTP_GET_VARS['forcescale']) ? $HTTP_GET_VARS['forcescale'] : $HTTP_GET_VARS['scale'];
 $lay     = ($HTTP_GET_VARS['layers']) ? $HTTP_GET_VARS['layers'] : array("fond");
-// ROU handle map interface type value (map or point)
-$interface  = ($HTTP_GET_VARS['interface']) ? $HTTP_GET_VARS['interface'] : 'mapImg';
-// ROU was here
 $act     = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
+$drawlayer    = $HTTP_GET_VARS['drawlayer'];
 $city    = $HTTP_GET_VARS['v'];
 $view    = $HTTP_GET_VARS['tpl'];
-$addcity = $HTTP_GET_VARS['add_city'];
-$addtype = $HTTP_GET_VARS['add_type'];
-$addnom = $HTTP_GET_VARS['add_nom'];
-$addemail = $HTTP_GET_VARS['add_email'];
-$addurl = $HTTP_GET_VARS['add_url'];
-$addnotes = $HTTP_GET_VARS['add_notes'];
+$addnom = $HTTP_GET_VARS['addnom'];
+$addlat = $HTTP_GET_VARS['addlat'];
+$addlong = $HTTP_GET_VARS['addlong'];
+$addstatut = $HTTP_GET_VARS['addstatut'];
+$addemail = $HTTP_GET_VARS['addemail'];
+$adddesc = $HTTP_GET_VARS['adddesc'];
 $addit   = $HTTP_GET_VARS['addit'];
 $fzoom   = $HTTP_GET_VARS['fzoom'];
 $fzoomout   = $HTTP_GET_VARS['fzoomout'];
 $fsens   = $HTTP_GET_VARS['fsens'];
 // ROU check if user agent is IE
-$browser = ereg("MSIE",getenv("HTTP_USER_AGENT")) ? "ie" : "";
+$mode = ereg("MSIE",getenv("HTTP_USER_AGENT")) ? "ie" : "";
+// ROU handle map interface type value (map or point)
+$interface  = ($HTTP_GET_VARS['interface']) ? $HTTP_GET_VARS['interface'] : 'mapImg';
 // ROU was here
 
 if (strstr($HTTP_GET_VARS['size'],'x')) {
@@ -58,21 +59,26 @@ $version = current(file('VERSION'));
 
 # Read configuration file and set array like $conf[section][item]
 if (!is_file('etc/localis.conf')) die("etc/localis.conf not found<br>You need to copy etc/localis.conf.dist and modify it to fit your needs.");
-$preconf = parseconf('etc/localis.conf');
+$conf = parseconf('etc/localis.conf');
+
+$lang = ($HTTP_GET_VARS['lang']) ? $HTTP_GET_VARS['lang'] : $conf['general']['lang'];
+$mode = ($HTTP_GET_VARS['mode']) ? $HTTP_GET_VARS['mode'] : $conf['general']['mode'];
+
 if ($HTTP_GET_VARS['lang']) {
-	$lang   = $HTTP_GET_VARS['lang'];
-	$qlang  = "&lang=$lang";
-	$ilang  = "<input type=hidden name=lang value=$lang>";
-} else {
-	$lang = $preconf["general"]["lang"];
+  $glob['query'].= "&lang=$lang";
+	$glob['input'].= "<input type=\"hidden\" name=\"lang\" value=\"$lang\">";
 }
-$loc_conf = $preconf["general"]["tpl_path"]."/".$lang."/lang.conf";
-if (is_file($loc_conf)) {
-	$conf = parseconf($loc_conf,$preconf);
-} else {
-	$conf = $preconf;
-	$lang = $conf["general"]["lang"];
+if ($HTTP_GET_VARS['mode']) {
+  $glob['query'].= "&mode=$mode";
+	$glob['input'].= "<input type=\"hidden\" name=\"mode\" value=\"$mode\">";
+}	
+
+$tpl_path = $conf[general][tpl_path]."/$mode";
+
+if (is_file("$tpl_path/$lang/globals.php")) {
+  include "$tpl_path/$lang/globals.php";
 }
+
 if ($HTTP_GET_VARS['forceextent.x'] or $HTTP_GET_VARS['forceextent_x']) {
 	$ext = array($conf[map][ext_minx],$conf[map][ext_miny],$conf[map][ext_maxx],$conf[map][ext_maxy]);
 } elseif ($HTTP_GET_VARS['extent']) {
@@ -84,43 +90,12 @@ if ($HTTP_GET_VARS['forceextent.x'] or $HTTP_GET_VARS['forceextent_x']) {
 $size    = ($HTTP_GET_VARS['size']) ? $HTTP_GET_VARS['size'] : $conf[gui]['defaultmapsize'];
 
 $conn = sig_connect();
-# Fetch information from mysql and create menu items and select option.
-# Debugged to preserve selections and adapted to new conf file.
-foreach ($conf[form] as $field=>$f) {
-	foreach ($conf[select] as $ck=>$ckit) {
-		if ($HTTP_GET_VARS["force{$field}{$ck}.x"] or $HTTP_GET_VARS["force{$field}{$ck}_x"]) {
-			$$field = $ck;
-			break;
-		}
-	}
-	$$field    = ($$field) ? $$field :$HTTP_GET_VARS["$field"];
-	${"list_$field"} = sig_list($f,$conn,0);
-	${"menu_$field"} = domenu(${"list_$field"},$$field);
-	${"icons_$field"} = doicons(${"list_$field"},$$field);
-	# If search string, build 'where' clause.
-	if (!empty(${"$field"}) and ereg("^text://.*$",$conf[form][$field])) {
-		$myv = str_replace('/','',strrchr($conf[form][$field],'/'));
-			$mm = explode(',',$myv);
-			foreach($mm as $mmv) {
-			$owh[] = "$mmv like '%".${"$field"}."%'";
-			$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($field));
-		}
-	}
-} 
 
-if (is_dir("etc/dbdata")) {
-	$dir = opendir("etc/dbdata");
-	while (false !== ($dd = readdir($dir))) {
-		if (substr($dd,0,1) != '.') {
-			$donf[$dd] = parseconf("etc/views/$dd");
-		}
-	}
-	closedir($dir);
+if ($addit and ($addtype != 'all')) {
+	additem($addnom,$addemail,$adddesc,$addstatut,$addlat,$addlong);
 }
 
-if ($addit and $addcity and ($addtype != 'all')) {
-	additem($addtype,$addcity,$addnom,$addemail,$addurl,$addnotes);
-}
+$userlayers = layerslist();
 	
 if (!is_file($conf["map"]['path']."/fonts/fontset")) {
 	$dir = opendir($conf["map"]["path"]."/fonts");
@@ -137,40 +112,20 @@ if (!is_file($conf["map"]['path']."/fonts/fontset")) {
 	fclose($fp);
 }
 
+/*
 # Select layer to use
 if ($type == 'all') {
 	// yes ! it sucks, but it waits for a rationnalization of config file
-	//array_shift($listres);
+	
 	array_shift($listres);
 	$mychoices = $listres ;
 	$type = '';
 } else {
 	$mychoices[] = $$field;
 }
+*/
+$mychoices = array("points");
 
-# Build layer selection (left menu)
-if (!$browser)
-  $js_start = 10;
-else
-  $js_start = 11; # erk !! I have to fix that hard coded value
-foreach($conf[layers] as $def_layer=>$res_layer) {
-	$lol += 1;
-	unset($lys);
-	$lys[] = $def_layer;
-	foreach ($lys as $l) {
-		if (@in_array(trim($l),$lay)) {
-			//$layer_menu.= "<tr><td class=toolchecked onclick='document.f.elements[".($lol+$js_start)."].checked=!document.f.elements[".($lol+$js_start)."].checked;'>";
-			$layer_menu.= "<tr><td class=toolchecked onclick='document.f.$l.checked=!document.f.$l.checked;'>";
-			$layer_menu.= "<input type=checkbox id=\"$l\" name=layers[] value='$l' checked onclick='this.checked=!this.checked;'> ".$conf["gui"]["$l"]."</td></tr>\n";
-			$layer_hidden.= "<input type=hidden name=layers[] value='$l'>\n";
-			$layer_query.= "layers[]=".urlencode($l)."&";
-		} else {
-			//$layer_menu.= "<tr><td class=toolch onclick='document.f.elements[".($lol+$js_start)."].checked=!document.f.elements[".($lol+$js_start)."].checked;'>";
-			$layer_menu.= "<tr><td class=toolch onclick='document.f.$l.checked=!document.f.$l.checked;'>";
-			$layer_menu.= "<input type=checkbox id=\"$l\" name=layers[] value='$l' onclick='this.checked=!this.checked;'>".$conf["gui"]["$l"]."</td></tr>\n";
-		}
-	}
-}
 
 # Set layer status (on/off) [patché et debuggué choppe seul le nom des layers]
 if ($view != $conf[gui][list_button]) {
@@ -300,7 +255,7 @@ if ($view != $conf[gui][list_button]) {
 			if ($act != 'edition') {
 				if (is_array($m)) {
 					foreach ($m as $vv=>$coord) {
-						$map_txt = preg_replace("/\r?\n/","<br>",addslashes($maplist[$vv]));
+						$map_txt = preg_replace("/\r?\n/","<br>",addslashes(str_replace('"',"'",$maplist[$vv])));
 						$map_locations.= "<area href=# name=\"$vv\" id=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" \n";
 						$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>$map_txt', WIDTH, 150);\" \n";
 						$map_locations.= "onmouseout='return nd();' onclick=\"return overlib('$map_txt', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
@@ -308,6 +263,9 @@ if ($view != $conf[gui][list_button]) {
 				}
 			}
 		}
+	}
+	if ($drawlayer) {
+		lcls_drawlayer($drawlayer);
 	}
 	if ($flagid) {
 		$zResult = $zMap->getLayerByName('flag');
@@ -320,14 +278,14 @@ if ($view != $conf[gui][list_button]) {
 		$map_locations.= "onmouseover=\"return overlib('$map_txt');\" onmouseout='return nd();'>\n";
 	}
 	# Create image, reference map & legend
-	$image_src = $zImage->saveWebImage(MS_PNG,0,0,-1);
+	$glob[imgsrc] = $zImage->saveWebImage(MS_PNG,0,0,-1);
 	$zRefer    = $zMap->reference;
 	$zRefer->set('width',$conf[map][ref_sizex]);
 	$zRefer->set('height',$conf[map][ref_sizey]);
 	$zRef      = $zMap->drawreferencemap();
-	$ref_src   = $zRef->saveWebImage(MS_PNG,0,0,-1);
+	$glob[refsrc]   = $zRef->saveWebImage(MS_PNG,0,0,-1);
 	$zLegende  = $zMap->drawLegend();
-	$leg_src   = $zLegende->saveWebImage(MS_PNG,0,0,-1);
+	$glob[legsrc]   = $zLegende->saveWebImage(MS_PNG,0,0,-1);
 	$scl = number_format($zMap->scale,0,',',' ');
 } else {
 	# Prepare list view
@@ -355,11 +313,50 @@ if ($view != $conf[gui][list_button]) {
 		unset($resultats);
 	}
 }
+# Build layer selection (left menu)
+# thanks raz for cleaning !!
+foreach($conf[layers] as $l=>$lv) {
+	if (@in_array(trim($l),$lay)) {
+		$glob['layermenu'].= "<tr><td class=\"toolchecked\" onclick=\"document.f.$l.checked=!document.f.$l.checked;\">";
+		$glob['layermenu'].= "<input type=\"checkbox\" id=\"$l\" name=\"layers[]\" value=\"$l\" checked onclick=\"this.checked=!this.checked;\"> $lv</td></tr>\n";
+		$glob['input'].= "<input type=\"hidden\" name=\"layers[]\" value=\"$l\">\n";
+		$glob['query'].= "&layers[]=".urlencode($l);
+	} else {
+		$glob['layermenu'].= "<tr><td class=toolch onclick='document.f.$l.checked=!document.f.$l.checked;'>";
+		$glob['layermenu'].= "<input type=checkbox id=\"$l\" name=layers[] value='$l' onclick='this.checked=!this.checked;'> $lv</td></tr>\n";
+	}
+}
+if (is_array($userlayers)) {
+  foreach ($userlayers as $ulnum=>$ul) {
+    $lol += 1;
+    if (@in_array($ulnum,$lay)) {
+      #$layer_menu.= "<div class=utoolchecked onclick='document.f.elements[".($lol+$js_start)."].checked=!document.f.elements[".($lol+$js_start)."].checked;'>";
+      #$layer_menu.=  $ul[layername]."<input type=checkbox name=layers[] value='$ulnum' checked onclick='this.checked=!this.checked;'></div>\n";
+      #$layer_hidden.= "<input type=hidden name=layers[] value='$ulnum'>\n";
+      $glob['query'].= "&ulayers[]=$ulnum";
+    } else {
+      #$layer_menu.= "<div class=utoolch onclick='document.f.elements[".($lol+$js_start)."].checked=!document.f.elements[".($lol+$js_start)."].checked;'>";
+      #$layer_menu.= $ul[layername]."<input type=checkbox name=layers[] value='$ulnum' onclick='this.checked=!this.checked;'></div>\n";
+    }
+    if ($drawlayer == $ulnum) {
+      $glob['catmenu'].= "<option value=$ulnum selected style=background-color:#FFCC99>$ul[layername]</option>";
+    } else {
+      $glob['catmenu'].= "<option value=$ulnum>$ul[layername]</option>";
+    }
+  }
+} 
+
 // ROU used by ie map
 ${"check$interface"} = "checked";
 // ROU was here
-${"action_$act"} = "checked";
-${"size_".$sizex."x".$sizey}   = "selected";
+#${"action_$act"} = "checked";
+#${"size_".$sizex."x".$sizey}   = "selected";
+$glob["act".$act] = "checked";
+$glob["size".$sizex."x".$sizey] = "selected";
+$glob['sizex'] = $sizex;
+$glob['sizey'] = $sizey;
+$glob['scale'] = $scl;
+
 
 mysql_close($conn);
 
@@ -368,21 +365,36 @@ $colwidth = $conf[map][ref_sizex]+4;
 if ($view == $conf[gui][list_button])
 	$interface = "";
 
-echo inc($browser."head");
+echo inc("head");
 echo inc("search");
 if ($view == $conf[gui][list_button]) {
 	echo inc("list");
 } else {
-	if ($act == "edition") {
-		$right = inc("edit");
+	if ($drawlayer == "NEW") {
+		$colors["50 120 200"] = "Bleu";
+		$colors["255 255 255"] = "Blanc";
+		$colors["0 0 0"] = "Noir";
+		$colors["50 200 120"] = "Vert";
+		$colors["200 120 50"] = "Orange";
+		$colors["200 50 0"] = "Rouge";
+		$symbols["ordi"] = "Ordi";
+		$symbols["flag"] = "Drapeau";
+		$ftype_menu = domenu(array('point'=>'point','line'=>'traits'),$ftype);
+		$fsize_menu = domenu(array(0,1,2,3,4,5),$fsize);
+		$fcolor_menu = domenu($colors,$fcolor);
+		$fsymbol_menu = domenu($symbols,$fsymbol);
+
+		$glob['right'] = inc("editlayer");
+	} elseif ($act == "edition") {
+		$glob['right'] = inc("edit");
 	} else {
-		$right = $list;
+		$glob['right'] = $list;
 	}
-	echo inc($browser."map");
+	echo inc("map");
 }
 echo inc("foot");
 
 if ($id)  tmpclean($id);
-if ($sid) tmpclean($sid);
+if($sid) tmpclean($sid);
 if (0 or $conf[gui][debug]) { echo "<pre style=font-size:80%;color:#990000>";print_r(get_defined_vars());echo "</pre>"; }
 ?>

@@ -1,4 +1,4 @@
-<? /* $Id: index.php,v 1.3 2002/10/28 04:05:57 mose Exp $
+<? /* $Id: index.php,v 1.4 2003/02/02 08:42:07 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -19,42 +19,38 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
 USA.
 */
+
+
 include "inc/parseconf.php";
 include "inc/lib.php";
 
 if (!is_file('etc/localis.conf')) die("localis.conf not found<br>Maybe you need to copy localis.conf.dist");
 
-$conn = sig_connect();
-$preconf = parseconf('etc/localis.conf');
+$conf = parseconf('etc/localis.conf');
+
+$page = ($HTTP_GET_VARS['page']) ? $HTTP_GET_VARS['page'] : 'index';
+$lang = ($HTTP_GET_VARS['lang']) ? $HTTP_GET_VARS['lang'] : $conf['general']['lang'];
+$mode = ($HTTP_GET_VARS['mode']) ? $HTTP_GET_VARS['mode'] : $conf['general']['mode'];
+
 if ($HTTP_GET_VARS['lang']) {
-  $lang   = $HTTP_GET_VARS['lang'];
-	$qlang  = "&lang=$lang";
-	$ilang  = "<input type=hidden name=lang value=$lang>";
-} else {
-	$lang = $preconf["general"]["lang"];
-}
-$loc_conf = $preconf["general"]["tpl_path"]."/".$lang."/lang.conf";
-if (is_file($loc_conf)) {
-  $conf = parseconf($loc_conf,$preconf);
-} else {
-  $conf = $preconf;
-  $lang = $conf["general"]["lang"];
-}
-foreach ($conf[form] as $field=>$f) {
-	${"$field"}    = $HTTP_GET_VARS["$field"];
-	${"list_$field"} = sig_list($f,$conn,0);
-	${"menu_$field"} = domenu(${"list_$field"},$$field);
+	$glob['query'].= "&lang=$lang";
+	$glob['input'].= "<input type=\"hidden\" name=\"lang\" value=\"$lang\">";
 }
 
-mysql_close($conn);
+if ($HTTP_GET_VARS['mode']) {
+	$glob['query'].= "&mode=$mode";
+	$glob['input'].= "<input type=\"hidden\" name=\"mode\" value=\"$mode\">";
+}
+
+$tpl_path = $conf[general][tpl_path]."/$mode";
+
+if (is_file("$tpl_path/$lang/globals.php")) {
+	include "$tpl_path/$lang/globals.php";
+}
+
+
 echo inc("head");
 echo inc("search");
-if ($_GET[help]) {
-	echo inc("help");
-} elseif ($_GET[credits]) {
-	echo inc("credits");
-} else { 
-	echo inc("index");
-}
+echo inc("$page");
 echo inc("foot");
 ?>

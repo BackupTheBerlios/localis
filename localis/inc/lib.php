@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.26 2002/12/11 16:49:53 ramzi Exp $
+<?  /* $Id: lib.php,v 1.27 2003/02/02 08:42:07 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -49,6 +49,66 @@ function sig_list($field, $conn, $cut=0) {
 	return $back;
 } 
 
+function layerslist() {
+  global $conn,$conf;
+  $query = "select * from layer";
+  $res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
+  while ($r = mysql_fetch_array($res)) {
+    $back["$r[layerid]"] = $r;
+  }
+  return $back;
+}
+
+function listobjects($layer) {
+  global $conn,$conf;
+  $query = "select * from layertogroup as l left join object as o on l.objectid=o.id where l.layerid=$layer order by l.ranknum";
+  $res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
+  while ($r = mysql_fetch_array($res)) {
+    $back[] = $r;
+  }
+  return $back;
+}
+
+function listpoints($object) {
+  global $conn,$conf;
+  $query = "select g.*, d.* from groupofdots as g left join dots as d on g.dotid=d.id where g.objectid=$object order by g.ranknum";
+  $res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
+  while ($r = mysql_fetch_array($res)) {
+    $back[] = $r;
+  }
+  return $back;
+}
+
+function getpoint($id) {
+  global $conn,$conf;
+  $query = "select * from dots where id=$id";
+  $res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
+  $r = mysql_fetch_array($res);
+  $back = array($r[E],$r[N]);
+  return $back;
+}
+
+function getcalqueinfo($id) {
+  global $conn,$conf;
+  $query = "select * from layer where layerid=$id ";
+  $res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
+  $r = mysql_fetch_array($res);
+  $back = array($r[layername],$r[layertype],$r[layergroup],$r[layercolor],$r[layersize],$r[layersymbol]);
+  return $back;
+}
+
+
+function listlines($layer) {
+  $obj = listobjects($layer);
+  if (is_array($obj)) {
+    foreach ($obj as $o) {
+      $line = listpoints($o[id]);
+      $back[$o[id]] = $line;
+    }
+  }
+  return $back;
+}
+
 function sig_query($select,$cond,$conn,$owh='') {
   global $conf;
 	$req = array();
@@ -69,7 +129,7 @@ function sig_query($select,$cond,$conn,$owh='') {
 		$query.= "left join ".$req[base][2].'.'.$req[table][2]." on ".$req[table][2].".".$req[champ][2]."=".$req[table][1].".".$req[champ][1]." ";
 	}
 	$query.= "$more limit 50;";
-  $res = mysql_db_query($req[base][1],$query,$conn) or die(mysql_error());
+  $res = mysql_db_query($req[base][1],$query,$conn) or die($query."<br>1".mysql_error());
   if ($res) {
     $i = 1;
     while ($r = mysql_fetch_array($res)) {
@@ -93,7 +153,7 @@ function surrounding($x,$y,$delta) {
 	$query.= $conf[map][coord_x]." < $maxx and ";
 	$query.= "$miny < ".$conf[map][coord_y]." and ";
 	$query.= $conf[map][coord_y]." < $maxy";
-	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die($query."<br>2".mysql_error());
 	if ($res) {
 		while ($r = mysql_fetch_array($res)) {
 			$n = $r[nom];
@@ -108,7 +168,7 @@ function surrounding($x,$y,$delta) {
 function getinfos($table,$id) {
 	global $conf, $conn;
 	$query = "select * from $table where id=$id;";
-	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die($query."<br>3".mysql_error());
 	if ($res) {
 		return mysql_fetch_array($res);
 	} else {
@@ -116,29 +176,25 @@ function getinfos($table,$id) {
 	}
 }
 
-function additem($where,$city,$nom,$email,$url,$notes) {
+function additem($nom,$email,$description,$statut,$latitude,$longitude) {
 	global $conf,$conn;
-	$query = "insert into $where (ville,nom,email,url,date,notes) values ('$city','$nom','$email','$url',now(),'$notes');";
-	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
+	$query = "insert into points (nom,email,description,statut,date,E,N) values ('$nom','$email','$description','$statut',now(),$longitude,$latitude);";
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die($query."<br>4".mysql_error());
 }
 
-# Fonction semi recursive, genere le html en fonction des nouveaux templates
 function inc($template) {
-  global $conf,$lang;
-	$file = $conf[general][tpl_path]."/$lang/$template.html";
+  global $conf,$lang,$mode,$glob;
+	if (is_file($conf[general][tpl_path]."/$lang/$template.php")) {
+		include $conf[general][tpl_path]."/$lang/$template.php";
+	}
+	$file = $conf[general][tpl_path]."/$mode/$template.html";
   if (!is_file($file)) {
 		$file = $conf[general][tpl_path]."/$template.html";
 	}
   if (is_file($file)) {
-  	$outp = preg_replace(array("/\\$([_a-zA-Z0-9]*)/e"),array("\$GLOBALS['\\1']"),trim(implode('', file($file))));
-  	while (ereg("\+?Array.([_a-zA-Z0-9\.]+\+?)",$outp,$matchs)) {
-				# For string concatenation in template
-				$mth = str_replace('+','',$matchs[0]);
-			  $pre = trim(strtok($mth."#",'.'));
-			  $section = trim(strtok('.'));
-			  $object = trim(strtok('#'));
-				$outp = str_replace('$','',str_replace($matchs[0],$conf["$section"]["$object"],$outp));
-		}
+  	$outp = preg_replace(array("/(\\$([_a-zA-Z0-9]*)\\$)/e", "/(\\$\.([_a-zA-Z0-9]*)\\$)/e", "/(\\$\+([_a-zA-Z0-9]*)\\$)/e"),
+		                     array("\$GLOBALS['texte\\2']", "\$conf['globals']['\\2']", "\$glob['\\2']"),
+												 trim(implode('', file($file))));
 		return $outp;
   } else {
     return "<div style=background:#CC3300;padding:2;margin:1>error handling '$template' Template.</div>";
@@ -207,8 +263,8 @@ function geo2pix($x,$minx,$maxx,$size) {
 function move_map($ext,$sens) {
 	global $conf;
 	if (empty($ext[0])) $ext[0] = 0;
-	$maplen = $ext[2] - $ext[0];
-	$mapwid = $ext[3] - $ext[1];
+	$maplen = ($ext[2] - $ext[0])/2;
+	$mapwid = ($ext[3] - $ext[1])/2;
 	switch($sens) { 
 		case $conf[gui][moveleft_button] :
 			$ext[0] = floor($ext[0] - $maplen);
@@ -222,7 +278,7 @@ function move_map($ext,$sens) {
 			$ext[1] = floor($ext[1] + $mapwid);
 			$ext[3] = floor($ext[3] + $mapwid);
 		break;
-		case $conf[gui][movedown_button] :
+		case $conf[gui][movebottom_button] :
 			$ext[1] = floor($ext[1] - $mapwid);
 			$ext[3] = floor($ext[3] - $mapwid);
 		break;
@@ -340,4 +396,135 @@ function tmpclean($id) {
 	@unlink($conf[general][tmp_path].'/'.$id.'.shp');
 	@unlink($conf[general][tmp_path].'/'.$id.'.png');
 }
+
+function lcls_drawlayer($drawlayer) {
+	global $zMap, $zImage, $userlayers;
+	if ($userlayers["$drawlayer"]["layertype"] == 'point') {
+		$layertype = MS_LAYER_POINT;
+		$shapetype = MS_SHAPE_POINT;
+	} elseif ($userlayers["$drawlayer"]["layertype"] == 'line') {
+		$layertype = MS_LAYER_LINE;
+		$shapetype = MS_SHAPE_LINE;
+	}
+	$zUser = ms_newLayerObj($zMap);
+	$zUser->set("status", MS_ON);
+	$zUser->set("type", $layertype);
+	$zUser->set("classitem", "point");
+	$zUser->set("name", $userlayers["$drawlayer"]["layername"]);
+	$zUser->set("group", $userlayers["$drawlayer"]["layergroup"]);
+	$zUclass = ms_newClassObj($zUser);
+	$zUclass->set("name", $userlayers["$drawlayer"]["layername"]);
+	if ($userlayers[$drawlayer][layercolor]) {
+		$zUclass->set("color", "{$userlayers[$drawlayer][layercolor]}");
+	}
+	if ($userlayers["$drawlayer"]["layersymbol"]) {
+		$zUclass->set("symbolname", $userlayers["$drawlayer"]["layersymbol"]);
+	}
+	$zUclass->set("size", $userlayers["$drawlayer"]["layersize"]);
+	
+	$listlines = listlines($drawlayer);
+	if (is_array($listlines)) {
+	  foreach ($listlines as $o=>$l) {
+		  if (is_array($l)) {
+				$zUclass->set("status", MS_ON);
+				$zUshape = ms_newShapeObj($shapetype);
+				$zUline = ms_newLineObj();
+				foreach ($l as $drawpoint) {
+				  $zUline->addXY($drawpoint[E], $drawpoint[N]);
+				}
+				$zUshape->add($zUline);
+			}
+		}
+	}
+	if (is_object($zUshape)) {
+		$zUshape->draw($zMap, $zUser, $zImage, 1, "test");
+	}
+}
+
+function lcls_drawline($drawlayer, $listlines, $edit=0, $flag='') {
+  global $zMap, $zImage, $userlayers;
+  $zUser = ms_newLayerObj($zMap);
+  $zUser->set("status", 1);
+  $zUser->set("type", MS_LAYER_LINE);
+  $zUser->set("classitem", "point");
+  $zUser->set("name", "User Input lines");
+  $zUser->set("group", "fond");
+  $zUclass = ms_newClassObj($zUser);
+  $zUclass->set("name", $userlayers[$drawlayer][layername]);
+  $zUclass->set("color", 12);
+  $zUclass->set("symbolname", "circle");
+  if (!$edit) {
+    $zUclass->set("size", 3);
+  } else {
+    $zUclass->set("size", 7);
+    $zUclass->set("overlaycolor", 0);
+    $zUclass->set("overlaysymbolname", "circle");
+    $zUclass->set("overlaysize", 3);
+  } 
+  if (is_array($listlines)) {
+    foreach ($listlines as $o=>$l) {
+      if (is_array($l)) {
+        $zUclass->set("status", MS_ON);
+        $zUshape = ms_newShapeObj(MS_SHAPE_LINE);
+
+        $zUline = ms_newLineObj();
+        foreach  ($l as $drawpoint) {
+          $zUline->addXY($drawpoint[E], $drawpoint[N]);
+        }
+        $zUshape->add($zUline);
+      }
+    }
+    if (is_object($zUshape)) {
+    $zUshape->draw($zMap, $zUser, $zImage, 1, "test");
+    }
+  } 
+  if ($edit) {
+    if (is_array($l)) {
+      $zUser = ms_newLayerObj($zMap);
+      $zUser->set("status", 1);
+      $zUser->set("type", MS_LAYER_POINT);
+      $zUser->set("classitem", "point");
+      $zUser->set("name", "User Input dots");
+      $zUser->set("group", "fond");
+      $zUclass = ms_newClassObj($zUser);
+      $zUclass->set("color", 12);
+      $zUclass->set("symbolname", "circle");
+      $zUclass->set("size", 10);
+      $zUclass->set("overlaysize", 6);
+      $zUclass->set("overlaysymbolname", "circle");
+      $zUclass->set("overlaycolor", 0);
+      $zUclass->set("status", MS_ON);
+      $zUshape = ms_newShapeObj(MS_SHAPE_POINT);
+
+      $zUline = ms_newLineObj();
+      foreach  ($l as $drawpoint) {
+        $zUline->addXY($drawpoint[E], $drawpoint[N]);
+      }
+      $zUshape->add($zUline);
+      $zUshape->draw($zMap, $zUser, $zImage, 1, "test");
+    }
+  } 
+  if ($flag) {
+    $flg = getpoint($flag);
+    $zUser = ms_newLayerObj($zMap);
+    $zUser->set("status", 1);
+    $zUser->set("type", MS_LAYER_POINT);
+    $zUser->set("classitem", "point");
+    $zUser->set("name", "User Input Flag");
+    $zUser->set("group", "fond");
+    $zUclass = ms_newClassObj($zUser);
+    $zUclass->set("color", 12);
+    $zUclass->set("symbolname", "flag2");
+    $zUclass->set("size", 40);
+    $zUclass->set("status", MS_ON);
+    $zUshape = ms_newShapeObj(MS_SHAPE_POINT);
+    
+    $zUline = ms_newLineObj();
+    $zUline->addXY($flg[0], $flg[1]);
+    $zUshape->add($zUline); 
+    $zUshape->draw($zMap, $zUser, $zImage, 1, "test");
+    
+  }
+} 
+
 ?>
