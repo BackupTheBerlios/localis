@@ -1,4 +1,4 @@
-# $Id: libre.sql,v 1.4 2002/10/21 04:55:21 mose Exp $
+# $Id: libre.sql,v 1.5 2002/10/21 04:56:42 mose Exp $
 #
 # Serveur: localhost
 # Généré le : Jeudi 17 Octobre 2002 à 15:10
@@ -126,7 +126,7 @@ INSERT INTO trolls VALUES (4, 'Paris', 'Travailleur indépendant.', '', 'shinobi'
 #
 
 DROP TABLE IF EXISTS human;
-CREATE TABLE trolls (
+CREATE TABLE human (
   id int(11) NOT NULL auto_increment,
   ville varchar(255) NOT NULL default '',
   notes varchar(255) NOT NULL default '',
