@@ -57,6 +57,7 @@ dbf_def      = dbf://NOM,C,64,0/E,N,12,4/N,N,12,4
 firstjeudi   = rows://ville,id,nom,description/communes
 lug   			 = rows://ville,id,nom,description/communes2
 trolls 			 = rows://ville,id,nom,description/communes3
+human 			 = rows://ville,id,nom,description/communes4
 
 [Layers]
 fond         = file://france.map
@@ -66,6 +67,7 @@ regions      = file://regions.map
 firstjeudi   = mysql://localis,firstjeudi,ville/localis,communes,NOM
 lug          = mysql://localis,lug,ville/localis,communes,NOM
 trolls       = mysql://localis,trolls,ville/localis,communes,NOM
+human        = mysql://localis,trolls,ville/localis,communes,NOM
 
 [Gui]
 fond         = Fond
@@ -81,8 +83,10 @@ colwidth     = 146
 debug        = 0
 firstjeudi   = First Jeudi
 lug          = LUG
+trolls       = Trolls
+human        = Humains
 noresult     = Aucun résultat.
 
 [Form]
 search       = text://20/ville,nom
-type  			 = select_list://all->[ Tous ],lug->LUG,firstjeudi->First Jeudi,trolls->Trolls
+type  			 = select_list://all->[ Tous ],lug->LUG,firstjeudi->First Jeudi,trolls->Trolls,human->Humains
