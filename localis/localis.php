@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.41 2002/12/11 16:49:53 ramzi Exp $
+<? /* $Id: localis.php,v 1.42 2002/12/17 11:04:30 ramzi Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -159,13 +159,15 @@ foreach($conf[layers] as $def_layer=>$res_layer) {
 	$lys[] = $def_layer;
 	foreach ($lys as $l) {
 		if (@in_array(trim($l),$lay)) {
-			$layer_menu.= "<tr><td class=toolchecked onclick='document.f.elements[".($lol+$js_start)."].checked=!document.f.elements[".($lol+$js_start)."].checked;'>";
-			$layer_menu.= "<input type=checkbox name=layers[] value='$l' checked onclick='this.checked=!this.checked;'> ".$conf["gui"]["$l"]."</td></tr>\n";
+			//$layer_menu.= "<tr><td class=toolchecked onclick='document.f.elements[".($lol+$js_start)."].checked=!document.f.elements[".($lol+$js_start)."].checked;'>";
+			$layer_menu.= "<tr><td class=toolchecked onclick='document.f.$l.checked=!document.f.$l.checked;'>";
+			$layer_menu.= "<input type=checkbox id=\"$l\" name=layers[] value='$l' checked onclick='this.checked=!this.checked;'> ".$conf["gui"]["$l"]."</td></tr>\n";
 			$layer_hidden.= "<input type=hidden name=layers[] value='$l'>\n";
 			$layer_query.= "layers[]=".urlencode($l)."&";
 		} else {
-			$layer_menu.= "<tr><td class=toolch onclick='document.f.elements[".($lol+$js_start)."].checked=!document.f.elements[".($lol+$js_start)."].checked;'>";
-			$layer_menu.= "<input type=checkbox name=layers[] value='$l' onclick='this.checked=!this.checked;'>".$conf["gui"]["$l"]."</td></tr>\n";
+			//$layer_menu.= "<tr><td class=toolch onclick='document.f.elements[".($lol+$js_start)."].checked=!document.f.elements[".($lol+$js_start)."].checked;'>";
+			$layer_menu.= "<tr><td class=toolch onclick='document.f.$l.checked=!document.f.$l.checked;'>";
+			$layer_menu.= "<input type=checkbox id=\"$l\" name=layers[] value='$l' onclick='this.checked=!this.checked;'>".$conf["gui"]["$l"]."</td></tr>\n";
 		}
 	}
 }
