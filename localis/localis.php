@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.23 2002/10/23 00:04:34 mose Exp $
+<? /* $Id: localis.php,v 1.24 2002/10/23 14:44:00 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -45,6 +45,8 @@ if (strstr($HTTP_GET_VARS['size'],'x')) {
 dl('php_mapscript.so');
 include "inc/parseconf.php";
 include "inc/lib.php";
+
+$version = current(file('VERSION'));
 
 # Read configuration file and set array like $conf[section][item]
 if (!is_file('etc/localis.conf')) die("etc/localis.conf not found<br>You need to copy etc/localis.conf.dist and modify it to fit your needs.");
