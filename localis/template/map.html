@@ -1,12 +1,12 @@
 <table border="0" cellpadding="0" cellspacing="0">
-<tr><td valign="top" width="$conf.gui.colwidth">
+<tr><td valign="top" width="$conf.gui.colwidth" align=right>
 
 <table border="0" cellpadding="1" cellspacing="0" width="$conf.gui.colwidth" class="dashed">
 <tr><td valign="top">
 <input type="image" src="$ref_src" width="$conf.map.ref_sizex" 
 height="$conf.map.ref_sizey" name="ref" alt="$conf.map.name" hspace="0" vspace="0" border="0"><br>
+<input type=image src=images/recadrer.png alt=Recadrer name=forceextent value="1" border=0 vspace=0 hspace=0>
 </td></tr></table>
-
 <table border="0" cellpadding="4" cellspacing="0" width="$conf.gui.colwidth" class="dashed">
 <tr><td valign="middle"><select name="size" class="submit" id="100">
 <option value="240x240" $size_240x240>240x240</option>
@@ -19,20 +19,20 @@ height="$conf.map.ref_sizey" name="ref" alt="$conf.map.name" hspace="0" vspace="
 </td></tr></table>
 
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="dashed">
-<tr><td valign="top" width="25%" align="center" class="tool$action_zoomout"
+<tr><td valign="top" width="25%" align="center" class="tool$action_edition" style=background:#efdebe
 onclick='document.f.action[1].checked=true;'><div>
-<img src="images/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"><br>
-<input type="radio" name="action" value="zoomout" $action_zoomout></div></td>
-<tr><td valign="top" width="25%" align="center" class="tool$action_zoomout"
-onclick='document.f.action[1].checked=true;'><div>
+<img src="images/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edition" valign="top"><br>
+<input type="radio" name="action" value="edition" $action_edition></div></td>
+<td valign="top" width="25%" align="center" class="tool$action_zoomout"
+onclick='document.f.action[2].checked=true;'><div>
 <img src="images/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"><br>
 <input type="radio" name="action" value="zoomout" $action_zoomout></div></td>
 <td valign="top" width="25%" align="center" class="tool$action_travel"
-onclick='document.f.action[2].checked=true;'><div>
+onclick='document.f.action[3].checked=true;'><div>
 <img src="images/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top"><br>
 <input type="radio" name="action" value="travel" $action_travel></div></tD>
 <td valign="top" width="25%" align="center" class="tool$action_zoomin"
-onclick='document.f.action[3].checked=true;'><div>
+onclick='document.f.action[4].checked=true;'><div>
 <img src="images/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom avant" valign="top"><br>
 <input type="radio" name="action" value="zoomin" $action_zoomin></div></td>
 </td></tr></table>
@@ -44,21 +44,21 @@ $layer_menu</table>
 <input type="submit" name="action" value="$conf.gui.refresh" class="submit" id="106">
 </td></tr></table>
 
-<table border="0" cellpadding="8" cellspacing="0" width="$conf.gui.colwidth"><tr><td valign="top">
-<div class="foot">Pour ajouter des points utilisez le drapeau doré.</div>
-<div class="foot">Localis est <b>en cours de developpement</b>, le fonctionnement de cette interface peut parfois etre perturbé.</div>
-<div class="foot">Contact Technique: <a href="mailto:mose@makina-corpus.net">mose</a>.</div>
+<table border="0" cellpadding="8" cellspacing="0" width="100%"><tr><td valign="top">
+<div class="foot">Pour ajouter un point utiliser le drapeau doré.</div><br>
+<div class="foot">Localis est <b>en cours de développement</b>, le fonctionnement de cette interface peut parfois être perturbé.</div>
+<div class="foot">Contact Technique : <a href="mailto:mose@makina-corpus.net">mose</a>.</div>
 </td></tr></table>
 <input type="hidden" name="extent" value="$extexploded">
 <input type="hidden" name="scale" value="$scl">
 </td>
 <td valign="top">
-<map name="localisation">
-$map_locations
-</map>
 <table border="0" cellpadding="0" cellspacing="0" class="maptable">
 <tr><td valign="top">
-<input type="image" src="$image_src" width="$sizex" height="$sizey" alt="$conf.map.name" hspace="0" vspace="0" class="map" border="0" usemap="#localisation">
+<map name="localisation" id="localisation">
+$map_locations
+</map>
+<input type="image" src="$image_src" width="$sizex" height="$sizey" alt="" hspace="0" vspace="0" class="map" border="0" usemap="#localisation">
 </td></tr></table>
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -70,6 +70,6 @@ $map_locations
 </form>
 </td>
 <td valign=top>
-$list
+$right
 </td></tr></table>
 

@@ -1,4 +1,4 @@
-<?  /* $Id: parseconf.php,v 1.1 2002/10/12 08:56:28 mose Exp $
+<?  /* $Id: parseconf.php,v 1.2 2002/10/28 03:36:08 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -20,9 +20,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
 USA.
 */
 
-function parseconf($file) {
+function parseconf($file,$ar='') {
   if (is_file($file)) {
     $f = file($file);
+		if (is_array($ar)) {
+			$back = $ar;
+		} else {
+			$back = array();
+		}
     foreach ($f as $line) {
 			$g = ereg("\[(.*)\]",$l,$s);
 			if ($g) $section = strtolower($s[1]);

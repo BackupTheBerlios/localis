@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.21 2002/10/27 22:13:05 mose Exp $
+<?  /* $Id: lib.php,v 1.22 2002/10/28 03:37:23 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -124,8 +124,8 @@ function additem($where,$city,$nom,$email,$url,$notes) {
 
 # Fonction semi recursive, genere le html en fonction des nouveaux templates
 function inc($template) {
-  global $conf;
-	$file = $conf[general][tpl_path]."/".$conf[general][lang]."/$template.html";
+  global $conf,$lang;
+	$file = $conf[general][tpl_path]."/$lang/$template.html";
   if (!is_file($file)) {
 		$file = $conf[general][tpl_path]."/$template.html";
 	}
