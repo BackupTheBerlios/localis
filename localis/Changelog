@@ -1,6 +1,6 @@
 Localis : Changelog 
 -------------------
-$Id: Changelog,v 1.6 2002/10/24 06:11:08 mose Exp $
+$Id: Changelog,v 1.7 2002/10/25 10:13:06 mose Exp $
 -------------------
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis - http://localis.makina-corpus.org
@@ -24,6 +24,9 @@ USA.
 -------------------
 
 v0.4.1 : 
+- added a 'back to full view' button under the reference map
+- added icons to access directly to requets
+- fixed security : maximum image size was not controlled (thx pascal)
 - fixed : keeping now the zoom level when click on a city on list
 
 v0.4 : 23 / 10 / 2002
