@@ -5,15 +5,15 @@ IMAGE "images/human.png"
 END
 
 SYMBOL
-NAME "flag"
+NAME "troll"
 TYPE pixmap
-IMAGE "images/flag_gold.png"
+IMAGE "images/troll.png"
 END
 
 SYMBOL
 NAME "flag2"
 TYPE pixmap
-IMAGE "images/flag_pink.png"
+IMAGE "images/flag_gold.png"
 END
 
 SYMBOL
