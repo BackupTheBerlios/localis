@@ -1,0 +1,176 @@
+MAP
+
+	NAME Limousin
+	STATUS on
+	EXTENT 455000 1980000 645000 2170000
+	UNITS meters
+	SHAPEPATH "data/"
+	SYMBOLSET "symbols.sym"
+	IMAGECOLOR 254 253 252
+	FONTSET "fonts/fontset"
+	TRANSPARENT on
+	IMAGETYPE "png"
+ 	SIZE 600 600
+	DEBUG on
+
+	WEB
+		LOG "tmp/maps.log"
+		IMAGEURL "/temp/"
+		IMAGEPATH "../www/temp/"
+		MINSCALE 100
+		MAXSCALE 4000000
+	END
+
+	REFERENCE
+		SIZE 100 100
+		STATUS on
+		EXTENT 455000 1980000 645000 2170000
+		OUTLINECOLOR 0 200 0
+		COLOR -1 -1 -1
+		IMAGE "limousin_pti.png"
+	END
+
+	LEGEND
+		KEYSIZE 20 18
+		KEYSPACING 7 5
+		LABEL
+			FONT verdana
+			TYPE truetype
+			ANTIALIAS on
+			SIZE 7
+			FORCE on
+			COLOR 60 60 60
+		END
+		TRANSPARENT on
+		OUTLINECOLOR 255 255 255
+		STATUS on
+	END
+
+	SCALEBAR
+		IMAGECOLOR 255 255 255
+		LABEL
+			COLOR 0 0 0
+			SIZE tiny
+		END
+		STYLE 1
+		SIZE 100 2
+		COLOR 0 0 0
+		UNITS KILOMETERS
+		INTERVALS 2
+		TRANSPARENT off
+		STATUS EMBED
+	END
+	
+	LAYER
+		NAME "ign"
+		TYPE RASTER
+		TILEINDEX "fond_100"
+		TILEITEM "location"
+		MAXSCALE 200000
+		GROUP "fond"
+		STATUS on
+	END
+
+	LAYER
+		NAME Landsat 
+		GROUP "fond"
+		TYPE RASTER
+		STATUS on
+		CONNECTIONTYPE WMS
+		CONNECTION "http://wms.jpl.nasa.gov/wms.cgi?"
+		METADATA
+			WIKI "LandsatGlobalMap"
+			"wms_name" "global_mosaic"
+			"wms_srs" "EPSG:4326"
+			"wms_styles" "visual"
+			"wms_server_version" "1.1.1"
+			"wms_layers" "global_mosaic"
+			"wms_request" "GetMap"
+			"wms_format" "image/png"
+			"wms_connectiontimeout" "60"
+		END
+	END
+
+	LAYER
+		NAME "Contours Départements"
+		TYPE line
+		DATA "dep"
+		STATUS on
+		GROUP "fond"
+		CLASSITEM 'CODE_DEPT'
+		CLASS
+			COLOR 130 90 20
+			SIZE 7
+			SYMBOL "circle"
+		END
+		TOLERANCE 5
+		TRANSPARENCY 30
+	END
+
+	LAYER
+		NAME "Départements"
+		TYPE polygon
+		DATA "dep"
+		STATUS on
+		GROUP "fond"
+		CLASSITEM 'CODE_DEPT'
+		LABELITEM 'NOM_DEPT'
+		CLASS
+			LABEL
+				FONT verdana
+				TYPE truetype
+				ANTIALIAS on
+				COLOR 78 78 78
+				BACKGROUNDCOLOR 255 255 255
+				SIZE 9
+			END
+			OUTLINECOLOR 255 255 255
+		END
+		TOLERANCE 5
+	END
+
+	LAYER
+		NAME "trame"
+		TYPE polygon
+		DATA "dep"
+		STATUS on
+		GROUP "fond"
+		CLASSITEM 'CODE_DEPT'
+		CLASS
+			EXPRESSION ([CODE_DEPT] ne 19 and [CODE_DEPT] ne 23 and [CODE_DEPT] ne 87)
+			COLOR 40 100 0
+			OUTLINECOLOR 255 255 255
+		END
+		TOLERANCE 5
+		TRANSPARENCY 30
+	END
+
+	LAYER
+		NAME "communes"
+		CONNECTIONTYPE postgis
+		CONNECTION "host=localhost user=mose dbname=etoil"
+		TYPE point
+		DATA "coord from communes"
+		STATUS off
+		CLASSITEM 'nom'
+		GROUP "fond"
+		LABELITEM 'nom'
+		CLASS
+			NAME "Communes"
+			SYMBOL "circle"
+			SIZE 9
+			LABEL
+				POSITION lc
+				COLOR 0 60 120
+				FONT arial_bold
+				TYPE truetype
+				SIZE 8
+				ANTIALIAS true
+			END
+			OUTLINECOLOR 128 128 128
+			COLOR 255 0 0
+		END
+		TOLERANCE 1
+	END
+
+END
