@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.32 2003/02/05 01:29:25 mose Exp $
+<?  /* $Id: lib.php,v 1.33 2003/02/05 04:40:05 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -281,6 +281,23 @@ function doicons($list,$it) {
 
 function lcls_drawpoint($x,$y) {
 	global $zMap, $zImage;
+	
+	$zU = ms_newLayerObj($zMap);
+	$zU->set("status", MS_ON);
+	$zU->set("type", MS_LAYER_POINT);
+	$zU->set("name", "Fond du point");
+	$zUcl = ms_newClassObj($zU);
+	$zUcl->set("symbolname", "circle");
+	$zUcl->set("size", "50");
+	$zUcl->set("color", "255 255 255");
+	$zUshp = ms_newShapeObj(MS_SHAPE_POINT);
+	$zUl = ms_newLineObj();
+	$zUl->addXY($x,$y);
+	$zUshp->add($zUl);
+	$zU->set("transparency", "50");
+	if (is_object($zUshp)) {
+		$zUshp->draw($zMap, $zU, $zImage, 1, "saisie");
+	}
 	$zUser = ms_newLayerObj($zMap);
 	$zUser->set("status", MS_ON);
 	$zUser->set("type", MS_LAYER_POINT);
