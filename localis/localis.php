@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.4 2002/10/16 14:16:52 mose Exp $
+<? /* $Id: localis.php,v 1.5 2002/10/16 15:26:41 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -54,8 +54,9 @@ foreach ($conf[form] as $enn=>$f) {
 	${"$field"}    = $HTTP_GET_VARS["$field"];
 	${"list_$field"} = sig_list($f,$conn,0);
 	${"menu_$field"} = domenu(${"list_$field"},$$field);
-	if ($$field and ereg("^[0-9]+$",$$field)) {
-		//$wh[] = "ref_$field=".$$field;
+	# If search string, build 'where' clause.
+	if (${"field"} and ereg("^text://.*$",$conf[form][$field])) {
+		$wh[] = "ville like '%".${"$field"}."%'";
 		$qu[] = "$field=".urlencode($$field);
 		$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($field), ${"list_$field"}[$$field]);
 	}
@@ -168,7 +169,7 @@ if ($view != $conf[gui][list_button]) {
 	$zExtent   = $zMap->extent;
 	$ext = ext2array($zExtent);
 	$extexploded = implode(' ',$ext);
-	if ($code_postal or $ville or $nature or $type) {
+	if ($search or $code_postal or $ville or $nature or $type) {
 		$wh[] = "((communes.".$conf[map][coord_x].") between $ext[0] and $ext[2])";
 		$wh[] = "((communes.".$conf[map][coord_y].") between $ext[1] and $ext[3])";
 		prepare_list($wh,$conn,$type);
@@ -178,14 +179,6 @@ if ($view != $conf[gui][list_button]) {
 		$zResult->set('status',MS_ON);
 		$zResult->set('data',"../../tmp/$id");
 		$zResult->draw($zImage);
-		# Obsolete used for medias-cites, to be cleaned	
-		if ($city) {
-			$sid = dbf_gen($conf[database][db_name],'communes',$villes,$wh,$conn,'s');
-			$zResult2 = $zMap->getLayerByName('communes');
-			$zResult2->set('status',MS_ON);
-			$zResult2->set('data',"../../tmp/$sid");
-			$zResult2->draw($zImage);
-		}
 	}
 	# Create image, reference map & legend
 	$image_src = $zImage->saveWebImage(MS_PNG,0,0,-1);
