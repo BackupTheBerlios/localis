@@ -1,7 +1,7 @@
 SYMBOL
 NAME "ordi"
 TYPE pixmap
-IMAGE "../images/comp.png"
+IMAGE "images/comp.png"
 END
 
 Symbol
