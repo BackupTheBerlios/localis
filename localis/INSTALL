@@ -1,6 +1,6 @@
 Localis : INSTALL 
 ----------------
-$Id: INSTALL,v 1.6 2003/02/10 13:52:26 mose Exp $
+$Id: INSTALL,v 1.7 2003/06/11 12:43:21 terraces Exp $
 -------------------
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis - http://localis.makina-corpus.org
@@ -42,7 +42,11 @@ Linux Install
 (check http://sig.cwriter.org/index.php/localis/INSTALL/2.linux)
 
 * Database setup
-Use the file tools/localis_db_0_5.sql to build the table structure
+Setup the mysql database with content of tools/localis_db_0_5.sql
+For example, you may type :
+
+mysqladmin -u root create localis
+cat tools/localis_db_0_5.sql | mysql -u root localis
 
 * maps setup
 The Easymapserver install builds all its context in /usr/local/mapserver.

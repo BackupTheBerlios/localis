@@ -1,6 +1,6 @@
 Localis : INSTALL 
 ----------------
-$Id: INSTALL,v 1.2 2003/02/10 13:52:43 mose Exp $
+$Id: INSTALL,v 1.3 2003/06/11 12:43:58 terraces Exp $
 -------------------
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis - http://localis.makina-corpus.org
@@ -50,8 +50,8 @@ Install
 Setup the mysql database with content of sql/
 For example, you may type :
 
-mysqladmin -u root create localis
 cat sql/*.sql | mysql -u root localis
+"localis" database should have been created with former localis installation
 
 Then put the mapfr directory into the www directory of the mapserver
 installation.
