@@ -37,8 +37,6 @@ onclick='document.f.action[4].checked=true;'><div>
 <input type="radio" name="action" value="zoomin" $action_zoomin></div></td>
 </td></tr></table>
 
-$edit
-
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="dashed">
 <tr><td valign="top">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -55,12 +53,12 @@ $layer_menu</table>
 <input type="hidden" name="scale" value="$scl">
 </td>
 <td valign="top">
-<map name="localisation">
-$map_locations
-</map>
 <table border="0" cellpadding="0" cellspacing="0" class="maptable">
 <tr><td valign="top">
-<input type="image" src="$image_src" width="$sizex" height="$sizey" alt="$conf.map.name" hspace="0" vspace="0" class="map" border="0" usemap="#localisation">
+<map name="localisation" id="localisation">
+$map_locations
+</map>
+<input type="image" src="$image_src" width="$sizex" height="$sizey" alt="" hspace="0" vspace="0" class="map" border="0" usemap="#localisation">
 </td></tr></table>
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -72,6 +70,6 @@ $map_locations
 </form>
 </td>
 <td valign=top>
-$list
+$right
 </td></tr></table>
 
