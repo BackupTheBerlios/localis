@@ -11,9 +11,9 @@ db_user      = localis
 db_pass      = localis
 
 [General]
-tpl_path     = /usr/local/mapserver/www/localis_demo/localis/template
-tmp_path     = /usr/local/mapserver/www/localis_demo/localis/tmp
-img_path     = /usr/local/mapserver/www/localis_demo/localis/images
+tpl_path     = /usr/local/mapserver/www/localis/localis/template
+tmp_path     = /usr/local/mapserver/www/localis/localis/tmp
+img_path     = /usr/local/mapserver/www/localis/localis/images
 sql_reftable = points
 sql_cityname = nom
 search_listresult = <u>%s</u>
@@ -21,7 +21,7 @@ lang         = fr
 
 [Globals]
 name         = Carte de la France Libre
-minimap      = /mapfr/mini_france.png
+minimap      = /maps/mini_france.png
 minimapx     = 142
 minimapy     = 142
 colwidth     = 146
@@ -44,7 +44,7 @@ colwidth     = 146
 
 [Map]
 name         = france
-path 		     = /usr/local/mapserver/www/localis_littoral/mapfr
+path 	     = /usr/local/mapserver/www/localis/mapfr
 file         = france.map
 url          = /maps
 defext       = 1 1630000 1267000 2690000
