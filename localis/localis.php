@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.11 2002/10/17 14:30:16 mastre Exp $
+<? /* $Id: localis.php,v 1.12 2002/10/17 14:54:51 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -38,6 +38,7 @@ include "inc/parseconf.php";
 include "inc/lib.php";
 
 # Read configuration file and set array like $conf[section][item]
+if (!is_file('etc/localis.conf')) die("localis.conf not found<br>Maybe you need to copy localis.conf.dist");
 $conf = parseconf('etc/localis.conf');
 $conn = sig_connect();
 
