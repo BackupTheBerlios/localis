@@ -32,29 +32,35 @@ if (isset($_REQUEST['purge']) and $_REQUEST['purge'] == 'all') {
 }
 $lay = array("fond");
 
-$moyens[1] = "Pédestre";
-$moyens[2] = "Equestre";
-$moyens[3] = "Cyclable";
-$moyens[4] = "Kayak";
-$smarty->assign('moyens',$moyens);
+$types[1] = "Pédestre";
+$types[2] = "Equestre";
+$types[3] = "Cyclable";
+$types[4] = "Kayak";
+$smarty->assign('types',$types);
 
-$durees[1] = "moins d'une demi-heure";
-$durees[2] = "moins d'une heure";
-$durees[3] = "une à deux heures";
-$durees[4] = "plus de deux heures";
-$smarty->assign('durees',$durees);
+$times[1] = "moins d'une demi-heure";
+$times[2] = "moins d'une heure";
+$times[3] = "une à deux heures";
+$times[4] = "plus de deux heures";
+$smarty->assign('times',$times);
 
-$difficultes[1] = "1";
-$difficultes[2] = "2";
-$difficultes[3] = "3";
-$difficultes[4] = "4";
-$difficultes[5] = "5";
-$smarty->assign('difficultes',$difficultes);
+$levels[1] = "1";
+$levels[2] = "2";
+$levels[3] = "3";
+$levels[4] = "4";
+$levels[5] = "5";
+$smarty->assign('levels',$levels);
 
 if (isset($_REQUEST['filtre'])) {
 	$filtre = $_REQUEST['filtre'];
-	$smarty->assign('filtre',$filtre);
+	$_SESSION['filtre'] = array();
+	foreach ($filtre as $f=>$v) {
+		$_SESSION["filtre"][$f] = $v;
+	}
+} elseif (isset($_SESSION['filtre'])) {
+	$filtre = $_SESSION['filtre'];
 }
+$smarty->assign('filtre',$filtre);
 
 // ========================================================================
 
@@ -148,40 +154,150 @@ if ($clicked) {
 			$focus['edit'] = "focus";
 			$_SESSION['track'][] = $map_click['x']." ".$map_click['y'];
 		}
-	} elseif (isset($_REQUEST['dir'])) {
 	}
 }
 
 if (isset($_REQUEST['p_name']) and $_SESSION['me']) {
-	if (!$db->add_parcours($_REQUEST['p_name'],$_SESSION['me'],$_REQUEST['p_type'],$_SESSION['track'],$_REQUEST['p_difficulte'],$_REQUEST['p_duree'])) {
+	if (!$db->add_parcours($_REQUEST['p_name'],$_SESSION['me'],$_REQUEST['p_type'],$_SESSION['track'],$_REQUEST['p_level'],$_REQUEST['p_time'])) {
 		$feedback[] = array('num'=>-1,'msg'=>$db->mes[0]);
 	} else {
 		$_SESSION['track'] = array();
 	}
+} elseif (isset($_REQUEST['do']) and $_REQUEST['do'] == tra('Enregistrer')) {
+	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+	$focus['edit'] = "focus";
 }
 
-if (isset($_REQUEST['action']) and $_REQUEST['action'] == tra('Rechercher')) {
+if (isset($filtre) and is_array($filtre)) {
 	//$where = "where parcours_type=1";
-	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+	foreach ($filtre as $f=>$v) {
+		if (!empty($v)) {
+			$wh[] = "parcours_$f=$v";
+		}
+	}
 	$where = '';
+	
+	$e_lay = ms_newLayerObj($e_map);
+	$e_lay->set('name','parcoursline');
+	$e_lay->set('status',MS_ON);
+	$e_lay->set('connectiontype',MS_POSTGIS);
+	$e_lay->set('connection',$db->connstr);
+	$query = "parcours_geom from parcours";
+	if (isset($wh) and is_array($wh) and count($wh)) {
+		$e_lay->setFilter(implode(' and ',$wh));
+	}
+	$e_lay->set('data',$query);
+	$e_lay->set('type',MS_LAYER_LINE);
+	$e_cla = ms_newClassObj($e_lay);
+	$e_sty = ms_newStyleObj($e_cla);
+	$e_sty->set("symbolname","circle");
+	$e_sty->set("size",8);
+	$e_sty->color->setRGB(0,0,0);
+
+	
+	$e_lay2 = ms_newLayerObj($e_map);
+	$e_lay2->set('name','parcourslineover');
+	$e_lay2->set('status',MS_ON);
+	$e_lay2->set('connectiontype',MS_POSTGIS);
+	$e_lay2->set('connection',$db->connstr);
+	$query = "parcours_geom from parcours";
+	if (isset($wh) and is_array($wh) and count($wh)) {
+		$e_lay2->setFilter(implode(' and ',$wh));
+	}
+	$e_lay2->set('data',$query);
+	$e_lay2->set('type',MS_LAYER_LINE);
+	$e_lay2->set('classitem','parcours_type');
+	
+	$e_cla2a = ms_newClassObj($e_lay2);
+	$e_cla2a->setExpression('1');
+	$e_sty2a = ms_newStyleObj($e_cla2a);
+	$e_sty2a->set("symbolname","circle");
+	$e_sty2a->set("size",4);
+	$e_sty2a->color->setRGB(250,170,20);
+	
+	$e_cla2b = ms_newClassObj($e_lay2);
+	$e_cla2b->setExpression('2');
+	$e_sty2b = ms_newStyleObj($e_cla2b);
+	$e_sty2b->set("symbolname","circle");
+	$e_sty2b->set("size",4);
+	$e_sty2b->color->setRGB(140,220,140);
+
+	$e_cla2c = ms_newClassObj($e_lay2);
+	$e_cla2c->setExpression('3');
+	$e_sty2c = ms_newStyleObj($e_cla2c);
+	$e_sty2c->set("symbolname","circle");
+	$e_sty2c->set("size",4);
+	$e_sty2c->color->setRGB(140,190,230);
+	
+	$e_cla2d = ms_newclassobj($e_lay2);
+	$e_cla2d->setExpression('4');
+	$e_sty2d = ms_newstyleobj($e_cla2d);
+	$e_sty2d->set("symbolname","circle");
+	$e_sty2d->set("size",4);
+	$e_sty2d->color->setrgb(250,130,90);
+	
 	$e_lay = ms_newLayerObj($e_map);
 	$e_lay->set('name','parcours');
 	$e_lay->set('status',MS_ON);
 	$e_lay->set('connectiontype',MS_POSTGIS);
 	$e_lay->set('connection',$db->connstr);
-	$e_lay->set('data',"parcours_start from parcours");
+	$query = "parcours_start from parcours";
+	if (isset($wh) and is_array($wh) and count($wh)) {
+		$e_lay->setFilter(implode(' and ',$wh));
+	}
+	$e_lay->set('data',$query);
 	$e_lay->set('type',MS_LAYER_POINT);
 	$e_lay->set('labelitem','parcours_name');
-	$e_cla = ms_newClassObj($e_lay);
-	$e_sty = ms_newStyleObj($e_cla);
-	$e_lab = $e_cla->label;
-	$e_lab->set("position",MS_CC);
-	$e_lab->set("size","medium");
-	$e_lab->color->setRGB(128,0,0);
-	$e_lab->backgroundcolor->setRGB(255,255,255);
-	$e_sty->set("size",8);
-	$e_sty->set("symbolname","circle");
-	$e_sty->color->setRGB(128,0,0);
+	$e_lay->set('classitem','parcours_type');
+	
+	$e_claa = ms_newClassObj($e_lay);
+	$e_claa->setExpression("1");
+	$e_stya = ms_newStyleObj($e_claa);
+	$e_laba = $e_claa->label;
+	$e_laba->set("position",MS_AUTO);
+	$e_laba->set("size","12");
+	$e_laba->set("type","truetype");
+	$e_laba->set("font","arial_bold_italic");
+	$e_laba->color->setRGB(0,0,0);
+	$e_laba->backgroundcolor->setRGB(250,170,20);
+	$e_stya->set("symbolname","marche");
+
+	$e_clab = ms_newClassObj($e_lay);
+	$e_clab->setExpression('2');
+	$e_styb = ms_newStyleObj($e_clab);
+	$e_labb = $e_clab->label;
+	$e_labb->set("position",MS_AUTO);
+	$e_labb->set("size","12");
+	$e_labb->set("type","truetype");
+	$e_labb->set("font","arial_bold_italic");
+	$e_labb->color->setRGB(0,0,0);
+	$e_labb->backgroundcolor->setRGB(140,220,140);
+	$e_styb->set("symbolname","cheval");
+
+	$e_clac = ms_newClassObj($e_lay);
+	$e_clac->setExpression('3');
+	$e_styc = ms_newStyleObj($e_clac);
+	$e_labc = $e_clac->label;
+	$e_labc->set("position",MS_AUTO);
+	$e_labc->set("size","12");
+	$e_labc->set("type","truetype");
+	$e_labc->set("font","arial_bold_italic");
+	$e_labc->color->setRGB(0,0,0);
+	$e_labc->backgroundcolor->setRGB(140,190,230);
+	$e_styc->set("symbolname","vtt");
+
+	$e_clad = ms_newClassObj($e_lay);
+	$e_clad->setExpression('4');
+	$e_styd = ms_newStyleObj($e_clad);
+	$e_labd = $e_clad->label;
+	$e_labd->set("position",MS_AUTO);
+	$e_labd->set("size","12");
+	$e_labd->set("type","truetype");
+	$e_labd->set("font","arial_bold_italic");
+	$e_labd->color->setRGB(0,0,0);
+	$e_labd->backgroundcolor->setRGB(250,130,90);
+	$e_styd->set("symbolname","canoe");
+
 }
 
 if (!empty($_SESSION['track'])) {

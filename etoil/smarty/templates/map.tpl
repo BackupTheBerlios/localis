@@ -54,13 +54,13 @@
 <input type="radio" id="edit" name="action" value="edit"{if $focus.edit eq 'focus'} checked="checked"{/if} accesskey="r" onchange="toggletool('tool_edit');" /></div></td>
 {/if}
 <td valign="top" width="25%" align="center" class="tool{$focus.zoomout}" id='tool_zoomout'>
-<div><label for="zoomout"><img src="img/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"></label><br />
+<div title="zoomout [ Alt-a ]"><label for="zoomout"><img src="img/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"></label><br />
 <input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked"{/if} accesskey="a" onchange="toggletool('tool_zoomout')" /></div></td>
 <td valign="top" width="25%" align="center" class="tool{$focus.travel}" id='tool_travel'>
-<div><label for="travel"><img src="img/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top"></label><br />
+<div title="deplacement [ Alt-z ]"><label for="travel"><img src="img/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top"></label><br />
 <input type="radio" id="travel" name="action" value="travel"{if $focus.travel eq 'focus'} checked="checked"{/if} accesskey="z" onchange="toggletool('tool_travel')" /></div></tD>
 <td valign="top" width="25%" align="center" class="tool{$focus.zoomin}" id='tool_zoomin'>
-<div><label for="zoomin"><img src="img/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom avant" valign="top"></lable><br />
+<div title="zoomin [ Alt-e ]"><label for="zoomin"><img src="img/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom avant" valign="top"></lable><br />
 <input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked"{/if}  accesskey="e" onchange="toggletool('tool_zoomin')" /></div></td>
 </td></tr></table>
 
@@ -72,52 +72,53 @@
 </td></tr></table>
 
 <div class="bar">Selection</div>
-<select name="filtre[moyen]">
+<select name="filtre[type]">
 <option value="">{tr}Moyen de locomotion{/tr}</option>
 <option value="">{tr}... Indifférent{/tr}</option>
-{foreach key=k item=i from=$moyens}
-<option value="{$k}"{if $filtre.moyen eq $k} selected="selected"{/if}>{$i}</option>
+{foreach key=k item=i from=$types}
+<option value="{$k}"{if $filtre.type eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
 </select><br />
 
-<select name="filtre[duree]">
+<select name="filtre[time]">
 <option value="">{tr}Durée du parcours{/tr}</option>
 <option value="">{tr}... Indifférent{/tr}</option>
-{foreach key=k item=i from=$durees}
-<option value="{$k}"{if $filtre.duree eq $k} selected="selected"{/if}>{$i}</option>
+{foreach key=k item=i from=$times}
+<option value="{$k}"{if $filtre.time eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
 </select><br />
 
-<select name="filtre[difficulte]">
+<select name="filtre[level]">
 <option value="">{tr}Niveau de difficulté{/tr}</option>
 <option value="">{tr}... Indifférent{/tr}</option>
-{foreach key=k item=i from=$difficultes}
-<option value="{$k}"{if $filtre.difficulte eq $k} selected="selected"{/if}>{$i}</option>
+{foreach key=k item=i from=$levels}
+<option value="{$k}"{if $filtre.level eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
 </select><br />
 
 <input type="submit" name="action" value="{tr}Rechercher{/tr}" /><br />
 
-{if $smarty.request.save eq 'all'}
+{if $smarty.request.do eq "{tr}Enregistrer{/tr}"}
 <table border="1">
 <tr><td>Nom</td><td><input type="text" name="p_name" value="" /></td></tr>
-<tr><td>Moyen de locomotion</td><td><select name="p_type">
-{foreach key=k item=i from=$moyens}
-<option value="{$k}">{$i}</option>
+<tr><td>Moyen de locomotion</td><td>
+<select name="p_type">
+{foreach key=k item=i from=$types}
+<option value="{$k}"{if $filtre.type eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
 </select></td></tr>
 
 <tr><td>Duree</td><td>
-<select name="p_duree">
-{foreach key=k item=i from=$durees}
-<option value="{$k}">{$i}</option>
+<select name="p_time">
+{foreach key=k item=i from=$times}
+<option value="{$k}"{if $filtre.time eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
 </select></td></tr>
 
 <tr><td>Difficulté (1 facile, 5 tres dur)</td><td>
-<select name="p_difficulte">
-{foreach key=k item=i from=$difficultes}
-<option value="{$k}">{$i}</option>
+<select name="p_level">
+{foreach key=k item=i from=$levels}
+<option value="{$k}"{if $filtre.level eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
 </select></td></tr>
 <tr><td></td><td><input type="submit" name="action" value="Enregistrer" /></td></tr>
@@ -129,8 +130,8 @@ click y : {$map_click.y}<br />
 <hr />
 {if count($smarty.session.track)}
 <div class="dashed">
-<a href="{$url}?purge=all">purge</a>
-<a href="{$url}?save=all">save</a></div>
+<input type="submit" name="do" value="{tr}Effacer{/tr}" />
+<input type="submit" name="do" value="{tr}Enregistrer{/tr}" /></div>
 {foreach item=x from=$smarty.session.track}
 <a href="{$url}?del={$x|escape:"url"}">[x]</a> <a href="">{$x}</a><br />
 {/foreach}

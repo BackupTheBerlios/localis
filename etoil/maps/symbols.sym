@@ -1,4 +1,28 @@
 SYMBOL
+NAME "marche"
+TYPE pixmap
+IMAGE "images/p_marche.png"
+END
+
+SYMBOL
+NAME "cheval"
+TYPE pixmap
+IMAGE "images/p_cheval.png"
+END
+
+SYMBOL
+NAME "canoe"
+TYPE pixmap
+IMAGE "images/p_canoe.png"
+END
+
+SYMBOL
+NAME "vtt"
+TYPE pixmap
+IMAGE "images/p_vtt.png"
+END
+
+SYMBOL
 NAME "tux"
 TYPE pixmap
 IMAGE "images/tux.png"
