@@ -1,14 +1,19 @@
 <?
 $mapmargin = 11; // taille de la bordure clicable de navigation perpendiculaire
 $blockspc=7; // espaces entre les blocks de droite
-$types[1] = "Pédestre";
+$types[1] = "P&eacute;destre";
 $types[2] = "Equestre";
-$types[3] = "Cyclable";
+$types[3] = "VTT";
 $types[4] = "Kayak";
-$typescolor[1]="faaa14"; // couleurs correspondant à chaque type, en hexa sur *6* caract !!
-$typescolor[2]="8cdc8c"; 
-$typescolor[3]="6cbee6"; 
-$typescolor[4]="fa825a"; 
+$types[5] = "Cyclotourisme";
+$types[6] = "Attelage";
+
+$typescolor[1]="fea034"; // couleurs correspondant à chaque type, en hexa sur *6* caract !!
+$typescolor[2]="2f9535"; // vert d'orgine ne ressort pas assez sur les cartes"8cdc8c"; 
+$typescolor[3]="f25254"; 
+$typescolor[4]="9cc9e1"; 
+$typescolor[5]="f79b9d"; 
+$typescolor[6]="9ad47f";
 /* marche pô
 $icontypes[1] = "maps/images/p_marche.png";
 $icontypes[2] = "../maps/images/p_cheval.png";
