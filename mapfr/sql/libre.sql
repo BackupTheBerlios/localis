@@ -1,4 +1,4 @@
-# $Id: libre.sql,v 1.7 2002/10/21 14:52:26 mose Exp $
+# $Id: libre.sql,v 1.8 2002/10/22 05:55:14 mose Exp $
 #
 # Serveur: localhost
 # Généré le : Jeudi 17 Octobre 2002 à 15:10
@@ -145,6 +145,6 @@ CREATE TABLE human (
 # Contenu de la table `human`
 #
 
-INSERT INTO human VALUES (1, 'Le-Haillan', 'Médias-Cité', '', 'Gerald Elbaze', '', 'http://medias-cite.org','1');
-INSERT INTO human VALUES (2, 'Saint-Martin-de-Ré', 'Ré-publique et RadioPhare', '', 'Olivier Zablocki', '', 'http://re-publique.net','1');
+INSERT INTO human VALUES (1, 'Le Haillan', 'Médias-Cité', '', 'Gerald Elbaze', '', 'http://medias-cite.org','1');
+INSERT INTO human VALUES (2, 'Saint-martin-de-ré', 'Ré-publique et RadioPhare', '', 'Olivier Zablocki', '', 'http://re-publique.net','1');
 
