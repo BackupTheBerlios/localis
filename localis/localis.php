@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.52 2003/02/04 21:41:26 mose Exp $
+<? /* $Id: localis.php,v 1.53 2003/02/05 01:29:25 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -34,15 +34,19 @@ $lay       = ($HTTP_GET_VARS['layers']) ? $HTTP_GET_VARS['layers'] : array("fond
 $act       = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
 $city      =  $HTTP_GET_VARS['v'];
 $view      =  $HTTP_GET_VARS['tpl'];
-$add       =  $HTTP_GET_VARS['add'];
+$add       =  $HTTP_GET_VARS['editlay'];
 // for pda template
 $fzoom     =  $HTTP_GET_VARS['fzoom'];
 $fzoomout  =  $HTTP_GET_VARS['fzoomout'];
 
 $fsens     =  $HTTP_GET_VARS['fsens'];
-$drawlayer =  $HTTP_GET_VARS['drawlayer'];
-$mode      = ereg("MSIE",getenv("HTTP_USER_AGENT")) ? "ie" : "";
+$editlay   =  $HTTP_GET_VARS['editlay'];
+$dellayer  =  $HTTP_GET_VARS['dellayer'];
+$confdel   =  $HTTP_GET_VARS['confirmdel'];
+$modlayer  =  $HTTP_GET_VARS['modlayer'];
+$drawlayer = ($HTTP_GET_VARS['modlayer']) ? $HTTP_GET_VARS['modlayer'] : $HTTP_GET_VARS['drawlayer'];;
 $interface = ($HTTP_GET_VARS['interface']) ? $HTTP_GET_VARS['interface'] : 'mapImg';
+$mode      = ereg("MSIE",getenv("HTTP_USER_AGENT")) ? "ie" : "";
 
 if (strstr($HTTP_GET_VARS['size'],'x')) {
 	list($sizex,$sizey) = split('x',$HTTP_GET_VARS['size']);
@@ -88,8 +92,17 @@ $conn = sig_connect();
 
 checkfontlist($conf["map"]['path']);
 
+// layer modification
+if ($confdel and $drawlayer) {
+	modlayer('killme!',$drawlayer);
+	$drawlayer = '';
+}
+if ($editlay['add']) {
+	$drawlayer = modlayer($editlay,$add['id']);
+}
+
+// points modification
 if ($addit and (is_array($add))) {
-	#additem($add[nom],$add[sign],$add[desc],$add[statut],$add[lat],$add[long]);
 	addobj($add);
 }
 
@@ -191,7 +204,6 @@ foreach($conf[layers] as $l=>$lv) {
 if (is_array($userlayers)) {
   foreach ($userlayers as $ulnum=>$ul) {
     if ($drawlayer == $ulnum) {
-			#$glob['input'].= "<input type=\"hidden\" name=\"drawlayer\" value=\"$ulnum\">\n";
       $glob['catmenu'].= "<option value=$ulnum selected style=background-color:#FFCC99>$ul[layername]</option>";
     } else {
       $glob['catmenu'].= "<option value=$ulnum>$ul[layername]</option>";
@@ -205,7 +217,6 @@ $glob["act".$act] = "checked";
 $glob["size".$sizex."x".$sizey] = "selected";
 $glob['sizex'] = $sizex;
 $glob['sizey'] = $sizey;
-$glob['scale'] = $scl;
 $glob['coordx'] = $coordx;
 $glob['coordy'] = $coordy;
 
@@ -213,12 +224,10 @@ if ($ext) {
 	$glob['query'].= "&extent=".urlencode($extexploded);
 	$glob['input'].= "<input type=\"hidden\" name=\"extent\" value=\"$extexploded\">";
 }
-$glob['query'].= "&scale=".urlencode($scl);
-$glob['input'].= "<input type=\"hidden\" name=\"scale\" value=\"$scl\">";
 
 $colwidth = $conf[map][ref_sizex]+4;
 
-if ($drawlayer and ($drawlayer != 'x') and ($drawlayer != 'NEW')) {
+if (($drawlayer and ($drawlayer != 'x') and ($drawlayer != 'NEW'))) {
 	$points = lcls_drawlayer($drawlayer);
 	if (is_array($points)) {
 		foreach ($points as $where=>$what) {
@@ -228,7 +237,7 @@ if ($drawlayer and ($drawlayer != 'x') and ($drawlayer != 'NEW')) {
 			$glob[maplocations].= sprintf($g_maplocations,$where,$where,($cdx-10),($cdy-10),($cdx+10),($cdy+10),$what[1],$what[1],'edit');
 			$lst.= sprintf($g_listitem,$drawlayer,$what[0],$glob[query],$what[0],$what[1]);
 		}
-		$list = sprintf($g_list,$lst);
+		$list.= sprintf($g_list,$lst);
 	}
 }
 
@@ -247,25 +256,39 @@ $glob[refsrc]   = $zRef->saveWebImage(MS_PNG,0,0,-1);
 $zLegende  = $zMap->drawLegend();
 $glob[legsrc]   = $zLegende->saveWebImage(MS_PNG,0,0,-1);
 $scl = number_format($zMap->scale,0,',',' ');
-
+$glob['scale'] = $scl;
+$glob['query'].= "&scale=".urlencode($scl);
+$glob['input'].= "<input type=\"hidden\" name=\"scale\" value=\"$scl\">";
+$layertop = sprintf($g_layername, $textelayer, $userlayers[$drawlayer]['layername'], $drawlayer, $glob['query'], $textelayeredit, $drawlayer, $drawlayer, $glob['query'], $textelayerdelete);
 
 echo inc("head");
 echo inc("search");
-if ($drawlayer == "NEW") {
-	$glob['ltype'] = domenu($laytype,'');
-	$glob['lcolor'] = domenu($laycolors,'');
-	$glob['lsize'] = domenu($laysize,'');
-	$glob['lsymbol'] = domenu($laysymbols,'');
+if ($drawlayer and $dellayer) {
+	$glob['right'] = $layertop.sprintf($g_confirmdelete, $texteconfirmdelete, $dellayer, $texteconfirmsubmit);
+} elseif (($drawlayer == "NEW") or ($modlayer)){
+	if ($modlayer) {
+		list($edlid,$edlname,$edltype,$edlgroup,$edlcolor,$edlsize,$edlsymbol) = $userlayers[$modlayer];
+		$glob['right'] = $layertop;
+	}
+	$glob['lid']     = $edlid;
+	$glob['lname']   = $edlname;
+	$glob['lgroup']  = $edlroup;
+	$glob['ltype']   = domenu($laytype,$edltype);
+	$glob['lcolor']  = domenu($laycolors,$edlcolor);
+	$glob['lsize']   = domenu($laysize,$edlsize);
+	$glob['lsymbol'] = domenu($laysymbols,$edlsymbol);
 
-	$glob['right'] = inc("editlayer");
+	$glob['right'].= inc("editlayer");
 } elseif ($act == "edition") {
 	$glob['statusmenu'] = domenu(array(0,1,2,3,4,5),0);
 	if ($showid) {
 		
 	}
-	$glob['right'] = inc("edit");
+	$glob['right'] = $layertop.inc("edit");
 } else {
-	$glob['right'] = $list;
+	if (($drawlayer and ($drawlayer != 'x') and ($drawlayer != 'NEW'))) {
+		$glob['right'].= $layertop.$list;
+	}
 }
 echo inc("map");
 echo inc("foot");

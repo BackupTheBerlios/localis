@@ -102,6 +102,11 @@ a:hover {
 }
 .dashed#form {
 	background-color: #efdebe;
+	border: 1px dashed #e8a339;
+}
+.dashed#form2 {
+	background-color: #efdebe;
+	border: 1px solid #a88309;
 }
 .dashed#form table {
 	font-size:80%;

@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.31 2003/02/04 19:04:34 mose Exp $
+<?  /* $Id: lib.php,v 1.32 2003/02/05 01:29:25 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -146,10 +146,28 @@ function getinfos($table,$id) {
 	}
 }
 
-function additem($nom,$email,$desc,$statut,$e,$n) {
+function modlayer($a,$id="") {
 	global $conf,$conn;
-	$query = "insert into points (nom,email,description,statut,date,E,N) values ('$nom','$email','$desc','$statut',now(),$e,$n);";
+	if (is_array($a)) {
+		if ($id) {
+			$query = "update layer set ";
+			$query.= "layername='".addslashes($a[name])."', ";
+			$query.= "layergroup='".addslashes($a[group])."', ";
+			$query.= "layertype='".addslashes($a[type])."', ";
+			$query.= "layercolor='".addslashes($a[color])."', ";
+			$query.= "layersize='".addslashes($a[size])."', ";
+			$query.= "layersymbol='".addslashes($a[symbol])."' ";
+			$query.= "where layerid=$id ";
+		} else {
+			$query = "insert into layer (layername,layertype,layergroup,layercolor,layersize,layersymbol) values ('";
+			$query.= addslashes($a[name])."', '$a[type]', '";
+			$query.= addslashes($a[group])."','$a[color]', '$a[size]', '$a[symbol]')";
+		}
+	} else {
+		$query = "delete from layer where layerid=$id";
+	}
 	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die($query."<br>".mysql_error());
+	return mysql_insert_id($conn);
 }
 
 function addobj($add) {
@@ -194,34 +212,6 @@ function inc($template) {
   }
 }
 
-function build_list($found,$qu,$eff) {
-  global $tempath, $tpl, $PHP_SELF, $resultats, $myc, $coords, $sizex, $sizey, $layer_query, $type, $conf;
-	// todo : make forcescale variable from conf
-	$args = @implode('&',$qu);
-  if (!$found) {
-    $list.= $conf[gui][noresult];
-  } else {
-    if (is_array($resultats)) {
-			foreach ($resultats as $vres) {
-				$ouca = $coords[$vres];
-				$list.= "<div class=base id=109><a href=localis.php?x=".$ouca[x]."&y=".$ouca[y];
-				$list.= "&v=".urlencode($vres)."&size={$sizex}x$sizey&type=$myc&".$layer_query."forcescale=1200&$args ";
-				$list.= "class=base>$vres</a></div>";
-				foreach ($found[$vres] as $kk) {
-					$list.= "<div class=list><a href=\"file.php?table=$myc&id=".$kk['cid']."\" target=_new>";
-					$list.= "<img src=images/mapzoom.png width=8 height=8 hspace=2 vspace=0 border=0 alt='look' align=baseline>&nbsp;";
-					$list.= "$kk[name]</a></div>\n";
-					$maplist[$vres].= "<div class=list><a href=file.php?table=$myc&id=".$kk['cid']." target=_new><b>$kk[name]</b></a><br>".$kk[shortdesc]."</div>"; 
-				}
-			}
-		}
-  }
-	$GLOBALS[maplist] = $maplist;
-  $GLOBALS[llist] = $list;
-  $GLOBALS[lrequete] = @array_pop($eff);
-  return inc('listitem');
-}
-
 function pix2geo($x,$minx,$maxx,$size) {
 	return floor(($x / $size) * ($maxx - $minx));
 }
@@ -255,36 +245,6 @@ function move_map($ext,$sens) {
 		}
 	}
 	return $ext;
-}
-
-function dbf_flag($click_x,$click_y, $qx, $qy) {
-  global $conf, $add_nom, $qinfo, $x, $y, $nature, $ext, $sizex, $sizey;
-	$path = $conf[general][tmp_path];
-  $UNIQUE_ID = $pref.uniqid('flag_');
-  $dbffile = "$path/$UNIQUE_ID.dbf";
-	$dbf_inf = explode('/',str_replace('dbf://','',$conf[map][dbf_def]));
-	$i=0;
-	foreach($dbf_inf as $d) {
-		$dd = explode(',',$d);
-		foreach($dd as $ddd) {
-			$dbfdef[$i][] = $ddd;
-		}
-		$i++;
-	}
-	$dbf = @dbase_create($dbffile,$dbfdef) or die ("dbf creation failed");
-	$did = @dbase_open("$dbffile",2) or die ("Unable to open dbf file");
-	$shapefile = ms_newShapefileObj("$path/$UNIQUE_ID", 1) or die("Error creating shapefile.");
-	$point = ms_newpointobj();
-	$GLOBALS['m']["$add_nom"][x] = $click_x;
-	$GLOBALS['m']["$add_nom"][y] = $click_y;
-	$GLOBALS['coords']["$add_nom"] = array('x' => $qx, 'y' => $qy );
-	$point->setXY($qx,$qy);
-	$shapefile->addPoint($point);
-	$tmp = array(trim($v),$qx,$qy);
-	dbase_add_record($did,$tmp);
-  $shapefile->free();
-  dbase_close($did);
-  return $UNIQUE_ID;
 }
 
 function clean_city($a) {
@@ -384,92 +344,6 @@ function lcls_drawlayer($drawlayer) {
 	}
 	return $pointslist;
 }
-
-function lcls_drawline($drawlayer, $listlines, $edit=0, $flag='') {
-  global $zMap, $zImage, $userlayers;
-  $zUser = ms_newLayerObj($zMap);
-  $zUser->set("status", 1);
-  $zUser->set("type", MS_LAYER_LINE);
-  $zUser->set("classitem", "point");
-  $zUser->set("name", "User Input lines");
-  $zUser->set("group", "fond");
-  $zUclass = ms_newClassObj($zUser);
-  $zUclass->set("name", $userlayers[$drawlayer][layername]);
-  $zUclass->set("color", 12);
-  $zUclass->set("symbolname", "circle");
-  if (!$edit) {
-    $zUclass->set("size", 3);
-  } else {
-    $zUclass->set("size", 7);
-    $zUclass->set("overlaycolor", 0);
-    $zUclass->set("overlaysymbolname", "circle");
-    $zUclass->set("overlaysize", 3);
-  } 
-  if (is_array($listlines)) {
-    foreach ($listlines as $o=>$l) {
-      if (is_array($l)) {
-        $zUclass->set("status", MS_ON);
-        $zUshape = ms_newShapeObj(MS_SHAPE_LINE);
-
-        $zUline = ms_newLineObj();
-        foreach  ($l as $drawpoint) {
-          $zUline->addXY($drawpoint[E], $drawpoint[N]);
-        }
-        $zUshape->add($zUline);
-      }
-    }
-    if (is_object($zUshape)) {
-    $zUshape->draw($zMap, $zUser, $zImage, 1, "test");
-    }
-  } 
-  if ($edit) {
-    if (is_array($l)) {
-      $zUser = ms_newLayerObj($zMap);
-      $zUser->set("status", 1);
-      $zUser->set("type", MS_LAYER_POINT);
-      $zUser->set("classitem", "point");
-      $zUser->set("name", "User Input dots");
-      $zUser->set("group", "fond");
-      $zUclass = ms_newClassObj($zUser);
-      $zUclass->set("color", 12);
-      $zUclass->set("symbolname", "circle");
-      $zUclass->set("size", 10);
-      $zUclass->set("overlaysize", 6);
-      $zUclass->set("overlaysymbolname", "circle");
-      $zUclass->set("overlaycolor", 0);
-      $zUclass->set("status", MS_ON);
-      $zUshape = ms_newShapeObj(MS_SHAPE_POINT);
-
-      $zUline = ms_newLineObj();
-      foreach  ($l as $drawpoint) {
-        $zUline->addXY($drawpoint[E], $drawpoint[N]);
-      }
-      $zUshape->add($zUline);
-      $zUshape->draw($zMap, $zUser, $zImage, 1, "test");
-    }
-  } 
-  if ($flag) {
-    $flg = getpoint($flag);
-    $zUser = ms_newLayerObj($zMap);
-    $zUser->set("status", 1);
-    $zUser->set("type", MS_LAYER_POINT);
-    $zUser->set("classitem", "point");
-    $zUser->set("name", "User Input Flag");
-    $zUser->set("group", "fond");
-    $zUclass = ms_newClassObj($zUser);
-    $zUclass->set("color", 12);
-    $zUclass->set("symbolname", "flag2");
-    $zUclass->set("size", 40);
-    $zUclass->set("status", MS_ON);
-    $zUshape = ms_newShapeObj(MS_SHAPE_POINT);
-    
-    $zUline = ms_newLineObj();
-    $zUline->addXY($flg[0], $flg[1]);
-    $zUshape->add($zUline); 
-    $zUshape->draw($zMap, $zUser, $zImage, 1, "test");
-    
-  }
-} 
 
 function checkfontlist($path) {
 	if (!is_file("$path/fonts/fontset")) {
