@@ -1,6 +1,5 @@
 MAP
 
-
 	NAME Limousin
 	STATUS on
 	EXTENT 455000 1980000 645000 2170000
@@ -67,29 +66,10 @@ MAP
 		TYPE RASTER
 		TILEINDEX "fond_100"
 		TILEITEM "location"
-		MAXSCALE 200000
+		MINSCALE 5000
+		MAXSCALE 100000
 		GROUP "fond"
 		STATUS on
-	END
-
-	LAYER
-		NAME Landsat 
-		GROUP "fond"
-		TYPE RASTER
-		STATUS on
-		CONNECTIONTYPE WMS
-		CONNECTION "http://wms.jpl.nasa.gov/wms.cgi?"
-		METADATA
-			WIKI "LandsatGlobalMap"
-			"wms_name" "global_mosaic"
-			"wms_srs" "EPSG:4326"
-			"wms_styles" "visual"
-			"wms_server_version" "1.1.1"
-			"wms_layers" "global_mosaic"
-			"wms_request" "GetMap"
-			"wms_format" "image/png"
-			"wms_connectiontimeout" "60"
-		END
 	END
 
 	LAYER
@@ -125,6 +105,11 @@ MAP
 				BACKGROUNDCOLOR 255 255 255
 				SIZE 9
 			END
+			MINSCALE 100000
+			OUTLINECOLOR 255 255 255
+		END
+		CLASS
+			MAXSCALE 100000
 			OUTLINECOLOR 255 255 255
 		END
 		TOLERANCE 5
