@@ -1,78 +1,95 @@
 <table border="0" cellpadding="0" cellspacing="0">
-<tr><td valign="top" width="$conf.gui.colwidth" align=right>
+<tr><td valign="top" width="$.colwidth$" align=right>
 
-<table border="0" cellpadding="1" cellspacing="0" width="$conf.gui.colwidth" class="dashed">
+<table border="0" cellpadding="1" cellspacing="0" width="$.colwidth$" class="dashed" id="map">
 <tr><td valign="top" align="center">
 <input type="hidden" name="forceextent" id="forceextent" value="">
-<input type="image" src="$ref_src" width="$conf.map.ref_sizex" 
-height="$conf.map.ref_sizey" name="ref" alt="$conf.map.name" hspace="0" vspace="0" border="0"><br>
-<a href="javascript:document.f.forceextent.value='1'; document.f.extent.value=''; document.f.scale.value=''; document.f.submit();" class="refbutton">Recadrer</a>
-<!--input type=image src=images/recadrer.png alt=Recadrer name=forceextent value="1" border=0 vspace=0 hspace=0-->
-</td></tr></table>
-<table border="0" cellpadding="4" cellspacing="0" width="$conf.gui.colwidth" class="dashed">
+<input type="image" src="$+refsrc$" width="$.minimapx$" height="$.minimapy$" name="ref" alt="$.name$" hspace="0" vspace="0" border="0"><br>
+<input type="submit" name="fit" value="$mapfit$" class="submit" id="106" onclick="document.f.forceextent.value='1'; document.f.extent.value=''; document.f.scale.value=''; document.f.submit();">
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr><td valign="middle"><select name="size" class="submit" id="100">
-<option value="240x240" $size_240x240>240x240</option>
-<option value="400x400" $size_400x400>400x400</option>
-<option value="600x600" $size_600x600>600x600</option>
-<option value="800x800" $size_800x800>800x800</option>
+<option value="320x240" $+size320x240$>320x240</option>
+<option value="640x480" $+size640x480$>640x480</option>
+<option value="800x600" $+size800x600$>800x600</option>
+<option value="1024x768" style="border-bottom: 1px solid #000000;" $+size1024x768$>1024x768</option>
+<option value="240x120" $+size240x120$>240x120</option>
+<option value="400x200" $+size400x200$>400x200</option>
+<option value="600x300" $+size600x300$>600x300</option>
+<option value="800x400" style="border-bottom: 1px solid #000000;" $+size800x400$>800x400</option>
+<option value="240x240" $+size240x240$>240x240</option>
+<option value="400x400" $+size400x400$>400x400</option>
+<option value="600x600" $+size600x600$>600x600</option>
+<option value="800x800" style="border-bottom: 1px solid #000000;" $+size800x800$>800x800</option>
+<option value="120x240" $+size120x240$>120x240</option>
+<option value="200x400" $+size200x400$>200x400</option>
+<option value="300x600" $+size300x600$>300x600</option>
+<option value="400x800" style="border-bottom: 1px solid #000000;" $+size400x800$>400x800</option>
+<option value="240x320" $+size240x320$>240x320</option>
+<option value="480x640" $+size480x640$>480x640</option>
+<option value="600x800" $+size600x800$>600x800</option>
+<option value="768x1024" $+size768x1024$>768x1024</option>
 </select></td>
 <td align="right" valign="middle">
-<div><input type="submit" name="nothing" value="&gt;&gt;" class="submit" id="100"></div>
+<div><input type="submit" name="resize" value="&gt;&gt;" class="submit" id="100"></div>
+</td></tr></table>
 </td></tr></table>
 
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="dashed">
-<tr><td valign="top" width="25%" align="center" class="tool$action_edition" style=background:#efdebe
-onclick='document.f.edition.checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Edition</div>', WIDTH, 80);" onmouseout="return nd();"><div>
+<tr><td valign="top" width="25%" align="center" class="tool$+actedition$" style="background:#efdebe"
+onclick='document.f.edition.checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>$mapedit$</div>', WIDTH, 80);" onmouseout="return nd();"><div>
 <img src="images/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edition" valign="top"><br>
-<input type="radio" id="edition" name="action" value="edition" $action_edition></div></td>
-<td valign="top" width="25%" align="center" class="tool$action_zoomout"
-onclick='document.f.zoomout.checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Zoom out</div>', WIDTH, 80);" onmouseout="return nd();"><div>
+<input type="radio" id="edition" name="action" value="edition" $+actedition$></div></td>
+<td valign="top" width="25%" align="center" class="tool$+actzoomout$"
+onclick='document.f.zoomout.checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>$mapzoomout$</div>', WIDTH, 80);" onmouseout="return nd();"><div>
 <img src="images/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"><br>
-<input type="radio" id="zoomout" name="action" value="zoomout" $action_zoomout></div></td>
-<td valign="top" width="25%" align="center" class="tool$action_travel"
-onclick='document.f.travel.checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Travel</div>', WIDTH, 80);" onmouseout="return nd();"><div>
+<input type="radio" id="zoomout" name="action" value="zoomout" $+actzoomout$></div></td>
+<td valign="top" width="25%" align="center" class="tool$+acttravel$"
+onclick='document.f.travel.checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>$maptravel$</div>', WIDTH, 80);" onmouseout="return nd();"><div>
 <img src="images/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top"><br>
-<input type="radio" id="travel" name="action" value="travel" $action_travel></div></tD>
-<td valign="top" width="25%" align="center" class="tool$action_zoomin"
-onclick='document.f.zoomin.checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Zoom in</div>', WIDTH, 80);" onmouseout="return nd();"><div>
+<input type="radio" id="travel" name="action" value="travel" $+acttravel$></div></tD>
+<td valign="top" width="25%" align="center" class="tool$+actzoomin$"
+onclick='document.f.zoomin.checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>$mapzoomin$</div>', WIDTH, 80);" onmouseout="return nd();"><div>
 <img src="images/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom avant" valign="top"><br>
-<input type="radio" id="zoomin" name="action" value="zoomin" $action_zoomin></div></td>
+<input type="radio" id="zoomin" name="action" value="zoomin" $+actzoomin$></div></td>
 </td></tr></table>
 
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="dashed">
 <tr><td valign="top">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
-$layer_menu</table>
-<input type="submit" name="action" value="$conf.gui.refresh" class="submit" id="106">
+$+layermenu$</table>
+<input type="submit" name="refresh" value="$maprefresh$" class="submit" id="106">
 </td></tr></table>
 
+<div class="dashed" id="light">
 <table border="0" cellpadding="8" cellspacing="0" width="100%"><tr><td valign="top">
-<div class="foot">Pour ajouter un point utiliser le drapeau doré.</div><br>
-<div class="foot">Localis est <b>en cours de développement</b>, le fonctionnement de cette interface peut parfois être perturbé.</div>
-<div class="foot">Contact Technique : <a href="mailto:mose@makina-corpus.net">mose</a>.</div>
+$mapnotice$
 </td></tr></table>
+</div>
 <input type="hidden" name="extent" value="$extexploded">
 <input type="hidden" name="scale" value="$scl">
-$ilang
 </td>
 <td valign="top">
 <table border="0" cellpadding="0" cellspacing="0" class="maptable">
-<tr><td valign="top">
+<tr><td valign="top" align="center">
 <map name="localisation" id="localisation">
-$map_locations
+$map_locations$
 </map>
-<input type="image" src="$image_src" width="$sizex" height="$sizey" alt="" hspace="0" vspace="0" class="map" border="0" usemap="#localisation">
+<input type="image" src="images/pix_5B69A6.png" width="$+sizex$" height="8" border="0" name="fsens" value="t" style="margin-bottom:2px;"><br>
+<input type="image" src="images/pix_5B69A6.png" height="$+sizey$" width="8" border="0" name="fsens" value="l" valign="top" style="margin-right:2px;"><input 
+type="image" src="$+imgsrc$" width="$+sizex$" height="$+sizey$" alt="" hspace="0" vspace="0" class="map" usemap="#localisation" valign=top><input 
+type="image" src="images/pix_5B69A6.png" height=$+sizey$ width="8" border="0" name="fsens" value="r" valign="top" style="margin-left:2px;"><br>
+<input type="image" src="images/pix_5B69A6.png" width="$+sizex$" height="8" border="0" name="fsens" value="b" style="margin-top:2px;"><br>
 </td></tr></table>
 
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr><td valign="top"><div class="foot">Echelle: 1 / $scl eme</div></td>
-<td valign="top" align="right">
-<div class="foot">Copyright IGN (c)</div>
-</td></tr></table>
-<img src="$leg_src" border="0" alt="legende">
-</form>
+
+<img src="$leg_src" border="1" alt="legende" align="right" hspace="0" vspace="4">
+<div class="foot" id="light">$mapscale$ $+scale$ $mapscaleunit$</div>
+<div class="foot" style="margin-top:10px;margin-bottom:2px;"><a href="$+imgsrc$" target="_new" class="submit">$mapdownload$</a></div>
+<div class="foot">$mapcopyright$</div>
 </td>
-<td valign=top>
-$right
+<td valign="top">
+$+right$
 </td></tr></table>
+</form>
 

@@ -1,0 +1,195 @@
+select, input { 
+	background:#ffffff;
+	color:#000000; 
+}
+
+option {
+	border: 0;
+	border-style: solid;
+	border-width: 0;
+}
+
+body {
+	background: #5B69A6;
+}
+#mapImg {
+        display: block;
+}
+#mapInput {
+        display: none;
+}
+.submit { 
+	background:#e8a339;
+	font-weight:bold; 
+	border-width: 1px;
+	border-size: 1px;
+}
+a { 
+	background-color: #FFFFFF;
+	color: #003366;  
+	font-weight: bold; 
+	padding: 1; 
+	text-decoration: none;
+}
+a:visited { 
+	color:#003366; 
+}
+a:hover { 
+	background:#e6b000; 
+	color:#000000; 
+}
+.localis {
+	background:none; 
+	font-size:140%;
+	color: #000000;
+	font-weight:bold;
+	margin: 2;
+}
+.sm {
+	font-size:small;
+	color: #999999;
+	margin-top: 5;
+}
+.smi {
+	font-size:small;
+	color: #333333;
+}
+.noa, .noa:hover {
+	background:none;
+}
+.head {
+	font-size: 80%;
+	color: #abb9e6;
+}
+.head a {
+	background-color: #5B69A6;
+}
+.foot {
+	font-size: 80%;
+	color: #abb9e6;
+}
+.foot#light {
+	color: #FFFFFF;
+}
+.base {
+	font-size: 80%;
+	background: none;
+	color: #666666;
+}
+.base:hover {
+	background:#bbbbbb;
+	color:#000000;
+}
+.corps {
+	margin-top: 6px;
+	margin-right: 6px;
+	background-color: #FFFFFF;
+	border: 1px solid #000000;
+	padding: 10px;
+}
+.dashed {
+	border-style: dashed;
+	border-width: 1px;
+	border-size: 1px;
+	margin: 6 10 0 8;
+	background: #FFFFFF;
+	border-color: #000000;
+}
+.dashed#light {
+	background-color: #abb9e6;
+	border: 1px solid #3b4986;
+}
+.dashed#light div {
+	font-size: 80%;
+	color: #333333;
+}
+.dashed#form {
+	background-color: #efdebe;
+}
+.dashed#form table {
+	font-size:80%;
+	margin:10px;
+}
+.dashed#map {
+	background-color: #5B69A6;
+}
+.topnav {
+	border-style: solid;
+	border-width: 1px;
+	border-size: 1px;
+	border: 1;
+	margin: 5 10 0 8;
+	background: #FFFFFF;
+}
+.top1 {
+	background-color: #000000;
+}
+.top1 a {
+	color: #e8a339;
+}
+.top1 a:hover {
+	color: #ffffff;
+}
+.top2 {
+	background-color: #3b4986;
+	color: #FFFFFF;
+}
+.liste {
+	border-style: dashed;
+	border-width: 1px;
+	border-size: 1px;
+	margin: 6 10 0 10;
+	background: #FFFFFF;
+}
+.map {
+	margin: 0px;
+	background: #FFFFFF;
+}
+.maptable {
+	background-color: #3b4986;
+	margin-top: 6px;
+}
+#100 {
+	width: 100%;
+}
+#106 {
+	margin-top: 6px;
+	width: 100%;
+}
+#109 {
+	margin-top: 9px;
+	width: 100%;
+}
+.toolch {
+	background: #FFFFFF;
+	padding: 1 0 1 0;
+}
+.tool {
+	background: #FFFFFF;
+}
+.toolchecked {
+	background: #efefef;
+	border-style: inset;
+	border-width: 1px;
+	border-size: 1px;
+}
+.list {
+	margin-top: 2px;
+}
+.invis {
+	color: #ffffff;
+	background: #ffffff;
+}
+/* ROU "recadrer" button becomes link */
+a.refbutton {
+	left: 0;
+	right: 0;
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	background: #ffffff;
+	color: #000000;
+}
+a.refbutton:hover {
+	background: #ffffff;
+}

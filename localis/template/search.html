@@ -1,22 +1,18 @@
-<table border='0' cellpadding='8' cellspacing='0' class='topnav'>
-<tr><td valign="bottom" bgcolor="#d8dbdf" align="center" width="128">
-<div class="localis"><a href="index.php?$qlang" class="noa">&nbsp;Localis&nbsp;</a></div>
-<div><a href="index.php?help=1$qlang" class="dashed">&nbsp;Aide&nbsp;</a></div>
+<table border="0" cellpadding="8" cellspacing="0" class="topnav">
+<tr><td valign="bottom" bgcolor="#abb9e6" align="center" width="130">
+<div class="localis"><a href="index.php?$+query$" class="noa">$searchtitre$</a></div>
+<div><a href="index.php?page=help$+query$" class="dashed">$searchhelp$</a></div>
+</td>
+<td valign="bottom" align="right">
+<select name="drawlayer">
+<option value="" style="border-bottom: 1px solid #666666;margin-bottom: 5px;">$searchchooselayer$</option>
+$+catmenu$
+<option value="NEW" style="border-top: 1px solid #666666;margin-top: 5px;">$searchnewlayer$</option>
+</select>
 </td>
 <td valign="bottom" align="center">
-Affichage en<br>
-&nbsp;<input type="submit" name="action" value="$conf.gui.map_button" class="submit">
-<input type="submit" name="tpl" value="$conf.gui.list_button" class="submit">
+$searchdisplayas$<br>
+&nbsp;<input type="submit" name="submit" value="$searchbuttonmap$" class="submit">
+<input type="submit" name="tpl" value="$searchbuttonlist$" class="submit">
 </td>
-<td valign="bottom" align="left">
-<b>Ville</b> <input type="text" size="34" name="search" value="$search"></font><br>
-<b>Type</b> <select name="type">
-$menu_type
-</select>
-<input type=image name=forcetypegroupes value='groupes' src="/maps/images/tux.png" hspace=3 vspace=3 width=15 height=16 border=0
-onmouseover="return overlib('<b>Groupes</b><br>LUGs, GULL (Groupements d\'Utilisateurs de Logiciels Libres) ou autres groupements d\'utilisateurs.', WIDTH, 150);" onmouseout='return nd();'>
-<input type=image name=forcetypehuman value='human' src="/maps/images/human.png" hspace=3 vspace=3 width=15 height=16 border=0
-onmouseover="return overlib('<b>Humains</b><br>Intrepides aventuriers des réseaux.', WIDTH, 150);" onmouseout='return nd();'>
-<input type=image name=forcetypetrolls value='trolls' src="/maps/images/troll.png" hspace=3 vspace=3 width=15 height=16 border=0
-onmouseover="return overlib('<b>Trolls</b><br>Culture naissante, liée à Gigax (troll); Adams (42); Stallman (folklore musical).', WIDTH, 150);" onmouseout='return nd();'>
-</td></tr></table>
+</tr></table>
