@@ -195,7 +195,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <ul style="font-size:9pt;">
 {section name=t loop=$tracks}
 {assign var=v value=$tracks[t].parcours_type}
-<li style="color:#{$typescolor.$v}"><a style="color:#{$typescolor.$v}" href="#" "onmouseover="getElementById({$tracks[t].parcours_id}).border='1';">{$tracks[t].parcours_name}</a></li>
+<li style="color:#{$typescolor.$v}"><a style="color:#{$typescolor.$v}" href="{$url}?pid={$tracks[t].parcours_id}">{$tracks[t].parcours_name}</a></li>
 {/section}
 </ul>
 {/if}
