@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.14 2002/10/21 01:16:47 mose Exp $
+<?  /* $Id: lib.php,v 1.15 2002/10/21 12:56:36 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -268,7 +268,7 @@ function dbf_flag($click_x,$click_y, $qx, $qy) {
 }
 
 function clean_city($a) {
-  return preg_replace(array("/ /","/'/","/-/"),array("%","%","%"),$a);
+  return preg_replace(array("/ /","/'/"),array("%","%"),$a);
 }
 
 function domenu($list,$it) {
