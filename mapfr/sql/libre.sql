@@ -1,4 +1,4 @@
-# $Id: libre.sql,v 1.5 2002/10/21 04:56:42 mose Exp $
+# $Id: libre.sql,v 1.6 2002/10/21 14:47:55 mose Exp $
 #
 # Serveur: localhost
 # Généré le : Jeudi 17 Octobre 2002 à 15:10
@@ -64,12 +64,12 @@ CREATE TABLE lug (
 # Contenu de la table `lug`
 #
 
-INSERT INTO lug VALUES (1, 'caen', 'Groupe des utilisateurs de Linux et des Logiciels Libre de Caen et du Calvados.', '0000-00-00 00:00:00', 'CaLviX','','','1');
+INSERT INTO lug VALUES (1, 'Caen', 'Groupe des utilisateurs de Linux et des Logiciels Libre de Caen et du Calvados.', '0000-00-00 00:00:00', 'CaLviX','','','1');
 INSERT INTO lug VALUES (2, 'Digne', 'Informatique alternative, Linux et autres.', '0000-00-00 00:00:00', 'Linux Alpes','','http://www.mairie-dignelesbains.fr/linux-alpes','1');
-INSERT INTO lug VALUES (3, 'brest', 'Faire découvrir et promouvoir les systèmes d\'exploitation Unix gratuits.', '0000-00-00 00:00:00', 'Finix','','http://www.finix.eu.org','1');
-INSERT INTO lug VALUES (4, 'biviers', 'Groupement des Utilisateurs Linux du Dauphiné.', '0000-00-00 00:00:00', 'Guilde','','http://www.guilde.asso.fr','1');
+INSERT INTO lug VALUES (3, 'Brest', 'Faire découvrir et promouvoir les systèmes d\'exploitation Unix gratuits.', '0000-00-00 00:00:00', 'Finix','','http://www.finix.eu.org','1');
+INSERT INTO lug VALUES (4, 'Biviers', 'Groupement des Utilisateurs Linux du Dauphiné.', '0000-00-00 00:00:00', 'Guilde','','http://www.guilde.asso.fr','1');
 INSERT INTO lug VALUES (5, 'Paris', 'L.U.G. Paris.', '0000-00-00 00:00:00', 'Parinux','','http://www.parinux.org','1');
-INSERT INTO lug VALUES (6, 'bordeaux', 'Association Bordelaise des Utilisateurs de Linux.', '0000-00-00 00:00:00', 'ABUL','','http://www.abul.org','1');
+INSERT INTO lug VALUES (6, 'Bordeaux', 'Association Bordelaise des Utilisateurs de Linux.', '0000-00-00 00:00:00', 'ABUL','','http://www.abul.org','1');
 INSERT INTO lug VALUES (7, 'Nantes', 'Association des utilisateurs nantais de Linux.', '0000-00-00 00:00:00', 'Linux-Nantes','','http://www.linux-nantes.fr.eu.org','1');
 INSERT INTO lug VALUES (11, 'Clermont-Ferrand', 'Promouvoir dans la région Auvergne Linux et les logiciels libres.', '0000-00-00 00:00:00', 'Linux Arverne','','http://www.linux-arverne.org','1');
 INSERT INTO lug VALUES (12, 'Cagnes-sur-Mer', 'Promouvoir Linux et les Logiciels Libres dans la région de la Côte d\'Azur.', '0000-00-00 00:00:00', 'Linux Azur','','http://www.linux-azur.org','1');
@@ -79,18 +79,18 @@ INSERT INTO lug VALUES (15, 'Caudebec-les-Elbeuf', 'Réseau Haut-Normand pour le 
 INSERT INTO lug VALUES (16, 'Toulouse', 'Club des Utilisateurs de Linux de Toulouse et des environs.', '0000-00-00 00:00:00', 'Culte','','http://www.culte.org','1');
 INSERT INTO lug VALUES (17, 'Strasbourg', 'Groupe des utilisateurs de Linux et de logiciel libre de la région de Strasbourg.', '0000-00-00 00:00:00', 'LUG de Strasbourg','','http://tux.u-strasbg.fr','1');
 INSERT INTO lug VALUES (18, 'Poitiers', 'Groupe des Utilisateurs de Linux à Poitiers.', '0000-00-00 00:00:00', 'GULP','','http://news.pcl.fr/gulp','1');
-INSERT INTO lug VALUES (19, 'vouneuil', 'Association Centre Ouest des Utilisateurs de Logiciels Libres.', '0000-00-00 00:00:00', 'ASPIC','','http://news.pcl.fr/aspic','1');
+INSERT INTO lug VALUES (19, 'Vouneuil', 'Association Centre Ouest des Utilisateurs de Logiciels Libres.', '0000-00-00 00:00:00', 'ASPIC','','http://news.pcl.fr/aspic','1');
 INSERT INTO lug VALUES (20, 'Chambéry', 'Logiciels Libre dans les Alpes.', '0000-00-00 00:00:00', 'Alpinux','','http://www.alpinux.net','1');
 INSERT INTO lug VALUES (21, 'Montsalvy', 'Club Informatique Montsalvyen d\'Utilisateurs de Logiciels Libres.', '0000-00-00 00:00:00', 'Cimull','','http://www.cybercantal.org/cimull','1');
 INSERT INTO lug VALUES (22, 'Valenciennes', 'Club Linux Nord - Pas de Calais.', '0000-00-00 00:00:00', 'CLX','','http://clx.anet.fr/spip','1');
 INSERT INTO lug VALUES (23, 'Paris', 'Gorupe parisien', '0000-00-00 00:00:00', 'GCU-squad','','http://gcu-squad.org','1');
 INSERT INTO lug VALUES (24, 'Rambouillet', 'Faire découvrir les logiciels libres au public en Yvelines.', '0000-00-00 00:00:00', 'Root66.net','','http://www.root66.net','1');
-INSERT INTO lug VALUES (25, 'aix en provence', 'lug', '0000-00-00 00:00:00', 'Axul','','http://www.axul.org','1');
+INSERT INTO lug VALUES (25, 'Aix en provence', 'lug', '0000-00-00 00:00:00', 'Axul','','http://www.axul.org','1');
 INSERT INTO lug VALUES (26, 'Metz', 'Découvrir et utiliser GNU/Linux et d\'autres logiciels sous licence libre.', '0000-00-00 00:00:00', 'Graoulug','','http://www.graoulug.org','1');
 INSERT INTO lug VALUES (27, 'Nimes', 'Groupe d\' Utilisateurs Linux Nimois.', '0000-00-00 00:00:00', 'nim','','http://nimes.gul.free.fr','1');
 INSERT INTO lug VALUES (28, 'Sarreguemines', 'Lug de Sarreguemines.', '0000-00-00 00:00:00', 'Mozenix,','','http://www.mozenix.org','1');
 INSERT INTO lug VALUES (29, 'La Rochelle', 'Groupe d\'utilisateurs de linux et des logiciels libres de La Rochelle et ses larges environs.', '0000-00-00 00:00:00', 'ROCHELUG','','http://lug.larochelle.tuxfamily.org','1');
-INSERT INTO lug VALUES (30, 'redon', 'Troupe Redonnaise Orientée Logiciels Libres.', '0000-00-00 00:00:00', 'TROLL West','','http://troll.west.free.fr','1');
+INSERT INTO lug VALUES (30, 'Redon', 'Troupe Redonnaise Orientée Logiciels Libres.', '0000-00-00 00:00:00', 'TROLL West','','http://troll.west.free.fr','1');
 INSERT INTO lug VALUES (31, 'Nancy', 'Groupe des Utilisateurs de Linux de Nancy et ses environs.', '0000-00-00 00:00:00', 'Mirabellug','','http://www.mirabellug.fr.fm','1');
 INSERT INTO lug VALUES (32, 'Thones', 'Savoie-Aravis Linux Users Group.', '0000-00-00 00:00:00', 'SALUG','','http://salug.tuxfamily.org','1');
 
