@@ -9,17 +9,17 @@
 {$maplocations}
 </map>
 <table cellspacing="0" cellpadding="0" border="0"><tr>
-<td width="{$mapmargin}"><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" /></td>
-<td width="{$sizex+2}"><input type="image" src="img/dot2.png" width="{$sizex+2}" height="{$mapmargin}" border="0" /></td>
-<td width="{$mapmargin}"><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" /></td>
+<td width="{$mapmargin}"><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="rt" /></td>
+<td width="{$sizex+2}"><input type="image" src="img/dot2.png" width="{$sizex+2}" height="{$mapmargin}" border="0" name="dir" value="ct" /></td>
+<td width="{$mapmargin}"><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="lt" /></td>
 </tr><tr>
-<td><input type="image" src="img/dot2.png" width="{$mapmargin}" height="{$sizey+2}" border="0" /></td>
+<td><input type="image" src="img/dot2.png" width="{$mapmargin}" height="{$sizey+2}" border="0" name="dir" value="lc" /></td>
 <td><input type="image" src="{$mapimage}" width="{$sizex}" height="{$sizey}" alt="" border="1" hspace="0" vspace="0" class="map" usemap="#localisation" valign="top"></td>
-<td><input type="image" src="img/dot2.png" width="{$mapmargin}" height="{$sizey+2}" border="0" /></td>
+<td><input type="image" src="img/dot2.png" width="{$mapmargin}" height="{$sizey+2}" border="0" name="dir" value="rc" /></td>
 </tr><tr>
-<td><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" /></td>
-<td><input type="image" src="img/dot2.png" width="{$sizex+2}" height="{$mapmargin}" border="0" /></td>
-<td><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" /></td>
+<td><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="lb" /></td>
+<td><input type="image" src="img/dot2.png" width="{$sizex+2}" height="{$mapmargin}" border="0" name="dir" value="cb" /></td>
+<td><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="rb" /></td>
 </tr></table>
 
 <img src="{$legsrc}" border="1" alt="legende" align="right" hspace="9" vspace="4">

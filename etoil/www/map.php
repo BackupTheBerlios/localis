@@ -112,27 +112,39 @@ if ($click_x and $click_y) {
 	$map_click['x'] = $extminx + pix2geo($click_x,$extminx,$extmaxx,$sizex);
 	$map_click['y'] = $extmaxy - pix2geo($click_y,$extminy,$extmaxy,$sizey);
 	$clicked = TRUE;
+} elseif (isset($_REQUEST['dir'])) {
+	list($fx,$fy) = $_REQUEST['dir'];
+	$ffx['l'] = $ffx['t'] = -1;
+	$ffx['c'] = 0;
+	$ffx['r'] = $ffx['b'] = 1;
+	$e_click->setXY(floor(($sizex/2)+($ffx[$fx]*$sizex/4)),floor(($sizey/2)+($ffx[$fy]*$sizey/4)),0);
+	$_REQUEST['action'] = "travel";
+	$clicked = TRUE;
+	$map_click = array();
 } else {
 	$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
 	$clicked = FALSE;
 	$map_click = array();
 }
 $focus = array();
-if ($clicked and isset($_REQUEST['action'])) {
-	if ($_REQUEST['action'] == "zoomin") {
-		$e_map->zoompoint(2,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-		$focus['zoomin'] = "focus";
-	} elseif ($_REQUEST['action'] == "zoomout") {
-		$e_map->zoompoint(-2,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-		$focus['zoomout'] = "focus";
-	} elseif ($_REQUEST['action'] == "travel") {
-		$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-		$focus['travel'] = "focus";
-	} elseif ($_REQUEST['action'] == "edit" and isset($_SESSION['admin']) and $_SESSION['admin']) {
-		$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
-		$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-		$focus['edit'] = "focus";
-		$_SESSION['track'][] = $map_click['x']." ".$map_click['y'];
+if ($clicked) {
+	if (isset($_REQUEST['action'])) {
+		if ($_REQUEST['action'] == "zoomin") {
+			$e_map->zoompoint(2,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+			$focus['zoomin'] = "focus";
+		} elseif ($_REQUEST['action'] == "zoomout") {
+			$e_map->zoompoint(-2,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+			$focus['zoomout'] = "focus";
+		} elseif ($_REQUEST['action'] == "travel") {
+			$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+			$focus['travel'] = "focus";
+		} elseif ($_REQUEST['action'] == "edit" and isset($_SESSION['admin']) and $_SESSION['admin']) {
+			$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
+			$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+			$focus['edit'] = "focus";
+			$_SESSION['track'][] = $map_click['x']." ".$map_click['y'];
+		}
+	} elseif (isset($_REQUEST['dir'])) {
 	}
 }
 
@@ -146,6 +158,7 @@ if (isset($_REQUEST['p_name']) and $_SESSION['me']) {
 
 if (isset($_REQUEST['action']) and $_REQUEST['action'] == tra('Rechercher')) {
 	//$where = "where parcours_type=1";
+	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 	$where = '';
 	$e_lay = ms_newLayerObj($e_map);
 	$e_lay->set('name','parcours');
@@ -159,7 +172,7 @@ if (isset($_REQUEST['action']) and $_REQUEST['action'] == tra('Rechercher')) {
 	$e_sty = ms_newStyleObj($e_cla);
 	$e_lab = $e_cla->label;
 	$e_lab->set("position",MS_CC);
-	$e_lab->set("size",9);
+	$e_lab->set("size","medium");
 	$e_lab->color->setRGB(128,0,0);
 	$e_lab->backgroundcolor->setRGB(255,255,255);
 	$e_sty->set("size",8);
