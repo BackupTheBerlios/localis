@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.8 2002/10/16 21:25:38 mastre Exp $
+<? /* $Id: localis.php,v 1.9 2002/10/17 00:13:14 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -49,8 +49,9 @@ foreach ($conf[form] as $field=>$f) {
 	${"menu_$field"} = domenu(${"list_$field"},$$field);
 	# If search string, build 'where' clause.
 	if (!empty(${"$field"}) and ereg("^text://.*$",$conf[form][$field])) {
-		$wh[] = "ville like '%".${"$field"}."%'";
-		$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($field), ${"list_$field"}[$$field]);
+		$myv = str_replace('/','',strrchr($conf[form][$field],'/'));
+		$wh[] = "$myv like '%".${"$field"}."%'";
+		$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($field));
 	}
 } 
 
@@ -163,9 +164,10 @@ if ($view != $conf[gui][list_button]) {
 		if (!empty($myc)) {
 			$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
 			$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_y].") between $ext[1] and $ext[3])";
+			$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($myc));
 			prepare_list($wh,$conn,$myc);
 			$id = dbf_gen($conf[database][db_name],$conf[general][sql_reftable],$resultats,$wh,$conn);
-			$list = build_list($found,$qu,$eff);
+			$list .= build_list($found,$qu,$eff);
 			$mylayer = str_replace('/','',strrchr($conf[infos][$myc],'/'));
 			$zResult = $zMap->getLayerByName($mylayer);
 			$zResult->set('status',MS_ON);
@@ -196,9 +198,10 @@ if ($view != $conf[gui][list_button]) {
 	}
 	$qu[] = "extent=".urlencode($extexploded);
 	foreach($mychoices as $myc) {
+		$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($myc));
 		prepare_list($wh,$conn,$myc);
+		$list .= build_list($found,$qu,$eff);
 	}
-	$list = build_list($found,$qu,$eff);
 }
 ${"action_$act"} = "checked";
 ${"size_".$sizex."x".$sizey}   = "selected";

@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.5 2002/10/16 21:22:49 mastre Exp $
+<?  /* $Id: lib.php,v 1.6 2002/10/17 00:13:14 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -99,10 +99,16 @@ function inc($template) {
 function prepare_list($wh,$conn,$type) {
   global $db,$conf;
   $sig_res = sig_query($type,$wh,$conn);
+	$ii = strtok(str_replace('rows://','',$conf[infos][$type]),'/');
+	$datas = explode(',',$ii);
+	$cityname = $datas[0];
+	$cid = $datas[1];
+	$name = $datas[2];
+	$shortdesc = $datas[3];
   if ($sig_res) {
     asort($sig_res);
     foreach ($sig_res as $sr) {
-      $s["$sr[ville]"][] = array('nom' => $sr[nom], 'id' => $sr[id]);
+      $s["$sr[$cityname]"][] = array('cid' => $sr[$cid], 'shortdesc' => $sr[$shortdesc], 'name' => $sr[$name]);
     }
     ksort($s);
     $GLOBALS[nbres] = count($sig_res);
@@ -119,22 +125,22 @@ function build_list($found,$qu,$eff) {
   if (!$found) {
     $list.= "Aucun resultat.";
   } else {
-    foreach ($resultats as $ville) {
-			$ouca = $coords[$ville];
+    foreach ($resultats as $vres) {
+			$ouca = $coords[$vres];
       $list.= "<div class=base id=109><a href=localis.php?x=".$ouca[x]."&y=".$ouca[y];
-			$list.= "&v=".urlencode($ville)."&size=400x400&".$layer_query."forcescale=188&$args ";
-			$list.= "class=base>$ville</a></div>";
-      foreach ($found[$ville] as $kk) {
-				$list.= "<div class=list><a href=http://#/fiche.asp?id=".$kk['id']." target=_new>";
+			$list.= "&v=".urlencode($vres)."&size=400x400&".$layer_query."forcescale=188&$args ";
+			$list.= "class=base>$vres</a></div>";
+      foreach ($found[$vres] as $kk) {
+				$list.= "<div class=list><a href=http://#/fiche.asp?id=".$kk['description']." target=_new>";
         $list.= "<img src=images/mapzoom.png width=8 height=8 hspace=2 vspace=0 border=0 alt='look' align=baseline>&nbsp;";
-				$list.= "$kk[nom]</a></div>\n";
-				$maplist[$ville].= "<div class=list>- <a href=#/fiche.asp?id=".$kk['id']." target=_new>$kk[nom]</a></div>"; 
+				$list.= "$kk[name]</a></div>\n";
+				$maplist[$vres].= "<div class=list>- ".$kk[shortdesc]."<a href=#/fiche.asp?id=".$kk['cid']." target=_new>$kk[name]</a></div>"; 
       }
     }
   }
 	$GLOBALS[maplist] = $maplist;
   $GLOBALS[llist] = $list;
-  $GLOBALS[lrequete] = @implode("<br>\n",$eff);
+  $GLOBALS[lrequete] = @array_pop($eff);
   return inc('listitem');
 }
 
@@ -142,24 +148,28 @@ function geo2pix($x,$minx,$maxx,$size) {
 	return floor($size * ($x - $minx) / ($maxx - $minx));
 }
 
-function dbf_gen($base,$jbase,$villes,$cond,$conn,$pref='') {
+function dbf_gen($base,$jbase,$vres,$cond,$conn,$pref='') {
   global $conf, $qinfo, $x, $y, $nature, $ext, $sizex, $sizey;
 	$path = $conf[general][tmp_path];
   $UNIQUE_ID = $pref.uniqid('');
   $dbffile = "$path/$UNIQUE_ID.dbf";
-  $dbfdef = array(
-    array("NOM","C",64,0),
-    array("ABS_C_LIEU","N",12,4),
-    array("ORD_C_LIEU","N",12,4)
-	);
-	$dbf = @dbase_create($dbffile,$dbfdef) or die ("Creation du dbf impossible");
-	$did = @dbase_open("$dbffile",2) or die ("Ouverture du dbf impossible");
+	$dbf_inf = explode('/',str_replace('dbf://','',$conf[map][dbf_def]));
+	$i=0;
+	foreach($dbf_inf as $d) {
+		$dd = explode(',',$d);
+		foreach($dd as $ddd) {
+			$dbfdef[$i][] = $ddd;
+		}
+	$i+=1;
+	}
+	$dbf = @dbase_create($dbffile,$dbfdef) or die ("dbf creation failed");
+	$did = @dbase_open("$dbffile",2) or die ("Unable to open dbf file");
 	$shapefile = ms_newShapefileObj("$path/$UNIQUE_ID", 1) or die("Error creating shapefile.");
 	$point = ms_newpointobj();
-  if (is_array($villes)) {
-    foreach ($villes as $v) {
+  if (is_array($vres)) {
+    foreach ($vres as $v) {
       $vc = clean_city($v);
-      $query = "select ABS_C_LIEU as abs, ORD_C_LIEU as ord from $jbase where NOM like '$vc';";
+      $query = "select ".$conf[map][coord_x]." as abs, ".$conf[map][coord_y]." as ord from $jbase where ".$conf[general][sql_cityname]." like '$vc';";
       $res = mysql_db_query($conf[database][db_name],$query,$conn);
       if ($res and mysql_numrows($res)) {
         $qx = mysql_result($res,0,"abs");
@@ -187,18 +197,16 @@ function clean_city($a) {
 
 function domenu($list,$it) {
   if (is_array($list)) {
-  foreach ($list as $k=>$l) {
-    if ((is_array($it) and in_array($k,$it)) or ($it == $k)) {
-			$ll = str_replace(' ','',strtolower($l));
-      $back.= "<option value='$k' selected>$l\n";
-    } else {
-      $back.= "<option value='$k'>$l\n";
-    }
-  }
-  return "$back";
-  } else {
-
-  }
+  	foreach ($list as $k=>$l) {
+    	if ((is_array($it) and in_array($k,$it)) or ($it == $k)) {
+				$ll = str_replace(' ','',strtolower($l));
+      	$back.= "<option value='$k' selected>$l\n";
+    	} else {
+      	$back.= "<option value='$k'>$l\n";
+    	}
+  	}
+ 		return "$back";
+ 	}
 }
 
 function tmpclean($id) {
