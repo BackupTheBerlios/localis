@@ -76,9 +76,14 @@ $ext = array($extminx,$extminy,$extmaxx,$extmaxy);
 $e_extent = ms_newRectObj();
 $e_extent->setextent($ext[0],$ext[1],$ext[2],$ext[3]);
 
-if (isset($_REQUEST['size'])) {
+$e_click = ms_newPointObj();
+if (isset($_REQUEST['size']) and isset($_REQUEST['resize']) and $_REQUEST['resize'] == ">>") {
 	list($sizex,$sizey) = split('x',$_REQUEST['size']);
 	$sizecheck["{$_REQUEST['size']}"] = " selected=\"selected\"";
+	$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
+	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+	$_REQUEST['action'] = "travel";
+	$clicked = TRUE;
 } else {
 	$sizex = $e_map->width;
 	$sizey = $e_map->height;
@@ -106,7 +111,6 @@ foreach ($layers as $l) {
 	}			
 }
 
-$e_click = ms_newPointObj();
 if ($click_x and $click_y) {
 	$e_click->setXY($click_x,$click_y,0);
 	$map_click['x'] = $extminx + pix2geo($click_x,$extminx,$extmaxx,$sizex);
@@ -239,6 +243,8 @@ $extminy = $e_map->extent->miny;
 $extmaxx = $e_map->extent->maxx;
 $extmaxy = $e_map->extent->maxy;
 $smarty->assign('extent',"$extminx $extminy $extmaxx $extmaxy");
+$scale = $e_map->scale;
+$smarty->assign('scale',$scale);
 $smarty->assign('refsrc',$refsrc);
 $smarty->assign('legsrc',$legsrc);
 $smarty->assign('focus',$focus);

@@ -126,7 +126,6 @@
 {if $smarty.session.admin}
 click x : {$map_click.x}<br />
 click y : {$map_click.y}<br />
-extent : {$extent}<br />
 <hr />
 {if count($smarty.session.track)}
 <div class="dashed">

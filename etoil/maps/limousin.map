@@ -131,32 +131,4 @@ MAP
 		TRANSPARENCY 30
 	END
 
-	LAYER
-		NAME "communes"
-		CONNECTIONTYPE postgis
-		CONNECTION "host=localhost user=mose dbname=etoil"
-		TYPE point
-		DATA "coord from communes"
-		STATUS off
-		CLASSITEM 'nom'
-		GROUP "fond"
-		LABELITEM 'nom'
-		CLASS
-			NAME "Communes"
-			SYMBOL "circle"
-			SIZE 9
-			LABEL
-				POSITION lc
-				COLOR 0 60 120
-				FONT arial_bold
-				TYPE truetype
-				SIZE 8
-				ANTIALIAS true
-			END
-			OUTLINECOLOR 128 128 128
-			COLOR 255 0 0
-		END
-		TOLERANCE 1
-	END
-
 END
