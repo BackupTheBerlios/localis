@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.19 2002/10/21 14:55:22 mastre Exp $
+<? /* $Id: localis.php,v 1.20 2002/10/21 15:56:06 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -133,8 +133,7 @@ if ($view != $conf[gui][list_button]) {
 	}
 	
 	$zClick = ms_newPointObj();
-	
-	if ($act and ($refx and $refy)) {
+	if ($act and ($refx and $refy) and (sizeof($ext) > 3)) {
 		$zClick->setXY($refx,$refy,0);
 		$zMap->set("width",$sizex);
 		$zMap->set("height",$sizey);
