@@ -77,7 +77,8 @@ colwidth     = 146
 debug        = 0
 firstjeudi   = First Jeudi
 lug          = LUG
+noresult     = Aucun résultat.
 
 [Form]
-search       = text://20/ville
+search       = text://20/ville,nom
 type  			 = select_list://all->[ Tous ],lug->LUG,firstjeudi->First Jeudi

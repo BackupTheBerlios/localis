@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.6 2002/10/17 00:13:14 mastre Exp $
+<?  /* $Id: lib.php,v 1.7 2002/10/17 02:42:10 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -49,7 +49,7 @@ function sig_list($field, $conn, $cut=0) {
 	return $back;
 } 
 
-function sig_query($select,$cond,$conn) {
+function sig_query($select,$cond,$conn,$owh='') {
   global $conf;
 	if ($t = str_replace('mysql://','',$conf[select][$select])) {
 		$data = explode('/',$t);
@@ -61,9 +61,10 @@ function sig_query($select,$cond,$conn) {
 			$req[champ][$i] = $dbinfo[2];
 		}
 	}
-	if ($cond) { $more = "where ".@implode(" and ",$cond); }
-  $query = "select distinct ".$req[table][1].".* from ".$req[table][1]." left join ".$req[base][2].'.'.$req[table][2]." on ".$req[table][2].".".$req[champ][2]."=".$req[table][1].".".$req[champ][1]." $more;";
-  $res = mysql_db_query($req[base][1],$query,$conn);
+	if ($cond) { $more = " where ".@implode(" and ",$cond); }
+	if ($owh) { $more .= " and ".@implode(" or ".$req[table][1].'.',$owh); }
+  $query = "select ".$req[table][1].".* from ".$req[table][1]." left join ".$req[base][2].'.'.$req[table][2]." on ".$req[table][2].".".$req[champ][2]."=".$req[table][1].".".$req[champ][1]." $more;";
+  $res = mysql_db_query($req[base][1],$query,$conn) or die(mysql_error());
   if ($res) {
     $i = 1;
     while ($r = mysql_fetch_array($res)) {
@@ -96,9 +97,9 @@ function inc($template) {
   }
 }
 
-function prepare_list($wh,$conn,$type) {
+function prepare_list($wh,$conn,$type,$owh='') {
   global $db,$conf;
-  $sig_res = sig_query($type,$wh,$conn);
+  $sig_res = sig_query($type,$wh,$conn,$owh);
 	$ii = strtok(str_replace('rows://','',$conf[infos][$type]),'/');
 	$datas = explode(',',$ii);
 	$cityname = $datas[0];
@@ -120,10 +121,10 @@ function prepare_list($wh,$conn,$type) {
 }
 
 function build_list($found,$qu,$eff) {
-  global $tempath, $tpl, $PHP_SELF, $resultats, $coords, $sizex, $sizey, $layer_query;
+  global $tempath, $tpl, $PHP_SELF, $resultats, $coords, $sizex, $sizey, $layer_query,$conf;
 	$args = @implode('&',$qu);
   if (!$found) {
-    $list.= "Aucun resultat.";
+    $list.= $conf[gui][noresult];
   } else {
     foreach ($resultats as $vres) {
 			$ouca = $coords[$vres];

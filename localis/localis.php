@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.9 2002/10/17 00:13:14 mastre Exp $
+<? /* $Id: localis.php,v 1.10 2002/10/17 02:42:10 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -50,8 +50,11 @@ foreach ($conf[form] as $field=>$f) {
 	# If search string, build 'where' clause.
 	if (!empty(${"$field"}) and ereg("^text://.*$",$conf[form][$field])) {
 		$myv = str_replace('/','',strrchr($conf[form][$field],'/'));
-		$wh[] = "$myv like '%".${"$field"}."%'";
-		$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($field));
+		$mm = explode(',',$myv);
+		foreach($mm as $mmv) {
+			$owh[] = "$mmv like '%".${"$field"}."%'";
+			$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($field));
+		}
 	}
 } 
 
@@ -160,14 +163,18 @@ if ($view != $conf[gui][list_button]) {
 	$ext = ext2array($zExtent);
 	$extexploded = implode(' ',$ext);
 	# create result layer
+	$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
+	$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_y].") between $ext[1] and $ext[3])";
 	foreach($mychoices as $myc) {
 		if (!empty($myc)) {
-			$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
-			$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_y].") between $ext[1] and $ext[3])";
 			$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($myc));
-			prepare_list($wh,$conn,$myc);
-			$id = dbf_gen($conf[database][db_name],$conf[general][sql_reftable],$resultats,$wh,$conn);
+			prepare_list($wh,$conn,$myc,$owh);
+			$id = dbf_gen($conf[database][db_name],$conf[general][sql_reftable],$resultats,$wh,$conn,$owh);
 			$list .= build_list($found,$qu,$eff);
+			unset($found);
+			unset($nbres);
+			unset($nbresresultats);
+			unset($resultats);
 			$mylayer = str_replace('/','',strrchr($conf[infos][$myc],'/'));
 			$zResult = $zMap->getLayerByName($mylayer);
 			$zResult->set('status',MS_ON);
@@ -199,7 +206,7 @@ if ($view != $conf[gui][list_button]) {
 	$qu[] = "extent=".urlencode($extexploded);
 	foreach($mychoices as $myc) {
 		$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($myc));
-		prepare_list($wh,$conn,$myc);
+		prepare_list($wh,$conn,$myc,$owh);
 		$list .= build_list($found,$qu,$eff);
 	}
 }
@@ -210,7 +217,7 @@ ${"size_".$sizex."x".$sizey}   = "selected";
 if (is_array($m)) {
 	foreach ($m as $vv=>$coord) {
 		$map_locations.= "<area href=\"#top\" name=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" ";
-		$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>".addslashes($maplist[$vv])."', WIDTH, -1);\" ";
+		$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>".str_replace('\n','<br>',addslashes($maplist[$vv]))."', WIDTH, -1);\" ";
 		$map_locations.= " onmouseout='return nd();' onclick=\"return overlib('".addslashes($maplist[$vv])."', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, -1);\">\n";
 	}
 }
