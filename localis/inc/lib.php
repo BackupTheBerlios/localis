@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.40 2003/03/26 22:27:26 mose Exp $
+<?  /* $Id: lib.php,v 1.41 2003/06/13 10:47:09 terraces Exp $
 Copyright (C) 2003, Makina Source, http://makina-source.org
 This file is a component of Localis - http://localis.org
 Created by mose <mose@makina-source.org> and mastre <mastre@localis.org>
@@ -35,9 +35,10 @@ function sig_connect() {
 
 function layerslist() {
   global $conn,$conf;
-  $query = "select *, count(*) as total from layer left join layerobj on layer.layerid=layerobj.layerid group by layer.layerid order by layer.layername";
+  $query = "select *, layer.layerid as id, count(*) as total from layer left join layerobj on layer.layerid=layerobj.layerid group by layer.layerid order by layer.layername";
   $res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
   while ($r = mysql_fetch_array($res)) {
+	$r['layerid'] = $r['id'];
     $back["$r[layerid]"] = $r;
   }
   return $back;
