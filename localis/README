@@ -1,6 +1,6 @@
 Localis : README
 ----------------
-$Id: README,v 1.5 2002/12/17 11:44:33 ramzi Exp $
+$Id: README,v 1.6 2003/02/10 13:32:54 mose Exp $
 -------------------
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis - http://localis.makina-corpus.org
@@ -27,6 +27,8 @@ Localis is a Geographic Information System. Database is handled by MySQL,
 and a PHP web interface displays a map generated on the fly by Mapscript from 
 Mapserver.
 
+Version 0.5 propose contributive feeding of the map, 
+
 (yes, it's very short, more verbose stuff will come soon).
 
 -------------------
@@ -42,13 +44,17 @@ Helped with Brute Code Force
 Protocol, Documentation and user Friendliness
 * Philippe Jullien <fi@makina-corpus.org>
 * Céline Philippon <cph@makina-corpus.com>
+* Thierry Dochy <dochy@idbconsulting.com> (windows install)
 
 Internet Explorer consultant
 * Benjamin Deboute <deboute@claranet.fr>
+* Thierry Dochy <dochy@idbconsulting.com>
 
 Geographic consultant
 * Benoit Veler <benenet@free.fr>
-(http://www.multigeo.com)
+  (http://www.multigeo.com)
+* Daniel Faivre <webmaster@geomaticien.com>
+  (http://geomaticien.com)
 
 Maintainer of English version
 * Djamel Kadi <dka@makina-corpus.org>
@@ -58,7 +64,11 @@ Maintainer of Spanish version
 
 Helped with Debug, ideas and Testing
 * Gerald Elbaze <elbaze@medias-cite.org>
-(Localis Aquitaine http://accespublic-aquitaine.org)
+  (Localis Aquitaine http://accespublic-aquitaine.org)
+* Olivier Zablocki <olivier.zablocki@keris.org>
+  (Localis Radiophare http://radiophare.localis.org)
+* Tom Bouillut <bouillut@no-log.org>
+  (joining code force)
 
 Helped with Real Money and Ressources
 * Conseil Régional d'Aquitaine <http://aquitaine.fr>

@@ -1,6 +1,6 @@
 Localis : INSTALL 
 ----------------
-$Id: INSTALL,v 1.4 2002/12/17 11:23:03 ramzi Exp $
+$Id: INSTALL,v 1.5 2003/02/10 13:32:54 mose Exp $
 -------------------
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis - http://localis.makina-corpus.org
@@ -27,8 +27,8 @@ USA.
 Prerequisite
 ------------
 
-Localis uses phpmapscript (PHP 4.2.1 with mapserver 3.6) that has 
-to be installed.
+Localis uses phpmapscript, an extension to Mapserver, that is documented
+	http://mapserver.gis.unm.edu
 
 A solution is to use EasyMapServer, a quick installer to build 
 mapserver with php in CGI mode for use with Localis.
@@ -37,14 +37,40 @@ You can get EasyMapServer at
   http://developer.berlios.de/projects/easymapserver
 
 
-Install
--------
-To install Localis, copy the file etc/localis.conf.dist to etc/localis.conf.
+Linux Install
+-------------
+(check http://sig.cwriter.org/index.php/localis/INSTALL/2.linux)
+
+* Database setup
+Use the file tools/localis_db_0_5.sql to build the table structure
+
+* maps setup
+The Easymapserver install builds all its context in /usr/local/mapserver.
+A sample maps set is provided in mapfr module of localis distribution.
+Default location is /usr/local/mapserver/www/localis/mapfr if you change
+it, modify localis.conf accordingly.
+
+* web setup
+Copy the whole localis/ directory in a web space (default is
+/usr/local/mapserver/www/localis/localis) and optinally setup apache
+with the following block
+
+<VirtualHost *>
+ServerName localis.mydomain.org
+DocumentRoot /usr/local/mapserver/www/localis/localis
+ScriptAlias /cgi-bin/ "/usr/local/mapserver/cgi-bin/"
+Alias "/maps/" "/usr/local/mapserver/www/localis/mapfr/"
+AddType application/php-cgi .php
+Action application/php-cgi /cgi-bin/php
+DirectoryIndex index.php
+Options +FollowSymLinks
+ErrorLog /var/log/apache/localis-error_log
+Customlog /var/log/apache/localis-access_log combined
+</VirtualHost>
+
+copy the file etc/localis.conf.dist to etc/localis.conf.
 The default values are setup for use with module mapfr released with Localis.
 In localis.conf, modify database access and path information (at least).
-
-Setup the mysql database with content of mapfr/sql, and put mapfr/ directory 
-in a space recursively writable by web user, change localis.conf accordingly.
 
 You should change acces rights of following directories to www-data 
 (or apache user) be able to write in:
@@ -52,9 +78,79 @@ You should change acces rights of following directories to www-data
    localis/tmp
    localis/templates
 
-Then put the whole localis directory contents in the www directory of the
-mapserver installation directory.
-
 (hrum. yes. a real installer is planned. hope soon, yes.)
+
+
+Windows Install (fr)
+--------------------
+(check http://sig.cwriter.org/index.php/localis/INSTALL/3.windows)
+
+* windows install
+
+Récupération EasyPhp
+  (easyphp1-6_setup.exe)
+
+Récupération version php 4.2.3
+  (php-4.2.3_n1-Win32.zip)
+
+Recopie php-4.2.3-Win32 
+  en C:\Program Files\EasyPHP\php
+
+Transfert C:\Program Files\EasyPHP\php\sapi\php4apache.dll 
+  en C:\Program Files\EasyPHP\php
+
+Transfert php_mapscript_36.dll, php_proj.dll 
+  dans C:\Program Files\EasyPHP\php\extensions
+
+copie php.exe
+  dans C:\Program Files\EasyPHP\cgi-bin
+
+
+Parametrage Spécifique Apache
+
+Pour forcer les pages php en cgi-bin .....
+(car mapscript ne passe pas en module lié avec apache)
+  AddType application/x-httpd-php .phpl .php
+  Action application/x-httpd-php-cgi /cgi-bin/php 
+
+forcer les pages php pour exécution cgi
+  Action phtml-script /cgi/php 
+  AddHandler phtml-script .phpl 
+
+définir des alias pour que l'exemple trouve les liens 
+  Alias /tmp/ "C:/Program Files/EasyPHP/www/localis/tmp/"
+  Alias /images/ "C:/Program Files/EasyPHP/www/localis/localis/images/"
+  Alias /images_easyphp/ "C:/Program Files/EasyPHP/home/images_easyphp/"
+
+Paramétrage
+
+db_host      = localhost    # where mysql database is located
+db_name      = localis      # the name of the database
+db_user      = root         # database username
+db_pass      =              # user password
+
+[General]
+titre        = Localis
+baseline     = Contributive Online GIS
+company      = Localis Workgroup
+company_url  = http://localis.berlios.de
+editor_name  = Localis : Edit
+root_path    = C:\Program Files\EasyPHP\www\localis
+tpl_path     = C:\Program Files\EasyPHP\www\localis\template
+tmp_path     = C:\Program Files\EasyPHP\www\localis\tmp\
+img_path     = C:\Program Files\EasyPHP\www\localis\localis\
+map_path     = C:\Program Files\EasyPHP\www
+
+sql_reftable = communes
+sql_cityname = nom
+search_listresult = <u>%s</u>
+lang         = fr
+
+[Map]
+name         = france
+path         = C:\Program Files\EasyPHP\www\mapfr
+file         = france.map
+url          = /mapfr
+
 -------------------
 EOF
