@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.29 2003/02/04 05:58:15 mose Exp $
+<?  /* $Id: lib.php,v 1.30 2003/02/04 06:48:08 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -106,43 +106,10 @@ function listlines($layer,$ext='') {
   if (is_array($obj)) {
     foreach ($obj as $o) {
       $line = listpoints($o[id],$ext);
-      $back[$o[name]] = $line;
+      $back[$o[id]] = array($o[name],$line);
     }
   }
   return $back;
-}
-
-function sig_query($select,$cond,$conn,$owh='') {
-  global $conf;
-	$req = array();
-	if ($t = str_replace('mysql://','',$conf[select][$select])) {
-		$data = explode('/',$t);
-		foreach ($data as $d) {
-			$i++;
-			$dbinfo = explode(',',$d);
-			$req[base][$i] = $dbinfo[0];
-			$req[table][$i] = $dbinfo[1];
-			$req[champ][$i] = $dbinfo[2];
-		}
-	}
-	if ($cond) { $more = " where ".@implode(" and ",$cond); }
-	if ($owh) { $more .= " and ".@implode(" or ".$req[table][1].'.',$owh); }
-  $query = "select distinct ".$req[table][1].".* from ".$req[table][1]." ";
-	if (($req[base][2]) and ("$req[base][2]/$req[table][2]/$req[champ][2]" != "$req[base][&]/$req[table][&]/$req[champ][&]")) {
-		$query.= "left join ".$req[base][2].'.'.$req[table][2]." on ".$req[table][2].".".$req[champ][2]."=".$req[table][1].".".$req[champ][1]." ";
-	}
-	$query.= "$more limit 50;";
-  $res = mysql_db_query($req[base][1],$query,$conn) or die($query."<br>1".mysql_error());
-  if ($res) {
-    $i = 1;
-    while ($r = mysql_fetch_array($res)) {
-      $back[$i] = $r;
-      $i++;
-    }
-    return $back;
-  } else {
-    return false;
-  }
 }
 
 function surrounding($x,$y,$delta) {
@@ -202,29 +169,6 @@ function inc($template) {
   } else {
     return "<div style=background:#CC3300;padding:2;margin:1>error handling '$template' Template.</div>";
   }
-}
-
-function prepare_list($wh,$conn,$type,$owh='') {
-  global $db,$conf;
-  $sig_res = sig_query($type,$wh,$conn,$owh);
-	$ii = strtok(str_replace('rows://','',$conf[infos][$type]),'/');
-	$datas = explode(',',$ii);
-	$cityname = $datas[0];
-	$cid = $datas[1];
-	$name = $datas[2];
-	$shortdesc = $datas[3];
-  if ($sig_res) {
-    asort($sig_res);
-    foreach ($sig_res as $sr) {
-      $s["$sr[$cityname]"][] = array('cid' => $sr[$cid], 'shortdesc' => $sr[$shortdesc], 'name' => $sr[$name]);
-    }
-    ksort($s);
-    $GLOBALS[nbres] = count($sig_res);
-    $GLOBALS[nbresresultats] = count($s);
-    $GLOBALS[found] = $s;
-    $GLOBALS[resultats] = array_keys($s);
-  }
-  return true;
 }
 
 function build_list($found,$qu,$eff) {
@@ -290,47 +234,6 @@ function move_map($ext,$sens) {
 	return $ext;
 }
 
-function dbf_gen($base,$jbase,$vres,$cond,$conn,$owh='',$pref='') {
-  global $conf, $qinfo, $x, $y, $nature, $ext, $sizex, $sizey;
-	$path = $conf[general][tmp_path];
-  $UNIQUE_ID = $pref.uniqid('');
-  $dbffile = "$path/$UNIQUE_ID.dbf";
-	$dbf_inf = explode('/',str_replace('dbf://','',$conf[map][dbf_def]));
-	$i=0;
-	foreach($dbf_inf as $d) {
-		$dd = explode(',',$d);
-		foreach($dd as $ddd) {
-			$dbfdef[$i][] = $ddd;
-		}
-	$i+=1;
-	}
-	$dbf = @dbase_create($dbffile,$dbfdef) or die ("dbf creation failed");
-	$did = @dbase_open("$dbffile",2) or die ("Unable to open dbf file");
-	$shapefile = ms_newShapefileObj("$path/$UNIQUE_ID", 1) or die("Error creating shapefile.");
-	$point = ms_newpointobj();
-  if (is_array($vres)) {
-    foreach ($vres as $v) {
-      $vc = clean_city($v);
-      $query = "select ".$conf[map][coord_x]." as abs, ".$conf[map][coord_y]." as ord from $jbase where ".$conf[general][sql_cityname]." like '$vc';";
-      $res = mysql_db_query($conf[database][db_name],$query,$conn);
-      if ($res and mysql_numrows($res)) {
-        $qx = mysql_result($res,0,"abs");
-				$GLOBALS['m'][$v][x] = geo2pix($qx,$ext[0],$ext[2],$sizex);
-        $qy = mysql_result($res,0,"ord");
-				$GLOBALS['m'][$v][y] = $sizey - geo2pix($qy,$ext[1],$ext[3],$sizey);
-				$point->setXY($qx,$qy);
-				$shapefile->addPoint($point);
-				$tmp = array(utf8_encode(trim($v)),$qx,$qy);
-				$GLOBALS['coords']["$v"] = array('x'=>$qx, 'y'=>$qy);
-				dbase_add_record($did,$tmp);
-			}
-    }
-  }
-  $shapefile->free();
-  dbase_close($did);
-  return $UNIQUE_ID;
-}
-
 function dbf_flag($click_x,$click_y, $qx, $qy) {
   global $conf, $add_nom, $qinfo, $x, $y, $nature, $ext, $sizex, $sizey;
 	$path = $conf[general][tmp_path];
@@ -393,12 +296,22 @@ function doicons($list,$it) {
  	}
 }
 
-function tmpclean($id) {
-	global $conf;
-	@unlink($conf[general][tmp_path].'/'.$id.'.dbf');
-	@unlink($conf[general][tmp_path].'/'.$id.'.shx');
-	@unlink($conf[general][tmp_path].'/'.$id.'.shp');
-	@unlink($conf[general][tmp_path].'/'.$id.'.png');
+function lcls_drawpoint($x,$y) {
+	global $zMap, $zImage;
+	$zUser = ms_newLayerObj($zMap);
+	$zUser->set("status", MS_ON);
+	$zUser->set("type", MS_LAYER_POINT);
+	$zUser->set("name", "Point de Saisie");
+	$zUclass = ms_newClassObj($zUser);
+	$zUclass->set("symbolname", "flag2");
+	$zUclass->set("status", MS_ON);
+	$zUshape = ms_newShapeObj(MS_SHAPE_POINT);
+	$zUline = ms_newLineObj();
+	$zUline->addXY($x,$y);
+	$zUshape->add($zUline);
+	if (is_object($zUshape)) {
+		$zUshape->draw($zMap, $zUser, $zImage, 1, "saisie");
+	}
 }
 
 function lcls_drawlayer($drawlayer) {
@@ -429,15 +342,15 @@ function lcls_drawlayer($drawlayer) {
 	$listlines = listlines($drawlayer,$ext);
 	if (is_array($listlines)) {
 	  foreach ($listlines as $o=>$l) {
-		  if (is_array($l)) {
+		  if (is_array($l[1])) {
 				$zUclass->set("status", MS_ON);
 				$zUshape = ms_newShapeObj($shapetype);
 				$zUline = ms_newLineObj();
-				foreach ($l as $drawpoint) {
+				foreach ($l[1] as $drawpoint) {
 				  $zUline->addXY($drawpoint[E], $drawpoint[N],0);
 					$imgx = geo2pix($drawpoint[E],$ext[0],$ext[2],$sizex);
 					$imgy = $sizey - geo2pix($drawpoint[N],$ext[1],$ext[3],$sizey);
-					$pointslist["$imgx/$imgy"] = $o;
+					$pointslist["$imgx/$imgy"] = array($o,$l[0]);
 				}
 				$zUshape->add($zUline);
 			}

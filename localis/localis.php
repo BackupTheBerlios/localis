@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.48 2003/02/04 05:58:15 mose Exp $
+<? /* $Id: localis.php,v 1.49 2003/02/04 06:48:08 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -184,48 +184,6 @@ $zExtent   = $zMap->extent;
 $ext = ext2array($zExtent);
 $extexploded = implode(' ',$ext);
 
-if ($drawlayer) {
-	$points = lcls_drawlayer($drawlayer);
-	if (is_array($points)) {
-		$list = "<div class=\"dashed\" style=\"margin-top:15px;padding:15px;\">";
-		foreach ($points as $where=>$what) {
-			$cdx = strtok($where, '/');
-			$cdy = strtok('/');
-			$what = preg_replace("/\r?\n/","<br>",addslashes(str_replace('"',"'",$what)));
-			$glob[maplocations].= "<area href=\"#\" name=\"$where\" id=\"$where\" shape=\"rect\" coords=\"".($cdx-10).",".($cdy-10).",".($cdx+10).",".($cdy+10)."\" \n";
-			$glob[maplocations].= "onmouseover=\"return overlib('".addslashes($what)."', WIDTH, 150);\" \n";
-			$glob[maplocations].= "onmouseout='return nd();' onclick=\"return overlib('$what', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
-			
-			$list.= "<div class=\"list\">$what</div>";
-		}
-		$list.= "</div>";
-	}
-}
-
-mysql_close($conn);
-
-if ($flagid) {
-	$zResult = $zMap->getLayerByName('flag');
-	$zResult->set('status',MS_ON);
-	$zResult->set('data',$conf[general][tmp_path]."/$flagid");
-	$zResult->draw($zImage);
-	$map_txt = "Vous êtes ici.";
-	$vv = 'flag';
-	$map_locations.= "<area href=# name=\"$vv\" id=\"$vv\" shape=\"rect\" coords=\"".($click_x-10).",".($click_y-10).",".($click_x+10).",".($click_y+10)."\" \n";
-	$map_locations.= "onmouseover=\"return overlib('$map_txt');\" onmouseout='return nd();'>\n";
-}
-# Create image, reference map & legend
-$glob[imgsrc] = $zImage->saveWebImage(MS_PNG,0,0,-1);
-$zRefer    = $zMap->reference;
-$zRefer->set('width',$conf[map][ref_sizex]);
-$zRefer->set('height',$conf[map][ref_sizey]);
-$zRef      = $zMap->drawreferencemap();
-$glob[refsrc]   = $zRef->saveWebImage(MS_PNG,0,0,-1);
-$zLegende  = $zMap->drawLegend();
-$glob[legsrc]   = $zLegende->saveWebImage(MS_PNG,0,0,-1);
-$scl = number_format($zMap->scale,0,',',' ');
-# Build layer selection (left menu)
-# thanks raz for cleaning !!
 foreach($conf[layers] as $l=>$lv) {
 	if (@in_array(trim($l),$lay)) {
 		$glob['layermenu'].= "<tr><td class=\"toolchecked\" onclick=\"document.f.$l.checked=!document.f.$l.checked;\">";
@@ -238,7 +196,6 @@ foreach($conf[layers] as $l=>$lv) {
 if (is_array($userlayers)) {
   foreach ($userlayers as $ulnum=>$ul) {
     if ($drawlayer == $ulnum) {
-			$glob['query'].= "&ulayers[]=$ulnum";
 			$glob['input'].= "<input type=\"hidden\" name=\"drawlayer\" value=\"$ulnum\">\n";
       $glob['catmenu'].= "<option value=$ulnum selected style=background-color:#FFCC99>$ul[layername]</option>";
     } else {
@@ -247,7 +204,6 @@ if (is_array($userlayers)) {
   }
 } 
 
-// ROU used by ie map
 ${"check$interface"} = "checked";
 $glob["lang$lang"] = "selected";
 $glob["act".$act] = "checked";
@@ -265,8 +221,44 @@ if ($ext) {
 $glob['query'].= "&scale=".urlencode($scl);
 $glob['input'].= "<input type=\"hidden\" name=\"scale\" value=\"$scl\">";
 
-
 $colwidth = $conf[map][ref_sizex]+4;
+
+if ($drawlayer) {
+	$points = lcls_drawlayer($drawlayer);
+	if (is_array($points)) {
+		$list = "<div class=\"dashed\" style=\"margin-top:15px;padding:5px;\">";
+		foreach ($points as $where=>$what) {
+			$cdx = strtok($where, '/');
+			$cdy = strtok('/');
+			$what[1] = preg_replace("/\r?\n/","<br>",addslashes(str_replace('"',"'",$what[1])));
+			$glob[maplocations].= "<area href=\"#\" name=\"$where\" id=\"$where\" shape=\"rect\" coords=\"".($cdx-10).",".($cdy-10).",".($cdx+10).",".($cdy+10)."\" \n";
+			$glob[maplocations].= "onmouseover=\"return overlib('".addslashes($what[1])."', WIDTH, 150);\" \n";
+			$glob[maplocations].= "onmouseout='return nd();' onclick=\"return overlib('$what[1]', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
+			
+			$list.= "<div class=\"list\"><a href=\"localis.php?drawlayer=$drawlayer&showid=$what[0]".$glob[query]."\">";
+			$list.= "<img src=images/mapzoom.png width=8 height=8 hspace=2 vspace=0 border=0 alt='look' align=baseline>&nbsp;";
+			$list.= "$what[0] : $what[1]</a></div>\n";
+		}
+		$list.= "</div>";
+	}
+}
+
+mysql_close($conn);
+
+if ($act == "edition") {
+	lcls_drawpoint($coordx,$coordy);
+}
+# Create image, reference map & legend
+$glob[imgsrc] = $zImage->saveWebImage(MS_PNG,0,0,-1);
+$zRefer    = $zMap->reference;
+$zRefer->set('width',$conf[map][ref_sizex]);
+$zRefer->set('height',$conf[map][ref_sizey]);
+$zRef      = $zMap->drawreferencemap();
+$glob[refsrc]   = $zRef->saveWebImage(MS_PNG,0,0,-1);
+$zLegende  = $zMap->drawLegend();
+$glob[legsrc]   = $zLegende->saveWebImage(MS_PNG,0,0,-1);
+$scl = number_format($zMap->scale,0,',',' ');
+
 
 echo inc("head");
 echo inc("search");
@@ -287,7 +279,7 @@ if ($drawlayer == "NEW") {
 	$glob['right'] = inc("editlayer");
 } elseif ($act == "edition") {
 	$glob['statusmenu'] = domenu(array(0,1,2,3,4,5),0);
-	if ($showpoint) {
+	if ($showid) {
 		
 	}
 	$glob['right'] = inc("edit");
@@ -297,7 +289,5 @@ if ($drawlayer == "NEW") {
 echo inc("map");
 echo inc("foot");
 
-if ($id)  tmpclean($id);
-if($sid) tmpclean($sid);
 if (0 or $conf[gui][debug]) { echo "<pre style=font-size:80%;color:#990000>";print_r(get_defined_vars());echo "</pre>"; }
 ?>
