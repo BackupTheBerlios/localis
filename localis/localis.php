@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.42 2002/12/17 11:04:30 ramzi Exp $
+<? /* $Id: localis.php,v 1.43 2002/12/19 11:44:33 ramzi Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -140,7 +140,7 @@ if (!is_file($conf["map"]['path']."/fonts/fontset")) {
 # Select layer to use
 if ($type == 'all') {
 	// yes ! it sucks, but it waits for a rationnalization of config file
-	array_shift($listres);
+	//array_shift($listres);
 	array_shift($listres);
 	$mychoices = $listres ;
 	$type = '';
