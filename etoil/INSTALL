@@ -1,0 +1,53 @@
+E-Toil Install
+
+1/ pre-requis
+* apache
+* php-cgi
+* mapserver
+* phpmapscript
+* postgresql
+* postgis
+
+2/ install
+* décompressez l'archive dans un endroit sur, hors de l'arborescence web.
+par exemple : /usr/local/etoil
+* preparez un virtualhost ou un sous-directory pour votre espace de travail
+
+# virtualhost ##########################################
+<VirtualHost *>
+	ServerName etoil.localhost
+	DocumentRoot /usr/local/etoil/www
+	ScriptAlias /cgi-bin/ "/usr/local/mapserver/cgi-bin/"
+	AddType application/php-cgi .php
+	Action application/php-cgi /cgi-bin/php
+	DirectoryIndex index.php
+	ErrorLog /usr/local/etoil/log/etoil-error_log
+	Customlog /usr/local/etoil/log/etoil-access_log combined
+	<Directory /usr/local/etoil>
+		order deny,allow
+		deny from all	
+	</Directory>
+	<Directory /usr/local/etoil/www>
+		order allow,deny
+		Allow from all
+	</Directory>
+</VirtualHost>
+
+# subdir ###############################################
+Alias /etoil/ /usr/local/etoil/www
+<Directory /usr/local/etoil>
+  order deny,allow
+	deny from all	
+</Directory>
+
+<Directory /usr/local/etoil/www>
+	ScriptAlias /cgi-bin/ "/usr/local/mapserver/cgi-bin/"
+	AddType application/php-cgi .php
+	Action application/php-cgi /cgi-bin/php
+	DirectoryIndex index.php
+	ErrorLog /usr/local/etoil/log/etoil-error_log
+	Customlog /usr/local/etoil/log/etoil-access_log combined
+	order allow,deny
+	Allow from all
+</Directory>
+
