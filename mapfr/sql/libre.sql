@@ -1,4 +1,4 @@
-# $Id: libre.sql,v 1.8 2002/10/22 05:55:14 mose Exp $
+# $Id: libre.sql,v 1.9 2002/10/23 14:50:45 mose Exp $
 #
 # Serveur: localhost
 # Généré le : Jeudi 17 Octobre 2002 à 15:10
@@ -147,4 +147,27 @@ CREATE TABLE human (
 
 INSERT INTO human VALUES (1, 'Le Haillan', 'Médias-Cité', '', 'Gerald Elbaze', '', 'http://medias-cite.org','1');
 INSERT INTO human VALUES (2, 'Saint-martin-de-ré', 'Ré-publique et RadioPhare', '', 'Olivier Zablocki', '', 'http://re-publique.net','1');
+
+#
+# Structure de la table `event`
+#
+
+DROP TABLE IF EXISTS event;
+CREATE TABLE event (
+  id int(11) NOT NULL auto_increment,
+  ville varchar(255) NOT NULL default '',
+  notes varchar(255) NOT NULL default '',
+  date datetime NOT NULL,
+  nom varchar(255) NOT NULL default '',
+  email varchar(255) NOT NULL default '',
+  url varchar(255) NOT NULL default '',
+	verified enum('0','1') NOT NULL default '0',
+  PRIMARY KEY id (id)
+) TYPE=MyISAM;
+
+#
+# Contenu de la table `event`
+#
+
+INSERT INTO event VALUES (1, 'Autrans', 'Autrans 2003', '', 'Les rencontres d\'Autrans, 7eme edition', '', 'http://autrans2003.org','1');
 
