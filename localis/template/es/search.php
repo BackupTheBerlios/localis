@@ -1,8 +1,8 @@
 <?
-$GLOBALS['textesearchhome'] = "Accueil";
-$GLOBALS['textesearchhelp']  = "Aide";
-$GLOBALS['textesearchchooselayer'] = "Choisissez un calque";
-$GLOBALS['textesearchnewlayer'] = "Nouveau Calque";
-$GLOBALS['textesearchbuttonmap'] = "Afficher";
-$GLOBALS['textesearchbuttonlist'] = "Liste";
+$GLOBALS['textesearchhome'] = "Inicio";
+$GLOBALS['textesearchhelp']  = "Ayuda";
+$GLOBALS['textesearchchooselayer'] = "Elija un calco";
+$GLOBALS['textesearchnewlayer'] = "Nuevo Calco";
+$GLOBALS['textesearchbuttonmap'] = "Mostrar";
+$GLOBALS['textesearchbuttonlist'] = "Lista";
 ?>

@@ -1,91 +1,52 @@
 <?
 $GLOBALS['textehelp'] =<<<_END_
-<h2>Aide</h2>
-Localis permet de visualiser le résultat d'une recherche effectuée dans plusieurs
-bases de données. D'autre part, Localis est un outil cartographique en ligne contributif.
-Il permet à l'utilisateur d'ajouter et de qualifier sur une carte des points, les rendant
-accessibles aux autres utilisateurs. L'ensemble de ces bases de données  géo-référencées et
-cartographiques constitue "la source de l'information".
+<h2>Ayuda</h2>
+Localis permite visualizar el resultado de una búsqueda en varias bases de datos. Además, Localis es una herramienta cartográfica contributiva en línea. Permite al usuario agregar y calificar puntos en un mapa, a los que pueden acceder a su vez otros usuarios. el conjunto de esas bases de datos georeferenciadas y cartográficas constituye "la fuente de información". 
 <br><br>
-Cet outil est composé de plusieurs modules à destination des utilisateurs : <br><br>
+Esta herramienta está compuesta de varios módulos para los usuarios : <br><br>
+<b>El modulo "formulario de búsqueda" : </b><br>
+<ul><li>El campo "Búsqueda" : es nada menos que un motor de búsqueda.</li>
+<li>El menú desplegable : se puede acceder a los objetos presentes en "la fuente de información" según las categorías precalificadas listadas en los menús desplegables.<br>
+Es posible cruzar los elementos seleccionados, a partir de las diferentes opciones de ingreso de datos, para obtener respuestas más precisas.</li></ul>
 
-<b>Le module "formulaire de recherche" : </b><br>
-Il est possible de déterminer les éléments à rechercher par différents moyens de saisie :
-<ul><li>Le champ "Recherche" : il s'agit d'un moteur de recherche.</li>
-<li>Le menu déroulant : les objets présents dans "la source de l'information" peuvent être
-accessibles selon des catégories pré-qualifiées listées dans des menus déroulants.<br>
-Il est bien sûr possible de croiser les éléments sélectionnés, au travers de ces différents
-moyens de saisie, pour obtenir des réponses plus précises.</li></ul>
-
-<ul><b>Note d'utilisation :</b><br>
-Pour passer à l'étape suivante, il est nécessaire de sélectionner le mode d'affichage des
-résultats : sous forme de "carte" en mode image, ou sous forme de "liste" en mode texte.
-Cette sélection aura pour effet de valider l'ensemble des options choisies par l'utilisateur
-et de soumettre cette requête au traitement.</ul>
+<ul><b>Nota :</b><br>
+Para pasar a la siguiente etapa, hay que seleccionar el modo de visualización de resultados : como un "mapa" en modo imagen, o como una "lista" en modo texto. Esta selección validará el conjunto de opciones elegidas por el usuario y someterá la petición al servidor.</ul>
 <br>
 
-<b>Le module "mode liste (texte)" :</b><br>
-L'ensemble des réponses à la requête est affiché sous forme de liste. Un lien mène vers une
-fiche détaillée pour chacune de ces réponses.
+<b>El módulo "modo lista (texto)" :</b><br>
+El conjunto de respuestas a la petición se presenta como una lista. Un enlace lleva hacia una ficha detallada para cada respuesta. 
 <br><br><br>
 
-<b>Le module "mode carte (image)" :</b><br>
-La liste est accompagnée de la localisation des points sur une carte.<br>
-Une série d'outils inhérents à ce type d'affichage est maintenant visible, ces outils sont :
+<b>El módulo "modo mapa (imagen)" :</b><br>
+La lista se acompaña con la localización de los puntos en un mapa.<br>
+Se puede acceder a las herramientas propias a este modo de visualización, éstas son :
 <ul>
-<li> La carte de navigation : cette reprise à une échelle fixe de l'ensemble de la zone
-géographique concernée permet à l'utilisateur de positionner la
-représentation visible dans l'image principale.</li>
+<li>El mapa de navegación : es una representación en escala fija de la totalidad de la zona geográfica en cuestión y permite al usuario posicionar la representación visible en la imagen principal.</li>
 
-<li>Le bouton "recadrer" : il permet d'afficher la carte de la région dans sa totalité.
-Il est très pratique, par exemple, après avoir navigué sur la carte de pouvoir revenir à
-la vue d'ensemble sans perdre la requête initiale.</li>
+<li>El botón "recentrar" : muestra la totalidad del mapa de la región. Puede ser práctico volver a la vista general luego de haber navegado en un mapa sin perder la petición inicial.</li>
 
-<li>Le menu déroulant "400x400" : il propose différents choix de résolution pour l'affichage
-de la carte principale (240x240, 400x400, 600x600, 800x800). Pour changer la résolution en
-rafraîchissant la page, l'utilisateur doit cliquer sur le bouton de validation '>>'.
-En cas de changement de résolution l'utilsateur ne perd ni la recherche en cours, ni le
-cadrage choisi.</li>
+<li>El menú desplegable "400x400" : Propone diferentes resoluciones gráficas para la visualización del mapa principal (200x200, 400x400, 600x600, 800x800). Para cambiar la resolución y refrescar la página, cliquee sobre el botón de validación '>>'. Al cambiar de resolución, se mantienen tanto la búsqueda en curso asi como el encuadre elegido.</li>
 
-<li>les options du "clic" de la souris sur la carte : il est possible de sélectionner une
-option en activant le "bouton radio" correspondant. <br>
-Les options accessibles sont : <ul>
-<li>l'option <b>"Planter un Drapeau"</b> (le drapeau jaune): lors de la sélection de cette
-option, l'utilisateur a la possibilité de "planter" ce drapeau sur la carte. Aprés avoir
-effectué cette opération, il pourra alors renseigner le point ainsi localisé selon plusieurs
-critères. Une fois qualifié, ce point sera accessible à la recherche par les autres
-utilisateurs.</li>
-<li>l'option <b>"Loupe"</b>, les icônes de zoom sont de type - (pour s'éloigner) et +
-(pour se rapprocher). L'échelle ainsi que l'indicateur de distance visibles au bas de la
-carte principale sont remis à jour à chaque utilisation de cette option.</li>
-<li>l'option <b>"Recentrer"</b> située entre les loupes (icône de la croix) permet,
-quand elle est sélectionnée, de se déplacer sur la carte. Le point séléctionné (par un clic)
-sur la carte sera au centre de la carte qui s'affichera sur la page suivante. Cette option
-a un comportement similaire sur la carte principale ainsi que sur la carte de navigation.</li>
+<li>Las opciones de "clic" del ratón sobre el mapa : Las herramientas se seleccionan cliqueando en su "botón radio" correspondiente.<br>
+Las opciones accesibles son : <ul>
+<li>la opción <b>"Plantar una Bandera"</b> (la bandera dorada): al seleccionar esta opción, el usuario puede "plantar" la bandera en algún lugar del mapa. Luego, puede ingresar información para ese punto. Una vez el punto calificado, éste se encontrará accesible a la búsqueda para los otros usuarios.</li>
+<li>la opción <b>"Lupa"</b>, sus iconos de zoom tienen los simbolos - (para alejarse) y + (para acercarse). Tanto la escala como el indicador de distancia bajo el mapa son actualizados cada vez que se usa esta opción.</li>
+<li>la opción <b>"Reencuadrar"</b> situada entre las lupas (ícono en forma de cruz) permite, al seleccionarse, desplazarse sobre el mapa. El punto seleccionado (con un clic) sobre el mapa estará en el centro del mapa de la página siguiente. El uso de esta opción es el mismo tanto sobre el mapa principal como sobre el mapa de navegación.</li>
 <br></ul>
-<li>Les éléments que l'on nomme "calque" (layer") qui, outre les réponses à la recherche,
-feront partie de la réponse cartographique et aideront à la lisibilité, peuvent être
-sélectionnés indépendament (nom des villes, contour des régions...).<br>
-De manière à pouvoir demander l'affichage de tel ou tel calque de façon simple pour une même
-requête, l'utilisateur dispose du bouton "Recalculer".</li>
-</ul>
-<br>
-<b>Note d'utilisation à propos des URL de Localis :</b><br>
 
-Après avoir obtenu l'affichage des informations désirées avec le niveau de lisibilité souhaité
-(présence de tel ou tel calque, résolution de tant par tant), l'utilisateur peut conserver
-l'adresse de cette vue/page avec l'ensemble des informations la constituant. C'est à dire la
-requête permettant d'obtenir les informations dans les bases.<br><br>
-Cette particularité a deux avantages principaux : <ul>
-<li>elle permet de capitaliser dans les "signets" ("favoris") le temps passé par l'utilisateur
-pour obtenir un document de référence personnel (en stockant la requête) </li>
-<li>elle permet, par ailleurs, de pouvoir transmettre l'adresse de cette page à un interlocuteur,
-lui permettant ainsi de ne pas perdre de temps à retrouver la même vue que son correspondant,
-tout en étant certain de travailler par la suite sur un document à jour, puisqu'utilisant
-la même requête pour interroger les mêmes bases pour générer la carte.</li>
+<li>Los elementos llamados "calcos" ("layers") aparte de filtrar la búsqueda, forman parte de la respuesta cartográfica y mejoran la lisibilidad del mapa. Estas pueden seleccionarse independientemente (nombre de las ciudades, contorno de las regiones...).<br>
+Para poder ver el calco deseado en forma sencilla y para una misma petición, el usuario cuenta con el botón "Recalcular".</li>
 </ul>
 <br>
-Gardez à l'esprit que cet outil est en développement, vous pourrez constater des imperfections voire des dysfonctionnements.<br>
-Merci de les signaler, le cas échéant, à <a href=mailto:mose@makina-corpus.org>mose</a>.
+
+<b>Nota sobre las URL de Localis :</b><br>
+Cuando se consigió la visualización de las informaciones y el nivel de visibilidad deseado (presencia de éste o aquel calco, dimensión de la imagen), se puede conservar la dirección de esta vista / página con todas sus informaciones, o sea, la petición a las bases (como una url) que permite construir la vista.<br><br>
+Esta particularidad tiene dos ventajas principales : <ul>
+<li>Permite capitalizar sus "favoritos" (bookmarks), y el tiempo pasado en construir el documento personalizado (al guardar la petición en los favoritos).</li>
+<li>Permite transmitir la dirección de la página a un interlocutor, para que éste no pierda tiempo reconstruyendo la vista, y estando seguro de trabajar sobre el mismo documento, al utilizar la misma petición para consultar las mismas bases.</li>
+</ul>
+<br>
+Tenga en cuenta que se trata de una herramienta en desarrollo, puede encontrarse con imperfecciones o problemas de funcionamiento.<br>
+Si se encuentra con alguna, por favor comuniqueselo a <a href=mailto:mose@makina-corpus.org>mose</a>.
 _END_;
 ?>
