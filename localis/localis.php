@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.25 2002/10/24 06:15:06 mose Exp $
+<? /* $Id: localis.php,v 1.26 2002/10/24 22:06:04 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -29,7 +29,11 @@ $act     = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
 $size    = ($HTTP_GET_VARS['size']) ? $HTTP_GET_VARS['size'] : "400x400";
 $type    = ($HTTP_GET_VARS['type']) ? $HTTP_GET_VARS['type'] : "";
 $city    = $HTTP_GET_VARS['v'];
-$ext     = split(' ',trim($HTTP_GET_VARS['extent']));
+if ($HTTP_GET_VARS['forceextent.x'] or $HTTP_GET_VARS['forceextent_x']) {
+	$ext     = split(' ',trim($HTTP_GET_VARS['forceextent']));
+} else {
+	$ext     = split(' ',trim($HTTP_GET_VARS['extent']));
+}
 $view    = $HTTP_GET_VARS['tpl'];
 $addcity = $HTTP_GET_VARS['add_city'];
 $addtype = $HTTP_GET_VARS['add_type'];
@@ -41,6 +45,8 @@ $addit   = $HTTP_GET_VARS['addit'];
 
 if (strstr($HTTP_GET_VARS['size'],'x')) {
 	list($sizex,$sizey) = split('x',$HTTP_GET_VARS['size']);
+	if ($sizex > 1200) $sizex = '1200';
+	if ($sizey > 1200) $sizey = '1200';
 }
 dl('php_mapscript.so');
 include "inc/parseconf.php";
@@ -136,6 +142,8 @@ if ($view != $conf[gui][list_button]) {
 	}	
 	$zLimit = ms_newRectObj();
 	$zLimit->setextent($conf[map][ext_minx],$conf[map][ext_miny],$conf[map][ext_maxx],$conf[map][ext_maxy]);
+	// had to hack to make min = 0 acceptable proposition
+	$maxext = (string) (int) $conf[map][ext_minx].' '.(string) (int) $conf[map][ext_miny].' '.$conf[map][ext_maxx].' '.$conf[map][ext_maxy];
 	if (!$sizex) {
 		$zSizex = $zMap->width;
 		$zSizey = $zMap->height;
@@ -228,11 +236,12 @@ if ($view != $conf[gui][list_button]) {
 			# Place javascript info area on points
 			if (is_array($m)) {
 				foreach ($m as $vv=>$coord) {
+					$map_txt = preg_replace("/\r?\n/","<br>",addslashes($maplist[$vv]));
 					$map_locations.= "<area href=\"#top\" name=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" ";
-					$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>".str_replace('\n','<br>',addslashes($maplist[$vv]))."', WIDTH, 150);\" ";
-					$map_locations.= " onmouseout='return nd();' onclick=\"return overlib('".addslashes($maplist[$vv])."', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
+					$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>$map_txt', WIDTH, 150);\" ";
+					$map_locations.= " onmouseout='return nd();' onclick=\"return overlib('$map_txt', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
+				}
 			}
-}
 		}
 	}
 	if ($flagid) {
@@ -278,9 +287,10 @@ ${"size_".$sizex."x".$sizey}   = "selected";
 # Place javascript info area on points
 if (is_array($m)) {
 	foreach ($m as $vv=>$coord) {
+		$map_txt = preg_replace("/\r?\n/","<br>",addslashes($maplist[$vv]));
 		$map_locations.= "<area href=\"#top\" name=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" ";
-		$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>".str_replace('\n','<br>',addslashes($maplist[$vv]))."', WIDTH, 150);\" ";
-		$map_locations.= "onmouseout='return nd();' onclick=\"return overlib('".addslashes($maplist[$vv])."', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
+		$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>$map_txt', WIDTH, 150);\" ";
+		$map_locations.= "onmouseout='return nd();' onclick=\"return overlib('$map_txt', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
 	}
 }
 mysql_close($conn);
