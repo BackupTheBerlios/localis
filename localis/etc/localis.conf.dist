@@ -51,6 +51,7 @@ ref_sizey    = 142
 coord_x      = E
 coord_y      = N
 dbf_def      = dbf://NOM,C,64,0/E,N,12,4/N,N,12,4
+
 [Infos]
 # Rows fetched (cityname, id, name, short description), layer name
 firstjeudi   = rows://ville,id,nom,description/communes

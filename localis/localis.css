@@ -57,12 +57,13 @@ a:hover {
 	color: #333333;
 }
 .base {
-	background:none;
-	color:#999999;
+	font-size: 80%;
+	background: none;
+	color: #666666;
 }
 .base:hover {
-	background:#999999;
-	color:#FFFFFF;
+	background:#bbbbbb;
+	color:#000000;
 }
 .corps {
 	margin: 20px;

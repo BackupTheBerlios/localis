@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.8 2002/10/17 14:30:16 mastre Exp $
+<?  /* $Id: lib.php,v 1.9 2002/10/17 18:33:59 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -129,13 +129,13 @@ function build_list($found,$qu,$eff) {
     foreach ($resultats as $vres) {
 			$ouca = $coords[$vres];
       $list.= "<div class=base id=109><a href=localis.php?x=".$ouca[x]."&y=".$ouca[y];
-			$list.= "&v=".urlencode($vres)."&size=400x400&".$layer_query."forcescale=188&$args ";
+			$list.= "&v=".urlencode($vres)."&size=400x400&".$layer_query."forcescale=600&$args ";
 			$list.= "class=base>$vres</a></div>";
       foreach ($found[$vres] as $kk) {
-				$list.= "<div class=list><a href=http://#?id=".$kk['description']." target=_new>";
+				$list.= "<div class=list><a href=\"file.php?id=".$kk['cid']."\" target=_new>";
         $list.= "<img src=images/mapzoom.png width=8 height=8 hspace=2 vspace=0 border=0 alt='look' align=baseline>&nbsp;";
 				$list.= "$kk[name]</a></div>\n";
-				$maplist[$vres].= "<div class=list>- ".$kk[shortdesc]."<a href=#/?id=".$kk['cid']." target=_new>$kk[name]</a></div>"; 
+				$maplist[$vres].= "<div class=list>- ".$kk[shortdesc]."<a href=file.php?id=".$kk['cid']." target=_new>$kk[name]</a></div>"; 
       }
     }
   }
