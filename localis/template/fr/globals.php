@@ -18,8 +18,9 @@ $laycolors["200 50 0"] = "Rouge";
 
 $laysymbols["ordi"]   = "Ordi";
 $laysymbols["flag"]   = "Drapeau";
-$laysymbols["disk"]   = "Rond";
-$laysymbols["square"] = "Carré";
+$laysymbols["tux"]    = "Tux";
+$laysymbols["human"]  = "Humain";
+$laysymbols["troll"]  = "Troll";
 
 $laytype['point'] = "Points";
 $laytype['line'] = "Lignes";

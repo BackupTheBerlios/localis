@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.35 2003/02/05 05:22:11 mose Exp $
+<?  /* $Id: lib.php,v 1.36 2003/02/05 05:37:27 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -311,19 +311,18 @@ function lcls_drawlayer($drawlayer) {
 	$zUser->set("type", $layertype);
 	$zUser->set("classitem", "item");
 	$zUser->set("name", $userlayers["$drawlayer"]["layername"]);
-	$zUser->set("group", $userlayers["$drawlayer"]["layergroup"]);
+	#$zUser->set("group", $userlayers["$drawlayer"]["layergroup"]);
 	$zUclass = ms_newClassObj($zUser);
 	$zUclass->set("name", $userlayers["$drawlayer"]["layername"]);
 	if ($userlayers[$drawlayer][layercolor]) {
 		list($r,$v,$b) = split(' ',$userlayers[$drawlayer][layercolor]);
-		$color = $zMap->addcolor($r, $v, $b);
-		$zUclass->set("color", $color);
+		$zUclass->set("color", $zMap->addColor($r, $v, $b));
 	}
 	if ($userlayers["$drawlayer"]["layersymbol"]) {
 		$zUclass->set("symbolname", $userlayers["$drawlayer"]["layersymbol"]);
 	}
 	$zUclass->set("size", $userlayers["$drawlayer"]["layersize"]);
-	$zUclass->set("outlinecolor", -1);
+	$zUclass->set("outlinecolor", "-1");
 	
 	$listlines = listlines($drawlayer,$ext);
 	if (is_array($listlines)) {
