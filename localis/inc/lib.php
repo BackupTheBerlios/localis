@@ -1,8 +1,8 @@
-<?  /* $Id: lib.php,v 1.39 2003/02/05 08:40:24 mose Exp $
-Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
-This file is a component of Localis <http://localis.makina-corpus.org>
-Created by mose@makina-corpus.org and mastre@makina-corpus.org
-Maintained by Makina Corpus <localis@makina-corpus.org>
+<?  /* $Id: lib.php,v 1.40 2003/03/26 22:27:26 mose Exp $
+Copyright (C) 2003, Makina Source, http://makina-source.org
+This file is a component of Localis - http://localis.org
+Created by mose <mose@makina-source.org> and mastre <mastre@localis.org>
+Maintained by Makina Source <localis@makina-source.org>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -15,9 +15,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
-USA.
+along with this program; if not, write to 
+the Free Software Foundation, Inc., 
+59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+or check http://www.gnu.org/copyleft/gpl.html
 */
 
 function ext2array($z) { 
@@ -32,26 +33,9 @@ function sig_connect() {
   return $conn;
 }
 
-function sig_list($field, $conn, $cut=0) {
-	# Fecth informations to build selects from mysql
-  global $conf;
-	if (ereg("select_list:\/\/(.*)",$field,$r)) {
-		$f = explode(",",$r[1]);
-		if(is_array($f)) {
-			foreach($f as $ff) {
-				$r = explode("->",$ff);
-				$lis[] = $r[0];
-     		$back[$r[0]] = $r[1];
-			}
-		}
-	}
-	$GLOBALS['listres'] = $lis;
-	return $back;
-} 
-
 function layerslist() {
   global $conn,$conf;
-  $query = "select * from layer order by layername";
+  $query = "select *, count(*) as total from layer left join layerobj on layer.layerid=layerobj.layerid group by layer.layerid order by layer.layername";
   $res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
   while ($r = mysql_fetch_array($res)) {
     $back["$r[layerid]"] = $r;

@@ -1,8 +1,8 @@
-<? /* $Id: index.php,v 1.5 2003/02/03 08:28:44 mose Exp $
-Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
-This file is a component of Localis <http://localis.makina-corpus.org>
-Created by mose@makina-corpus.org and mastre@makina-corpus.org
-Maintained by Makina Corpus <localis@makina-corpus.org>
+<? /* $Id: index.php,v 1.6 2003/03/26 22:27:26 mose Exp $
+Copyright (C) 2003, Makina Source, http://makina-source.org
+This file is a component of Localis - http://localis.org
+Created by mose <mose@makina-source.org> and mastre <mastre@localis.org>
+Maintained by Makina Source <localis@makina-source.org>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -15,9 +15,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
-USA.
+along with this program; if not, write to 
+the Free Software Foundation, Inc., 
+59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+or check http://www.gnu.org/copyleft/gpl.html
 */
 
 

@@ -11,17 +11,16 @@ db_user      = localis
 db_pass      = localis
 
 [General]
-root_path    = /var/www/mapserver/www
-tpl_path     = /var/www/mapserver/www/template
-tmp_path     = /var/www/mapserver/www/tmp
-img_path     = /var/www/mapserver/www/images
-sql_reftable = communes
+tpl_path     = /usr/local/mapserver/www/localis_demo/localis/template
+tmp_path     = /usr/local/mapserver/www/localis_demo/localis/tmp
+img_path     = /usr/local/mapserver/www/localis_demo/localis/images
+sql_reftable = points
 sql_cityname = nom
 search_listresult = <u>%s</u>
 lang         = fr
 
 [Globals]
-name         = Localis
+name         = Carte de la France Libre
 minimap      = /mapfr/mini_france.png
 minimapx     = 142
 minimapy     = 142
@@ -45,57 +44,34 @@ colwidth     = 146
 
 [Map]
 name         = france
-path 		     = /usr/local/mapserver/www/mapfr
+path 		     = /usr/local/mapserver/www/localis_littoral/mapfr
 file         = france.map
-url          = /mapfr
-minimap      = /mapfr/mini_france.png
-defext       = 1 1630000 1267000 2690000 
-ref_sizex    = 142
-ref_sizey    = 142
+url          = /maps
+defext       = 1 1630000 1267000 2690000
+defsize      = 400x400
+shapepath    = data
 coord_x      = E
 coord_y      = N
 dbf_def      = dbf://NOM,C,64,0/E,N,12,4/N,N,12,4
 
-[Infos]
-# Rows fetched (cityname, id, name, short description), layer name
-lug                      = rows://ville,id,nom,notes/communes2
-trolls 			 = rows://ville,id,nom,notes/communes3
-human 			 = rows://ville,id,nom,notes/communes4
-[Layers]
-fond         = Fond
-regions      = Regions
-
-[Select]
-lug          = mysql://localis,lug,ville/localis,communes,nom
-trolls       = mysql://localis,trolls,ville/localis,communes,NOM
-human        = mysql://localis,human,ville/localis,communes,NOM
-
+[Reference]
+sizex        = 142
+sizey        = 142
+extent       = 1 1630000 1267000 2690000
+image        = mini_france.png
 
 [Gui]
-fond                 = Fond
-departements         = Departements
-regions              = Regions
-agglomerations       = Agglomerations
-communes             = Communes
-type                 = Type
-fit                  = Recadrer
-refresh              = Recalculer
-map_button           = Carte
-list_button          = Liste
-search               = Recherche
-colwidth             = 146
-debug                = 0
-noresult             = Aucun résultat.
-moveleft_button      = l
-moveright_button     = r
-moveup_button        = u
-movebottom_button    = b
-defaultmapsize       = 400x400
-lug                  = LUG
-trolls               = Trolls
-human                = Humains
-
-[Form]
-search = text://20/ville,nom
-type   = select_list://all->[ Tous ],lug->Groupes,trolls->Trolls,human->Humains
+type         = Type
+fit          = Recadrer
+refresh      = Recalculer
+map_button   = Carte
+list_button  = Liste
+search       = Recherche
+colwidth     = 146
+debug        = 0
+noresult     = Aucun résultat.
+moveleft_button    = l
+moveright_button   = r
+moveup_button      = u
+movebottom_button  = b
 

@@ -4,9 +4,9 @@
 <table border="0" cellpadding="1" cellspacing="0" width="$conf.gui.colwidth" class="dashed">
 <tr><td valign="top" align="center">
 <input type="hidden" name="forceextent" id="forceextent" value="">
-<input type="image" src="$ref_src" width="$conf.map.ref_sizex" 
-height="$conf.map.ref_sizey" name="ref" alt="$conf.map.name" hspace="0" vspace="0" border="0"><br>
-<input type="submit" name="fit" value="$conf.gui.fit" class="submit" style="width: 60%;" id="106" onclick="document.f.forceextent.value='1'; document.f.extent.value=''; document.f.scale.value=''; document.f.submit();">
+<input type="image" src="$+refsrc$" width="$.minimapx$" 
+height="$.minimapy$" name="ref" alt="$.name$" hspace="0" vspace="0" border="0"><br>
+<input type="submit" name="fit" value="$mapfit$" class="submit" style="width: 60%;" id="106" onclick="document.f.forceextent.value='1'; document.f.extent.value=''; document.f.scale.value=''; document.f.submit();">
 <!--a href="javascript:document.f.forceextent.value='1'; document.f.extent.value=''; document.f.scale.value=''; document.f.submit();" class="refbutton">Recadrer</a-->
 <!--input type=image src=images/recadrer.png alt=Recadrer name=forceextent value="1" border=0 vspace=0 hspace=0-->
 </td></tr></table>

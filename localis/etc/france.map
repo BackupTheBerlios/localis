@@ -1,0 +1,209 @@
+MAP
+
+NAME France
+STATUS on
+EXTENT 000001 1630000 1267000 2690000
+UNITS meters
+SHAPEPATH "data/"
+SYMBOLSET "symbols.sym"
+IMAGECOLOR 254 253 252
+FONTSET "fonts/fontset"
+TRANSPARENT on
+INTERLACE on
+
+WEB
+	IMAGEURL "/tmp/"
+	MINSCALE 100000
+	MAXSCALE 4000000
+END
+
+REFERENCE
+	SIZE 122 142
+	STATUS on
+	EXTENT 000001 1630000 1267000 2690000
+	OUTLINECOLOR 100 0 0
+	IMAGE "mini_france.png"
+	COLOR -1 -1 -1
+END
+
+LEGEND
+	KEYSIZE 20 18
+	KEYSPACING 7 5
+	LABEL
+		FONT arial_bold
+		TYPE truetype
+		SIZE 8
+		ANTIALIAS on
+		FORCE on
+		COLOR 60 60 60
+	END
+	TRANSPARENT on
+	OUTLINECOLOR 255 255 255
+	STATUS on
+END
+
+SCALEBAR
+  IMAGECOLOR 255 255 255
+  LABEL
+    COLOR 0 0 0
+    SIZE tiny    
+  END
+  STYLE 1
+  SIZE 100 2
+	COLOR 0 0 0
+  UNITS KILOMETERS
+  INTERVALS 2
+  TRANSPARENT off
+  STATUS EMBED
+END
+
+
+LAYER
+  NAME "fond3"
+	GROUP "fond"
+  TYPE line
+  DATA "limdep"
+  STATUS on
+	CLASSITEM 'NATURE'
+  CLASS
+		EXPRESSION ('[NATURE]' eq 'Frontière internationale')
+		SIZE 12
+		COLOR 200 150 100
+		SYMBOL "circle"
+  END
+  TOLERANCE 5
+END
+
+LAYER
+  NAME "fond2"
+	GROUP "fond"
+  TYPE line
+  DATA "limdep"
+  STATUS on
+	CLASSITEM 'NATURE'
+  CLASS
+		EXPRESSION ('[NATURE]' eq 'Limite côtière')
+		SIZE 12
+		COLOR 100 150 200
+		SYMBOL "circle"
+  END
+  TOLERANCE 5
+END
+
+LAYER
+  NAME "fond1"
+	GROUP "fond"
+  TYPE line
+  DATA "limdep"
+  STATUS on
+	CLASSITEM 'NATURE'
+  CLASS
+		EXPRESSION ('[NATURE]' eq 'Limite côtière' OR '[NATURE]' eq 'Frontière internationale')
+		SIZE 5
+		COLOR 0 0 0
+		SYMBOL "circle"
+  END
+  TOLERANCE 5
+END
+
+LAYER
+  NAME "Départements1"
+  TYPE polygon
+  DATA "dep"
+  STATUS on
+	GROUP "fond"
+	CLASSITEM 'CODE_DEPT'
+	LABELITEM 'NOM_DEPT'
+  CLASS
+    COLOR 255 255 255
+  END
+  TOLERANCE 5
+END
+
+LAYER
+  NAME "Départements"
+  TYPE polygon
+  DATA "dep"
+  STATUS on
+	GROUP "departements"
+	CLASSITEM 'CODE_DEPT'
+	LABELITEM 'NOM_DEPT'
+	SYMBOLSCALE 6000000
+  CLASS
+		LABEL
+			POSITION cc
+			COLOR 200 150 100
+			FONT georgia
+			TYPE truetype
+			ANTIALIAS true
+			MINSIZE 3
+			MAXSIZE 9
+		END
+    COLOR 240 230 200
+		OUTLINECOLOR 160 110 60
+  END
+  TOLERANCE 5
+END
+
+
+LAYER
+  NAME "fond2"
+	GROUP "regions"
+  TYPE line
+  DATA "limdep"
+  STATUS on
+	CLASSITEM 'NATURE'
+  CLASS
+		EXPRESSION ('[NATURE]' eq 'Limite côtière' OR '[NATURE]' eq 'Frontière internationale')
+		SIZE 2
+		COLOR 0 0 0
+		SYMBOL "circle"
+ END
+  TOLERANCE 5
+END
+
+LAYER
+	NAME "fond legende"
+	GROUP "regions"
+	TYPE polygon
+	DATA "dep"
+	STATUS on
+	CLASSITEM "NOM_REGION"
+	LABELITEM "NOM_REGION"
+	SYMBOLSCALE 6000000
+  CLASS
+		LABEL
+			POSITION auto
+			COLOR 0 0 0
+			OUTLINECOLOR 255 255 125
+			BUFFER 2
+			FONT georgia_bold
+			TYPE truetype
+			ANTIALIAS true
+			MINSIZE 6
+			MAXSIZE 12
+			FORCE on
+		END
+    COLOR -1 -1 -1
+  END
+  TOLERANCE 5
+END
+
+LAYER
+  NAME "regions"
+  TYPE line
+  DATA "limdep"
+  STATUS on
+	GROUP "regions" 
+	CLASSITEM 'NATURE'
+  CLASS
+		EXPRESSION ('[NATURE]' eq 'Limite de région')
+		SIZE 1
+		COLOR 0 0 0
+		SYMBOL "circle"
+  END
+  TOLERANCE 5
+END
+
+END
+
