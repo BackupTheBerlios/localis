@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.24 2002/11/07 15:49:14 mastre Exp $
+<?  /* $Id: lib.php,v 1.25 2002/11/07 17:25:24 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -204,11 +204,27 @@ function geo2pix($x,$minx,$maxx,$size) {
 	return floor($size * ($x - $minx) / ($maxx - $minx));
 }
 
-function move_map($minx='',$maxx='',$sens) {
-	global $ext;
+function move_map($ext,$sens) {
+	global $conf;
+	if (empty($ext[0])) $ext[0] = 0;
+	$maplen = $ext[2] - $ext[0];
+	$mapwid = $ext[3] - $ext[1];
 	switch($sens) { 
-		case "left" :
-			
+		case $conf[gui][moveleft_button] :
+			$ext[0] = floor($ext[0] - $maplen);
+			$ext[2] = floor($ext[2] - $maplen);
+		break;
+		case $conf[gui][moveright_button] :
+			$ext[0] = floor($ext[0] + $maplen);
+			$ext[2] = floor($ext[2] + $maplen);
+		break;
+		case $conf[gui][moveup_button] :
+			$ext[1] = floor($ext[1] + $mapwid);
+			$ext[3] = floor($ext[3] + $mapwid);
+		break;
+		case $conf[gui][movedown_button] :
+			$ext[1] = floor($ext[1] - $mapwid);
+			$ext[3] = floor($ext[3] - $mapwid);
 		break;
 	}
 	return $ext;

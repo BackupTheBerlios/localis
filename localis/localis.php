@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.38 2002/11/07 15:49:13 mastre Exp $
+<? /* $Id: localis.php,v 1.39 2002/11/07 17:25:24 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -37,6 +37,7 @@ $addnotes = $HTTP_GET_VARS['add_notes'];
 $addit   = $HTTP_GET_VARS['addit'];
 $fzoom   = $HTTP_GET_VARS['fzoom'];
 $fzoomout   = $HTTP_GET_VARS['fzoomout'];
+$fsens   = $HTTP_GET_VARS['fsens'];
 
 if (strstr($HTTP_GET_VARS['size'],'x')) {
 	list($sizex,$sizey) = split('x',$HTTP_GET_VARS['size']);
@@ -193,6 +194,10 @@ if ($view != $conf[gui][list_button]) {
 	}
 	if (!is_array($ext)) {
 		$zExtent = $zMap->extent;
+	} elseif (!empty($fsens)) {
+		$fExt = move_map($ext,$fsens);
+		$zExtent = ms_newRectObj();
+		$zExtent->setextent($fExt[0],$fExt[1],$fExt[2],$fExt[3]);
 	} else {
 		$zExtent = ms_newRectObj();
 		$zExtent->setextent($ext[0],$ext[1],$ext[2],$ext[3]);

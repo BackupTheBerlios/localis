@@ -4,10 +4,21 @@
 <h5>Echelle: 1 / $scl eme</h5>
 </form>
 <form action="localis.php" method='get'>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top>
+<img src="images/zoomout2.png" width=18 height=18>
 <input type="submit" name="fzoom" value=" $conf.gui.zoom_button " class="submit">
 <input type="submit" name="fzoomout" value=" $conf.gui.zoomout_button " class="submit">
+</td><td valign=top>
+<img src="images/travel.png" width=18 height=18>
+<input type="submit" name="fsens" value="$conf.gui.moveup_button" class="submit">
+<input type="submit" name="fsens" value="$conf.gui.moveleft_button" class="submit">
+<input type="submit" name="fsens" value="$conf.gui.moveright_button" class="submit">
+<input type="submit" name="fsens" value="$conf.gui.movedown_button" class="submit">
 <input type=hidden name=type value=firstjeudi>
 <input type=hidden name=action value="$act">
 <input type="hidden" name="extent" value="$extexploded">
 <input type="hidden" name="scale" value="$scl">
+<input type="hidden" name="search" value="$search">
+</table>
 </form>
