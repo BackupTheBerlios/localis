@@ -1,7 +1,13 @@
 SYMBOL
 NAME "flag"
 TYPE pixmap
-IMAGE "images/flag3.png"
+IMAGE "images/flag_gold.png"
+END
+
+SYMBOL
+NAME "flag2"
+TYPE pixmap
+IMAGE "images/flag_pink.png"
 END
 
 SYMBOL
