@@ -255,33 +255,37 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_lay2->set('type',MS_LAYER_LINE);
 	$e_lay2->set('classitem','parcours_type');
 	
+	$extype=1;
 	$e_cla2a = ms_newClassObj($e_lay2);
-	$e_cla2a->setExpression('1');
+	$e_cla2a->setExpression($extype);
 	$e_sty2a = ms_newStyleObj($e_cla2a);
 	$e_sty2a->set("symbolname","circle");
 	$e_sty2a->set("size",3);
-	$e_sty2a->color->setRGB(hexdec(substr($typescolor[1],0,2)),hexdec(substr($typescolor[1],2,2)),hexdec(substr($typescolor[1],4,2)));
+	$e_sty2a->color->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	
+	$extype=2;
 	$e_cla2b = ms_newClassObj($e_lay2);
-	$e_cla2b->setExpression('2');
+	$e_cla2b->setExpression($extype);
 	$e_sty2b = ms_newStyleObj($e_cla2b);
 	$e_sty2b->set("symbolname","circle");
 	$e_sty2b->set("size",3);
-	$e_sty2b->color->setRGB(hexdec(substr($typescolor[2],0,2)),hexdec(substr($typescolor[2],2,2)),hexdec(substr($typescolor[2],4,2)));
+	$e_sty2b->color->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 
+	$extype=3;
 	$e_cla2c = ms_newClassObj($e_lay2);
-	$e_cla2c->setExpression('3');
+	$e_cla2c->setExpression($extype);
 	$e_sty2c = ms_newStyleObj($e_cla2c);
 	$e_sty2c->set("symbolname","circle");
 	$e_sty2c->set("size",3);
-	$e_sty2c->color->setRGB(hexdec(substr($typescolor[3],0,2)),hexdec(substr($typescolor[3],2,2)),hexdec(substr($typescolor[3],4,2)));
+	$e_sty2c->color->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	
+	$extype=4;
 	$e_cla2d = ms_newclassobj($e_lay2);
-	$e_cla2d->setExpression('4');
+	$e_cla2d->setExpression($extype);
 	$e_sty2d = ms_newstyleobj($e_cla2d);
 	$e_sty2d->set("symbolname","circle");
 	$e_sty2d->set("size",3);
-	$e_sty2d->color->setRGB(hexdec(substr($typescolor[4],0,2)),hexdec(substr($typescolor[4],2,2)),hexdec(substr($typescolor[4],4,2)));
+	$e_sty2d->color->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	
 	$e_lay = ms_newLayerObj($e_map);
 	$e_lay->set('name','parcours');
@@ -299,9 +303,10 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_lay->set('labelitem','parcours_name');
 	$e_lay->set('classitem','parcours_type');
 	
+	$extype='1';
 	$e_claa = ms_newClassObj($e_lay);
 	$e_claa->set('name','Pedestre');
-	$e_claa->setExpression("1");
+	$e_claa->setExpression($extype);
 	$e_stya = ms_newStyleObj($e_claa);
 	$e_laba = $e_claa->label;
 	$e_laba->set("position",MS_AUTO);
@@ -309,12 +314,13 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_laba->set("type","truetype");
 	$e_laba->set("font","arial_bold_italic");
 	$e_laba->color->setRGB(0,0,0);
-	$e_laba->backgroundcolor->setRGB(250,170,20);
+	$e_laba->backgroundcolor->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	$e_stya->set("symbolname","marche");
 
+	$extype='2';
 	$e_clab = ms_newClassObj($e_lay);
 	$e_clab->set('name','Equestre');
-	$e_clab->setExpression('2');
+	$e_clab->setExpression($extype);
 	$e_styb = ms_newStyleObj($e_clab);
 	$e_labb = $e_clab->label;
 	$e_labb->set("position",MS_AUTO);
@@ -322,12 +328,13 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_labb->set("type","truetype");
 	$e_labb->set("font","arial_bold_italic");
 	$e_labb->color->setRGB(0,0,0);
-	$e_labb->backgroundcolor->setRGB(140,220,140);
+	$e_labb->backgroundcolor->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	$e_styb->set("symbolname","cheval");
 
+	$extype='3';
 	$e_clac = ms_newClassObj($e_lay);
 	$e_clac->set('name','VTT');
-	$e_clac->setExpression('3');
+	$e_clac->setExpression($extype);
 	$e_styc = ms_newStyleObj($e_clac);
 	$e_labc = $e_clac->label;
 	$e_labc->set("position",MS_AUTO);
@@ -335,12 +342,13 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_labc->set("type","truetype");
 	$e_labc->set("font","arial_bold_italic");
 	$e_labc->color->setRGB(0,0,0);
-	$e_labc->backgroundcolor->setRGB(140,190,230);
+	$e_labc->backgroundcolor->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	$e_styc->set("symbolname","vtt");
 
+	$extype='4';
 	$e_clad = ms_newClassObj($e_lay);
 	$e_clad->set('name','Canoe-kayak');
-	$e_clad->setExpression('4');
+	$e_clad->setExpression($extype);
 	$e_styd = ms_newStyleObj($e_clad);
 	$e_labd = $e_clad->label;
 	$e_labd->set("position",MS_AUTO);
@@ -348,7 +356,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_labd->set("type","truetype");
 	$e_labd->set("font","arial_bold_italic");
 	$e_labd->color->setRGB(0,0,0);
-	$e_labd->backgroundcolor->setRGB(250,130,90);
+	$e_labd->backgroundcolor->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	$e_styd->set("symbolname","canoe");
 
 }
