@@ -1,6 +1,6 @@
 Localis : INSTALL 
 ----------------
-$Id: INSTALL,v 1.7 2003/06/11 12:43:21 terraces Exp $
+$Id: INSTALL,v 1.8 2003/06/12 12:57:20 terraces Exp $
 -------------------
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis - http://localis.makina-corpus.org
@@ -63,7 +63,6 @@ with the following block
 ServerName localis.mydomain.org
 DocumentRoot /usr/local/mapserver/www/localis/localis
 ScriptAlias /cgi-bin/ "/usr/local/mapserver/cgi-bin/"
-Alias "/maps/" "/usr/local/mapserver/www/localis/mapfr/"
 AddType application/php-cgi .php
 Action application/php-cgi /cgi-bin/php
 DirectoryIndex index.php
