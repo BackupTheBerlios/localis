@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.20 2002/10/26 17:18:04 mose Exp $
+<?  /* $Id: lib.php,v 1.21 2002/10/27 22:13:05 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -118,7 +118,7 @@ function getinfos($table,$id) {
 
 function additem($where,$city,$nom,$email,$url,$notes) {
 	global $conf,$conn;
-	$query = "insert into $where (ville,nom,email,url,notes) values ('$city','$nom','$email','$url','$notes');";
+	$query = "insert into $where (ville,nom,email,url,date,notes) values ('$city','$nom','$email','$url',now(),'$notes');";
 	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
 }
 
