@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.33 2002/10/28 03:43:23 mose Exp $
+<? /* $Id: localis.php,v 1.34 2002/10/28 04:05:57 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -52,8 +52,9 @@ $version = current(file('VERSION'));
 if (!is_file('etc/localis.conf')) die("etc/localis.conf not found<br>You need to copy etc/localis.conf.dist and modify it to fit your needs.");
 $preconf = parseconf('etc/localis.conf');
 if ($HTTP_GET_VARS['lang']) {
-	$lang = $HTTP_GET_VARS['lang'];
-	$qlang  ="&lang=$lang";
+	$lang   = $HTTP_GET_VARS['lang'];
+	$qlang  = "&lang=$lang";
+	$ilang  = "<input type=hidden name=lang value=$lang>";
 } else {
 	$lang = $preconf["general"]["lang"];
 }

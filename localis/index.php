@@ -1,4 +1,4 @@
-<? /* $Id: index.php,v 1.2 2002/10/17 15:21:04 mastre Exp $
+<? /* $Id: index.php,v 1.3 2002/10/28 04:05:57 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -25,7 +25,21 @@ include "inc/lib.php";
 if (!is_file('etc/localis.conf')) die("localis.conf not found<br>Maybe you need to copy localis.conf.dist");
 
 $conn = sig_connect();
-$conf = parseconf('etc/localis.conf');
+$preconf = parseconf('etc/localis.conf');
+if ($HTTP_GET_VARS['lang']) {
+  $lang   = $HTTP_GET_VARS['lang'];
+	$qlang  = "&lang=$lang";
+	$ilang  = "<input type=hidden name=lang value=$lang>";
+} else {
+	$lang = $preconf["general"]["lang"];
+}
+$loc_conf = $preconf["general"]["tpl_path"]."/".$lang."/lang.conf";
+if (is_file($loc_conf)) {
+  $conf = parseconf($loc_conf,$preconf);
+} else {
+  $conf = $preconf;
+  $lang = $conf["general"]["lang"];
+}
 foreach ($conf[form] as $field=>$f) {
 	${"$field"}    = $HTTP_GET_VARS["$field"];
 	${"list_$field"} = sig_list($f,$conn,0);
