@@ -18,8 +18,8 @@ $name[6] = "attel";
 
 $typescolor[1]="fea034"; // couleurs correspondant à chaque type, en hexa sur *6* caract !!
 $typescolor[2]="2f9535"; // vert d'orgine ne ressort pas assez sur les cartes"8cdc8c"; 
-$typescolor[3]="f25254"; 
-$typescolor[4]="9cc9e1"; 
+$typescolor[3]="9cc9e1"; 
+$typescolor[4]="f25254"; 
 $typescolor[5]="f79b9d"; 
 $typescolor[6]="9ad47f";
 /* marche pô
