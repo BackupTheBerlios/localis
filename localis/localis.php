@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.24 2002/10/23 14:44:00 mose Exp $
+<? /* $Id: localis.php,v 1.25 2002/10/24 06:15:06 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -70,7 +70,7 @@ foreach ($conf[form] as $field=>$f) {
 } 
 
 if ($addit and $addcity and ($addtype != 'all')) {
-	additem($addtype,addslashes($addcity),addslashes($addnom),addslashes($addemail),addslashes($addurl),addslashes($addnotes));
+	additem($addtype,$addcity,$addnom,$addemail,$addurl,$addnotes);
 }
 	
 if (!is_file($conf["map"]['path']."/fonts/fontset")) {
