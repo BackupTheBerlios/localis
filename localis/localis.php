@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.2 2002/10/14 16:20:08 mastre Exp $
+<? /* $Id: localis.php,v 1.3 2002/10/15 15:37:05 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -90,7 +90,7 @@ foreach($conf[layers] as $def_layer=>$res_layer) {
 
 # Set layer status (on/off) [patché et debuggué choppe seul le nom des layers]
 if ($view != $conf[gui][list_button]) {
-	$zMap = ms_newMapObj($conf["map"]["path"].'/'.$conf["map"]["file"]);
+	$zMap = ms_newMapObj($conf["map"]["path"].$conf["map"]["url"].'/'.$conf["map"]["file"]);
 	$lys = array();
 	$lys = $zMap->getAllGroupNames();
 	foreach ($lys as $l) {
@@ -180,7 +180,7 @@ if ($view != $conf[gui][list_button]) {
 		$zResult->draw($zImage);
 		# Obsolete used for medias-cites, to be cleaned	
 		if ($city) {
-			$sid = dbf_gen('identite','aquitaine',array($city),$wh,$conn,'s');
+			$sid = dbf_gen($conf[database][db_name],'communes',$villes,$wh,$conn,'s');
 			$zResult2 = $zMap->getLayerByName('communes');
 			$zResult2->set('status',MS_ON);
 			$zResult2->set('data',"../../tmp/$sid");
@@ -199,8 +199,8 @@ if ($view != $conf[gui][list_button]) {
 	$scl = number_format($zMap->scale,0,',',' ');
 } else {
 	$extexploded = implode(' ',$ext);
-	$wh[] = "((communes.abs_c_lieu * 100) between $ext[0] and $ext[2])";
-	$wh[] = "((communes.ord_c_lieu * 100) between $ext[1] and $ext[3])";
+	$wh[] = "((communes.abs_c_lieu) between $ext[0] and $ext[2])";
+	$wh[] = "((communes.ord_c_lieu) between $ext[1] and $ext[3])";
 	$qu[] = "tpl=$tpl";
 	if (is_array($lay)) {
 		foreach ($lay as $l) {
@@ -214,6 +214,7 @@ if ($view != $conf[gui][list_button]) {
 ${"action_$act"} = "checked";
 ${"size_".$sizex."x".$sizey}   = "selected";
 
+# Place javascript info area on points
 if (is_array($m)) {
 	foreach ($m as $vv=>$coord) {
 		$map_locations.= "<area href=\"#top\" name=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" ";

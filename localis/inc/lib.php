@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.2 2002/10/14 16:20:08 mastre Exp $
+<?  /* $Id: lib.php,v 1.3 2002/10/15 15:37:05 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -39,9 +39,9 @@ function sig_list($field, $conn, $cut=0) {
 		$f = explode(",",$r[1]);
 		if(is_array($f)) {
 		foreach($f as $ff) {
-			$i+=1;
+			$r = explode("->",$ff);
 			$h = strtolower(trim(str_replace(" ","",$ff)));
-     $back[$h] = $ff;
+     $back[$r[0]] = $r[1];
 		 }
 		}
 		return $back;
@@ -76,7 +76,7 @@ function sig_query($select,$cond,$conn) {
 		}
 	}
 	if ($cond) { $more = "where ".@implode(" and ",$cond); }
-  $query = "select distinct ".$req[table][1].".* from ".$req[table][1]." left join ".$req[table][2]." on ".$req[table][2].".".$req[champ][2]."=".$req[table][1].".".$req[champ][1]." $more;";
+  $query = "select distinct ".$req[table][1].".* from ".$req[table][1]." left join ".$req[base][2].'.'.$req[table][2]." on ".$req[table][2].".".$req[champ][2]."=".$req[table][1].".".$req[champ][1]." $more;";
   $res = mysql_db_query($req[base][1],$query,$conn);
   if ($res) {
     $i = 1;
