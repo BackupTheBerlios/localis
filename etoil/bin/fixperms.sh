@@ -2,7 +2,7 @@
 #
 #   OpenMoney for PHP  (v0.1-cvs)
 #
-#   $Header: /home/xubuntu/berlios_backup/github/tmp-cvs/localis/Repository/etoil/bin/fixperms.sh,v 1.1 2005/03/22 21:26:37 mose Exp $
+#   $Header: /home/xubuntu/berlios_backup/github/tmp-cvs/localis/Repository/etoil/bin/fixperms.sh,v 1.2 2005/03/22 23:31:41 mose Exp $
 # 
 #   Copyright (c) 2004 OpenMoney Community (see COPYRIGHT)
 #   http://openmoney.org - http://gna.org/projects/openmoney
@@ -24,7 +24,7 @@
 # 
 #
 
-DIRS="smarty/Temp www/tmp log"
+DIRS="smarty/temp www/tmp log"
 
 # debian
 APACHE=`ps aux | grep apache | sed -n -e 2p | cut -d' ' -f 1`
