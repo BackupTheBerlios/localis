@@ -16,7 +16,7 @@ function toggletool(id) {literal}{{/literal}
 	document.getElementById('tool_travel').style.backgroundColor='#fff';
 	document.getElementById('tool_zoomout').style.backgroundColor='#fff';
 	document.getElementById(id).style.border='1px solid #000';
-	document.getElementById(id).style.backgroundColor='#ddd';
+	document.getElementById(id).style.backgroundColor='#dff1d3';
 {literal}}{/literal}
 </script>
 </head>

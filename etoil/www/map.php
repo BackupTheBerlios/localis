@@ -7,6 +7,7 @@ checkfontlist(PROOT."/maps");
 // valeurs a mettre en conf -----------
 
 $mapmargin = 11; // taille de la bordure clicable de navigation perpendiculaire
+$blockspc=7; // espaces entre les blocks de droite
 $types[1] = "Pédestre";
 $types[2] = "Equestre";
 $types[3] = "Cyclable";
@@ -134,6 +135,7 @@ $smarty->assign('sizex',$sizex);
 $smarty->assign('sizey',$sizey);
 $smarty->assign('sizecheck',$sizecheck);
 $smarty->assign('mapmargin',$mapmargin);
+$smarty->assign('blockspc',$blockspc);
 
 $layers = $e_map->getAllGroupNames();
 foreach ($layers as $l) {
@@ -157,7 +159,7 @@ if ($click_x and $click_y) {
 	$ffx['l'] = $ffx['t'] = -1;
 	$ffx['c'] = 0;
 	$ffx['r'] = $ffx['b'] = 1;
-	$e_click->setXY(floor(($sizex/2)+($ffx[$fx]*$sizex/4)),floor(($sizey/2)+($ffx[$fy]*$sizey/4)),0);
+	$e_click->setXY(floor(($sizex/2)+($ffx[$fx]*$sizex/2)),floor(($sizey/2)+($ffx[$fy]*$sizey/2)),0);
 	$_REQUEST['action'] = "travel";
 	$clicked = TRUE;
 	$map_click = array();

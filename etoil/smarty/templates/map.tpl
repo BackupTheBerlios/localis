@@ -32,7 +32,7 @@
 ><input id="cb" type="image" src="img/flecheB.gif" border="0" name="dir" value="cb" /></td>
 <td><input {popup text="{tr}Vers le Sud-Est{/tr}"} type="image" src="img/flecheBD.gif" border="0" name="dir" value="rb" /></td>
 </tr><tr>
-<td colspan="3"><img src="img/dot0.png" height="5" width="1" /></td>
+<td colspan="3"><img src="img/dot0.png" height="{$blockspc}"></td>
 </tr>
 </table>
 
@@ -54,22 +54,7 @@
 </td>
 <td style="padding-left : 10px;">
 
-<div class="bar">Recherche de ville</div>
-<input type="text" name="ville" value="" style="width:100%;" /><br />
-{if $cities}
-<div class="found">
-{section name=o loop=$cities}
-{$cities[o].code_postal}
-<a href="{$url}?focusville={$cities[o].nom|escape:"url"}">{$cities[o].nom}</a><br />
-{/section}
-</div>
-{elseif $city_info}
-<div class="found">
-{$city_info[0].code_postal}
-{$city_info[0].nom}
-</div>
-{/if}
-
+<div class="bar">{tr}Affichage{/tr}</div>
 <table border="0" cellpadding="1" cellspacing="0" id="map">
 <tr><td valign="top" align="center">
 <input type="image" src="{$refsrc}" width="100" height="100" name="ref" alt="{$name}" hspace="0" vspace="0" border="0"><img 
@@ -88,9 +73,30 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 {popup text="{tr}Recadrer{/tr} [ Alt-c ]"} accesskey="c" />
 </td>
 </tr></table>
-</td></tr></table>
-<input type="hidden" name="resize" value="n" />
+</td></tr>
+<tr><td><img src="img/dot0.png" height="{$blockspc}"></td></tr>
+</table>
 
+<input type="hidden" name="resize" value="n" />
+<div class="bar">{tr}Localiser une commune{/tr}</div>
+<input type="text" name="ville" value="" style="width:100%;" /><br />
+{if $cities}
+<div class="found">
+{section name=o loop=$cities}
+{$cities[o].code_postal}
+<a href="{$url}?focusville={$cities[o].nom|escape:"url"}">{$cities[o].nom}</a><br />
+{/section}
+</div>
+{elseif $city_info}
+<div class="found">
+{$city_info[0].code_postal}
+{$city_info[0].nom}
+</div>
+{/if}
+
+<img src="img/dot0.png" height="{$blockspc}">
+
+<div class="bar">{tr}Navigation{/tr}</div>
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="navbar">
 <tr>
 {if $smarty.session.admin}
@@ -109,6 +115,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomin')" /></div></td>
 </td></tr></table>
 
+<img src="img/dot0.png" height="{$blockspc}">
 <div class="bar">Selection</div>
 <div class="selection">
 <select name="filtre[type]" id="ftype">
@@ -134,9 +141,9 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <option value="{$k}"{if $filtre.level eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
 </select><br />
-
-<input type="submit" name="search" value="{tr}Rechercher{/tr}" /><br />
 </div>
+
+<input type="submit" class="button" name="action" value="{tr}Rechercher{/tr}" /><br />
 
 <div class="bar">
 {section name=t loop=$tracks}
