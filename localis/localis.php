@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.18 2002/10/21 01:16:47 mose Exp $
+<? /* $Id: localis.php,v 1.19 2002/10/21 14:55:22 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -184,8 +184,10 @@ if ($view != $conf[gui][list_button]) {
 	$ext = ext2array($zExtent);
 	$extexploded = implode(' ',$ext);
 	# create result layer
-	$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
-	$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_y].") between $ext[1] and $ext[3])";
+	if (count($ext) > 3) {
+		$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
+		$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_y].") between $ext[1] and $ext[3])";
+	}
 	foreach($mychoices as $myc) {
 		if (!empty($myc)) {
 			$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($myc));
@@ -225,8 +227,10 @@ if ($view != $conf[gui][list_button]) {
 } else {
 	# Prepare list view
 	$extexploded = implode(' ',$ext);
-	$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
-	$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_y].") between $ext[1] and $ext[3])";
+	if (count($ext) > 3) {
+		$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
+		$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_y].") between $ext[1] and $ext[3])";
+	}
 	$qu[] = "tpl=$tpl";
 	if (is_array($lay)) {
 		foreach ($lay as $l) {
