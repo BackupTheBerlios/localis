@@ -1,6 +1,6 @@
 Localis : Changelog 
 -------------------
-$Id: Changelog,v 1.5 2002/10/23 00:03:28 mose Exp $
+$Id: Changelog,v 1.6 2002/10/24 06:11:08 mose Exp $
 -------------------
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis - http://localis.makina-corpus.org
@@ -22,6 +22,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
 USA.
 -------------------
+
+v0.4.1 : 
+- fixed : keeping now the zoom level when click on a city on list
 
 v0.4 : 23 / 10 / 2002
 - first public release

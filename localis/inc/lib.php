@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.16 2002/10/21 13:22:32 mastre Exp $
+<?  /* $Id: lib.php,v 1.17 2002/10/24 06:09:49 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -165,6 +165,7 @@ function prepare_list($wh,$conn,$type,$owh='') {
 
 function build_list($found,$qu,$eff) {
   global $tempath, $tpl, $PHP_SELF, $resultats, $myc, $coords, $sizex, $sizey, $layer_query, $type, $conf;
+	// todo : make forcescale variable from conf
 	$args = @implode('&',$qu);
   if (!$found) {
     $list.= $conf[gui][noresult];
@@ -172,7 +173,7 @@ function build_list($found,$qu,$eff) {
     foreach ($resultats as $vres) {
 			$ouca = $coords[$vres];
       $list.= "<div class=base id=109><a href=localis.php?x=".$ouca[x]."&y=".$ouca[y];
-			$list.= "&v=".urlencode($vres)."&size=400x400&type=$myc&".$layer_query."forcescale=1200&$args ";
+			$list.= "&v=".urlencode($vres)."&size={$sizex}x$sizey&type=$myc&".$layer_query."forcescale=1200&$args ";
 			$list.= "class=base>$vres</a></div>";
       foreach ($found[$vres] as $kk) {
 				$list.= "<div class=list><a href=\"file.php?table=$myc&id=".$kk['cid']."\" target=_new>";
