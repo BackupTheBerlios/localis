@@ -36,6 +36,7 @@ img_path     = /var/www/mapserver/www/images
 sql_reftable = communes
 sql_cityname = nom
 search_listresult = <u>%s</u>
+lang         = fr
 
 [Map]
 name         = france
