@@ -39,7 +39,7 @@
 <td class="bar2"><b style="margin: 0 15px 0 3px;font-size:12px;">{$k}</b></td><td>&nbsp;</td>
 {else}
 <td width="20" style="width:20px;"><img src="{$i}" width="20" height="18" hspace="0" vspace="0" border="0" alt="" /></td>
-<td><a href="#" onclick="document.getElementById('ftype').value='{$smarty.foreach.leg.iteration}'; document.f.submit();" class="leg">{$k}</a></td><td>&nbsp;</td>
+<td><a href="#" onclick="document.getElementById('ftype').value='{$smarty.foreach.leg.iteration}'; document.f.search.click();" class="leg">{$k}</a></td><td>&nbsp;</td>
 {/if}
 {/foreach}
 </tr></table>
@@ -131,13 +131,14 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 {/foreach}
 </select><br />
 
-<input type="submit" name="action" value="{tr}Rechercher{/tr}" /><br />
+<input type="submit" name="search" value="{tr}Rechercher{/tr}" /><br />
 </div>
 
 <div class="bar">
 {section name=t loop=$tracks}
 {assign var=v value=$tracks[t].parcours_type}
-<img src="{$icontypes.$v}" width="10" height="9" /> {$tracks[t].parcours_name}<br />
+<a href="#" onmouseover="getElementById({$tracks[t].parcours_id}).border='1';">
+<img src="{$icontypes.$v}" width="10" height="9" border="0" /> {$tracks[t].parcours_name}</a><br />
 {/section}
 </div>
 
