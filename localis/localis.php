@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.39 2002/11/07 17:25:24 mastre Exp $
+<? /* $Id: localis.php,v 1.40 2002/12/10 20:49:59 ramzi Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -25,6 +25,9 @@ $refx    = ($HTTP_GET_VARS['ref_x']) ? $HTTP_GET_VARS['ref_x'] : $HTTP_GET_VARS[
 $refy    = ($HTTP_GET_VARS['ref_y']) ? $HTTP_GET_VARS['ref_y'] : $HTTP_GET_VARS['ref.y'];
 $scl     = ($HTTP_GET_VARS['forcescale']) ? $HTTP_GET_VARS['forcescale'] : $HTTP_GET_VARS['scale'];
 $lay     = ($HTTP_GET_VARS['layers']) ? $HTTP_GET_VARS['layers'] : array("fond");
+// ROU handle map interface type value (map or point)
+$interface  = ($HTTP_GET_VARS['interface']) ? $HTTP_GET_VARS['interface'] : 'mapImg';
+// ROU was here
 $act     = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
 $city    = $HTTP_GET_VARS['v'];
 $view    = $HTTP_GET_VARS['tpl'];
@@ -38,6 +41,9 @@ $addit   = $HTTP_GET_VARS['addit'];
 $fzoom   = $HTTP_GET_VARS['fzoom'];
 $fzoomout   = $HTTP_GET_VARS['fzoomout'];
 $fsens   = $HTTP_GET_VARS['fsens'];
+// ROU check if user agent is IE
+$browser = ereg("MSIE",getenv("HTTP_USER_AGENT")) ? "ie" : "";
+// ROU was here
 
 if (strstr($HTTP_GET_VARS['size'],'x')) {
 	list($sizex,$sizey) = split('x',$HTTP_GET_VARS['size']);
@@ -143,7 +149,7 @@ if ($type == 'all') {
 }
 
 # Build layer selection (left menu)
-$js_start = 9; # erk !! I have to fix that hard coded value
+$js_start = 11; # erk !! I have to fix that hard coded value
 foreach($conf[layers] as $def_layer=>$res_layer) {
 	$lol += 1;
 	unset($lys);
@@ -344,6 +350,9 @@ if ($view != $conf[gui][list_button]) {
 		unset($resultats);
 	}
 }
+// ROU used by ie map
+${"check$interface"} = "checked";
+// ROU was here
 ${"action_$act"} = "checked";
 ${"size_".$sizex."x".$sizey}   = "selected";
 
@@ -351,7 +360,10 @@ mysql_close($conn);
 
 $colwidth = $conf[map][ref_sizex]+4;
 
-echo inc("head");
+if ($view == $conf[gui][list_button])
+	$interface = "";
+
+echo inc($browser."head");
 echo inc("search");
 if ($view == $conf[gui][list_button]) {
 	echo inc("list");
@@ -361,7 +373,7 @@ if ($view == $conf[gui][list_button]) {
 	} else {
 		$right = $list;
 	}
-	echo inc("map");
+	echo inc($browser."map");
 }
 echo inc("foot");
 
