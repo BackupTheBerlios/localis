@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.6 2002/10/16 19:54:20 mastre Exp $
+<? /* $Id: localis.php,v 1.7 2002/10/16 21:22:14 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -183,9 +183,15 @@ if ($view != $conf[gui][list_button]) {
 	$scl = number_format($zMap->scale,0,',',' ');
 } else {
 	# Prepare list view
+	if ($$field == 'all') {
+		array_shift($listres);
+		$mychoices = $listres ;
+	} else {
+		$mychoices[] = $$field;
+	}
 	$extexploded = implode(' ',$ext);
-	$wh[] = "((communes.abs_c_lieu) between $ext[0] and $ext[2])";
-	$wh[] = "((communes.ord_c_lieu) between $ext[1] and $ext[3])";
+	$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
+	$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_y].") between $ext[1] and $ext[3])";
 	$qu[] = "tpl=$tpl";
 	if (is_array($lay)) {
 		foreach ($lay as $l) {
@@ -193,7 +199,9 @@ if ($view != $conf[gui][list_button]) {
 		} 
 	}
 	$qu[] = "extent=".urlencode($extexploded);
-	prepare_list($wh,$conn,$type);
+	foreach($mychoices as $myc) {
+		prepare_list($wh,$conn,$myc);
+	}
 	$list = build_list($found,$qu,$eff);
 }
 ${"action_$act"} = "checked";
