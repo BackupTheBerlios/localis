@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.29 2002/10/25 13:36:34 mose Exp $
+<? /* $Id: localis.php,v 1.30 2002/10/26 17:17:28 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -53,8 +53,10 @@ if (!is_file('etc/localis.conf')) die("etc/localis.conf not found<br>You need to
 $conf = parseconf('etc/localis.conf');
 if ($HTTP_GET_VARS['forceextent.x'] or $HTTP_GET_VARS['forceextent_x']) {
 	$ext = array($conf[map][ext_minx],$conf[map][ext_miny],$conf[map][ext_maxx],$conf[map][ext_maxy]);
-} else {
+} elseif ($HTTP_GET_VARS['extent']) {
 	$ext = split(' ',trim($HTTP_GET_VARS['extent']));
+} else {
+	$ext = array($conf[map][ext_minx],$conf[map][ext_miny],$conf[map][ext_maxx],$conf[map][ext_maxy]);
 }
 $conn = sig_connect();
 # Fetch information from mysql and create menu items and select option.
@@ -69,6 +71,7 @@ foreach ($conf[form] as $field=>$f) {
 	$$field    = ($$field) ? $$field :$HTTP_GET_VARS["$field"];
 	${"list_$field"} = sig_list($f,$conn,0);
 	${"menu_$field"} = domenu(${"list_$field"},$$field);
+	${"icons_$field"} = doicons(${"list_$field"},$$field);
 	# If search string, build 'where' clause.
 	if (!empty(${"$field"}) and ereg("^text://.*$",$conf[form][$field])) {
 		$myv = str_replace('/','',strrchr($conf[form][$field],'/'));
@@ -79,6 +82,14 @@ foreach ($conf[form] as $field=>$f) {
 		}
 	}
 } 
+
+$dir = opendir("etc/dbdata");
+while (false !== ($dd = readdir($dir))) {
+  if (substr($dd,0,1) != '.') {
+	  $donf[$dd] = parseconf("etc/views/$dd");
+	}
+}
+closedir($dir);
 
 if ($addit and $addcity and ($addtype != 'all')) {
 	additem($addtype,$addcity,$addnom,$addemail,$addurl,$addnotes);
@@ -101,6 +112,8 @@ if (!is_file($conf["map"]['path']."/fonts/fontset")) {
 
 # Select layer to use
 if ($type == 'all') {
+	// yes ! it sucks, but it waits for a rationnalization of config file
+	array_shift($listres);
 	array_shift($listres);
 	$mychoices = $listres ;
 	$type = '';
@@ -167,7 +180,8 @@ if ($view != $conf[gui][list_button]) {
 		$zClick->setXY($refx,$refy,0);
 		$zMap->set("width",$sizex);
 		$zMap->set("height",$sizey);
-		$zMap->zoomscale($scl*1000,$zClick,142,142,$zLimit,$zLimit);
+		#$zMap->zoomscale($scl*1000,$zClick,142,142,$zLimit,$zLimit);
+		$zMap->zoomscale($scl*2,$zClick,142,142,$zLimit,$zLimit);
 	} elseif ($city) {
 		$refx = geo2pix($click_x,$conf[map][ext_minx],$conf[map][ext_maxx],$sizex);
 		$refy = $sizey - geo2pix($click_y,$conf[map][ext_miny],$conf[map][ext_maxy],$sizey);
@@ -236,12 +250,14 @@ if ($view != $conf[gui][list_button]) {
 			if (!is_file($conf[general][tmp_path]."/$id.shx")) echo "$id.shx not found<br>";
 			if (!is_file($conf[general][tmp_path]."/$id.dbf")) echo "$id.dbf not found<br>";
 			# Place javascript info area on points
-			if (is_array($m)) {
-				foreach ($m as $vv=>$coord) {
-					$map_txt = preg_replace("/\r?\n/","<br>",addslashes($maplist[$vv]));
-					$map_locations.= "<area href=\"#top\" name=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" ";
-					$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>$map_txt', WIDTH, 150);\" ";
-					$map_locations.= " onmouseout='return nd();' onclick=\"return overlib('$map_txt', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
+			if ($act != 'edition') {
+				if (is_array($m)) {
+					foreach ($m as $vv=>$coord) {
+						$map_txt = preg_replace("/\r?\n/","<br>",addslashes($maplist[$vv]));
+						$map_locations.= "<area href=# name=\"$vv\" id=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" \n";
+						$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>$map_txt', WIDTH, 150);\" \n";
+						$map_locations.= "onmouseout='return nd();' onclick=\"return overlib('$map_txt', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
+					}
 				}
 			}
 		}
@@ -285,16 +301,6 @@ if ($view != $conf[gui][list_button]) {
 ${"action_$act"} = "checked";
 ${"size_".$sizex."x".$sizey}   = "selected";
 
-
-# Place javascript info area on points
-if (is_array($m)) {
-	foreach ($m as $vv=>$coord) {
-		$map_txt = preg_replace("/\r?\n/","<br>",addslashes($maplist[$vv]));
-		$map_locations.= "<area href=\"#top\" name=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" ";
-		$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>$map_txt', WIDTH, 150);\" ";
-		$map_locations.= "onmouseout='return nd();' onclick=\"return overlib('$map_txt', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
-	}
-}
 mysql_close($conn);
 
 $colwidth = $conf[map][ref_sizex]+4;
@@ -305,7 +311,9 @@ if ($view == $conf[gui][list_button]) {
 	echo inc("list");
 } else {
 	if ($act == "edition") {
-		$edit = inc("edit");
+		$right = inc("edit");
+	} else {
+		$right = $list;
 	}
 	echo inc("map");
 }
