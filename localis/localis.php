@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.5 2002/10/16 15:26:41 mastre Exp $
+<? /* $Id: localis.php,v 1.6 2002/10/16 19:54:20 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -29,17 +29,11 @@ $act     = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
 $size    = ($HTTP_GET_VARS['size']) ? $HTTP_GET_VARS['size'] : "400x400";
 $city    = $HTTP_GET_VARS['v'];
 $ext     = split(' ',trim($HTTP_GET_VARS['extent']));
-
-$code_postal      = $HTTP_GET_VARS['code_postal'];
-$ville = $HTTP_GET_VARS['ville'];
-$nature  = $HTTP_GET_VARS['nature'];
-$label   = $HTTP_GET_VARS['label'];
 $view    = $HTTP_GET_VARS['tpl'];
 if (strstr($HTTP_GET_VARS['size'],'x')) {
 	list($sizex,$sizey) = split('x',$HTTP_GET_VARS['size']);
 }
 dl('php_mapscript.so');
-
 include "inc/parseconf.php";
 include "inc/lib.php";
 
@@ -49,27 +43,16 @@ $conn = sig_connect();
 
 # Fetch information from mysql and create menu items and select option.
 # Debugged to preserve selections and adapted to new conf file.
-foreach ($conf[form] as $enn=>$f) {
-	$field = field_name($enn);
+foreach ($conf[form] as $field=>$f) {
 	${"$field"}    = $HTTP_GET_VARS["$field"];
 	${"list_$field"} = sig_list($f,$conn,0);
 	${"menu_$field"} = domenu(${"list_$field"},$$field);
 	# If search string, build 'where' clause.
-	if (${"field"} and ereg("^text://.*$",$conf[form][$field])) {
+	if (!empty(${"$field"}) and ereg("^text://.*$",$conf[form][$field])) {
 		$wh[] = "ville like '%".${"$field"}."%'";
-		$qu[] = "$field=".urlencode($$field);
 		$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($field), ${"list_$field"}[$$field]);
 	}
 } 
-
-$fields_text = split(" +",$conf_search_text);
-foreach ($fields_text as $field) {
-if ($$field) {
-		$wh[] = "$field like '".$$field."%'";
-		$qu[] = "$field=".urlencode($$field);
-		$eff[] = sprintf($conf_search_textresult, ucfirst($field), $$field);
-	}
-}
 
 # Build layer selection (left menu)
 foreach($conf[layers] as $def_layer=>$res_layer) {
@@ -104,10 +87,8 @@ if ($view != $conf[gui][list_button]) {
 			}
 		}
 	}	
-
 	$zLimit = ms_newRectObj();
 	$zLimit->setextent($conf[map][ext_minx],$conf[map][ext_miny],$conf[map][ext_maxx],$conf[map][ext_maxy]);
-	
 	if (!$sizex) {
 		$zSizex = $zMap->width;
 		$zSizey = $zMap->height;
@@ -169,16 +150,26 @@ if ($view != $conf[gui][list_button]) {
 	$zExtent   = $zMap->extent;
 	$ext = ext2array($zExtent);
 	$extexploded = implode(' ',$ext);
-	if ($search or $code_postal or $ville or $nature or $type) {
-		$wh[] = "((communes.".$conf[map][coord_x].") between $ext[0] and $ext[2])";
-		$wh[] = "((communes.".$conf[map][coord_y].") between $ext[1] and $ext[3])";
-		prepare_list($wh,$conn,$type);
-		$id = dbf_gen($conf[database][db_name],'communes',$villes,$wh,$conn);
-		$list = build_list($found,$qu,$eff);
-		$zResult = $zMap->getLayerByName('communes');
-		$zResult->set('status',MS_ON);
-		$zResult->set('data',"../../tmp/$id");
-		$zResult->draw($zImage);
+	# create result layer
+	if ($$field == 'all') {
+		array_shift($listres);
+		$mychoices = $listres ;
+	} else {
+		$mychoices[] = $$field;
+	}
+	foreach($mychoices as $myc) {
+		if (!empty($myc)) {
+			$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
+			$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_y].") between $ext[1] and $ext[3])";
+			prepare_list($wh,$conn,$myc);
+			$id = dbf_gen($conf[database][db_name],$conf[general][sql_reftable],$resultats,$wh,$conn);
+			$list = build_list($found,$qu,$eff);
+			$mylayer = str_replace('/','',strrchr($conf[infos][$myc],'/'));
+			$zResult = $zMap->getLayerByName($mylayer);
+			$zResult->set('status',MS_ON);
+			$zResult->set('data',"../../tmp/$id");
+			$zResult->draw($zImage);
+		}
 	}
 	# Create image, reference map & legend
 	$image_src = $zImage->saveWebImage(MS_PNG,0,0,-1);
@@ -191,6 +182,7 @@ if ($view != $conf[gui][list_button]) {
 	$leg_src   = $zLegende->saveWebImage(MS_PNG,0,0,-1);
 	$scl = number_format($zMap->scale,0,',',' ');
 } else {
+	# Prepare list view
 	$extexploded = implode(' ',$ext);
 	$wh[] = "((communes.abs_c_lieu) between $ext[0] and $ext[2])";
 	$wh[] = "((communes.ord_c_lieu) between $ext[1] and $ext[3])";

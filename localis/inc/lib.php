@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.3 2002/10/15 15:37:05 mastre Exp $
+<?  /* $Id: lib.php,v 1.4 2002/10/16 19:54:20 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -38,29 +38,15 @@ function sig_list($field, $conn, $cut=0) {
 	if (ereg("select_list:\/\/(.*)",$field,$r)) {
 		$f = explode(",",$r[1]);
 		if(is_array($f)) {
-		foreach($f as $ff) {
-			$r = explode("->",$ff);
-			$h = strtolower(trim(str_replace(" ","",$ff)));
-     $back[$r[0]] = $r[1];
-		 }
+			foreach($f as $ff) {
+				$r = explode("->",$ff);
+				$lis[] = $r[0];
+     		$back[$r[0]] = $r[1];
+			}
 		}
-		return $back;
 	}
-  $query = "select ".$col."_id as i, ".$col."_name as n from $col;";
-  $res = mysql_db_query($conf["database"]["db_name"],$query,$conn);
-  if ($res) {
-    while ($r = mysql_fetch_row($res)) {
-      if ($cut and strlen($r[i]) > $cut) {
-        $back[$r[0]] = substr($r[1],0,$cut).' ...';
-      } else {
-        $back[$r[0]] = $r[1];
-      }
-    }
-    @asort($back);
-    return $back; 
-  } else {
-    return false;
-  } 
+	$GLOBALS['listres'] = $lis;
+	return $back;
 } 
 
 function sig_query($select,$cond,$conn) {
@@ -74,6 +60,7 @@ function sig_query($select,$cond,$conn) {
 			$req[table][$i] = $dbinfo[1];
 			$req[champ][$i] = $dbinfo[2];
 		}
+			$GLOBALS['mymatch'] = $req[base][1];
 	}
 	if ($cond) { $more = "where ".@implode(" and ",$cond); }
   $query = "select distinct ".$req[table][1].".* from ".$req[table][1]." left join ".$req[base][2].'.'.$req[table][2]." on ".$req[table][2].".".$req[champ][2]."=".$req[table][1].".".$req[champ][1]." $more;";
@@ -120,20 +107,20 @@ function prepare_list($wh,$conn,$type) {
     }
     ksort($s);
     $GLOBALS[nbres] = count($sig_res);
-    $GLOBALS[nbresvilles] = count($s);
+    $GLOBALS[nbresresultats] = count($s);
     $GLOBALS[found] = $s;
-    $GLOBALS[villes] = array_keys($s);
+    $GLOBALS[resultats] = array_keys($s);
   }
   return true;
 }
 
 function build_list($found,$qu,$eff) {
-  global $tempath, $tpl, $PHP_SELF, $villes, $coords, $sizex, $sizey, $layer_query;
+  global $tempath, $tpl, $PHP_SELF, $resultats, $coords, $sizex, $sizey, $layer_query;
 	$args = @implode('&',$qu);
   if (!$found) {
     $list.= "Aucun resultat.";
   } else {
-    foreach ($villes as $ville) {
+    foreach ($resultats as $ville) {
 			$ouca = $coords[$ville];
       $list.= "<div class=base id=109><a href=localis.php?x=".$ouca[x]."&y=".$ouca[y];
 			$list.= "&v=".urlencode($ville)."&size=400x400&".$layer_query."forcescale=188&$args ";
@@ -159,8 +146,6 @@ function geo2pix($x,$minx,$maxx,$size) {
 function dbf_gen($base,$jbase,$villes,$cond,$conn,$pref='') {
   global $conf, $qinfo, $x, $y, $nature, $ext, $sizex, $sizey;
 	$path = $conf[general][tmp_path];
-  $querycat = "select nature_ref from nature";
-  $rescat = mysql_db_query($conf[database][db_name],$querycat,$conn);
   $UNIQUE_ID = $pref.uniqid('');
   $dbffile = "$path/$UNIQUE_ID.dbf";
   $dbfdef = array(
@@ -199,13 +184,6 @@ function dbf_gen($base,$jbase,$villes,$cond,$conn,$pref='') {
 
 function clean_city($a) {
   return preg_replace(array("/ /","/'/","/-/"),array("%","%","%"),$a);
-}
-
-function field_name($q) {
-	if($res = trim(strtok($q,'='))) {
-	return $res;
-	}
-	else return FALSE;
 }
 
 function domenu($list,$it) {
