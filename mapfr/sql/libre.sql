@@ -1,4 +1,4 @@
-# $Id: libre.sql,v 1.6 2002/10/21 14:47:55 mose Exp $
+# $Id: libre.sql,v 1.7 2002/10/21 14:52:26 mose Exp $
 #
 # Serveur: localhost
 # Généré le : Jeudi 17 Octobre 2002 à 15:10
@@ -119,6 +119,9 @@ INSERT INTO trolls VALUES (1, 'Paris', 'Auteur de Logiciels Libres.', '', 'mose'
 INSERT INTO trolls VALUES (2, 'Saint-maur-des-fosses', 'Codeur corse.', '', 'mastre', 'mastre@localis.org', 'http://beve.org','1');
 INSERT INTO trolls VALUES (3, 'Auray', 'Travailleur indépendant.', '', 'rodolphe', 'rq@lolix.org', 'http://lolix.org','1');
 INSERT INTO trolls VALUES (4, 'Paris', 'Travailleur indépendant.', '', 'shinobi', 'arnaud@crao.net', 'http://crao.net','1');
+INSERT INTO trolls VALUES (5, 'Alfortville', 'Codeur.', '', 'Alex', 'apa@makinacorpus.org', 'http://passant.org','1');
+INSERT INTO trolls VALUES (6, 'Thouars', 'Etudiant Geek.', '', 'Nicolas', 'nr@altern.org', '','1');
+INSERT INTO trolls VALUES (7, 'Valognes', 'Troll', '', 'Arnaud Bienvenu', 'arnaud.bienvenu@makina-corpus.org', '','1');
 
 
 #
