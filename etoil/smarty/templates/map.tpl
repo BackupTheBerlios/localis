@@ -1,4 +1,5 @@
 {include file="head.tpl"}
+{popup_init src="js/overlib.js"}
 
 <div class="central">
 <form name="f">
@@ -27,9 +28,9 @@
 <div class="foot" style="margin-top:10px;margin-bottom:2px;margin-left:10px;"><a href="{$mapimage}" target="_new" class="submit">{tr}Télécharger{/tr}</a></div>
 
 </td>
-<td>
+<td style="padding-left : 10px;">
 
-<table border="0" cellpadding="1" cellspacing="0" class="dashed" id="map">
+<table border="0" cellpadding="1" cellspacing="0" id="map">
 <tr><td valign="top" align="center">
 <input type="image" src="{$refsrc}" width="100" height="100" name="ref" alt="{$name}" hspace="0" vspace="0" border="0"><br>
 <input type="submit" name="fit" value="{tr}Recadrer{/tr}" class="submit" onclick="document.f.forceextent.value='1'; document.f.extent.value=''; document.f.scale.value=''; document.f.submit();">
@@ -46,32 +47,26 @@
 </td></tr></table>
 </td></tr></table>
 
-<table border="0" cellpadding="2" cellspacing="1" width="100%" class="dashed">
+<table border="0" cellpadding="2" cellspacing="1" width="100%" class="navbar">
 <tr>
 {if $smarty.session.admin}
 <td valign="top" width="25%" align="center" class="tool{$focus.edit}" id='tool_edit'>
-<div><label for="edit"><img src="img/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edit" valign="top"></label><br />
-<input type="radio" id="edit" name="action" value="edit"{if $focus.edit eq 'focus'} checked="checked"{/if} accesskey="r" onchange="toggletool('tool_edit');" /></div></td>
+<div {popup text="{tr}Ajouter{/tr} [ Alt-a ]"}><label for="edit" accesskey="a"><img src="img/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edit" valign="top"></label>
+<input type="radio" id="edit" name="action" value="edit"{if $focus.edit eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_edit');"/></div></td>
 {/if}
 <td valign="top" width="25%" align="center" class="tool{$focus.zoomout}" id='tool_zoomout'>
-<div title="zoomout [ Alt-a ]"><label for="zoomout"><img src="img/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"></label><br />
-<input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked"{/if} accesskey="a" onchange="toggletool('tool_zoomout')" /></div></td>
+<div {popup text="{tr}Eloigner{/tr} [ Alt-e ]"}><label for="zoomout" accesskey="e"><img src="img/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"></label>
+<input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomout')" /></div></td>
 <td valign="top" width="25%" align="center" class="tool{$focus.travel}" id='tool_travel'>
-<div title="deplacement [ Alt-z ]"><label for="travel"><img src="img/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top"></label><br />
-<input type="radio" id="travel" name="action" value="travel"{if $focus.travel eq 'focus'} checked="checked"{/if} accesskey="z" onchange="toggletool('tool_travel')" /></div></tD>
+<div {popup text="{tr}Déplacer{/tr} [ Alt-d ]"}><label for="travel" accesskey="d"><img src="img/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top"></label>
+<input type="radio" id="travel" name="action" value="travel"{if $focus.travel eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_travel')" /></div></tD>
 <td valign="top" width="25%" align="center" class="tool{$focus.zoomin}" id='tool_zoomin'>
-<div title="zoomin [ Alt-e ]"><label for="zoomin"><img src="img/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom avant" valign="top"></lable><br />
-<input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked"{/if}  accesskey="e" onchange="toggletool('tool_zoomin')" /></div></td>
-</td></tr></table>
-
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="dashed">
-<tr><td valign="top">
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-{$layermenu}</table>
-<input type="submit" name="refresh" value="{tr}Rafraichir{/tr}" class="submit" id="106" />
+<div {popup text="{tr}Rapprocher{/tr} [ Alt-r ]"}><label for="zoomin" accesskey="r"><img src="img/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom avant" valign="top"></label>
+<input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomin')" /></div></td>
 </td></tr></table>
 
 <div class="bar">Selection</div>
+<div class="selection">
 <select name="filtre[type]">
 <option value="">{tr}Moyen de locomotion{/tr}</option>
 <option value="">{tr}... Indifférent{/tr}</option>
@@ -97,6 +92,7 @@
 </select><br />
 
 <input type="submit" name="action" value="{tr}Rechercher{/tr}" /><br />
+</div>
 
 {if $smarty.request.do eq "{tr}Enregistrer{/tr}"}
 <table border="1">

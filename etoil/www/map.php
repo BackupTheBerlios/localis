@@ -327,7 +327,7 @@ if (!empty($_SESSION['track'])) {
 	$e_track->addFeature($e_shape);
 	$e_class = ms_newClassObj($e_track);
 	$e_style = ms_newStyleObj($e_class);
-	$e_style->color->setRGB(255,255,255);
+	$e_style->color->setRGB(255,255,20);
 	$e_style->set("size",3);
 	$e_style->set("symbolname",'circle');
 

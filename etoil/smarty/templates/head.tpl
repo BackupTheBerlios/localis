@@ -4,20 +4,20 @@
 <meta http-equiv="Content-Language" content="{$language}">
 <link rel="StyleSheet" type="text/css" href="etoil.css" />
 <script>
-{literal}
-function toggletool(id) {
+function toggletool(id) {literal}{{/literal}
+{if $smarty.session.admin}
 	document.getElementById('tool_edit').style.border='0';
+	document.getElementById('tool_edit').style.backgroundColor='#fff';
+{/if}
 	document.getElementById('tool_zoomin').style.border='0';
 	document.getElementById('tool_travel').style.border='0';
 	document.getElementById('tool_zoomout').style.border='0';
-	document.getElementById('tool_edit').style.backgroundColor='#eee';
-	document.getElementById('tool_zoomin').style.backgroundColor='#eee';
-	document.getElementById('tool_travel').style.backgroundColor='#eee';
-	document.getElementById('tool_zoomout').style.backgroundColor='#eee';
+	document.getElementById('tool_zoomin').style.backgroundColor='#fff';
+	document.getElementById('tool_travel').style.backgroundColor='#fff';
+	document.getElementById('tool_zoomout').style.backgroundColor='#fff';
 	document.getElementById(id).style.border='1px solid #000';
 	document.getElementById(id).style.backgroundColor='#ddd';
-}
-{/literal}
+{literal}}{/literal}
 </script>
 </head>
 <body>
