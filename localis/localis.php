@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.12 2002/10/17 14:54:51 mastre Exp $
+<? /* $Id: localis.php,v 1.13 2002/10/17 15:21:04 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -41,7 +41,6 @@ include "inc/lib.php";
 if (!is_file('etc/localis.conf')) die("localis.conf not found<br>Maybe you need to copy localis.conf.dist");
 $conf = parseconf('etc/localis.conf');
 $conn = sig_connect();
-
 # Fetch information from mysql and create menu items and select option.
 # Debugged to preserve selections and adapted to new conf file.
 foreach ($conf[form] as $field=>$f) {

@@ -1,4 +1,4 @@
-<? /* $Id: index.php,v 1.1 2002/10/12 08:56:25 mose Exp $
+<? /* $Id: index.php,v 1.2 2002/10/17 15:21:04 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -21,17 +21,18 @@ USA.
 */
 include "inc/parseconf.php";
 include "inc/lib.php";
-$conf = parseconf('etc/localis.conf');
-foreach ($conf as $k=>$v) {
-  ${"conf_$k"} = $v;
-}
-$conn = sig_connect();
-$sig_labels = sig_list('label',$conn,0);
-$sig_natures = sig_list('nature',$conn,0);
-$menu_nature = domenu($sig_natures,$nature);
-$menu_label  = domenu($sig_labels,$label);
-mysql_close($conn);
 
+if (!is_file('etc/localis.conf')) die("localis.conf not found<br>Maybe you need to copy localis.conf.dist");
+
+$conn = sig_connect();
+$conf = parseconf('etc/localis.conf');
+foreach ($conf[form] as $field=>$f) {
+	${"$field"}    = $HTTP_GET_VARS["$field"];
+	${"list_$field"} = sig_list($f,$conn,0);
+	${"menu_$field"} = domenu(${"list_$field"},$$field);
+}
+
+mysql_close($conn);
 echo inc("head");
 echo inc("search");
 if ($_GET[help]) {
