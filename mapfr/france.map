@@ -13,7 +13,7 @@ TRANSPARENT on
 INTERLACE on
 
 WEB
-	IMAGEPATH "../tmp/"
+	IMAGEPATH "/var/www/mapserver/www/tmp/"
 	IMAGEURL "/tmp/"
 	MINSCALE 75000
 	MAXSCALE 4000000
@@ -140,26 +140,53 @@ LAYER
   TOLERANCE 5
 END
 
-layer
-  name "communes"
-  type point 
-  data "communes"
-  status on
-	classitem 'nom'
-	group "communes"
-	labelitem 'maj'
-  class
-		label
-			position auto
-			color 0 60 120
-			font arial_bold
-			type truetype
-			size 8
-			antialias true
-		end
-  end
-  tolerance 5
-end
+LAYER
+  NAME "communes"
+  TYPE point 
+  DATA "communes"
+  STATUS off
+	CLASSITEM 'NOM'
+	GROUP "fond"
+	LABELITEM 'NOM'
+  CLASS
+		LABEL
+			POSITION auto 
+			COLOR 0 60 120
+			FONT arial_bold
+			TYPE truetype
+			SIZE 8
+			ANTIALIAS true
+		END
+		SYMBOL ordi 
+		OUTLINECOLOR 128 128 128
+		COLOR 255 0 0
+  END
+  TOLERANCE 1
+END
+
+LAYER
+  NAME "communes2"
+  TYPE point 
+  DATA "communes"
+  STATUS off
+	CLASSITEM 'NOM'
+	GROUP "fond"
+	LABELITEM 'NOM'
+  CLASS
+		LABEL
+			POSITION auto 
+			COLOR 0 60 120
+			FONT arial_bold
+			TYPE truetype
+			SIZE 8
+			ANTIALIAS true
+		END
+		SYMBOL ordi2
+		OUTLINECOLOR 128 128 128
+		COLOR 255 0 0
+  END
+  TOLERANCE 1
+END
 
 END
 
