@@ -223,7 +223,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_cla = ms_newClassObj($e_lay);
 	$e_sty = ms_newStyleObj($e_cla);
 	$e_sty->set("symbolname","circle");
-	$e_sty->set("size",8);
+	$e_sty->set("size",6); // chgt vince, je trouvais les traces un peu épaisses...
 	$e_sty->color->setRGB(0,0,0);
 
 	
@@ -244,28 +244,28 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_cla2a->setExpression('1');
 	$e_sty2a = ms_newStyleObj($e_cla2a);
 	$e_sty2a->set("symbolname","circle");
-	$e_sty2a->set("size",4);
+	$e_sty2a->set("size",3);
 	$e_sty2a->color->setRGB(250,170,20);
 	
 	$e_cla2b = ms_newClassObj($e_lay2);
 	$e_cla2b->setExpression('2');
 	$e_sty2b = ms_newStyleObj($e_cla2b);
 	$e_sty2b->set("symbolname","circle");
-	$e_sty2b->set("size",4);
+	$e_sty2b->set("size",3);
 	$e_sty2b->color->setRGB(140,220,140);
 
 	$e_cla2c = ms_newClassObj($e_lay2);
 	$e_cla2c->setExpression('3');
 	$e_sty2c = ms_newStyleObj($e_cla2c);
 	$e_sty2c->set("symbolname","circle");
-	$e_sty2c->set("size",4);
+	$e_sty2c->set("size",3);
 	$e_sty2c->color->setRGB(140,190,230);
 	
 	$e_cla2d = ms_newclassobj($e_lay2);
 	$e_cla2d->setExpression('4');
 	$e_sty2d = ms_newstyleobj($e_cla2d);
 	$e_sty2d->set("symbolname","circle");
-	$e_sty2d->set("size",4);
+	$e_sty2d->set("size",3);
 	$e_sty2d->color->setrgb(250,130,90);
 	
 	$e_lay = ms_newLayerObj($e_map);
@@ -288,7 +288,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_stya = ms_newStyleObj($e_claa);
 	$e_laba = $e_claa->label;
 	$e_laba->set("position",MS_AUTO);
-	$e_laba->set("size","10");
+	$e_laba->set("size","12");
 	$e_laba->set("type","truetype");
 	$e_laba->set("font","arial_bold_italic");
 	$e_laba->color->setRGB(0,0,0);
@@ -301,7 +301,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_styb = ms_newStyleObj($e_clab);
 	$e_labb = $e_clab->label;
 	$e_labb->set("position",MS_AUTO);
-	$e_labb->set("size","10");
+	$e_labb->set("size","12");
 	$e_labb->set("type","truetype");
 	$e_labb->set("font","arial_bold_italic");
 	$e_labb->color->setRGB(0,0,0);
@@ -314,7 +314,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_styc = ms_newStyleObj($e_clac);
 	$e_labc = $e_clac->label;
 	$e_labc->set("position",MS_AUTO);
-	$e_labc->set("size","10");
+	$e_labc->set("size","12");
 	$e_labc->set("type","truetype");
 	$e_labc->set("font","arial_bold_italic");
 	$e_labc->color->setRGB(0,0,0);
@@ -327,7 +327,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_styd = ms_newStyleObj($e_clad);
 	$e_labd = $e_clad->label;
 	$e_labd->set("position",MS_AUTO);
-	$e_labd->set("size","10");
+	$e_labd->set("size","12");
 	$e_labd->set("type","truetype");
 	$e_labd->set("font","arial_bold_italic");
 	$e_labd->color->setRGB(0,0,0);
