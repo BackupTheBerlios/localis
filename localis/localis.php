@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.55 2003/02/05 04:05:51 mose Exp $
+<? /* $Id: localis.php,v 1.56 2003/02/05 06:08:42 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -34,7 +34,7 @@ $lay       = ($HTTP_GET_VARS['layers']) ? $HTTP_GET_VARS['layers'] : array("fond
 $act       = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
 $city      =  $HTTP_GET_VARS['v'];
 $view      =  $HTTP_GET_VARS['tpl'];
-$add       =  $HTTP_GET_VARS['editlay'];
+$add       =  $HTTP_GET_VARS['add'];
 // for pda template
 $fzoom     =  $HTTP_GET_VARS['fzoom'];
 $fzoomout  =  $HTTP_GET_VARS['fzoomout'];
@@ -107,7 +107,7 @@ if ($editlay['add']) {
 }
 
 // points modification
-if ($addit and (is_array($add))) {
+if ((is_array($add)) and ($add[submit])) {
 	addobj($add);
 }
 
@@ -254,18 +254,19 @@ if ($act == "edition") {
 }
 # Create image, reference map & legend
 $glob[imgsrc] = $zImage->saveWebImage(MS_PNG,0,0,-1);
-$zRefer    = $zMap->reference;
+$zRefer = $zMap->reference;
 $zRefer->set('width',$conf[map][ref_sizex]);
 $zRefer->set('height',$conf[map][ref_sizey]);
-$zRef      = $zMap->drawreferencemap();
-$glob[refsrc]   = $zRef->saveWebImage(MS_PNG,0,0,-1);
-$zLegende  = $zMap->drawLegend();
-$glob[legsrc]   = $zLegende->saveWebImage(MS_PNG,0,0,-1);
+$zRef = $zMap->drawreferencemap();
+$glob[refsrc] = $zRef->saveWebImage(MS_PNG,0,0,-1);
+$zLegende = $zMap->drawLegend();
+$glob[legsrc] = $zLegende->saveWebImage(MS_PNG,0,0,-1);
 $scl = number_format($zMap->scale,0,',',' ');
 $glob['scale'] = $scl;
 $glob['query'].= "&scale=".urlencode($scl);
 $glob['input'].= "<input type=\"hidden\" name=\"scale\" value=\"$scl\">";
-$layertop = sprintf($g_layername, $textelayer, $userlayers[$drawlayer]['layername'], $drawlayer, $glob['query'], $textelayeredit, $drawlayer, $drawlayer, $glob['query'], $textelayerdelete);
+$layertop = sprintf($g_layername, $textelayer, $userlayers[$drawlayer]['layername'], $drawlayer, 
+                    $glob['query'], $textelayeredit, $drawlayer, $drawlayer, $glob['query'], $textelayerdelete);
 
 echo inc("head");
 echo inc("search");

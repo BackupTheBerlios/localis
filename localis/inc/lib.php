@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.36 2003/02/05 05:37:27 mose Exp $
+<?  /* $Id: lib.php,v 1.37 2003/02/05 06:08:42 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -175,22 +175,25 @@ function addobj($add) {
 	$query = "insert into metadata (title,content,status,date,signature) values ('";
 	$query.= addslashes($add[nom])."','";
 	$query.= addslashes($add[content])."','";
-	$query.= addslashes($add[status])."',now(),";
+	$query.= addslashes($add[status])."',now(),'";
 	$query.= addslashes($add[signature])."')";
 	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
-	echo "$query<hr>";
+	#echo "$query<hr>";
 	$metaid = mysql_insert_id($conn);
-	$query = "insert into object (name,meta) value ('".addslashes($add[nom])."',$metaid)";
+	$query = "insert into object (name,meta) values ('".addslashes($add[nom])."',$metaid)";
 	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
-	echo "$query<hr>";
+	#echo "$query<hr>";
 	$objid = mysql_insert_id($conn);
 	$query = "insert into dots (E,N) values ($add[x],$add[y])";
 	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
-	echo "$query<hr>";
+	#echo "$query<hr>";
 	$dotid = mysql_insert_id($conn);
 	$query = "insert into objdots (dotid,objectid) values ($dotid,$objid)";
 	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
-	echo "$query<hr>";
+	#echo "$query<hr>";
+	$query = "insert into layerobj (objectid,layerid) values ($objid,$add[layer])";
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die("function adobj($add)<hr>$query<hr>".mysql_error());
+	#echo "$query<hr>";
 }
 
 function inc($template) {
@@ -330,19 +333,19 @@ function lcls_drawlayer($drawlayer) {
 		  if (is_array($l[1])) {
 				$zUclass->set("status", MS_ON);
 				$zUshape = ms_newShapeObj($shapetype);
-				$zUline = ms_newLineObj();
 				foreach ($l[1] as $drawpoint) {
+					$zUline = ms_newLineObj();
 				  $zUline->addXY($drawpoint[E], $drawpoint[N],0);
 					$imgx = geo2pix($drawpoint[E],$ext[0],$ext[2],$sizex);
 					$imgy = $sizey - geo2pix($drawpoint[N],$ext[1],$ext[3],$sizey);
 					$pointslist["$imgx/$imgy"] = array($o,$l[0]);
+					$zUshape->add($zUline);
 				}
-				$zUshape->add($zUline);
+			}
+			if (is_object($zUshape)) {
+				$zUshape->draw($zMap, $zUser, $zImage, 1, "test");
 			}
 		}
-	}
-	if (is_object($zUshape)) {
-		$zUshape->draw($zMap, $zUser, $zImage, 1, "test");
 	}
 	return $pointslist;
 }
