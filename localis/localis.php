@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.22 2002/10/22 11:56:40 mose Exp $
+<? /* $Id: localis.php,v 1.23 2002/10/23 00:04:34 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -73,10 +73,11 @@ if ($addit and $addcity and ($addtype != 'all')) {
 	
 if (!is_file($conf["map"]['path']."/fonts/fontset")) {
 	$dir = opendir($conf["map"]["path"]."/fonts");
-	
-	while (false !== ($dd = readdir($dir))) {
-		if ($dd and (substr($dd,0,1) != '.') and (substr($dd,-4,4) == '.ttf')) {
-			$fonts.= strtolower(substr(basename($dd),0,-4))."    ".$conf["map"]["path"]."/fonts/".$dd."\n";
+	if ($dir) {
+		while (false !== ($dd = readdir($dir))) {
+			if ($dd and (substr($dd,0,1) != '.') and (substr($dd,-4,4) == '.ttf')) {
+				$fonts.= strtolower(substr(basename($dd),0,-4))."    ".$conf["map"]["path"]."/fonts/".$dd."\n";
+			}
 		}
 	}
 	echo $fonts;
