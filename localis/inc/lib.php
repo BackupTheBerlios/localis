@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.1 2002/10/12 08:56:28 mose Exp $
+<?  /* $Id: lib.php,v 1.2 2002/10/14 16:20:08 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -39,16 +39,15 @@ function sig_list($field, $conn, $cut=0) {
 		$f = explode(",",$r[1]);
 		if(is_array($f)) {
 		foreach($f as $ff) {
-     $back[] = $ff;
+			$i+=1;
+			$h = strtolower(trim(str_replace(" ","",$ff)));
+     $back[$h] = $ff;
 		 }
 		}
+		return $back;
 	}
-	return $back;
-	/* 
-	# Unused Yet, it will be reimplemented
-	if (ereg("list",$conf[form][
-  //$query = "select ".$col."_id as i, ".$col."_name as n from $col;";
-  //$res = mysql_db_query($conf["database"]["db_name"],$query,$conn);
+  $query = "select ".$col."_id as i, ".$col."_name as n from $col;";
+  $res = mysql_db_query($conf["database"]["db_name"],$query,$conn);
   if ($res) {
     while ($r = mysql_fetch_row($res)) {
       if ($cut and strlen($r[i]) > $cut) {
@@ -61,18 +60,24 @@ function sig_list($field, $conn, $cut=0) {
     return $back; 
   } else {
     return false;
-  } */
+  } 
 } 
 
-function sig_query($base,$cond,$conn,$qry='') {
+function sig_query($select,$cond,$conn) {
   global $conf;
-  if ($cond) { $more = "where ".@implode(" and ",$cond); }
-  if ($qry) {
-    $query = "select * from $base $more;";
-  } else {
-    $query = "select distinct $base.* from $base left join aquitaine on aquitaine.NOM=$base.ville $more;";
-  }
-  $res = mysql_db_query($conf['db_name'],$query,$conn);
+	if ($t = str_replace('mysql://','',$conf[select][$select])) {
+		$data = explode('/',$t);
+		foreach ($data as $d) {
+			$i++;
+			$dbinfo = explode(',',$d);
+			$req[base][$i] = $dbinfo[0];
+			$req[table][$i] = $dbinfo[1];
+			$req[champ][$i] = $dbinfo[2];
+		}
+	}
+	if ($cond) { $more = "where ".@implode(" and ",$cond); }
+  $query = "select distinct ".$req[table][1].".* from ".$req[table][1]." left join ".$req[table][2]." on ".$req[table][2].".".$req[champ][2]."=".$req[table][1].".".$req[champ][1]." $more;";
+  $res = mysql_db_query($req[base][1],$query,$conn);
   if ($res) {
     $i = 1;
     while ($r = mysql_fetch_array($res)) {
@@ -105,9 +110,9 @@ function inc($template) {
   }
 }
 
-function prepare_list($wh,$conn) {
+function prepare_list($wh,$conn,$type) {
   global $db,$conf;
-  $sig_res = sig_query($conf[database][db_name],$wh,$conn);
+  $sig_res = sig_query($type,$wh,$conn);
   if ($sig_res) {
     asort($sig_res);
     foreach ($sig_res as $sr) {
@@ -124,7 +129,7 @@ function prepare_list($wh,$conn) {
 
 function build_list($found,$qu,$eff) {
   global $tempath, $tpl, $PHP_SELF, $villes, $coords, $sizex, $sizey, $layer_query;
-	$args = implode('&',$qu);
+	$args = @implode('&',$qu);
   if (!$found) {
     $list.= "Aucun resultat.";
   } else {
@@ -173,9 +178,9 @@ function dbf_gen($base,$jbase,$villes,$cond,$conn,$pref='') {
       $query = "select ABS_C_LIEU as abs, ORD_C_LIEU as ord from $jbase where NOM like '$vc';";
       $res = mysql_db_query($conf[database][db_name],$query,$conn);
       if ($res and mysql_numrows($res)) {
-        $qx = mysql_result($res,0,"abs") * 100;
+        $qx = mysql_result($res,0,"abs");
 				$GLOBALS['m'][$v][x] = geo2pix($qx,$ext[0],$ext[2],$sizex);
-        $qy = mysql_result($res,0,"ord") * 100;
+        $qy = mysql_result($res,0,"ord");
 				$GLOBALS['m'][$v][y] = $sizey - geo2pix($qy,$ext[1],$ext[3],$sizey);
 				$point->setXY($qx,$qy);
 				$shapefile->addPoint($point);
@@ -207,6 +212,7 @@ function domenu($list,$it) {
   if (is_array($list)) {
   foreach ($list as $k=>$l) {
     if ((is_array($it) and in_array($k,$it)) or ($it == $k)) {
+			$ll = str_replace(' ','',strtolower($l));
       $back.= "<option value='$k' selected>$l\n";
     } else {
       $back.= "<option value='$k'>$l\n";

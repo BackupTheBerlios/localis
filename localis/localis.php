@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.1 2002/10/12 08:56:26 mose Exp $
+<? /* $Id: localis.php,v 1.2 2002/10/14 16:20:08 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -55,7 +55,7 @@ foreach ($conf[form] as $enn=>$f) {
 	${"list_$field"} = sig_list($f,$conn,0);
 	${"menu_$field"} = domenu(${"list_$field"},$$field);
 	if ($$field and ereg("^[0-9]+$",$$field)) {
-		$wh[] = "ref_$field=".$$field;
+		//$wh[] = "ref_$field=".$$field;
 		$qu[] = "$field=".urlencode($$field);
 		$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($field), ${"list_$field"}[$$field]);
 	}
@@ -169,10 +169,10 @@ if ($view != $conf[gui][list_button]) {
 	$ext = ext2array($zExtent);
 	$extexploded = implode(' ',$ext);
 	if ($code_postal or $ville or $nature or $type) {
-		$wh[] = "((".$conf[database][db_name].".abs_c_lieu) between $ext[0] and $ext[2])";
-		$wh[] = "((".$conf[database][db_name].".ord_c_lieu) between $ext[1] and $ext[3])";
-		prepare_list($wh,$conn);
-		$id = dbf_gen('identite','aquitaine',$villes,$wh,$conn);
+		$wh[] = "((communes.".$conf[map][coord_x].") between $ext[0] and $ext[2])";
+		$wh[] = "((communes.".$conf[map][coord_y].") between $ext[1] and $ext[3])";
+		prepare_list($wh,$conn,$type);
+		$id = dbf_gen($conf[database][db_name],'communes',$villes,$wh,$conn);
 		$list = build_list($found,$qu,$eff);
 		$zResult = $zMap->getLayerByName('communes');
 		$zResult->set('status',MS_ON);
@@ -181,7 +181,7 @@ if ($view != $conf[gui][list_button]) {
 		# Obsolete used for medias-cites, to be cleaned	
 		if ($city) {
 			$sid = dbf_gen('identite','aquitaine',array($city),$wh,$conn,'s');
-			$zResult2 = $zMap->getLayerByName('Spot');
+			$zResult2 = $zMap->getLayerByName('communes');
 			$zResult2->set('status',MS_ON);
 			$zResult2->set('data',"../../tmp/$sid");
 			$zResult2->draw($zImage);
@@ -208,7 +208,7 @@ if ($view != $conf[gui][list_button]) {
 		} 
 	}
 	$qu[] = "extent=".urlencode($extexploded);
-	prepare_list($wh,$conn);
+	prepare_list($wh,$conn,$type);
 	$list = build_list($found,$qu,$eff);
 }
 ${"action_$act"} = "checked";
