@@ -153,7 +153,8 @@ if ($click_x and $click_y) {
 	$map_click = array();
 } else {
 	$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
-	$clicked = FALSE;
+	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+	$clicked = false;
 	$map_click = array();
 }
 $focus = array();
@@ -189,8 +190,13 @@ if (!empty($_REQUEST['p_name']) and $_SESSION['me']) {
 	$focus['edit'] = "focus";
 }
 
+// essai de calcul du facteur d'echelle avant affichage
+// pour affichage conditionnel des labels (en laissant les pictos tjrs On)
+// sans rajouter une couche supplémentaire 
+// ce calcul ne fonctionne pas, donc on verra plus tard...
 $scale_r=$rapechelpix*($extmaxx-$extminx)/$sizex; // echelle recalculée (empirique ...)
-echo "scale_r=".$scale_r;
+//echo "scale_r=".$scale_r;
+
 if (isset($filtre) and is_array($filtre)) {
 	foreach ($filtre as $f=>$v) {
 		if (!empty($v)) {
