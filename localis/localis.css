@@ -1,0 +1,134 @@
+select, input { 
+	background:#ffffff;
+	color:#000000; 
+}
+
+option {
+	border: 0;
+	border-style: solid;
+	border-width: 0;
+}
+
+body {
+	background: #efefef;
+}
+
+.submit { 
+	background:#efefef;
+	font-weight:bold; 
+	border-width: 1px;
+	border-size: 1px;
+}
+a { 
+	background:#FFFFFF;
+	color:#003366; 
+	font-weight:bold; 
+	padding:1; 
+	text-decoration: none;
+}
+a:visited { 
+	color:#003366; 
+}
+a:hover { 
+	background:#e6b000; 
+	color:#000000; 
+}
+.localis {
+	background:none; 
+	font-size:140%;
+	color: #000000;
+	font-weight:bold;
+	margin: 2;
+}
+.sm {
+	font-size:small;
+	color: #999999;
+	margin-top: 5;
+}
+.smi {
+	font-size:small;
+	color: #333333;
+}
+.noa, .noa:hover {
+	background:none;
+}
+.foot {
+	font-size: 80%;
+	color: #333333;
+}
+.base {
+	background:none;
+	color:#999999;
+}
+.base:hover {
+	background:#999999;
+	color:#FFFFFF;
+}
+.corps {
+	margin: 20px;
+}
+.dashed {
+	border-style: dashed;
+	border-width: 1px;
+	border-size: 1px;
+	margin: 6 10 0 8;
+	background: #FFFFFF;
+	border-color: #000000;
+}
+.topnav {
+	border-style: solid;
+	border-width: 1px;
+	border-size: 1px;
+	border: 1;
+	margin: 3 10 0 10;
+	background: #FFFFFF;
+}
+.liste {
+	border-style: dashed;
+	border-width: 1px;
+	border-size: 1px;
+	margin: 6 10 0 10;
+	background: #FFFFFF;
+}
+.map {
+	margin: 3px;
+	background: #FFFFFF;
+}
+.maptable {
+	margin-top: 6px;
+	background: #FFFFFF;
+	border-width: 1px;
+	border-size: 1px;
+	border-style: solid;
+}
+#100 {
+	width: 100%;
+}
+#106 {
+	margin-top: 6px;
+	width: 100%;
+}
+#109 {
+	margin-top: 9px;
+	width: 100%;
+}
+.toolch {
+	background: #FFFFFF;
+	padding: 1 0 1 0;
+}
+.tool {
+	background: #FFFFFF;
+}
+.toolchecked {
+	background: #efefef;
+	border-style: inset;
+	border-width: 1px;
+	border-size: 1px;
+}
+.list {
+	margin-top: 2px;
+}
+.invis {
+	color: #ffffff;
+	background: #ffffff;
+}
