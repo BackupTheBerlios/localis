@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.20 2002/10/21 15:56:06 mastre Exp $
+<? /* $Id: localis.php,v 1.21 2002/10/21 17:58:04 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -205,6 +205,14 @@ if ($view != $conf[gui][list_button]) {
 			if (!is_file($conf[general][tmp_path]."/$id.shp")) echo "$id.shp not found<br>";
 			if (!is_file($conf[general][tmp_path]."/$id.shx")) echo "$id.shx not found<br>";
 			if (!is_file($conf[general][tmp_path]."/$id.dbf")) echo "$id.dbf not found<br>";
+			# Place javascript info area on points
+			if (is_array($m)) {
+				foreach ($m as $vv=>$coord) {
+					$map_locations.= "<area href=\"#top\" name=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" ";
+					$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>".str_replace('\n','<br>',addslashes($maplist[$vv]))."', WIDTH, 150);\" ";
+					$map_locations.= " onmouseout='return nd();' onclick=\"return overlib('".addslashes($maplist[$vv])."', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
+			}
+}
 		}
 	}
 	if ($flagid) {
@@ -247,14 +255,6 @@ ${"action_$act"} = "checked";
 ${"size_".$sizex."x".$sizey}   = "selected";
 
 
-# Place javascript info area on points
-if (is_array($m)) {
-	foreach ($m as $vv=>$coord) {
-		$map_locations.= "<area href=\"#top\" name=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" ";
-		$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>".str_replace('\n','<br>',addslashes($maplist[$vv]))."', WIDTH, 150);\" ";
-		$map_locations.= " onmouseout='return nd();' onclick=\"return overlib('".addslashes($maplist[$vv])."', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
-	}
-}
 mysql_close($conn);
 
 $colwidth = $conf[map][ref_sizex]+4;
