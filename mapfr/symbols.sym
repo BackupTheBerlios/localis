@@ -1,4 +1,10 @@
 SYMBOL
+NAME "flag"
+TYPE pixmap
+IMAGE "images/flag3.png"
+END
+
+SYMBOL
 NAME "ordi"
 TYPE pixmap
 IMAGE "images/comp.png"
