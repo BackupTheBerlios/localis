@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.7 2002/10/16 21:22:14 mastre Exp $
+<? /* $Id: localis.php,v 1.8 2002/10/16 21:25:38 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -53,6 +53,14 @@ foreach ($conf[form] as $field=>$f) {
 		$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($field), ${"list_$field"}[$$field]);
 	}
 } 
+
+# Select layer to use
+if ($$field == 'all') {
+	array_shift($listres);
+	$mychoices = $listres ;
+} else {
+	$mychoices[] = $$field;
+}
 
 # Build layer selection (left menu)
 foreach($conf[layers] as $def_layer=>$res_layer) {
@@ -151,12 +159,6 @@ if ($view != $conf[gui][list_button]) {
 	$ext = ext2array($zExtent);
 	$extexploded = implode(' ',$ext);
 	# create result layer
-	if ($$field == 'all') {
-		array_shift($listres);
-		$mychoices = $listres ;
-	} else {
-		$mychoices[] = $$field;
-	}
 	foreach($mychoices as $myc) {
 		if (!empty($myc)) {
 			$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
@@ -183,12 +185,6 @@ if ($view != $conf[gui][list_button]) {
 	$scl = number_format($zMap->scale,0,',',' ');
 } else {
 	# Prepare list view
-	if ($$field == 'all') {
-		array_shift($listres);
-		$mychoices = $listres ;
-	} else {
-		$mychoices[] = $$field;
-	}
 	$extexploded = implode(' ',$ext);
 	$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
 	$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_y].") between $ext[1] and $ext[3])";
