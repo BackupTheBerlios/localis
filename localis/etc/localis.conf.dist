@@ -54,10 +54,10 @@ dbf_def      = dbf://NOM,C,64,0/E,N,12,4/N,N,12,4
 
 [Infos]
 # Rows fetched (cityname, id, name, short description), layer name
-firstjeudi   = rows://ville,id,nom,description/communes
-lug   			 = rows://ville,id,nom,description/communes2
-trolls 			 = rows://ville,id,nom,description/communes3
-human 			 = rows://ville,id,nom,description/communes4
+firstjeudi   = rows://ville,id,nom,notes/communes
+lug   			 = rows://ville,id,nom,notes/communes2
+trolls 			 = rows://ville,id,nom,notes/communes3
+human 			 = rows://ville,id,nom,notes/communes4
 
 [Layers]
 fond         = file://france.map
@@ -67,7 +67,7 @@ regions      = file://regions.map
 firstjeudi   = mysql://localis,firstjeudi,ville/localis,communes,NOM
 lug          = mysql://localis,lug,ville/localis,communes,NOM
 trolls       = mysql://localis,trolls,ville/localis,communes,NOM
-human        = mysql://localis,trolls,ville/localis,communes,NOM
+human        = mysql://localis,human,ville/localis,communes,NOM
 
 [Gui]
 fond         = Fond
