@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.30 2002/10/26 17:17:28 mose Exp $
+<? /* $Id: localis.php,v 1.31 2002/10/27 22:12:12 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -267,6 +267,10 @@ if ($view != $conf[gui][list_button]) {
 		$zResult->set('status',MS_ON);
 		$zResult->set('data',$conf[general][tmp_path]."/$flagid");
 		$zResult->draw($zImage);
+		$map_txt = "Vous êtes ici.";
+		$vv = 'flag';
+		$map_locations.= "<area href=# name=\"$vv\" id=\"$vv\" shape=\"rect\" coords=\"".($click_x-10).",".($click_y-10).",".($click_x+10).",".($click_y+10)."\" \n";
+		$map_locations.= "onmouseover=\"return overlib('$map_txt');\" onmouseout='return nd();'>\n";
 	}
 	# Create image, reference map & legend
 	$image_src = $zImage->saveWebImage(MS_PNG,0,0,-1);
