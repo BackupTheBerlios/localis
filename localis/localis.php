@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.14 2002/10/18 18:48:28 mose Exp $
+<? /* $Id: localis.php,v 1.15 2002/10/20 01:53:26 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -132,7 +132,7 @@ if ($view != $conf[gui][list_button]) {
 		$zMap->set("height",$sizey);
 		$zMap->zoomscale($scl*1000,$zClick,$sizex,$sizey,$zLimit,$zLimit);
 	} else {
-		if ($click_x and $click_y) {
+		if (($act != "edition") and $click_x and $click_y) {
 			$zClick->setXY($click_x,$click_y,0);
 			$sizemapx = $sizex;
 			$sizemapy = $sizey;
@@ -149,6 +149,10 @@ if ($view != $conf[gui][list_button]) {
 			$zMap->zoompoint(2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
 		} elseif ($clicked and ($act == "zoomout")) {
 			$zMap->zoompoint(-2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);		
+		} elseif ($act == "edition") {
+			$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);		
+			$coordx = pix2geo($click_x,$ext[0],$ext[2],$sizex);
+			$coordy = pix2geo($click_y,$ext[1],$ext[3],$sizey);
 		} elseif ($clicked and ($act == "travel")) {
 			$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
 		} elseif ($scl and $zClick) {
@@ -216,12 +220,13 @@ if ($view != $conf[gui][list_button]) {
 ${"action_$act"} = "checked";
 ${"size_".$sizex."x".$sizey}   = "selected";
 
+
 # Place javascript info area on points
 if (is_array($m)) {
 	foreach ($m as $vv=>$coord) {
 		$map_locations.= "<area href=\"#top\" name=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" ";
-		$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>".str_replace('\n','<br>',addslashes($maplist[$vv]))."', WIDTH, -1);\" ";
-		$map_locations.= " onmouseout='return nd();' onclick=\"return overlib('".addslashes($maplist[$vv])."', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, -1);\">\n";
+		$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>".str_replace('\n','<br>',addslashes($maplist[$vv]))."', WIDTH, 150);\" ";
+		$map_locations.= " onmouseout='return nd();' onclick=\"return overlib('".addslashes($maplist[$vv])."', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
 	}
 }
 
@@ -234,6 +239,9 @@ echo inc("search");
 if ($view == $conf[gui][list_button]) {
 	echo inc("list");
 } else {
+	if ($act == "edition") {
+		$edit = inc("edit");
+	}
 	echo inc("map");
 }
 echo inc("foot");
