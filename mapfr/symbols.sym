@@ -1,4 +1,10 @@
 SYMBOL
+NAME "human"
+TYPE pixmap
+IMAGE "images/human.png"
+END
+
+SYMBOL
 NAME "flag"
 TYPE pixmap
 IMAGE "images/flag_gold.png"

@@ -170,6 +170,31 @@ END
 
 
 LAYER
+  NAME "communes4"
+  TYPE point 
+  DATA "communes"
+  STATUS off
+	CLASSITEM 'nom'
+	GROUP "fond"
+	LABELITEM 'nom'
+  CLASS
+		LABEL
+			POSITION auto 
+			COLOR 0 60 120
+			FONT arial_bold
+			TYPE truetype
+			SIZE 8
+			ANTIALIAS true
+		END
+		SYMBOL human
+		OUTLINECOLOR 128 128 128
+		COLOR 255 0 0
+  END
+  TOLERANCE 1
+END
+
+
+LAYER
   NAME "communes"
   TYPE point 
   DATA "communes"

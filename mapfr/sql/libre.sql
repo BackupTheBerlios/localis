@@ -1,4 +1,4 @@
-# $Id: libre.sql,v 1.3 2002/10/21 00:36:16 mose Exp $
+# $Id: libre.sql,v 1.4 2002/10/21 04:55:21 mose Exp $
 #
 # Serveur: localhost
 # Généré le : Jeudi 17 Octobre 2002 à 15:10
@@ -119,3 +119,29 @@ INSERT INTO trolls VALUES (1, 'Paris', 'Auteur de Logiciels Libres.', '', 'mose'
 INSERT INTO trolls VALUES (2, 'Saint-maur-des-fosses', 'Codeur corse.', '', 'mastre', 'mastre@localis.org', 'http://beve.org','1');
 INSERT INTO trolls VALUES (3, 'Auray', 'Travailleur indépendant.', '', 'rodolphe', 'rq@lolix.org', 'http://lolix.org','1');
 INSERT INTO trolls VALUES (4, 'Paris', 'Travailleur indépendant.', '', 'shinobi', 'arnaud@crao.net', 'http://crao.net','1');
+
+
+#
+# Structure de la table `human`
+#
+
+DROP TABLE IF EXISTS human;
+CREATE TABLE trolls (
+  id int(11) NOT NULL auto_increment,
+  ville varchar(255) NOT NULL default '',
+  notes varchar(255) NOT NULL default '',
+  date datetime NOT NULL,
+  nom varchar(255) NOT NULL default '',
+  email varchar(255) NOT NULL default '',
+  url varchar(255) NOT NULL default '',
+	verified enum('0','1') NOT NULL default '0',
+  PRIMARY KEY id (id)
+) TYPE=MyISAM;
+
+#
+# Contenu de la table `human`
+#
+
+INSERT INTO human VALUES (1, 'Le-Haillan', 'Médias-Cité', '', 'Gerald Elbaze', '', 'http://medias-cite.org','1');
+INSERT INTO human VALUES (2, 'Saint-Martin-de-Ré', 'Ré-publique et RadioPhare', '', 'Olivier Zablocki', '', 'http://re-publique.net','1');
+
