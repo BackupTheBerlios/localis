@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.21 2002/10/21 17:58:04 mastre Exp $
+<? /* $Id: localis.php,v 1.22 2002/10/22 11:56:40 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -70,6 +70,21 @@ foreach ($conf[form] as $field=>$f) {
 if ($addit and $addcity and ($addtype != 'all')) {
 	additem($addtype,addslashes($addcity),addslashes($addnom),addslashes($addemail),addslashes($addurl),addslashes($addnotes));
 }
+	
+if (!is_file($conf["map"]['path']."/fonts/fontset")) {
+	$dir = opendir($conf["map"]["path"]."/fonts");
+	
+	while (false !== ($dd = readdir($dir))) {
+		if ($dd and (substr($dd,0,1) != '.') and (substr($dd,-4,4) == '.ttf')) {
+			$fonts.= strtolower(substr(basename($dd),0,-4))."    ".$conf["map"]["path"]."/fonts/".$dd."\n";
+		}
+	}
+	echo $fonts;
+	closedir($dir);
+	$fp = fopen($conf["map"]['path']."/fonts/fontset","w+");
+	fputs($fp,$fonts);
+	fclose($fp);
+}
 
 # Select layer to use
 if ($$field == 'all') {
@@ -102,6 +117,8 @@ foreach($conf[layers] as $def_layer=>$res_layer) {
 # Set layer status (on/off) [patché et debuggué choppe seul le nom des layers]
 if ($view != $conf[gui][list_button]) {
 	$zMap = ms_newMapObj($conf["map"]["path"].'/'.$conf["map"]["file"]);
+	$zWeb = $zMap->web;
+	$zWeb->set('imagepath',$conf["general"]["tmp_path"]."/");
 	$lys = array();
 	$lys = $zMap->getAllGroupNames();
 	foreach ($lys as $l) {
@@ -255,6 +272,14 @@ ${"action_$act"} = "checked";
 ${"size_".$sizex."x".$sizey}   = "selected";
 
 
+# Place javascript info area on points
+if (is_array($m)) {
+	foreach ($m as $vv=>$coord) {
+		$map_locations.= "<area href=\"#top\" name=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" ";
+		$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>".str_replace('\n','<br>',addslashes($maplist[$vv]))."', WIDTH, 150);\" ";
+		$map_locations.= "onmouseout='return nd();' onclick=\"return overlib('".addslashes($maplist[$vv])."', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
+	}
+}
 mysql_close($conn);
 
 $colwidth = $conf[map][ref_sizex]+4;
