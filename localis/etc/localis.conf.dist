@@ -89,6 +89,7 @@ lug          = LUG
 trolls       = Trolls
 human        = Humains
 noresult     = Aucun résultat.
+defaultmapsize = 400x400
 
 [Form]
 search       = text://20/ville,nom

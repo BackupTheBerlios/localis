@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.36 2002/11/05 14:34:14 mastre Exp $
+<? /* $Id: localis.php,v 1.37 2002/11/07 07:55:50 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -26,7 +26,6 @@ $refy    = ($HTTP_GET_VARS['ref_y']) ? $HTTP_GET_VARS['ref_y'] : $HTTP_GET_VARS[
 $scl     = ($HTTP_GET_VARS['forcescale']) ? $HTTP_GET_VARS['forcescale'] : $HTTP_GET_VARS['scale'];
 $lay     = ($HTTP_GET_VARS['layers']) ? $HTTP_GET_VARS['layers'] : array("fond");
 $act     = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
-$size    = ($HTTP_GET_VARS['size']) ? $HTTP_GET_VARS['size'] : "400x400";
 $city    = $HTTP_GET_VARS['v'];
 $view    = $HTTP_GET_VARS['tpl'];
 $addcity = $HTTP_GET_VARS['add_city'];
@@ -72,6 +71,9 @@ if ($HTTP_GET_VARS['forceextent.x'] or $HTTP_GET_VARS['forceextent_x']) {
 } else {
 	$ext = array($conf[map][ext_minx],$conf[map][ext_miny],$conf[map][ext_maxx],$conf[map][ext_maxy]);
 }
+
+$size    = ($HTTP_GET_VARS['size']) ? $HTTP_GET_VARS['size'] : $conf[gui]['defaultmapsize'];
+
 $conn = sig_connect();
 # Fetch information from mysql and create menu items and select option.
 # Debugged to preserve selections and adapted to new conf file.
@@ -159,6 +161,9 @@ foreach($conf[layers] as $def_layer=>$res_layer) {
 # Set layer status (on/off) [patché et debuggué choppe seul le nom des layers]
 if ($view != $conf[gui][list_button]) {
 	$zMap = ms_newMapObj($conf["map"]["path"].'/'.$conf["map"]["file"]);
+	list($sizex,$sizey) = split('x',$size);
+	$zMap->set('width', $sizex);
+	$zMap->set('height', $sizey);
 	$zWeb = $zMap->web;
 	$zWeb->set('imagepath',$conf["general"]["tmp_path"]."/");
 	$lys = array();
