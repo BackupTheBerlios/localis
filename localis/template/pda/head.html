@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>$conf.general.titre</title>
+</head>
+<body bgcolor="#ddeeee">
+<form action="localis.php" method='get'>
+<table width=100% cellpadding=1 cellspacing=0 border=0>
+<tr><td bgcolor=#FFFFFF align=center valign=middle>
+<h5><a href="index.php?$qlang">$conf.general.baseline</a></h5></td>
+<td bgcolor=#336699>
+<input type="Text" size="8" name="search" value="$search">
+<input type="submit" name="action" value=" $conf.gui.map_button ">
+<input type="submit" name="tpl" value=" $conf.gui.list_button " class="submit">
+$ilang
+<input type=hidden name=type value=human>
+</td>
+<td  bgcolor=#336699 align=right>
+<input type="submit" name="forceextent.x" value="Recadrer"> 
+</td>
+<td bgcolor=#ffffff>
+<h5>&nbsp;<a href="index.php?help=1$qlang">?</a></h5>
+</td></tr></table>
