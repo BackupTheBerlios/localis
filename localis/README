@@ -1,6 +1,6 @@
 Localis : README
 ----------------
-$Id: README,v 1.1 2002/10/12 08:56:27 mose Exp $
+$Id: README,v 1.2 2002/10/19 23:42:58 mose Exp $
 -------------------
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis - http://localis.makina-corpus.org
@@ -28,3 +28,43 @@ and a PHP web interface displays a map generated on the fly by Mapscript from
 Mapserver.
 
 (yes, it's very short, more verbose stuff will come soon).
+
+-------------------
+Credits
+
+Lead Author, Coder and Maintainer
+* mose <mose@makina-corpus.org>
+
+Helped with Brute Code Force
+* Mastre <mastre@beve.org>
+
+Protocol, Documentation and user Friendliness
+* Philippe Jullien <fi@makina-corpus.org>
+
+Maintainer of English version
+* Djamel Kadi <dka@makina-corpus.org>
+
+Maintainer of Spanish version
+* Diego Duchowney <ddu@makina-corpus.org>
+
+Helped with Debug, ideas and Testing
+* Gerald Elbaze <elbaze@medias-cite.org>
+(Localis Aquitaine http://accespublic-aquitaine.org)
+
+Helped with Real Money and Ressources
+* Conseil Régional d'Aquitaine <http://aquitaine.fr>
+* Médias-cité <http://medias-cite.org>
+* Makina Corpus <http://makina-corpus.org>
+
+Special thanks :
+* for the gathering of geographical data of Jerome Galichon
+  that he gives out for public usage at http://www.galichon.org/codesgeo
+* INSEE <http://www.insee.fr> and IGN <http://www.ign.fr> for
+  some free maps and data bundled in Localis.
+* Olivier Zablocki for his moral support and his ideas.
+* Mapserver developpers, for their contribution to Free Software.
+* Benoit and Fabien from Medias-cite that survived successfully to
+  the browsing of Localis Source code at early ages.
+* Madame Chen for her reliable daily contribution.
+
+-----------------------
