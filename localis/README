@@ -1,6 +1,6 @@
 Localis : README
 ----------------
-$Id: README,v 1.3 2002/10/28 05:02:48 mose Exp $
+$Id: README,v 1.4 2002/12/17 11:23:03 ramzi Exp $
 -------------------
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis - http://localis.makina-corpus.org
@@ -37,9 +37,13 @@ Lead Author, Coder and Maintainer
 
 Helped with Brute Code Force
 * Mastre <mastre@beve.org>
+* Ramzi <ramzi@symbolique.org>
 
 Protocol, Documentation and user Friendliness
 * Philippe Jullien <fi@makina-corpus.org>
+
+Internet Explorer consultant
+* Benjamin Deboute <deboute@claranet.fr>
 
 Geographic consultant
 * Benoit Veler <benenet@free.fr>

@@ -1,6 +1,6 @@
 Localis : Changelog 
 -------------------
-$Id: Changelog,v 1.7 2002/10/25 10:13:06 mose Exp $
+$Id: Changelog,v 1.8 2002/12/17 11:23:03 ramzi Exp $
 -------------------
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis - http://localis.makina-corpus.org
@@ -22,6 +22,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
 USA.
 -------------------
+
+v0.4.2 :
+- fully functionnal under internet explorer (thx ben)
+- fixed lotta minor bugs about javascript code
+- removed events and firstjeudis information (obsolete as date related)
+- fixed some undone translations
 
 v0.4.1 : 
 - added a 'back to full view' button under the reference map
