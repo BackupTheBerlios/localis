@@ -2,10 +2,12 @@
 <tr><td valign="top" width="$conf.gui.colwidth" align=right>
 
 <table border="0" cellpadding="1" cellspacing="0" width="$conf.gui.colwidth" class="dashed">
-<tr><td valign="top">
+<tr><td valign="top" align="center">
+<input type="hidden" name="forceextent" id="forceextent" value="">
 <input type="image" src="$ref_src" width="$conf.map.ref_sizex" 
 height="$conf.map.ref_sizey" name="ref" alt="$conf.map.name" hspace="0" vspace="0" border="0"><br>
-<input type=image src=images/recadrer.png alt=Recadrer name=forceextent value="1" border=0 vspace=0 hspace=0>
+<a href="javascript:document.f.forceextent.value='1'; document.f.extent.value=''; document.f.scale.value=''; document.f.submit();" class="refbutton">Recadrer</a>
+<!--input type=image src=images/recadrer.png alt=Recadrer name=forceextent value="1" border=0 vspace=0 hspace=0-->
 </td></tr></table>
 <table border="0" cellpadding="4" cellspacing="0" width="$conf.gui.colwidth" class="dashed">
 <tr><td valign="middle"><select name="size" class="submit" id="100">

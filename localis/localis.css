@@ -138,3 +138,11 @@ a:hover {
 	color: #ffffff;
 	background: #ffffff;
 }
+/* ROU "recadrer" button becomes link */
+a.refbutton {
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	background: #ffffff;
+	color: #000000;
+}

@@ -2,10 +2,12 @@
 <tr><td valign="top" width="$conf.gui.colwidth" align=right>
 
 <table border="0" cellpadding="1" cellspacing="0" width="$conf.gui.colwidth" class="dashed">
-<tr><td valign="top">
+<tr><td valign="top" align="center">
+<input type="hidden" name="forceextent" id="forceextent" value="">
 <input type="image" src="$ref_src" width="$conf.map.ref_sizex" 
 height="$conf.map.ref_sizey" name="ref" alt="$conf.map.name" hspace="0" vspace="0" border="0"><br>
-<input type=image src=images/recadrer.png alt=Recadrer name=forceextent value="1" border=0 vspace=0 hspace=0>
+<a href="javascript:document.f.forceextent.value='1'; document.f.extent.value=''; document.f.scale.value=''; document.f.submit();" class="refbutton">Fit</a>
+<!--input type=image src=images/recadrer.png alt=Recadrer name=forceextent value="1" border=0 vspace=0 hspace=0-->
 </td></tr></table>
 <table border="0" cellpadding="4" cellspacing="0" width="$conf.gui.colwidth" class="dashed">
 <tr><td valign="middle"><select name="size" class="submit" id="100">
@@ -20,19 +22,19 @@ height="$conf.map.ref_sizey" name="ref" alt="$conf.map.name" hspace="0" vspace="
 
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="dashed">
 <tr><td valign="top" width="25%" align="center" class="tool$action_edition" style=background:#efdebe
-onclick='document.f.action[1].checked=true;'><div>
+onclick='document.f.action[1].checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Edition</div>', WIDTH, 80);" onmouseout="return nd();"><div>
 <img src="images/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edition" valign="top"><br>
 <input type="radio" name="action" value="edition" $action_edition></div></td>
 <td valign="top" width="25%" align="center" class="tool$action_zoomout"
-onclick='document.f.action[2].checked=true;'><div>
+onclick='document.f.action[2].checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Zoom out</div>', WIDTH, 80);" onmouseout="return nd();"><div>
 <img src="images/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"><br>
 <input type="radio" name="action" value="zoomout" $action_zoomout></div></td>
 <td valign="top" width="25%" align="center" class="tool$action_travel"
-onclick='document.f.action[3].checked=true;'><div>
+onclick='document.f.action[3].checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Travel</div>', WIDTH, 80);" onmouseout="return nd();"><div>
 <img src="images/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top"><br>
 <input type="radio" name="action" value="travel" $action_travel></div></tD>
 <td valign="top" width="25%" align="center" class="tool$action_zoomin"
-onclick='document.f.action[4].checked=true;'><div>
+onclick='document.f.action[4].checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Zoom in</div>', WIDTH, 80);" onmouseout="return nd();"><div>
 <img src="images/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom avant" valign="top"><br>
 <input type="radio" name="action" value="zoomin" $action_zoomin></div></td>
 </td></tr></table>
