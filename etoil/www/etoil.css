@@ -74,6 +74,10 @@ a:hover {
 .cartouche img {
 	margin-top : 10px;
 }
+.navmap {
+	background-color : #dff1d3;
+	vertical-align : middle;
+	}
 .nav {
 	width : 144px;
 	margin : 0px;

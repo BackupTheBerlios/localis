@@ -2,7 +2,7 @@
 #
 #   OpenMoney for PHP  (v0.1-cvs)
 #
-#   $Header: /home/xubuntu/berlios_backup/github/tmp-cvs/localis/Repository/etoil/bin/fixperms.sh,v 1.3 2005/03/26 10:04:31 mose Exp $
+#   $Header: /home/xubuntu/berlios_backup/github/tmp-cvs/localis/Repository/etoil/bin/fixperms.sh,v 1.4 2005/04/04 14:29:28 vmaury Exp $
 # 
 #   Copyright (c) 2004 OpenMoney Community (see COPYRIGHT)
 #   http://openmoney.org - http://gna.org/projects/openmoney
@@ -33,6 +33,7 @@ if [ -z $APACHE ]; then
 	APACHE=`ps aux | grep httpd | sed -n -e 2p | cut -d' ' -f 1`
 fi
 
+APACHE="www-data"
 # small trick to manage path
 cd bin 2&> /dev/null
 cd ..  2&> /dev/null

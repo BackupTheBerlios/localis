@@ -1,6 +1,7 @@
 {include file="head.tpl"}
 {popup_init src="js/overlib.js"}
 
+
 <div class="central">
 <form name="f">
 <input type="hidden" name="extent" value="{$extent}" />
@@ -15,18 +16,21 @@
 {/if}
 <input type="image" src="img/dot1.png" width="1" height="1" border="0" name="dir" value="cc" />
 <table cellspacing="0" cellpadding="0" border="0"><tr>
-<td width="{$mapmargin}"><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="lt" /></td>
-<td width="{$sizex+2}"><input type="image" src="img/dot2.png" width="{$sizex+2}" height="{$mapmargin}" border="0" name="dir" value="ct" /></td>
-<td width="{$mapmargin}"><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="rt" /></td>
+<td width="{$mapmargin}"><input {popup text="{tr}Vers le Nord-Ouest{/tr}"} type="image" src="img/flecheHG.gif" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="lt" /></td>
+<td width="{$sizex+2}" align="center" class="navmap"><input {popup text="{tr}Vers le Nord{/tr}"} type="image" src="img/flecheH.gif" border="0" name="dir" value="ct" /></td>
+<td width="{$mapmargin}"><input {popup text="{tr}Vers le Nord-Est{/tr}"} type="image" src="img/flecheHD.gif" border="0" name="dir" value="rt" /></td>
 </tr><tr>
-<td><input type="image" src="img/dot2.png" width="{$mapmargin}" height="{$sizey+2}" border="0" name="dir" value="lc" /></td>
+<td class="navmap"><input {popup text="{tr}Vers l'Ouest{/tr}"} type="image" src="img/flecheG.gif" border="0" name="dir" value="lc" /></td>
 <td><input type="image" src="{$mapimage}" width="{$sizex}" height="{$sizey}" alt="" border="1" hspace="0" vspace="0" class="map" usemap="#localisation" valign="top"></td>
-<td><input type="image" src="img/dot2.png" width="{$mapmargin}" height="{$sizey+2}" border="0" name="dir" value="rc" /></td>
+<td class="navmap"><input {popup text="{tr}Vers l'Est{/tr}"} type="image" src="img/flecheD.gif" border="0" name="dir" value="rc" /></td>
 </tr><tr>
-<td><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="lb" /></td>
-<td><input type="image" src="img/dot2.png" width="{$sizex+2}" height="{$mapmargin}" border="0" name="dir" value="cb" /></td>
-<td><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="rb" /></td>
-</tr></table>
+<td><input {popup text="{tr}Vers le Sud-Ouest{/tr}"} type="image" src="img/flecheBG.gif" border="0" name="dir" value="lb" /></td>
+<td class="navmap" align="center"><input {popup text="{tr}Vers le Sud{/tr}"} type="image" src="img/flecheB.gif" border="0" name="dir" value="cb" /></td>
+<td><input {popup text="{tr}Vers le Sud-Est{/tr}"} type="image" src="img/flecheBD.gif" border="0" name="dir" value="rb" /></td>
+</tr><tr>
+<td colspan="3"><img src="img/dot0.png" height="5"</td>
+</tr>
+</table>
 
 <table cellpadding="0" cellspacing="0" border="0"><tr>
 {foreach name=leg key=k item=i from=$legends}

@@ -6,7 +6,7 @@ checkfontlist(PROOT."/maps");
 
 // valeurs a mettre en conf -----------
 
-$mapmargin = 15; // taille de la bordure clicable de navigation perpendiculaire
+$mapmargin = 11; // taille de la bordure clicable de navigation perpendiculaire
 $types[1] = "Pédestre";
 $types[2] = "Equestre";
 $types[3] = "Cyclable";
