@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.49 2003/02/04 06:48:08 mose Exp $
+<? /* $Id: localis.php,v 1.50 2003/02/04 08:09:03 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -68,6 +68,7 @@ $tpl_path = $conf[general][tpl_path]."/$mode";
 if (is_file("$tpl_path/$lang/globals.php")) {
   include "$tpl_path/$lang/globals.php";
 }
+include"$tpl_path/globals.php";
 
 if ($HTTP_GET_VARS['forceextent']) {
 	$ext = split(' ',$conf[map][defext]);
@@ -186,12 +187,11 @@ $extexploded = implode(' ',$ext);
 
 foreach($conf[layers] as $l=>$lv) {
 	if (@in_array(trim($l),$lay)) {
-		$glob['layermenu'].= "<tr><td class=\"toolchecked\" onclick=\"document.f.$l.checked=!document.f.$l.checked;\">";
-		$glob['layermenu'].= "<input type=\"checkbox\" id=\"$l\" name=\"layers[]\" value=\"$l\" checked onclick=\"this.checked=!this.checked;\"> $lv</td></tr>\n";
+		$check = 'checked';
 	} else {
-		$glob['layermenu'].= "<tr><td class=toolch onclick='document.f.$l.checked=!document.f.$l.checked;'>";
-		$glob['layermenu'].= "<input type=checkbox id=\"$l\" name=layers[] value='$l' onclick='this.checked=!this.checked;'> $lv</td></tr>\n";
+		$check = '';
 	}
+	$glob['layermenu'].= sprintf($g_layermenu,$check,$l,$l,$l,$l,$check,$lv);
 }
 if (is_array($userlayers)) {
   foreach ($userlayers as $ulnum=>$ul) {
@@ -226,20 +226,14 @@ $colwidth = $conf[map][ref_sizex]+4;
 if ($drawlayer) {
 	$points = lcls_drawlayer($drawlayer);
 	if (is_array($points)) {
-		$list = "<div class=\"dashed\" style=\"margin-top:15px;padding:5px;\">";
 		foreach ($points as $where=>$what) {
 			$cdx = strtok($where, '/');
 			$cdy = strtok('/');
 			$what[1] = preg_replace("/\r?\n/","<br>",addslashes(str_replace('"',"'",$what[1])));
-			$glob[maplocations].= "<area href=\"#\" name=\"$where\" id=\"$where\" shape=\"rect\" coords=\"".($cdx-10).",".($cdy-10).",".($cdx+10).",".($cdy+10)."\" \n";
-			$glob[maplocations].= "onmouseover=\"return overlib('".addslashes($what[1])."', WIDTH, 150);\" \n";
-			$glob[maplocations].= "onmouseout='return nd();' onclick=\"return overlib('$what[1]', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
-			
-			$list.= "<div class=\"list\"><a href=\"localis.php?drawlayer=$drawlayer&showid=$what[0]".$glob[query]."\">";
-			$list.= "<img src=images/mapzoom.png width=8 height=8 hspace=2 vspace=0 border=0 alt='look' align=baseline>&nbsp;";
-			$list.= "$what[0] : $what[1]</a></div>\n";
+			$glob[maplocations].= sprintf($g_maplocations,$where,$where,($cdx-10),($cdy-10),($cdx+10),($cdy+10),$what[1],$what[1],'edit');
+			$lst.= sprintf($g_listitem,$drawlayer,$what[0],$glob[query],$what[0],$what[1]);
 		}
-		$list.= "</div>";
+		$list = sprintf($g_list,$lst);
 	}
 }
 
