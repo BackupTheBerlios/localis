@@ -72,13 +72,12 @@ $+input$
 <table border="0" cellpadding="0" cellspacing="0" class="maptable">
 <tr><td valign="top" align="center">
 <map name="localisation" id="localisation">
-$map_locations$
-</map>
+$+maplocations$</map>
 <input type="image" src="images/pix_5B69A6.png" width="8" height="8" border="0" name="fsens" value="tl" style="margin-right:2px;margin-bottom:2px;"><input 
 type="image" src="images/pix_5B69A6.png" width="$+sizex$" height="8" border="0" name="fsens" value="t" style="margin-bottom:2px;"><input 
 type="image" src="images/pix_5B69A6.png" width="8" height="8" border="0" name="fsens" value="tr" style="margin-left:2px;margin-bottom:2px;"><br>
 <input type="image" src="images/pix_5B69A6.png" height="$+sizey$" width="8" border="0" name="fsens" value="l" valign="top" style="margin-right:2px;"><input 
-type="image" src="$+imgsrc$" width="$+sizex$" height="$+sizey$" alt="" hspace="0" vspace="0" class="map" usemap="#localisation" valign=top><input 
+type="image" src="$+imgsrc$" width="$+sizex$" height="$+sizey$" alt="" hspace="0" vspace="0" class="map" usemap="#localisation" valign="top"><input 
 type="image" src="images/pix_5B69A6.png" height=$+sizey$ width="8" border="0" name="fsens" value="r" valign="top" style="margin-left:2px;"><br>
 <input type="image" src="images/pix_5B69A6.png" width="8" height="8" border="0" name="fsens" value="bl" style="margin-right:2px;margin-top:2px;"><input 
 type="image" src="images/pix_5B69A6.png" width="$+sizex$" height="8" border="0" name="fsens" value="b" style="margin-top:2px;"><input 
@@ -86,10 +85,10 @@ type="image" src="images/pix_5B69A6.png" width="8" height="8" border="0" name="f
 </td></tr></table>
 
 
-<img src="$+legsrc$" border="1" alt="legende" align="right" hspace="0" vspace="4">
-<div class="foot" id="light">$mapscale$ $+scale$ $mapscaleunit$</div>
-<div class="foot" style="margin-top:10px;margin-bottom:2px;"><a href="$+imgsrc$" target="_new" class="submit">$mapdownload$</a></div>
-<div class="foot">$mapcopyright$</div>
+<img src="$+legsrc$" border="1" alt="legende" align="right" hspace="9" vspace="4">
+<div class="foot" style="margin-left:10px;" id="light">$mapscale$ $+scale$ $mapscaleunit$</div>
+<div class="foot" style="margin-top:10px;margin-bottom:2px;margin-left:10px;"><a href="$+imgsrc$" target="_new" class="submit">$mapdownload$</a></div>
+<div class="foot" style="margin-left:10px;">$mapcopyright$</div>
 </td>
 <td valign="top">
 $+right$

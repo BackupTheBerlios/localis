@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.28 2003/02/03 19:51:59 mose Exp $
+<?  /* $Id: lib.php,v 1.29 2003/02/04 05:58:15 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -61,7 +61,7 @@ function layerslist() {
 
 function listobjects($layer) {
   global $conn,$conf;
-  $query = "select * from layertogroup as l left join object as o on l.objectid=o.id where l.layerid=$layer order by l.ranknum";
+  $query = "select * from layerobj as l left join object as o on l.objectid=o.id where l.layerid=$layer order by l.ranknum";
   $res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
   while ($r = mysql_fetch_array($res)) {
     $back[] = $r;
@@ -69,9 +69,12 @@ function listobjects($layer) {
   return $back;
 }
 
-function listpoints($object) {
+function listpoints($object,$ext='') {
   global $conn,$conf;
-  $query = "select g.*, d.* from groupofdots as g left join dots as d on g.dotid=d.id where g.objectid=$object order by g.ranknum";
+	if ($ext) {
+		$where = "and ((d.E between $ext[0] and $ext[2]) and (d.N between $ext[1] and $ext[3]))";
+	}
+  $query = "select g.*, d.* from objdots as g left join dots as d on g.dotid=d.id where g.objectid=$object $where order by g.ranknum";
   $res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
   while ($r = mysql_fetch_array($res)) {
     $back[] = $r;
@@ -98,12 +101,12 @@ function getcalqueinfo($id) {
 }
 
 
-function listlines($layer) {
+function listlines($layer,$ext='') {
   $obj = listobjects($layer);
   if (is_array($obj)) {
     foreach ($obj as $o) {
-      $line = listpoints($o[id]);
-      $back[$o[id]] = $line;
+      $line = listpoints($o[id],$ext);
+      $back[$o[name]] = $line;
     }
   }
   return $back;
@@ -176,10 +179,10 @@ function getinfos($table,$id) {
 	}
 }
 
-function additem($nom,$email,$description,$statut,$latitude,$longitude) {
+function additem($nom,$email,$desc,$statut,$e,$n) {
 	global $conf,$conn;
-	$query = "insert into points (nom,email,description,statut,date,E,N) values ('$nom','$email','$description','$statut',now(),$longitude,$latitude);";
-	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die($query."<br>4".mysql_error());
+	$query = "insert into points (nom,email,description,statut,date,E,N) values ('$nom','$email','$desc','$statut',now(),$e,$n);";
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die($query."<br>".mysql_error());
 }
 
 function inc($template) {
@@ -399,7 +402,7 @@ function tmpclean($id) {
 }
 
 function lcls_drawlayer($drawlayer) {
-	global $zMap, $zImage, $userlayers;
+	global $zMap, $zImage, $userlayers, $ext, $sizex, $sizey;
 	if ($userlayers["$drawlayer"]["layertype"] == 'point') {
 		$layertype = MS_LAYER_POINT;
 		$shapetype = MS_SHAPE_POINT;
@@ -410,7 +413,7 @@ function lcls_drawlayer($drawlayer) {
 	$zUser = ms_newLayerObj($zMap);
 	$zUser->set("status", MS_ON);
 	$zUser->set("type", $layertype);
-	$zUser->set("classitem", "point");
+	$zUser->set("classitem", "item");
 	$zUser->set("name", $userlayers["$drawlayer"]["layername"]);
 	$zUser->set("group", $userlayers["$drawlayer"]["layergroup"]);
 	$zUclass = ms_newClassObj($zUser);
@@ -423,7 +426,7 @@ function lcls_drawlayer($drawlayer) {
 	}
 	$zUclass->set("size", $userlayers["$drawlayer"]["layersize"]);
 	
-	$listlines = listlines($drawlayer);
+	$listlines = listlines($drawlayer,$ext);
 	if (is_array($listlines)) {
 	  foreach ($listlines as $o=>$l) {
 		  if (is_array($l)) {
@@ -431,7 +434,10 @@ function lcls_drawlayer($drawlayer) {
 				$zUshape = ms_newShapeObj($shapetype);
 				$zUline = ms_newLineObj();
 				foreach ($l as $drawpoint) {
-				  $zUline->addXY($drawpoint[E], $drawpoint[N]);
+				  $zUline->addXY($drawpoint[E], $drawpoint[N],0);
+					$imgx = geo2pix($drawpoint[E],$ext[0],$ext[2],$sizex);
+					$imgy = $sizey - geo2pix($drawpoint[N],$ext[1],$ext[3],$sizey);
+					$pointslist["$imgx/$imgy"] = $o;
 				}
 				$zUshape->add($zUline);
 			}
@@ -440,6 +446,7 @@ function lcls_drawlayer($drawlayer) {
 	if (is_object($zUshape)) {
 		$zUshape->draw($zMap, $zUser, $zImage, 1, "test");
 	}
+	return $pointslist;
 }
 
 function lcls_drawline($drawlayer, $listlines, $edit=0, $flag='') {
@@ -528,4 +535,21 @@ function lcls_drawline($drawlayer, $listlines, $edit=0, $flag='') {
   }
 } 
 
+function checkfontlist($path) {
+	if (!is_file("$path/fonts/fontset")) {
+		$dir = opendir("$path/fonts");
+		if ($dir) {
+			while (false !== ($dd = readdir($dir))) {
+				if ($dd and (substr($dd,0,1) != '.') and (substr($dd,-4,4) == '.ttf')) {
+					$fonts.= strtolower(substr(basename($dd),0,-4))."    $path/fonts/$dd\n";
+				}
+			}
+		}
+		closedir($dir);
+		$fp = fopen("$path/fonts/fontset","w+");
+		fputs($fp,$fonts);
+		fclose($fp);
+	}
+
+}
 ?>
