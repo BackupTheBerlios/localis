@@ -1,0 +1,22 @@
+********************************
+* Todo list... et commentaires *
+********************************
+
+* Multilangues *
+----------------
+- passer en multilangues
+- prévoir des champs dans la bdd stockant les labels suivant la langue
+
+* BDD *
+-------
+- pour toutes les tables, rajouter des champs dates création/maj, user création/maj
+- créer une table des disciplines, contenant les infos couleur, picto, traductions
+- créer une table des critères d'un parcours par discipline
+- créer une table des points remarquables
+- créer une table des structures touristiques
+
+- générer un log des accès base
+
+* ergonomie *
+-------------
+- créer une popup affichant les détails sur un parcours, un site un point...

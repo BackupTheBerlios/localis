@@ -76,7 +76,6 @@ a:hover {
 	background-color : #008000; 
 	border-bottom-color : #dff1d3;
 	border-right-color : #dff1d3;
-	width : 100%;
 }
 
 .cartouche img {
@@ -186,6 +185,13 @@ a:hover {
 }
 .bar {
 	padding : 2px 10px;
+	background-color : #dff1d3;
+	font-weight : bold;
+	color : #393;
+}
+.smbar {
+	padding : 2px 2px;
+	font-size : 10pt;
 	background-color : #dff1d3;
 	font-weight : bold;
 	color : #393;

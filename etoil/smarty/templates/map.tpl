@@ -95,7 +95,6 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 {/if}
 
 <img src="img/dot0.png" height="{$blockspc}">
-
 <div class="bar">{tr}Navigation{/tr}</div>
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="navbar">
 <tr>
@@ -115,81 +114,41 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomin')" /></div></td>
 </td></tr></table>
 
-<img src="img/dot0.png" height="{$blockspc}">
-<div class="bar">Selection</div>
-<div class="selection">
-<select name="filtre[type]" id="ftype">
-<option value="">{tr}Moyen de locomotion{/tr}</option>
-<option value="">{tr}... Indifférent{/tr}</option>
-{foreach key=k item=i from=$types}
-<option value="{$k}"{if $filtre.type eq $k} selected="selected"{/if}>{$i}</option>
-{/foreach}
-</select><br />
-
-<select name="filtre[time]">
-<option value="">{tr}Durée du parcours{/tr}</option>
-<option value="">{tr}... Indifférent{/tr}</option>
-{foreach key=k item=i from=$times}
-<option value="{$k}"{if $filtre.time eq $k} selected="selected"{/if}>{$i}</option>
-{/foreach}
-</select><br />
-
-<select name="filtre[level]">
-<option value="">{tr}Niveau de difficulté{/tr}</option>
-<option value="">{tr}... Indifférent{/tr}</option>
-{foreach key=k item=i from=$levels}
-<option value="{$k}"{if $filtre.level eq $k} selected="selected"{/if}>{$i}</option>
-{/foreach}
-</select><br />
-</div>
-
-<input type="submit" class="button" name="action" value="{tr}Rechercher{/tr}" /><br />
-
-{if $tracks}
-<div class="bar">
-{section name=t loop=$tracks}
-{assign var=v value=$tracks[t].parcours_type}
-<a href="{$url}?pid={$tracks[t].parcours_id}" onmouseover="getElementById({$tracks[t].parcours_id}).border='1';">
-<img src="{$icontypes.$v}" width="10" height="9" border="0" /> {$tracks[t].parcours_name}</a><br />
-{/section}
-</div>
-{/if}
-
-
+{* bloc d'enregistrement/modification de tracé (conditionnel, si user non blaireau) *}
 {if $smarty.session.admin}
+<img src="img/dot0.png" height="{$blockspc}">
 {if $smarty.request.do eq "{tr}Enregistrer{/tr}"}
 <div class="bar">{tr}Edition/ajout de tracé{/tr}</div>
 <table class="inputable">
 <tr><td>Nom</td><td><input type="text" name="p_name" value="" /></td></tr>
-<tr><td>Moyen de locomotion</td><td>
+<tr><td>{tr}Discipline{/tr}</td><td>
 <select name="p_type">
 {foreach key=k item=i from=$types}
 <option value="{$k}"{if $filtre.type eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
 </select></td></tr>
 
-<tr><td>Duree</td><td>
+<tr><td>{tr}Durée{/tr}</td><td>
 <select name="p_time">
 {foreach key=k item=i from=$times}
 <option value="{$k}"{if $filtre.time eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
 </select></td></tr>
 
-<tr><td>Difficulté (1 facile, 5 tres dur)</td><td>
+<tr><td>{tr}Difficulté{/tr} (1 facile, 5 tres dur)</td><td>
 <select name="p_level">
 {foreach key=k item=i from=$levels}
 <option value="{$k}"{if $filtre.level eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
 </select></td></tr>
-<tr><td></td><td><input type="submit" name="action" value="Enregistrer" /></td></tr>
+<tr><td></td><td><input type="submit" class="button" name="action" value="{tr}Enregistrer{/tr}" /></td></tr>
 </table>
 {/if}
 {if count($smarty.session.track)}
 <div class="bar">{tr}Coordonnées du tracé{/tr}</div>
 {if $smarty.request.do ne "{tr}Enregistrer{/tr}"}
-<div class="dashed">
-<input type="submit" name="do" value="{tr}Effacer{/tr}" />
-<input type="submit" name="do" value="{tr}Enregistrer{/tr}" /></div>
+<input type="submit" class="button" name="do" value="{tr}Effacer{/tr}" />
+<input type="submit" class="button" name="do" value="{tr}Enregistrer{/tr}" />
 {/if}
 {foreach item=x from=$smarty.session.track}
 <a href="{$url}?del={$x|escape:"url"}">[x]</a> <a href="">{$x}</a><br />
@@ -197,7 +156,52 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <hr />
 {/if}
 {/if}
+{* FIN bloc d'enregistrement/modification de tracé *}
+
+{* bloc de sélection critères tracés *}
+<img src="img/dot0.png" height="{$blockspc}">
+<div class="bar">Selection</div>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr><td>{tr}Discipline{/tr}&nbsp;</td><td>
+<select class="selection" name="filtre[type]" id="ftype">
+<option value="">{tr}... Indifférent{/tr}</option>
+{foreach key=k item=i from=$types}
+<option style="color:#{$typescolor.$k}" value="{$k}"{if $filtre.type eq $k} selected="selected"{/if}>{$i}</option>
+{/foreach}
+</select></td></tr>
+
+<tr><td>{tr}Durée{/tr}&nbsp;</td><td>
+<select  class="selection" name="filtre[time]">
+<option value="">{tr}... Indifférent{/tr}</option>
+{foreach key=k item=i from=$times}
+<option value="{$k}"{if $filtre.time eq $k} selected="selected"{/if}>{$i}</option>
+{/foreach}
+</select></td></tr>
+
+<tr><td>{tr}Difficulté{/tr}&nbsp;</td><td>
+<select  class="selection" name="filtre[level]">
+<option value="">{tr}... Indifférent{/tr}</option>
+{foreach key=k item=i from=$levels}
+<option value="{$k}"{if $filtre.level eq $k} selected="selected"{/if}>{$i}</option>
+{/foreach}
+</select></td></tr>
+<tr><td>&nbsp;</td><td>
+<input type="submit" class="button" name="action" value="{tr}Rechercher{/tr}" />
 </td></tr></table>
+
+{if $tracks}
+<img src="img/dot0.png" height="{$blockspc}">
+<div class="smbar">Parcours correspondant aux critères</div>
+<ul style="font-size:9pt;">
+{section name=t loop=$tracks}
+{assign var=v value=$tracks[t].parcours_type}
+<li style="color:#{$typescolor.$v}"><a style="color:#{$typescolor.$v}" href="#" "onmouseover="getElementById({$tracks[t].parcours_id}).border='1';">{$tracks[t].parcours_name}</a></li>
+{/section}
+</ul>
+{/if}
+
+</td></tr></table>
+
 </form>
 </div>
 

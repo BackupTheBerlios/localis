@@ -12,14 +12,20 @@ $types[1] = "Pédestre";
 $types[2] = "Equestre";
 $types[3] = "Cyclable";
 $types[4] = "Kayak";
-$icontypes[1] = "/maps/images/p_marche.png";
-$icontypes[2] = "/maps/images/p_cheval.png";
+$typescolor[1]="faaa14"; // couleur, sur 6 caract !!
+$typescolor[2]="8cdc8c"; 
+$typescolor[3]="6cbee6"; 
+$typescolor[4]="fa825a"; 
+/* marche pô
+$icontypes[1] = "maps/images/p_marche.png";
+$icontypes[2] = "../maps/images/p_cheval.png";
 $icontypes[3] = "/maps/images/p_vtt.png";
-$icontypes[4] = "/maps/images/p_canoe.png";
-$times[1] = "moins d'une demi-heure";
-$times[2] = "moins d'une heure";
-$times[3] = "une à deux heures";
-$times[4] = "plus de deux heures";
+$icontypes[4] = "/maps/images/p_canoe.png"; */
+
+$times[1] = "< 1/2h";
+$times[2] = "< 1h";
+$times[3] = "1 à 2 h";
+$times[4] = "> 2h";
 $levels[1] = "1";
 $levels[2] = "2";
 $levels[3] = "3";
@@ -254,32 +260,34 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_sty2a = ms_newStyleObj($e_cla2a);
 	$e_sty2a->set("symbolname","circle");
 	$e_sty2a->set("size",3);
-	$e_sty2a->color->setRGB(250,170,20);
+	$e_sty2a->color->setRGB(hexdec(substr($typescolor[1],0,2)),hexdec(substr($typescolor[1],2,2)),hexdec(substr($typescolor[1],4,2)));
 	
 	$e_cla2b = ms_newClassObj($e_lay2);
 	$e_cla2b->setExpression('2');
 	$e_sty2b = ms_newStyleObj($e_cla2b);
 	$e_sty2b->set("symbolname","circle");
 	$e_sty2b->set("size",3);
-	$e_sty2b->color->setRGB(140,220,140);
+	$e_sty2b->color->setRGB(hexdec(substr($typescolor[2],0,2)),hexdec(substr($typescolor[2],2,2)),hexdec(substr($typescolor[2],4,2)));
 
 	$e_cla2c = ms_newClassObj($e_lay2);
 	$e_cla2c->setExpression('3');
 	$e_sty2c = ms_newStyleObj($e_cla2c);
 	$e_sty2c->set("symbolname","circle");
 	$e_sty2c->set("size",3);
-	$e_sty2c->color->setRGB(140,190,230);
+	$e_sty2c->color->setRGB(hexdec(substr($typescolor[3],0,2)),hexdec(substr($typescolor[3],2,2)),hexdec(substr($typescolor[3],4,2)));
 	
 	$e_cla2d = ms_newclassobj($e_lay2);
 	$e_cla2d->setExpression('4');
 	$e_sty2d = ms_newstyleobj($e_cla2d);
 	$e_sty2d->set("symbolname","circle");
 	$e_sty2d->set("size",3);
-	$e_sty2d->color->setrgb(250,130,90);
+	$e_sty2d->color->setRGB(hexdec(substr($typescolor[4],0,2)),hexdec(substr($typescolor[4],2,2)),hexdec(substr($typescolor[4],4,2)));
 	
 	$e_lay = ms_newLayerObj($e_map);
 	$e_lay->set('name','parcours');
 	$e_lay->set('status',MS_ON);
+	$e_lay->set('labelcache',MS_ON); // par défaut
+
 	$e_lay->set('connectiontype',MS_POSTGIS);
 	$e_lay->set('connection',$db->connstr);
 	$query = "parcours_start from parcours";
@@ -344,7 +352,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_styd->set("symbolname","canoe");
 
 }
-
+// trace dessinée en temps réel en ligne
 if (!empty($_SESSION['track'])) {
 	$e_shape = ms_newShapeObj(MS_SHAPE_LINE);
 	$e_line = ms_newLineObj();
@@ -397,6 +405,7 @@ $image = $e_image->saveWebImage();
 $e_ref = $e_map->drawreferencemap();
 $refsrc = $e_ref->saveWebImage('MS_PNG',0,0,-1);
 
+// reconstitue la légende avec les pictos
 for ($i=0; $i<$e_map->numlayers; $i++) {
 	$layer = $e_map->getLayer($i);
 	if ($layer->status != MS_OFF && $layer->type != MS_LAYER_QUERY) {
@@ -411,6 +420,11 @@ for ($i=0; $i<$e_map->numlayers; $i++) {
 }
 $smarty->assign('legends',$legends);
 
+/* calcule la liste des parcours correspondant aux critères de requête 
+et se trouvant dans la zone affichée
+calcule les coord xy (pix) des rectangles correspondant aux pictos
+définissant les zones cliquables dans la maparea
+*/
 $extminx = $e_map->extent->minx;
 $extminy = $e_map->extent->miny;
 $extmaxx = $e_map->extent->maxx;
@@ -434,10 +448,11 @@ $smarty->assign('focus',$focus);
 $smarty->assign('map_click',$map_click);
 $smarty->assign('mapimage',$image);
 $smarty->assign('types',$types);
-$smarty->assign('icontypes',$icontypes);
+$smarty->assign('typescolor',$typescolor);
+//$smarty->assign('icontypes',$icontypes);
 $smarty->assign('times',$times);
 $smarty->assign('levels',$levels);
 
 $smarty->display("map.tpl");
-echo elapsed_time();
+echo "<small>".elapsed_time()."</small>";
 ?>
