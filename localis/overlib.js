@@ -1,4 +1,3 @@
-//\/ $Id: overlib.js,v 1.1 2002/10/12 08:56:27 mose Exp $
 //\//////////////////////////////////////////////////////////////////////////////////
 //\  overLIB 3.50  --  This notice must remain untouched at all times.
 //\  Copyright Erik Bosrup 1998-2001. All rights reserved.
@@ -95,27 +94,27 @@ var CLOSESIZEUNIT=70;
 var CLOSEDECORATION=71;
 var CLOSESTYLE=72;
 var CLOSEWEIGHT=73;
-if(typeof ol_fgcolor=='undefined'){var ol_fgcolor="#e4effa";}
-if(typeof ol_bgcolor=='undefined'){var ol_bgcolor="#a4afba";}
+if(typeof ol_fgcolor=='undefined'){var ol_fgcolor="#CCCCFF";}
+if(typeof ol_bgcolor=='undefined'){var ol_bgcolor="#333399";}
 if(typeof ol_textcolor=='undefined'){var ol_textcolor="#000000";}
-if(typeof ol_capcolor=='undefined'){var ol_capcolor="#000000";}
-if(typeof ol_closecolor=='undefined'){var ol_closecolor="#424242";}
+if(typeof ol_capcolor=='undefined'){var ol_capcolor="#FFFFFF";}
+if(typeof ol_closecolor=='undefined'){var ol_closecolor="#9999FF";}
 if(typeof ol_textfont=='undefined'){var ol_textfont="Verdana,Arial,Helvetica";}
 if(typeof ol_captionfont=='undefined'){var ol_captionfont="Verdana,Arial,Helvetica";}
 if(typeof ol_closefont=='undefined'){var ol_closefont="Verdana,Arial,Helvetica";}
-if(typeof ol_textsize=='undefined'){var ol_textsize="9";}
-if(typeof ol_captionsize=='undefined'){var ol_captionsize="9";}
-if(typeof ol_closesize=='undefined'){var ol_closesize="9";}
-if(typeof ol_width=='undefined'){var ol_width="142";}
+if(typeof ol_textsize=='undefined'){var ol_textsize="1";}
+if(typeof ol_captionsize=='undefined'){var ol_captionsize="1";}
+if(typeof ol_closesize=='undefined'){var ol_closesize="1";}
+if(typeof ol_width=='undefined'){var ol_width="200";}
 if(typeof ol_border=='undefined'){var ol_border="1";}
 if(typeof ol_offsetx=='undefined'){var ol_offsetx=10;}
-if(typeof ol_offsety=='undefined'){var ol_offsety=12;}
+if(typeof ol_offsety=='undefined'){var ol_offsety=10;}
 if(typeof ol_text=='undefined'){var ol_text="Default Text";}
 if(typeof ol_cap=='undefined'){var ol_cap="";}
 if(typeof ol_sticky=='undefined'){var ol_sticky=0;}
 if(typeof ol_background=='undefined'){var ol_background="";}
-if(typeof ol_close=='undefined'){var ol_close="[X]";}
-if(typeof ol_hpos=='undefined'){var ol_hpos=CENTER;}
+if(typeof ol_close=='undefined'){var ol_close="Close";}
+if(typeof ol_hpos=='undefined'){var ol_hpos=8;}
 if(typeof ol_status=='undefined'){var ol_status="";}
 if(typeof ol_autostatus=='undefined'){var ol_autostatus=0;}
 if(typeof ol_height=='undefined'){var ol_height=-1;}
@@ -140,7 +139,7 @@ if(typeof ol_delay=='undefined'){var ol_delay=0;}
 if(typeof ol_hauto=='undefined'){var ol_hauto=0;}
 if(typeof ol_vauto=='undefined'){var ol_vauto=0;}
 if(typeof ol_closeclick=='undefined'){var ol_closeclick=0;}
-if(typeof ol_css=='undefined'){var ol_css=CSSSTYLE;}
+if(typeof ol_css=='undefined'){var ol_css=51;}
 if(typeof ol_fgclass=='undefined'){var ol_fgclass="";}
 if(typeof ol_bgclass=='undefined'){var ol_bgclass="";}
 if(typeof ol_textfontclass=='undefined'){var ol_textfontclass="";}
@@ -155,12 +154,12 @@ if(typeof ol_textstyle=='undefined'){var ol_textstyle="normal";}
 if(typeof ol_textweight=='undefined'){var ol_textweight="normal";}
 if(typeof ol_captionsizeunit=='undefined'){var ol_captionsizeunit="px";}
 if(typeof ol_captiondecoration=='undefined'){var ol_captiondecoration="none";}
-if(typeof ol_captionstyle=='undefined'){var ol_captionstyle="bold";}
+if(typeof ol_captionstyle=='undefined'){var ol_captionstyle="normal";}
 if(typeof ol_captionweight=='undefined'){var ol_captionweight="bold";}
 if(typeof ol_closesizeunit=='undefined'){var ol_closesizeunit="px";}
 if(typeof ol_closedecoration=='undefined'){var ol_closedecoration="none";}
 if(typeof ol_closestyle=='undefined'){var ol_closestyle="normal";}
-if(typeof ol_closeweight=='undefined'){var ol_closeweight="bold";}
+if(typeof ol_closeweight=='undefined'){var ol_closeweight="normal";}
 if(typeof ol_texts=='undefined'){var ol_texts=new Array("Text 0", "Text 1");}
 if(typeof ol_caps=='undefined'){var ol_caps=new Array("Caption 0", "Caption 1");}
 var otext="";
@@ -198,9 +197,9 @@ var ocapicon="";
 var otextfont="Verdana,Arial,Helvetica";
 var ocaptionfont="Verdana,Arial,Helvetica";
 var oclosefont="Verdana,Arial,Helvetica";
-var otextsize="9";
-var ocaptionsize="9";
-var oclosesize="9";
+var otextsize="1";
+var ocaptionsize="1";
+var oclosesize="1";
 var oframe=self;
 var otimeout=0;
 var otimerid=0;
