@@ -1,4 +1,4 @@
-# $Id: libre.sql,v 1.9 2002/10/23 14:50:45 mose Exp $
+# $Id: libre.sql,v 1.10 2002/10/24 22:07:04 mose Exp $
 #
 # Serveur: localhost
 # Généré le : Jeudi 17 Octobre 2002 à 15:10
@@ -73,7 +73,7 @@ INSERT INTO lug VALUES (6, 'Bordeaux', 'Association Bordelaise des Utilisateurs 
 INSERT INTO lug VALUES (7, 'Nantes', 'Association des utilisateurs nantais de Linux.', '0000-00-00 00:00:00', 'Linux-Nantes','','http://www.linux-nantes.fr.eu.org','1');
 INSERT INTO lug VALUES (11, 'Clermont-Ferrand', 'Promouvoir dans la région Auvergne Linux et les logiciels libres.', '0000-00-00 00:00:00', 'Linux Arverne','','http://www.linux-arverne.org','1');
 INSERT INTO lug VALUES (12, 'Cagnes-sur-Mer', 'Promouvoir Linux et les Logiciels Libres dans la région de la Côte d\'Azur.', '0000-00-00 00:00:00', 'Linux Azur','','http://www.linux-azur.org','1');
-INSERT INTO lug VALUES (13, 'Orléans', 'Association à Orléans, dans le département du Loiret.', '0000-00-00 00:00:00', 'Coagul','','http://web.cnrs-orleans.fr/~lugo','1');
+INSERT INTO lug VALUES (13, 'Orléans', 'Association à Orléans, dans le département du Loiret.', '0000-00-00 00:00:00', 'Lugo','','http://web.cnrs-orleans.fr/~lugo','1');
 INSERT INTO lug VALUES (14, 'Marseille', ' Provence Linux Users Group.', '0000-00-00 00:00:00', 'PLUG','','http://www.plugfr.org','1');
 INSERT INTO lug VALUES (15, 'Caudebec-les-Elbeuf', 'Réseau Haut-Normand pour le Développement de l\'Informatique Libre.', '0000-00-00 00:00:00', 'RUNIX','','http://runix.aful.org','1');
 INSERT INTO lug VALUES (16, 'Toulouse', 'Club des Utilisateurs de Linux de Toulouse et des environs.', '0000-00-00 00:00:00', 'Culte','','http://www.culte.org','1');
