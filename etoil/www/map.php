@@ -188,7 +188,7 @@ if ($clicked) {
 	}
 }
 
-if (isset($_REQUEST['p_name']) and $_SESSION['me']) {
+if (!empty($_REQUEST['p_name']) and $_SESSION['me']) {
 	if (!$db->add_parcours($_REQUEST['p_name'],$_SESSION['me'],$_REQUEST['p_type'],$_SESSION['track'],$_REQUEST['p_level'],$_REQUEST['p_time'])) {
 		$feedback[] = array('num'=>-1,'msg'=>$db->mes[0]);
 	} else {
