@@ -38,9 +38,6 @@ if (!isset($title)) {
 // temp values
 $feedback = array();
 $smarty->assign_by_ref('feedback',$feedback);
-$smarty->assign('mw','400');
-$smarty->assign('mh','400');
-$smarty->assign('b','25');
 $smarty->assign('language', $language);
 $smarty->assign('langs', $langs);
 $smarty->assign('url', basename($_SERVER['PHP_SELF']));

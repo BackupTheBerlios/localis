@@ -163,3 +163,10 @@ a:hover {
 	padding : 0px 7px;
 }
 
+.toolfocus {
+	background: #efefef;
+	border : 1px inset;
+}
+.tool {
+	background: #FFFFFF;
+}

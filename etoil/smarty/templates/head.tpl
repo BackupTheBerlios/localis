@@ -14,7 +14,7 @@
 {if $smarty.session.admin}
 <a href="admin-users.php" class="adminlink">Users</a>
 <a href="admin-conf.php" class="adminlink">Conf</a>
-<a href="admin-purge.php?from={$smarty.server.PHP_SELF}" class="adminlink">Purge {$tplsize}</a>
+<a href="admin-purge.php?from={$smarty.server.PHP_SELF}" class="adminlink">Purge</a>
 <a href="techdata.php" class="adminlink">Tech Data</a>
 {else}
 &nbsp;
