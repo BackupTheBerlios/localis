@@ -1,18 +1,15 @@
 <table border="0" cellpadding="8" cellspacing="0" class="topnav">
-<tr><td valign="bottom" bgcolor="#abb9e6" align="center" width="130">
-<div class="localis"><a href="index.php?$+query$" class="noa">$searchtitre$</a></div>
-<div><a href="index.php?page=help$+query$" class="dashed">$searchhelp$</a></div>
+<tr><td valign="midle" bgcolor="#3b4986" align="center" width="130">
+<div class="head">
+<a href="index.php?$+query$" class="toplink">$searchhome$</a>
+<a href="index.php?page=help$+query$" class="toplink">$searchhelp$</a></div>
 </td>
-<td valign="bottom" align="right">
-<select name="drawlayer">
+<td valign="bottom" align="right" bgcolor="#abb9e6">
+<select name="drawlayer" class="submit">
 <option value="" style="border-bottom: 1px solid #666666;margin-bottom: 5px;">$searchchooselayer$</option>
 $+catmenu$
 <option value="NEW" style="border-top: 1px solid #666666;margin-top: 5px;">$searchnewlayer$</option>
 </select>
-</td>
-<td valign="bottom" align="center">
-$searchdisplayas$<br>
-&nbsp;<input type="submit" name="submit" value="$searchbuttonmap$" class="submit">
-<input type="submit" name="tpl" value="$searchbuttonlist$" class="submit">
+<input type="submit" name="submit" value="$searchbuttonmap$" class="submit">
 </td>
 </tr></table>

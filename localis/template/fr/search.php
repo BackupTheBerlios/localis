@@ -1,9 +1,8 @@
 <?
-$GLOBALS['textesearchtitre'] = "Localis";
+$GLOBALS['textesearchhome'] = "Accueil";
 $GLOBALS['textesearchhelp']  = "Aide";
 $GLOBALS['textesearchchooselayer'] = "Choisissez un calque";
 $GLOBALS['textesearchnewlayer'] = "Nouveau Calque";
-$GLOBALS['textesearchdisplayas'] = "Affichage en";
-$GLOBALS['textesearchbuttonmap'] = "Carte";
+$GLOBALS['textesearchbuttonmap'] = "Afficher";
 $GLOBALS['textesearchbuttonlist'] = "Liste";
 ?>

@@ -61,9 +61,6 @@ a:hover {
 	font-size: 80%;
 	color: #abb9e6;
 }
-.head a {
-	background-color: #5B69A6;
-}
 .foot {
 	font-size: 80%;
 	color: #abb9e6;
@@ -114,12 +111,16 @@ a:hover {
 	background-color: #5B69A6;
 }
 .topnav {
-	border-style: solid;
-	border-width: 1px;
-	border-size: 1px;
-	border: 1;
-	margin: 5 10 0 8;
+	border: 1px solid #000000;
+	border-top: none;
+	margin: 0 10 0 8;
 	background: #FFFFFF;
+}
+.toplink {
+	background-color: #FFFFFF;
+	color: #FFFFFF;
+	padding: 2px 8px 2px 8px;
+	border: 1px solid #3b4986;
 }
 .top1 {
 	background-color: #000000;
@@ -178,18 +179,5 @@ a:hover {
 }
 .invis {
 	color: #ffffff;
-	background: #ffffff;
-}
-/* ROU "recadrer" button becomes link */
-a.refbutton {
-	left: 0;
-	right: 0;
-	font-family: Verdana, Helvetica, sans-serif;
-	font-size: 10px;
-	font-weight: normal;
-	background: #ffffff;
-	color: #000000;
-}
-a.refbutton:hover {
 	background: #ffffff;
 }

@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.44 2003/02/02 08:42:07 mose Exp $
+<? /* $Id: localis.php,v 1.45 2003/02/03 02:53:02 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -19,6 +19,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
 USA.
 */
+
+dl('php_mapscript.so');
+include "inc/parseconf.php";
+include "inc/lib.php";
+$glob['version'] = current(file('VERSION'));
 
 $click_x = $HTTP_GET_VARS['x'];
 $click_y = $HTTP_GET_VARS['y'];
@@ -51,12 +56,6 @@ if (strstr($HTTP_GET_VARS['size'],'x')) {
 	if ($sizex > 1200) $sizex = '1200';
 	if ($sizey > 1200) $sizey = '1200';
 }
-dl('php_mapscript.so');
-include "inc/parseconf.php";
-include "inc/lib.php";
-
-$version = current(file('VERSION'));
-
 # Read configuration file and set array like $conf[section][item]
 if (!is_file('etc/localis.conf')) die("etc/localis.conf not found<br>You need to copy etc/localis.conf.dist and modify it to fit your needs.");
 $conf = parseconf('etc/localis.conf');
@@ -96,7 +95,8 @@ if ($addit and ($addtype != 'all')) {
 }
 
 $userlayers = layerslist();
-	
+
+
 if (!is_file($conf["map"]['path']."/fonts/fontset")) {
 	$dir = opendir($conf["map"]["path"]."/fonts");
 	if ($dir) {
@@ -112,198 +112,117 @@ if (!is_file($conf["map"]['path']."/fonts/fontset")) {
 	fclose($fp);
 }
 
-/*
-# Select layer to use
-if ($type == 'all') {
-	// yes ! it sucks, but it waits for a rationnalization of config file
-	
-	array_shift($listres);
-	$mychoices = $listres ;
-	$type = '';
-} else {
-	$mychoices[] = $$field;
-}
-*/
 $mychoices = array("points");
 
 
 # Set layer status (on/off) [patché et debuggué choppe seul le nom des layers]
-if ($view != $conf[gui][list_button]) {
-	$zMap = ms_newMapObj($conf["map"]["path"].'/'.$conf["map"]["file"]);
-	list($sizex,$sizey) = split('x',$size);
-	$zMap->set('width', $sizex);
-	$zMap->set('height', $sizey);
-	$zWeb = $zMap->web;
-	$zWeb->set('imagepath',$conf["general"]["tmp_path"]."/");
-	$lys = array();
-	$lys = $zMap->getAllGroupNames();
-	foreach ($lys as $l) {
-		$tl = array();
-		$tl = $zMap->getLayersIndexByGroup($l);
-		if ((is_array($tl)) and (!in_array($l,$lay))) {
-			foreach ($tl as $t) {
-				$zLayer = $zMap->getLayer($t);
-				$zLayer->set("status",MS_OFF);
-			}
-		}
-	}	
-	$zLimit = ms_newRectObj();
-	$zLimit->setextent($conf[map][ext_minx],$conf[map][ext_miny],$conf[map][ext_maxx],$conf[map][ext_maxy]);
-	if (!$sizex) {
-		$zSizex = $zMap->width;
-		$zSizey = $zMap->height;
-		$sizex = $zSizex;
-		$sizey = $zSizey;
-	} else {
-		$zSizex = $sizex;
-		$zSizey = $sizey;
-	}
-	if (!is_array($ext)) {
-		$zExtent = $zMap->extent;
-	} elseif (!empty($fsens)) {
-		$fExt = move_map($ext,$fsens);
-		$zExtent = ms_newRectObj();
-		$zExtent->setextent($fExt[0],$fExt[1],$fExt[2],$fExt[3]);
-	} else {
-		$zExtent = ms_newRectObj();
-		$zExtent->setextent($ext[0],$ext[1],$ext[2],$ext[3]);
-	}
-	
-	$zClick = ms_newPointObj();
-	if ($act and ($refx and $refy) and (sizeof($ext) > 3)) {
-		$zClick->setXY($refx,$refy,0);
-		$zMap->set("width",$sizex);
-		$zMap->set("height",$sizey);
-		#$zMap->zoomscale($scl*1000,$zClick,142,142,$zLimit,$zLimit);
-		$zMap->zoomscale($scl*2,$zClick,142,142,$zLimit,$zLimit);
-	} elseif ($city) {
-		$refx = geo2pix($click_x,$conf[map][ext_minx],$conf[map][ext_maxx],$sizex);
-		$refy = $sizey - geo2pix($click_y,$conf[map][ext_miny],$conf[map][ext_maxy],$sizey);
-		$zClick->setXY($refx,$refy,0);
-		$zMap->set("width",$sizex);
-		$zMap->set("height",$sizey);
-		$zMap->zoomscale($scl*1000,$zClick,$sizex,$sizey,$zLimit,$zLimit);
-	} else {
-		if (($act != "edition") and $click_x and $click_y) {
-			$zClick->setXY($click_x,$click_y,0);
-			$sizemapx = $sizex;
-			$sizemapy = $sizey;
-			$extmap = $zExtent;
-			$clicked = TRUE;
-		} else {
-			$zClick->setXY(floor($sizex/2),floor($sizey/2),0);
-			$sizemapx = $sizex;
-			$sizemapy = $sizey;
-			$extmap = $zExtent;
-			$clicked = FALSE;
-		}
-		if (!empty($fzoom)) {
-			$zMap->zoompoint(2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
-		}
-		if (!empty($fzoomout)) {
-			$zMap->zoompoint(-2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
-		}
-		if ($clicked and ($act == "zoomin")) {
-			$zMap->zoompoint(2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
-		} elseif ($clicked and ($act == "zoomout")) {
-			$zMap->zoompoint(-2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);		
-		} elseif ($act == "edition") {
-			$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);		
-			$coordx = pix2geo($click_x,$ext[0],$ext[2],$sizex) + $ext[0];
-			$coordy = $ext[3] - pix2geo($click_y,$ext[1],$ext[3],$sizey);
-			$flagid = dbf_flag($click_x, $click_y, $coordx, $coordy);
-			$addville = domenu(surrounding($coordx,$coordy,10000),'');
-		} elseif ($clicked and ($act == "travel")) {
-			$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
-		} elseif ($scl and $zClick and empty($fzoom) and empty($fzoomout)) {
-			$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
-			$act = "travel";
+$zMap = ms_newMapObj($conf["map"]["path"].'/'.$conf["map"]["file"]);
+list($sizex,$sizey) = split('x',$size);
+$zMap->set('width', $sizex);
+$zMap->set('height', $sizey);
+$zWeb = $zMap->web;
+$zWeb->set('imagepath',$conf["general"]["tmp_path"]."/");
+$lys = array();
+$lys = $zMap->getAllGroupNames();
+foreach ($lys as $l) {
+	$tl = array();
+	$tl = $zMap->getLayersIndexByGroup($l);
+	if ((is_array($tl)) and (!in_array($l,$lay))) {
+		foreach ($tl as $t) {
+			$zLayer = $zMap->getLayer($t);
+			$zLayer->set("status",MS_OFF);
 		}
 	}
+}	
+$zLimit = ms_newRectObj();
+$zLimit->setextent($conf[map][ext_minx],$conf[map][ext_miny],$conf[map][ext_maxx],$conf[map][ext_maxy]);
+if (!$sizex) {
+	$zSizex = $zMap->width;
+	$zSizey = $zMap->height;
+	$sizex = $zSizex;
+	$sizey = $zSizey;
+} else {
+	$zSizex = $sizex;
+	$zSizey = $sizey;
+}
+if (!is_array($ext)) {
+	$zExtent = $zMap->extent;
+} elseif (!empty($fsens)) {
+	$fExt = move_map($ext,$fsens);
+	$zExtent = ms_newRectObj();
+	$zExtent->setextent($fExt[0],$fExt[1],$fExt[2],$fExt[3]);
+} else {
+	$zExtent = ms_newRectObj();
+	$zExtent->setextent($ext[0],$ext[1],$ext[2],$ext[3]);
+}
+
+$zClick = ms_newPointObj();
+if ($act and ($refx and $refy) and (sizeof($ext) > 3)) {
+	$zClick->setXY($refx,$refy,0);
 	$zMap->set("width",$sizex);
 	$zMap->set("height",$sizey);
-	$zImage    = $zMap->draw();
-	$zExtent   = $zMap->extent;
-	$ext = ext2array($zExtent);
-	$extexploded = implode(' ',$ext);
-	# create result layer
-	if (count($ext) > 3) {
-		$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
-		$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_y].") between $ext[1] and $ext[3])";
-	}
-	foreach($mychoices as $myc) {
-		if (!empty($myc)) {
-			$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($myc));
-			prepare_list($wh,$conn,$myc,$owh);
-			$id = dbf_gen($conf[database][db_name],$conf[general][sql_reftable],$resultats,$wh,$conn,$owh);
-			if (is_array($found)) {
-				$list .= build_list($found,$qu,$eff);
-			}
-			unset($found);
-			unset($nbres);
-			unset($nbresresultats);
-			unset($resultats);
-			$mylayer = str_replace('/','',strrchr($conf[infos][$myc],'/'));
-			$zResult = $zMap->getLayerByName($mylayer);
-			$zResult->set('status',MS_ON);
-			$zResult->set('data',$conf[general][tmp_path]."/$id");
-			$zResult->draw($zImage);
-			if (!is_file($conf[general][tmp_path]."/$id.shp")) echo "$id.shp not found<br>";
-			if (!is_file($conf[general][tmp_path]."/$id.shx")) echo "$id.shx not found<br>";
-			if (!is_file($conf[general][tmp_path]."/$id.dbf")) echo "$id.dbf not found<br>";
-			# Place javascript info area on points
-			if ($act != 'edition') {
-				if (is_array($m)) {
-					foreach ($m as $vv=>$coord) {
-						$map_txt = preg_replace("/\r?\n/","<br>",addslashes(str_replace('"',"'",$maplist[$vv])));
-						$map_locations.= "<area href=# name=\"$vv\" id=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" \n";
-						$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>$map_txt', WIDTH, 150);\" \n";
-						$map_locations.= "onmouseout='return nd();' onclick=\"return overlib('$map_txt', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
-					}
-				}
-			}
-		}
-	}
-	if ($drawlayer) {
-		lcls_drawlayer($drawlayer);
-	}
-	if ($flagid) {
-		$zResult = $zMap->getLayerByName('flag');
-		$zResult->set('status',MS_ON);
-		$zResult->set('data',$conf[general][tmp_path]."/$flagid");
-		$zResult->draw($zImage);
-		$map_txt = "Vous êtes ici.";
-		$vv = 'flag';
-		$map_locations.= "<area href=# name=\"$vv\" id=\"$vv\" shape=\"rect\" coords=\"".($click_x-10).",".($click_y-10).",".($click_x+10).",".($click_y+10)."\" \n";
-		$map_locations.= "onmouseover=\"return overlib('$map_txt');\" onmouseout='return nd();'>\n";
-	}
-	# Create image, reference map & legend
-	$glob[imgsrc] = $zImage->saveWebImage(MS_PNG,0,0,-1);
-	$zRefer    = $zMap->reference;
-	$zRefer->set('width',$conf[map][ref_sizex]);
-	$zRefer->set('height',$conf[map][ref_sizey]);
-	$zRef      = $zMap->drawreferencemap();
-	$glob[refsrc]   = $zRef->saveWebImage(MS_PNG,0,0,-1);
-	$zLegende  = $zMap->drawLegend();
-	$glob[legsrc]   = $zLegende->saveWebImage(MS_PNG,0,0,-1);
-	$scl = number_format($zMap->scale,0,',',' ');
+	#$zMap->zoomscale($scl*1000,$zClick,142,142,$zLimit,$zLimit);
+	$zMap->zoomscale($scl*2,$zClick,142,142,$zLimit,$zLimit);
+} elseif ($city) {
+	$refx = geo2pix($click_x,$conf[map][ext_minx],$conf[map][ext_maxx],$sizex);
+	$refy = $sizey - geo2pix($click_y,$conf[map][ext_miny],$conf[map][ext_maxy],$sizey);
+	$zClick->setXY($refx,$refy,0);
+	$zMap->set("width",$sizex);
+	$zMap->set("height",$sizey);
+	$zMap->zoomscale($scl*1000,$zClick,$sizex,$sizey,$zLimit,$zLimit);
 } else {
-	# Prepare list view
-	$extexploded = implode(' ',$ext);
-	if (count($ext) > 3) {
-		$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
-		$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_y].") between $ext[1] and $ext[3])";
+	if (($act != "edition") and $click_x and $click_y) {
+		$zClick->setXY($click_x,$click_y,0);
+		$sizemapx = $sizex;
+		$sizemapy = $sizey;
+		$extmap = $zExtent;
+		$clicked = TRUE;
+	} else {
+		$zClick->setXY(floor($sizex/2),floor($sizey/2),0);
+		$sizemapx = $sizex;
+		$sizemapy = $sizey;
+		$extmap = $zExtent;
+		$clicked = FALSE;
 	}
-	$qu[] = "tpl=$tpl";
-	if (is_array($lay)) {
-		foreach ($lay as $l) {
-			$qu[] = "layers[]=$l";
-		} 
+	if (!empty($fzoom)) {
+		$zMap->zoompoint(2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
 	}
-	$qu[] = "extent=".urlencode($extexploded);
-	foreach($mychoices as $myc) {
+	if (!empty($fzoomout)) {
+		$zMap->zoompoint(-2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
+	}
+	if ($clicked and ($act == "zoomin")) {
+		$zMap->zoompoint(2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
+	} elseif ($clicked and ($act == "zoomout")) {
+		$zMap->zoompoint(-2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);		
+	} elseif ($act == "edition") {
+		$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);		
+		$coordx = pix2geo($click_x,$ext[0],$ext[2],$sizex) + $ext[0];
+		$coordy = $ext[3] - pix2geo($click_y,$ext[1],$ext[3],$sizey);
+		$flagid = dbf_flag($click_x, $click_y, $coordx, $coordy);
+		$addville = domenu(surrounding($coordx,$coordy,10000),'');
+	} elseif ($clicked and ($act == "travel")) {
+		$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
+	} elseif ($scl and $zClick and empty($fzoom) and empty($fzoomout)) {
+		$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
+		$act = "travel";
+	}
+}
+$zMap->set("width",$sizex);
+$zMap->set("height",$sizey);
+$zImage    = $zMap->draw();
+$zExtent   = $zMap->extent;
+$ext = ext2array($zExtent);
+$extexploded = implode(' ',$ext);
+# create result layer
+if (count($ext) > 3) {
+	$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_x].") between $ext[0] and $ext[2])";
+	$wh[] = "((".$conf[general][sql_reftable].".".$conf[map][coord_y].") between $ext[1] and $ext[3])";
+}
+foreach($mychoices as $myc) {
+	if (!empty($myc)) {
 		$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($myc));
 		prepare_list($wh,$conn,$myc,$owh);
+		$id = dbf_gen($conf[database][db_name],$conf[general][sql_reftable],$resultats,$wh,$conn,$owh);
 		if (is_array($found)) {
 			$list .= build_list($found,$qu,$eff);
 		}
@@ -311,16 +230,58 @@ if ($view != $conf[gui][list_button]) {
 		unset($nbres);
 		unset($nbresresultats);
 		unset($resultats);
+		$mylayer = str_replace('/','',strrchr($conf[infos][$myc],'/'));
+		$zResult = $zMap->getLayerByName($mylayer);
+		$zResult->set('status',MS_ON);
+		$zResult->set('data',$conf[general][tmp_path]."/$id");
+		$zResult->draw($zImage);
+		if (!is_file($conf[general][tmp_path]."/$id.shp")) echo "$id.shp not found<br>";
+		if (!is_file($conf[general][tmp_path]."/$id.shx")) echo "$id.shx not found<br>";
+		if (!is_file($conf[general][tmp_path]."/$id.dbf")) echo "$id.dbf not found<br>";
+		# Place javascript info area on points
+		if ($act != 'edition') {
+			if (is_array($m)) {
+				foreach ($m as $vv=>$coord) {
+					$map_txt = preg_replace("/\r?\n/","<br>",addslashes(str_replace('"',"'",$maplist[$vv])));
+					$map_locations.= "<area href=# name=\"$vv\" id=\"$vv\" shape=\"rect\" coords=\"".($coord[x]-10).",".($coord[y]-10).",".($coord[x]+10).",".($coord[y]+10)."\" \n";
+					$map_locations.= "onmouseover=\"return overlib('<b style=font-size:120%>".addslashes($vv)."</b><br>$map_txt', WIDTH, 150);\" \n";
+					$map_locations.= "onmouseout='return nd();' onclick=\"return overlib('$map_txt', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
+				}
+			}
+		}
 	}
 }
+if ($drawlayer) {
+	lcls_drawlayer($drawlayer);
+}
+if ($flagid) {
+	$zResult = $zMap->getLayerByName('flag');
+	$zResult->set('status',MS_ON);
+	$zResult->set('data',$conf[general][tmp_path]."/$flagid");
+	$zResult->draw($zImage);
+	$map_txt = "Vous êtes ici.";
+	$vv = 'flag';
+	$map_locations.= "<area href=# name=\"$vv\" id=\"$vv\" shape=\"rect\" coords=\"".($click_x-10).",".($click_y-10).",".($click_x+10).",".($click_y+10)."\" \n";
+	$map_locations.= "onmouseover=\"return overlib('$map_txt');\" onmouseout='return nd();'>\n";
+}
+# Create image, reference map & legend
+$glob[imgsrc] = $zImage->saveWebImage(MS_PNG,0,0,-1);
+$zRefer    = $zMap->reference;
+$zRefer->set('width',$conf[map][ref_sizex]);
+$zRefer->set('height',$conf[map][ref_sizey]);
+$zRef      = $zMap->drawreferencemap();
+$glob[refsrc]   = $zRef->saveWebImage(MS_PNG,0,0,-1);
+$zLegende  = $zMap->drawLegend();
+$glob[legsrc]   = $zLegende->saveWebImage(MS_PNG,0,0,-1);
+$scl = number_format($zMap->scale,0,',',' ');
 # Build layer selection (left menu)
 # thanks raz for cleaning !!
 foreach($conf[layers] as $l=>$lv) {
 	if (@in_array(trim($l),$lay)) {
 		$glob['layermenu'].= "<tr><td class=\"toolchecked\" onclick=\"document.f.$l.checked=!document.f.$l.checked;\">";
 		$glob['layermenu'].= "<input type=\"checkbox\" id=\"$l\" name=\"layers[]\" value=\"$l\" checked onclick=\"this.checked=!this.checked;\"> $lv</td></tr>\n";
-		$glob['input'].= "<input type=\"hidden\" name=\"layers[]\" value=\"$l\">\n";
-		$glob['query'].= "&layers[]=".urlencode($l);
+		#$glob['input'].= "<input type=\"hidden\" name=\"layers[]\" value=\"$l\">\n";
+		#$glob['query'].= "&layers[]=".urlencode($l);
 	} else {
 		$glob['layermenu'].= "<tr><td class=toolch onclick='document.f.$l.checked=!document.f.$l.checked;'>";
 		$glob['layermenu'].= "<input type=checkbox id=\"$l\" name=layers[] value='$l' onclick='this.checked=!this.checked;'> $lv</td></tr>\n";
@@ -328,17 +289,9 @@ foreach($conf[layers] as $l=>$lv) {
 }
 if (is_array($userlayers)) {
   foreach ($userlayers as $ulnum=>$ul) {
-    $lol += 1;
-    if (@in_array($ulnum,$lay)) {
-      #$layer_menu.= "<div class=utoolchecked onclick='document.f.elements[".($lol+$js_start)."].checked=!document.f.elements[".($lol+$js_start)."].checked;'>";
-      #$layer_menu.=  $ul[layername]."<input type=checkbox name=layers[] value='$ulnum' checked onclick='this.checked=!this.checked;'></div>\n";
-      #$layer_hidden.= "<input type=hidden name=layers[] value='$ulnum'>\n";
-      $glob['query'].= "&ulayers[]=$ulnum";
-    } else {
-      #$layer_menu.= "<div class=utoolch onclick='document.f.elements[".($lol+$js_start)."].checked=!document.f.elements[".($lol+$js_start)."].checked;'>";
-      #$layer_menu.= $ul[layername]."<input type=checkbox name=layers[] value='$ulnum' onclick='this.checked=!this.checked;'></div>\n";
-    }
     if ($drawlayer == $ulnum) {
+			$glob['query'].= "&ulayers[]=$ulnum";
+			$glob['input'].= "<input type=\"hidden\" name=\"drawlayer\" value=\"$ulnum\">\n";
       $glob['catmenu'].= "<option value=$ulnum selected style=background-color:#FFCC99>$ul[layername]</option>";
     } else {
       $glob['catmenu'].= "<option value=$ulnum>$ul[layername]</option>";
@@ -357,41 +310,41 @@ $glob['sizex'] = $sizex;
 $glob['sizey'] = $sizey;
 $glob['scale'] = $scl;
 
+if ($ext) {
+	$glob['query'].= "&extent=".urlencode($extexploded);
+	$glob['input'].= "<input type=\"hidden\" name=\"extent\" value=\"$extexploded\">";
+}
+$glob['query'].= "&scale=$scale";
+$glob['input'].= "<input type=\"hidden\" name=\"scale\" value=\"$scale\">";
+
 
 mysql_close($conn);
 
 $colwidth = $conf[map][ref_sizex]+4;
 
-if ($view == $conf[gui][list_button])
-	$interface = "";
-
 echo inc("head");
 echo inc("search");
-if ($view == $conf[gui][list_button]) {
-	echo inc("list");
-} else {
-	if ($drawlayer == "NEW") {
-		$colors["50 120 200"] = "Bleu";
-		$colors["255 255 255"] = "Blanc";
-		$colors["0 0 0"] = "Noir";
-		$colors["50 200 120"] = "Vert";
-		$colors["200 120 50"] = "Orange";
-		$colors["200 50 0"] = "Rouge";
-		$symbols["ordi"] = "Ordi";
-		$symbols["flag"] = "Drapeau";
-		$ftype_menu = domenu(array('point'=>'point','line'=>'traits'),$ftype);
-		$fsize_menu = domenu(array(0,1,2,3,4,5),$fsize);
-		$fcolor_menu = domenu($colors,$fcolor);
-		$fsymbol_menu = domenu($symbols,$fsymbol);
+if ($drawlayer == "NEW") {
+	$colors["50 120 200"] = "Bleu";
+	$colors["255 255 255"] = "Blanc";
+	$colors["0 0 0"] = "Noir";
+	$colors["50 200 120"] = "Vert";
+	$colors["200 120 50"] = "Orange";
+	$colors["200 50 0"] = "Rouge";
+	$symbols["ordi"] = "Ordi";
+	$symbols["flag"] = "Drapeau";
+	$ftype_menu = domenu(array('point'=>'point','line'=>'traits'),$ftype);
+	$fsize_menu = domenu(array(0,1,2,3,4,5),$fsize);
+	$fcolor_menu = domenu($colors,$fcolor);
+	$fsymbol_menu = domenu($symbols,$fsymbol);
 
-		$glob['right'] = inc("editlayer");
-	} elseif ($act == "edition") {
-		$glob['right'] = inc("edit");
-	} else {
-		$glob['right'] = $list;
-	}
-	echo inc("map");
+	$glob['right'] = inc("editlayer");
+} elseif ($act == "edition") {
+	$glob['right'] = inc("edit");
+} else {
+	$glob['right'] = $list;
 }
+echo inc("map");
 echo inc("foot");
 
 if ($id)  tmpclean($id);
