@@ -1,6 +1,6 @@
 Localis : INSTALL 
 ----------------
-$Id: INSTALL,v 1.5 2003/02/10 13:32:54 mose Exp $
+$Id: INSTALL,v 1.6 2003/02/10 13:52:26 mose Exp $
 -------------------
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis - http://localis.makina-corpus.org
@@ -81,48 +81,42 @@ You should change acces rights of following directories to www-data
 (hrum. yes. a real installer is planned. hope soon, yes.)
 
 
-Windows Install (fr)
---------------------
-(check http://sig.cwriter.org/index.php/localis/INSTALL/3.windows)
+Windows Install
+---------------
+(fr version at http://sig.cwriter.org/index.php/localis/INSTALL/3.windows)
 
-* windows install
+ get EasyPhp 
+     (easyphp1-6_setup.exe)
+ get php 4.2.3 
+     (php-4.2.3_n1-Win32.zip)
 
-Récupération EasyPhp
-  (easyphp1-6_setup.exe)
+Copy php-4.2.3-Win32 
+  to C:\Program Files\EasyPHP\php
 
-Récupération version php 4.2.3
-  (php-4.2.3_n1-Win32.zip)
+Move C:\Program Files\EasyPHP\php\sapi\php4apache.dll 
+  to C:\Program Files\EasyPHP\php
 
-Recopie php-4.2.3-Win32 
-  en C:\Program Files\EasyPHP\php
+Move php_mapscript_36.dll, php_proj.dll 
+  in C:\Program Files\EasyPHP\php\extensions
 
-Transfert C:\Program Files\EasyPHP\php\sapi\php4apache.dll 
-  en C:\Program Files\EasyPHP\php
-
-Transfert php_mapscript_36.dll, php_proj.dll 
-  dans C:\Program Files\EasyPHP\php\extensions
-
-copie php.exe
-  dans C:\Program Files\EasyPHP\cgi-bin
+Copy php.exe
+  in C:\Program Files\EasyPHP\cgi-bin
 
 
-Parametrage Spécifique Apache
+* Apache Parameters
 
-Pour forcer les pages php en cgi-bin .....
-(car mapscript ne passe pas en module lié avec apache)
   AddType application/x-httpd-php .phpl .php
   Action application/x-httpd-php-cgi /cgi-bin/php 
-
-forcer les pages php pour exécution cgi
   Action phtml-script /cgi/php 
   AddHandler phtml-script .phpl 
 
-définir des alias pour que l'exemple trouve les liens 
+  # define aliases for sample map
   Alias /tmp/ "C:/Program Files/EasyPHP/www/localis/tmp/"
   Alias /images/ "C:/Program Files/EasyPHP/www/localis/localis/images/"
   Alias /images_easyphp/ "C:/Program Files/EasyPHP/home/images_easyphp/"
 
-Paramétrage
+
+* etc/localis.conf
 
 db_host      = localhost    # where mysql database is located
 db_name      = localis      # the name of the database
@@ -152,5 +146,6 @@ path         = C:\Program Files\EasyPHP\www\mapfr
 file         = france.map
 url          = /mapfr
 
+(thanks to Thierry Dochy for the windows install)
 -------------------
 EOF
