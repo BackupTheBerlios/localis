@@ -216,8 +216,8 @@ class db {
 	}
 
 	function get_cities($name) {
-		$name = ucfirst(addslashes(trim($name)));
-		$query = "select nom from communes where nom like '$name%'";
+		$name = strtolower(addslashes(trim($name)));
+		$query = "select nom,code_postal from communes where lower(nom) like '$name%' or lower(maj) like '$name%'";
 		return $this->query($query,true);
 	}
 	

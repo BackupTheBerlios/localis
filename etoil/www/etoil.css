@@ -193,3 +193,8 @@ a:hover {
 	line-height : 13px;
 	font-size : 11px;
 }
+.inputable {
+	background-color : #eee;
+	padding : 10px;
+	border : 1px solid #000;
+}

@@ -121,6 +121,10 @@ if (isset($_REQUEST['focusville'])) {
 	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 	$_REQUEST['action'] = "travel";
 	$clicked = TRUE;
+} elseif (isset($_REQUEST['action']) and $_REQUEST['action'] == tra('Rechercher')) {
+	$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
+	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+	$clicked = false;
 }
 
 $e_map->set('width',$sizex);

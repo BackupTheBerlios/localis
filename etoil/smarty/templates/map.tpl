@@ -37,6 +37,7 @@
 {if $cities}
 <div class="found">
 {section name=o loop=$cities}
+{$cities[o].code_postal}
 <a href="{$url}?focusville={$cities[o].nom|escape:"url"}">{$cities[o].nom}</a><br />
 {/section}
 </div>
@@ -115,8 +116,10 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <input type="submit" name="action" value="{tr}Rechercher{/tr}" /><br />
 </div>
 
+{if $smarty.session.admin}
 {if $smarty.request.do eq "{tr}Enregistrer{/tr}"}
-<table border="1">
+<div class="bar">{tr}Edition/ajout de tracé{/tr}</div>
+<table class="inputable">
 <tr><td>Nom</td><td><input type="text" name="p_name" value="" /></td></tr>
 <tr><td>Moyen de locomotion</td><td>
 <select name="p_type">
@@ -141,11 +144,13 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <tr><td></td><td><input type="submit" name="action" value="Enregistrer" /></td></tr>
 </table>
 {/if}
-{if $smarty.session.admin}
 {if count($smarty.session.track)}
+<div class="bar">{tr}Coordonnées du tracé{/tr}</div>
+{if $smarty.request.do ne "{tr}Enregistrer{/tr}"}
 <div class="dashed">
 <input type="submit" name="do" value="{tr}Effacer{/tr}" />
 <input type="submit" name="do" value="{tr}Enregistrer{/tr}" /></div>
+{/if}
 {foreach item=x from=$smarty.session.track}
 <a href="{$url}?del={$x|escape:"url"}">[x]</a> <a href="">{$x}</a><br />
 {/foreach}
