@@ -5,6 +5,8 @@ include("setup.php");
 checkfontlist(PROOT."/maps");
 
 // valeurs a mettre en conf -----------
+include_conce("map_conf.inc");
+// elles y sont 
 
 $mapmargin = 11; // taille de la bordure clicable de navigation perpendiculaire
 $blockspc=7; // espaces entre les blocks de droite
@@ -12,7 +14,7 @@ $types[1] = "Pédestre";
 $types[2] = "Equestre";
 $types[3] = "Cyclable";
 $types[4] = "Kayak";
-$typescolor[1]="faaa14"; // couleur, sur 6 caract !!
+$typescolor[1]="faaa14"; // couleurs correspondant à chaque type, en hexa sur *6* caract !!
 $typescolor[2]="8cdc8c"; 
 $typescolor[3]="6cbee6"; 
 $typescolor[4]="fa825a"; 
