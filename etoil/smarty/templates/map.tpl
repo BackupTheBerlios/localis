@@ -24,7 +24,15 @@
 <td><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="rb" /></td>
 </tr></table>
 
-<img src="{$legsrc}" border="1" alt="legende" align="right" hspace="9" vspace="4">
+<table cellpadding="0" cellspacing="0" border="0"><tr>
+{foreach name=leg key=k item=i from=$legends}
+{if $filtre.type eq $smarty.foreach.leg.iteration}
+<td class="bar2" width="20" style="width:20px;"><img src="{$i}" width="20" height="18" hspace="0" vspace="0" border="0" alt="" /></td><td class="bar2"><b style="margin: 0 15px 0 2px;">{$k}</b></td>
+{else}
+<td><img src="{$i}" border="0" alt="" /></td><td><b style="margin: 0 15px 0 2px;">{$k}</b></td>
+{/if}
+{/foreach}
+</tr></table>
 <div class="foot" style="margin-left:10px;" id="light">Echelle: {$scale} {if $smarty.session.admin and $map_click}[x {$map_click.x} - y {$map_click.y} ]{/if}
 </div>
 <div class="foot" style="margin-top:10px;margin-bottom:2px;margin-left:10px;"><a href="{$mapimage}" target="_new" class="submit">{tr}Télécharger{/tr}</a></div>

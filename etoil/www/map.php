@@ -282,6 +282,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_lay->set('classitem','parcours_type');
 	
 	$e_claa = ms_newClassObj($e_lay);
+	$e_claa->set('name','Pedestre');
 	$e_claa->setExpression("1");
 	$e_stya = ms_newStyleObj($e_claa);
 	$e_laba = $e_claa->label;
@@ -294,6 +295,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_stya->set("symbolname","marche");
 
 	$e_clab = ms_newClassObj($e_lay);
+	$e_clab->set('name','Equestre');
 	$e_clab->setExpression('2');
 	$e_styb = ms_newStyleObj($e_clab);
 	$e_labb = $e_clab->label;
@@ -306,6 +308,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_styb->set("symbolname","cheval");
 
 	$e_clac = ms_newClassObj($e_lay);
+	$e_clac->set('name','VTT');
 	$e_clac->setExpression('3');
 	$e_styc = ms_newStyleObj($e_clac);
 	$e_labc = $e_clac->label;
@@ -318,6 +321,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_styc->set("symbolname","vtt");
 
 	$e_clad = ms_newClassObj($e_lay);
+	$e_clad->set('name','Canoe-kayak');
 	$e_clad->setExpression('4');
 	$e_styd = ms_newStyleObj($e_clad);
 	$e_labd = $e_clad->label;
@@ -382,8 +386,20 @@ $e_image = $e_map->draw();
 $image = $e_image->saveWebImage();
 $e_ref = $e_map->drawreferencemap();
 $refsrc = $e_ref->saveWebImage('MS_PNG',0,0,-1);
-$e_legend = $e_map->drawLegend();
-$legsrc = $e_legend->savewebimage('MS_PNG',0,0,-1);
+
+for ($i=0; $i<$e_map->numlayers; $i++) {
+	$layer = $e_map->getLayer($i);
+	if ($layer->status != MS_OFF && $layer->type != MS_LAYER_QUERY) {
+		for ($j=0; $j<$layer->numclasses; $j++) {
+			$myClass = $layer->GetClass($j);
+			if ($myClass->name) {
+				$e_img = $myClass->createLegendIcon($e_map->keysizex, $e_map->keysizey);
+				$legends[$myClass->name] = $e_img->saveWebImage('MS_PNG', 0, 0, 0);
+			}
+		}
+	}
+}
+$smarty->assign('legends',$legends);
 
 $extminx = $e_map->extent->minx;
 $extminy = $e_map->extent->miny;
@@ -393,7 +409,6 @@ $smarty->assign('extent',"$extminx $extminy $extmaxx $extmaxy");
 $scale = $e_map->scale;
 $smarty->assign('scale',$scale);
 $smarty->assign('refsrc',$refsrc);
-$smarty->assign('legsrc',$legsrc);
 $smarty->assign('focus',$focus);
 $smarty->assign('map_click',$map_click);
 $smarty->assign('mapimage',$image);

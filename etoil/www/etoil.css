@@ -177,6 +177,11 @@ a:hover {
 	font-weight : bold;
 	color : #393;
 }
+.bar2 {
+	background-color : #dff1d3;
+	font-weight : bold;
+	color : #393;
+}
 .selection select,.selection input[type=submit] {
 	width : 100%;
 }
