@@ -193,6 +193,7 @@ if (!empty($_REQUEST['p_name']) and $_SESSION['me']) {
 	} else {
 		$_SESSION['track'] = array();
 	}
+	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 } elseif (isset($_REQUEST['do']) and $_REQUEST['do'] == tra('Enregistrer')) {
 	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 	$focus['edit'] = "focus";
