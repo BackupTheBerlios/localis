@@ -22,21 +22,21 @@ height="$conf.map.ref_sizey" name="ref" alt="$conf.map.name" hspace="0" vspace="
 
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="dashed">
 <tr><td valign="top" width="25%" align="center" class="tool$action_edition" style=background:#efdebe
-onclick='document.f.action[1].checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Edición</div>', WIDTH, 80);" onmouseout="return nd();"><div>
+onclick='document.f.edition.checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Edición</div>', WIDTH, 80);" onmouseout="return nd();"><div>
 <img src="images/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edición" valign="top"><br>
-<input type="radio" name="action" value="edition" $action_edition></div></td>
+<input type="radio" id="edition" name="action" value="edition" $action_edition></div></td>
 <td valign="top" width="25%" align="center" class="tool$action_zoomout"
-onclick='document.f.action[2].checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Zoom Atrás</div>', WIDTH, 80);" onmouseout="return nd();"><div>
+onclick='document.f.zoomout.checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Zoom Atrás</div>', WIDTH, 80);" onmouseout="return nd();"><div>
 <img src="images/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Atrás" valign="top"><br>
-<input type="radio" name="action" value="zoomout" $action_zoomout></div></td>
+<input type="radio" id="zoomout" name="action" value="zoomout" $action_zoomout></div></td>
 <td valign="top" width="25%" align="center" class="tool$action_travel"
-onclick='document.f.action[3].checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Moverse</div>', WIDTH, 80);" onmouseout="return nd();"><div>
+onclick='document.f.travel.checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Moverse</div>', WIDTH, 80);" onmouseout="return nd();"><div>
 <img src="images/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Moverse" valign="top"><br>
-<input type="radio" name="action" value="travel" $action_travel></div></tD>
+<input type="radio" id="travel" name="action" value="travel" $action_travel></div></tD>
 <td valign="top" width="25%" align="center" class="tool$action_zoomin"
-onclick='document.f.action[4].checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Zoom adelante</div>', WIDTH, 80);" onmouseout="return nd();"><div>
+onclick='document.f.zoomin.checked=true;' onmouseover="return overlib('<div class=list style=\'text-align:center;\'>Zoom adelante</div>', WIDTH, 80);" onmouseout="return nd();"><div>
 <img src="images/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom adelante" valign="top"><br>
-<input type="radio" name="action" value="zoomin" $action_zoomin></div></td>
+<input type="radio" id="zoomin" name="action" value="zoomin" $action_zoomin></div></td>
 </td></tr></table>
 
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="dashed">
