@@ -82,18 +82,44 @@ $ext = array($extminx,$extminy,$extmaxx,$extmaxy);
 $e_extent = ms_newRectObj();
 $e_extent->setextent($ext[0],$ext[1],$ext[2],$ext[3]);
 
-$e_click = ms_newPointObj();
-if (isset($_REQUEST['size']) and isset($_REQUEST['resize']) and $_REQUEST['resize'] == ">>") {
+if (!isset($_REQUEST['size'])) {
+	$sizex = $e_map->width;
+	$sizey = $e_map->height;
+} else {
 	list($sizex,$sizey) = split('x',$_REQUEST['size']);
-	$sizecheck["{$_REQUEST['size']}"] = " selected=\"selected\"";
+}
+$sizecheck["{$sizex}x{$sizey}"] = " selected=\"selected\"";
+
+$e_click = ms_newPointObj();
+if (!empty($_REQUEST['ville'])) {
+	$cities = $db->get_cities($_REQUEST['ville']);
+	if (!$cities or count($cities) == 0) {
+		$feedback[] = array('num'=>-1,'msg'=>'Désolé aucun nom de ville en Limousin ne commence par '.$_REQUEST['ville']);
+	} elseif (count($cities) == 1) {
+		$_REQUEST['focusville'] = $cities[0]['nom'];
+	} else {
+		$smarty->assign('cities',$cities);
+	}
+}
+
+if (isset($_REQUEST['focusville'])) {
+	$city_info = $db->get_city_info($_REQUEST['focusville']);
+	if (!$city_info) {
+		$feedback[] = array('num'=>-1,'msg'=>'Désolé aucun nom de ville en Limousin ne correspond à '.$_REQUEST['focusville']);
+	} else {
+		$smarty->assign('city_info',$city_info);
+		preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$city_info[0]['xy'],$m);
+		$sf = 6000;
+		$e_rect = ms_newRectObj();
+		$e_rect->setextent(floor($m[1]-$sf),floor($m[2]-$sf),floor($m[1]+$sf),floor($m[2]+$sf));
+		$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
+		$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_rect,$e_limit);
+	}
+} elseif (isset($_REQUEST['size']) and isset($_REQUEST['resize']) and $_REQUEST['resize'] == ">>") {
 	$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
 	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 	$_REQUEST['action'] = "travel";
 	$clicked = TRUE;
-} else {
-	$sizex = $e_map->width;
-	$sizey = $e_map->height;
-	$sizecheck["{$sizex}x{$sizey}"] = " selected=\"selected\"";
 }
 
 $e_map->set('width',$sizex);
@@ -122,7 +148,7 @@ if ($click_x and $click_y) {
 	$map_click['x'] = $extminx + pix2geo($click_x,$extminx,$extmaxx,$sizex);
 	$map_click['y'] = $extmaxy - pix2geo($click_y,$extminy,$extmaxy,$sizey);
 	$clicked = TRUE;
-} elseif (isset($_REQUEST['dir'])) {
+} elseif (!empty($_REQUEST['dir'])) {
 	list($fx,$fy) = $_REQUEST['dir'];
 	$ffx['l'] = $ffx['t'] = -1;
 	$ffx['c'] = 0;

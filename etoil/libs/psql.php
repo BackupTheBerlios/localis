@@ -175,7 +175,7 @@ class db {
   function get_conf($name) {
     $name = addslashes($name);
     $query = "select * from conf where name='$name'";
-    return $this->queryone($query);
+    return $this->getone($query);
   }
 
   function mod_conf($name,$value) {
@@ -215,7 +215,17 @@ class db {
 		}
 	}
 
+	function get_cities($name) {
+		$name = ucfirst(addslashes(trim($name)));
+		$query = "select nom from communes where nom like '$name%'";
+		return $this->query($query,true);
+	}
 	
+	function get_city_info($city) {
+		$city = addslashes(trim($city));
+		$query = "select nom,code_postal,astext(coords) as xy from communes where nom='$city'";
+		return $this->query($query,true);
+	}
 }
 
 if (!is_file(PROOT."/db/local.php")) {

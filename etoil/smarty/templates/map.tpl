@@ -9,10 +9,11 @@
 <map name="localisation" id="localisation">
 {$maplocations}
 </map>
+<input type="image" src="img/dot1.png" width="1" height="1" border="0" name="dir" value="cc" />
 <table cellspacing="0" cellpadding="0" border="0"><tr>
-<td width="{$mapmargin}"><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="rt" /></td>
-<td width="{$sizex+2}"><input type="image" src="img/dot2.png" width="{$sizex+2}" height="{$mapmargin}" border="0" name="dir" value="ct" /></td>
 <td width="{$mapmargin}"><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="lt" /></td>
+<td width="{$sizex+2}"><input type="image" src="img/dot2.png" width="{$sizex+2}" height="{$mapmargin}" border="0" name="dir" value="ct" /></td>
+<td width="{$mapmargin}"><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="rt" /></td>
 </tr><tr>
 <td><input type="image" src="img/dot2.png" width="{$mapmargin}" height="{$sizey+2}" border="0" name="dir" value="lc" /></td>
 <td><input type="image" src="{$mapimage}" width="{$sizex}" height="{$sizey}" alt="" border="1" hspace="0" vspace="0" class="map" usemap="#localisation" valign="top"></td>
@@ -24,11 +25,28 @@
 </tr></table>
 
 <img src="{$legsrc}" border="1" alt="legende" align="right" hspace="9" vspace="4">
-<div class="foot" style="margin-left:10px;" id="light">{$mapscale} {$scale} {$mapscaleunit}</div>
+<div class="foot" style="margin-left:10px;" id="light">Echelle: {$scale} {if $smarty.session.admin and $map_click}[x {$map_click.x} - y {$map_click.y} ]{/if}
+</div>
 <div class="foot" style="margin-top:10px;margin-bottom:2px;margin-left:10px;"><a href="{$mapimage}" target="_new" class="submit">{tr}Télécharger{/tr}</a></div>
 
 </td>
 <td style="padding-left : 10px;">
+
+<div class="bar">Recherche de ville</div>
+<input type="text" name="ville" value="" style="width:100%;" /><br />
+{if $cities}
+<div class="found">
+{section name=o loop=$cities}
+<a href="{$url}?focusville={$cities[o].nom|escape:"url"}">{$cities[o].nom}</a><br />
+{/section}
+</div>
+{elseif $city_info}
+<div class="found">
+{$city_info[0].xy}<br />
+{$city_info[0].code_postal}
+{$city_info[0].nom}
+</div>
+{/if}
 
 <table border="0" cellpadding="1" cellspacing="0" id="map">
 <tr><td valign="top" align="center">
@@ -121,9 +139,6 @@
 </table>
 {/if}
 {if $smarty.session.admin}
-click x : {$map_click.x}<br />
-click y : {$map_click.y}<br />
-<hr />
 {if count($smarty.session.track)}
 <div class="dashed">
 <input type="submit" name="do" value="{tr}Effacer{/tr}" />

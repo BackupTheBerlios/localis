@@ -187,3 +187,9 @@ a:hover {
 .navbar input[type=radio] {
 	display : none;
 }
+.found {
+	padding : 3px 10px;
+	background-color : #dff1d3;
+	line-height : 13px;
+	font-size : 11px;
+}
