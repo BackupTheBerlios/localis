@@ -5,18 +5,22 @@
 * Multilangues *
 ----------------
 - passer en multilangues
-- prÃ©voir des champs dans la bdd stockant les labels suivant la langue
+- prÃ©voir des champs dans la bdd stockant les la belle des champs suivant la langue
 
 * BDD *
 -------
+- intégrer la notion d'altitude par segment de LINESTRING dans la table des parcours
 - pour toutes les tables, rajouter des champs dates crÃ©ation/maj, user crÃ©ation/maj
 - crÃ©er une table des disciplines, contenant les infos couleur, picto, traductions
 - crÃ©er une table des critÃ¨res d'un parcours par discipline
 - crÃ©er une table des points remarquables
-- crÃ©er une table des structures touristiques
+- crÃ©er une table des structures touristiques (points)
+- créer une table des parcs ou zones protégées (shapes)
 
 - gÃ©nÃ©rer un log des accÃ¨s base
 
 * ergonomie *
 -------------
-- crÃ©er une popup affichant les dÃ©tails sur un parcours, un site un point...
+- créer un menu style explorateur permettant d'afficher les différentes couches informatives (points touristiques, zones protégées et parc) comme sur ifn.fr: http://www.ifn.fr/spip/acces_public/cartodyn.php
+- crÃ©er une popup affichant les dÃ©tails sur un parcours, un site, un point...
+- créer le script dispo slt en admin permettant d'importer directement les trk ... avec l'altitude

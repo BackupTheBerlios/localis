@@ -223,7 +223,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_sty->set("size",$extparcwdth); 
 	$e_sty->color->setRGB(0,0,0);
 
-	
+// autre couche utilisée pour l'intérieur de la ligne, dont la couleur varie suivant la discipline	
 	$e_lay2 = ms_newLayerObj($e_map);
 	$e_lay2->set('name','parcourslineover');
 	$e_lay2->set('status',MS_ON);
