@@ -6,9 +6,13 @@
 <input type="hidden" name="extent" value="{$extent}" />
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td width="{math equation="(x * 2) + y + 2" x=$mapmargin y=$sizex}">
+{if count($tracks)}
 <map name="localisation" id="localisation">
-{$maplocations}
+{section name=i loop=$tracks}
+<area href="#" name="{$tracks[i].parcours_id}" id="{$tracks[i].parcours_id}" shape="rect" coords="{$tracks[i].rect}" {popup text="et vla "|cat:$tracks[i].parcours_name} />
+{/section}
 </map>
+{/if}
 <input type="image" src="img/dot1.png" width="1" height="1" border="0" name="dir" value="cc" />
 <table cellspacing="0" cellpadding="0" border="0"><tr>
 <td width="{$mapmargin}"><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="lt" /></td>

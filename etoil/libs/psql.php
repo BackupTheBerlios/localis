@@ -228,7 +228,7 @@ class db {
 	}
 
 	function get_parcours($ex) {
-		$query = "select parcours_name,parcours_type,AsText(parcours_start) as coord from parcours";
+		$query = "select parcours_id,parcours_name,parcours_type,AsText(parcours_start) as coord from parcours";
 		$query.= " where parcours_start && GeomFromText('POLYGON(($ex[0] $ex[1],$ex[0] $ex[3],$ex[2] $ex[3],$ex[0] $ex[1]))',-1)";
 		if (isset($_SESSION['filtre'])) {
 			$wh = array();

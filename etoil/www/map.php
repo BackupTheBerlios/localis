@@ -406,6 +406,13 @@ $extmaxx = $e_map->extent->maxx;
 $extmaxy = $e_map->extent->maxy;
 
 $tracks = $db->get_parcours(array($extminx,$extminy,$extmaxx,$extmaxy),$filtre);
+for ($i=0;$i<count($tracks);$i++) {
+	if (preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$tracks[$i]['coord'],$m)) {
+		$xx = geo2pix($m[1],$extminx,$extmaxx,$sizex);
+		$yy = geo2pix($m[2],$extmaxy,$extminy,$sizey);
+		$tracks[$i]['rect'] = ($xx - 10) .','. ($yy - 10) .','. ($xx + 10) .','. ($yy + 10);
+	}
+}
 $smarty->assign('tracks',$tracks);
 
 $smarty->assign('extent',"$extminx $extminy $extmaxx $extmaxy");
