@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.56 2003/02/05 06:08:42 mose Exp $
+<? /* $Id: localis.php,v 1.57 2003/02/05 06:18:55 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -99,8 +99,8 @@ if ($confdel and $drawlayer) {
 	$drawlayer = '';
 }
 if ($editlay['add']) {
-	if ($add['id']) {
-		modlayer($editlay,$add['id']);
+	if ($editlay['id']) {
+		modlayer($editlay,$editlay['id']);
 	} else {
 		$drawlayer = modlayer($editlay,'');
 	}
