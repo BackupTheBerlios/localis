@@ -55,22 +55,18 @@ dbf_def      = dbf://NOM,C,64,0/E,N,12,4/N,N,12,4
 
 [Infos]
 # Rows fetched (cityname, id, name, short description), layer name
-firstjeudi   = rows://ville,id,nom,notes/communes
 groupes			 = rows://ville,id,nom,notes/communes2
 trolls 			 = rows://ville,id,nom,notes/communes3
 human 			 = rows://ville,id,nom,notes/communes4
-event 			 = rows://ville,id,nom,notes/communes5
 
 [Layers]
 fond         = file://france.map
 regions      = file://regions.map
 
 [Select]
-firstjeudi   = mysql://localis,firstjeudi,ville/localis,communes,NOM
 groupes      = mysql://localis,lug,ville/localis,communes,NOM
 trolls       = mysql://localis,trolls,ville/localis,communes,NOM
 human        = mysql://localis,human,ville/localis,communes,NOM
-event        = mysql://localis,event,ville/localis,communes,NOM
 
 [Gui]
 fond         = Fond
@@ -84,7 +80,6 @@ list_button  = Liste
 search       = Recherche
 colwidth     = 146
 debug        = 0
-firstjeudi   = First Jeudi
 lug          = LUG
 trolls       = Trolls
 human        = Humains
@@ -93,4 +88,4 @@ defaultmapsize = 400x400
 
 [Form]
 search       = text://20/ville,nom
-type  			 = select_list://all->[ Tous ],groupes->Groupes,firstjeudi->First Jeudi,event->Evenement,trolls->Trolls,human->Humains
+type  			 = select_list://all->[ Tous ],groupes->Groupes,trolls->Trolls,human->Humains
