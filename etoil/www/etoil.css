@@ -203,3 +203,8 @@ a:hover {
 	padding : 10px;
 	border : 1px solid #000;
 }
+.leg {
+	padding : 0 15px 0 3px;
+	background-color : #fff;
+	font-size : 12px;
+}

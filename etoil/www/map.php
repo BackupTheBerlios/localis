@@ -4,7 +4,28 @@ $db = true;
 include("setup.php");
 checkfontlist(PROOT."/maps");
 
-$mapfile = PROOT. "/maps/limousin.map";
+// valeurs a mettre en conf -----------
+
+$mapmargin = 15; // taille de la bordure clicable de navigation perpendiculaire
+$types[1] = "Pédestre";
+$types[2] = "Equestre";
+$types[3] = "Cyclable";
+$types[4] = "Kayak";
+$times[1] = "moins d'une demi-heure";
+$times[2] = "moins d'une heure";
+$times[3] = "une à deux heures";
+$times[4] = "plus de deux heures";
+$levels[1] = "1";
+$levels[2] = "2";
+$levels[3] = "3";
+$levels[4] = "4";
+$levels[5] = "5";
+$mapfile = "limousin.map";
+$sf = 6000; // distance autour d'une ville lors d'un focus ville
+
+// ------------------------------------
+
+$mapfile = PROOT. "/maps/$mapfile";
 if (isset($_REQUEST['x'])) {
 	$click_x = $_REQUEST['x'];
 	$click_y = $_REQUEST['y'];
@@ -17,11 +38,7 @@ if (isset($_REQUEST['ref_x']) or isset($_REQUEST['ref.x'])) {
 } else {
 	$refx = $refy = false;
 }
-if (isset($_REQUEST['forcescale']) or isset($_REQUEST['scale'])) {
-	$scl = ($_REQUEST['forcescale']) ? $_REQUEST['forcescale'] : $_REQUEST['scale'];
-} else {
-	$scl = 1;
-}
+
 if (isset($_REQUEST['act'])) {
 	$act = $_REQUEST['act'];
 } else {
@@ -31,25 +48,6 @@ if (isset($_REQUEST['purge']) and $_REQUEST['purge'] == 'all') {
 	$_SESSION['track'] = array();
 }
 $lay = array("fond");
-
-$types[1] = "Pédestre";
-$types[2] = "Equestre";
-$types[3] = "Cyclable";
-$types[4] = "Kayak";
-$smarty->assign('types',$types);
-
-$times[1] = "moins d'une demi-heure";
-$times[2] = "moins d'une heure";
-$times[3] = "une à deux heures";
-$times[4] = "plus de deux heures";
-$smarty->assign('times',$times);
-
-$levels[1] = "1";
-$levels[2] = "2";
-$levels[3] = "3";
-$levels[4] = "4";
-$levels[5] = "5";
-$smarty->assign('levels',$levels);
 
 if (isset($_REQUEST['filtre'])) {
 	$filtre = $_REQUEST['filtre'];
@@ -94,7 +92,7 @@ $e_click = ms_newPointObj();
 if (!empty($_REQUEST['ville'])) {
 	$cities = $db->get_cities($_REQUEST['ville']);
 	if (!$cities or count($cities) == 0) {
-		$feedback[] = array('num'=>-1,'msg'=>'Désolé aucun nom de ville en Limousin ne commence par '.$_REQUEST['ville']);
+		$feedback[] = array('num'=>-1,'msg'=>sprintf(tra('Désolé, aucun nom de ville en Limousin ne commence par %s.'),$_REQUEST['ville']));
 	} elseif (count($cities) == 1) {
 		$_REQUEST = array();
 		$_REQUEST['focusville'] = $cities[0]['nom'];
@@ -106,7 +104,7 @@ if (!empty($_REQUEST['ville'])) {
 if (isset($_REQUEST['focusville'])) {
 	$city_info = $db->get_city_info($_REQUEST['focusville']);
 	if (!$city_info) {
-		$feedback[] = array('num'=>-1,'msg'=>'Désolé aucun nom de ville en Limousin ne correspond à '.$_REQUEST['focusville']);
+		$feedback[] = array('num'=>-1,'msg'=>sprintf(tra('Désolé, aucun nom de ville en Limousin ne correspond à %s.'),$_REQUEST['focusville']));
 	} else {
 		$smarty->assign('city_info',$city_info);
 		preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$city_info[0]['xy'],$m);
@@ -132,9 +130,7 @@ $e_map->set('height',$sizey);
 $smarty->assign('sizex',$sizex);
 $smarty->assign('sizey',$sizey);
 $smarty->assign('sizecheck',$sizecheck);
-$smarty->assign('mapmargin',12);
-
-// ========================================================================
+$smarty->assign('mapmargin',$mapmargin);
 
 $layers = $e_map->getAllGroupNames();
 foreach ($layers as $l) {
@@ -412,6 +408,10 @@ $smarty->assign('refsrc',$refsrc);
 $smarty->assign('focus',$focus);
 $smarty->assign('map_click',$map_click);
 $smarty->assign('mapimage',$image);
+$smarty->assign('types',$types);
+$smarty->assign('times',$times);
+$smarty->assign('levels',$levels);
+
 $smarty->display("map.tpl");
 echo elapsed_time();
 ?>

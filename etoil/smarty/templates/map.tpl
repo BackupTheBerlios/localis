@@ -27,9 +27,11 @@
 <table cellpadding="0" cellspacing="0" border="0"><tr>
 {foreach name=leg key=k item=i from=$legends}
 {if $filtre.type eq $smarty.foreach.leg.iteration}
-<td class="bar2" width="20" style="width:20px;"><img src="{$i}" width="20" height="18" hspace="0" vspace="0" border="0" alt="" /></td><td class="bar2"><b style="margin: 0 15px 0 2px;">{$k}</b></td>
+<td class="bar2" width="20" style="width:20px;"><img src="{$i}" width="20" height="18" hspace="0" vspace="0" border="0" alt="" /></td>
+<td class="bar2"><b style="margin: 0 15px 0 3px;font-size:12px;">{$k}</b></td><td>&nbsp;</td>
 {else}
-<td><img src="{$i}" border="0" alt="" /></td><td><b style="margin: 0 15px 0 2px;">{$k}</b></td>
+<td width="20" style="width:20px;"><img src="{$i}" width="20" height="18" hspace="0" vspace="0" border="0" alt="" /></td>
+<td><a href="#" onclick="document.getElementById('ftype').value='{$smarty.foreach.leg.iteration}'; document.f.submit();" class="leg">{$k}</a></td><td>&nbsp;</td>
 {/if}
 {/foreach}
 </tr></table>
@@ -97,7 +99,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 
 <div class="bar">Selection</div>
 <div class="selection">
-<select name="filtre[type]">
+<select name="filtre[type]" id="ftype">
 <option value="">{tr}Moyen de locomotion{/tr}</option>
 <option value="">{tr}... Indifférent{/tr}</option>
 {foreach key=k item=i from=$types}
