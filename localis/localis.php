@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.15 2002/10/20 01:53:26 mose Exp $
+<? /* $Id: localis.php,v 1.16 2002/10/20 02:18:54 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -67,18 +67,19 @@ if ($$field == 'all') {
 }
 
 # Build layer selection (left menu)
+$js_start = 9; # erk !! I have to fix that hard coded value
 foreach($conf[layers] as $def_layer=>$res_layer) {
 	$lol += 1;
 	unset($lys);
 	$lys[] = $def_layer;
 	foreach ($lys as $l) {
 		if (@in_array(trim($l),$lay)) {
-			$layer_menu.= "<tr><td class=toolchecked onclick='document.f.elements[".($lol+8)."].checked=!document.f.elements[".($lol+8)."].checked;'>";
+			$layer_menu.= "<tr><td class=toolchecked onclick='document.f.elements[".($lol+$js_start)."].checked=!document.f.elements[".($lol+$js_start)."].checked;'>";
 			$layer_menu.= "<input type=checkbox name=layers[] value='$l' checked onclick='this.checked=!this.checked;'> ".$conf["gui"]["$l"]."</td></tr>\n";
 			$layer_hidden.= "<input type=hidden name=layers[] value='$l'>\n";
 			$layer_query.= "layers[]=".urlencode($l)."&";
 		} else {
-			$layer_menu.= "<tr><td class=toolch onclick='document.f.elements[".($lol+8)."].checked=!document.f.elements[".($lol+8)."].checked;'>";
+			$layer_menu.= "<tr><td class=toolch onclick='document.f.elements[".($lol+$js_start)."].checked=!document.f.elements[".($lol+$js_start)."].checked;'>";
 			$layer_menu.= "<input type=checkbox name=layers[] value='$l' onclick='this.checked=!this.checked;'>".$conf["gui"]["$l"]."</td></tr>\n";
 		}
 	}
