@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.3 2002/10/15 15:37:05 mastre Exp $
+<? /* $Id: localis.php,v 1.4 2002/10/16 14:16:52 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -90,7 +90,7 @@ foreach($conf[layers] as $def_layer=>$res_layer) {
 
 # Set layer status (on/off) [patché et debuggué choppe seul le nom des layers]
 if ($view != $conf[gui][list_button]) {
-	$zMap = ms_newMapObj($conf["map"]["path"].$conf["map"]["url"].'/'.$conf["map"]["file"]);
+	$zMap = ms_newMapObj($conf["map"]["path"].'/'.$conf["map"]["file"]);
 	$lys = array();
 	$lys = $zMap->getAllGroupNames();
 	foreach ($lys as $l) {
