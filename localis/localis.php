@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.28 2002/10/25 12:15:27 mose Exp $
+<? /* $Id: localis.php,v 1.29 2002/10/25 13:36:34 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -146,8 +146,6 @@ if ($view != $conf[gui][list_button]) {
 	}	
 	$zLimit = ms_newRectObj();
 	$zLimit->setextent($conf[map][ext_minx],$conf[map][ext_miny],$conf[map][ext_maxx],$conf[map][ext_maxy]);
-	// had to hack to make min = 0 acceptable proposition
-	$maxext = (string) (int) $conf[map][ext_minx].' '.(string) (int) $conf[map][ext_miny].' '.$conf[map][ext_maxx].' '.$conf[map][ext_maxy];
 	if (!$sizex) {
 		$zSizex = $zMap->width;
 		$zSizey = $zMap->height;
