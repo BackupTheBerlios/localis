@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.27 2002/10/25 08:24:41 mose Exp $
+<? /* $Id: localis.php,v 1.28 2002/10/25 12:15:27 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -27,7 +27,6 @@ $scl     = ($HTTP_GET_VARS['forcescale']) ? $HTTP_GET_VARS['forcescale'] : $HTTP
 $lay     = ($HTTP_GET_VARS['layers']) ? $HTTP_GET_VARS['layers'] : array("fond");
 $act     = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
 $size    = ($HTTP_GET_VARS['size']) ? $HTTP_GET_VARS['size'] : "400x400";
-$type    = ($HTTP_GET_VARS['type']) ? $HTTP_GET_VARS['type'] : "";
 $city    = $HTTP_GET_VARS['v'];
 $view    = $HTTP_GET_VARS['tpl'];
 $addcity = $HTTP_GET_VARS['add_city'];
@@ -61,7 +60,13 @@ $conn = sig_connect();
 # Fetch information from mysql and create menu items and select option.
 # Debugged to preserve selections and adapted to new conf file.
 foreach ($conf[form] as $field=>$f) {
-	${"$field"}    = $HTTP_GET_VARS["$field"];
+	foreach ($conf[select] as $ck=>$ckit) {
+		if ($HTTP_GET_VARS["force{$field}{$ck}.x"] or $HTTP_GET_VARS["force{$field}{$ck}_x"]) {
+			$$field = $ck;
+			break;
+		}
+	}
+	$$field    = ($$field) ? $$field :$HTTP_GET_VARS["$field"];
 	${"list_$field"} = sig_list($f,$conn,0);
 	${"menu_$field"} = domenu(${"list_$field"},$$field);
 	# If search string, build 'where' clause.
@@ -88,7 +93,6 @@ if (!is_file($conf["map"]['path']."/fonts/fontset")) {
 			}
 		}
 	}
-	echo $fonts;
 	closedir($dir);
 	$fp = fopen($conf["map"]['path']."/fonts/fontset","w+");
 	fputs($fp,$fonts);
@@ -96,7 +100,7 @@ if (!is_file($conf["map"]['path']."/fonts/fontset")) {
 }
 
 # Select layer to use
-if ($$field == 'all') {
+if ($type == 'all') {
 	array_shift($listres);
 	$mychoices = $listres ;
 	$type = '';
