@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.17 2002/10/24 06:09:49 mose Exp $
+<?  /* $Id: lib.php,v 1.18 2002/10/24 14:43:33 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -51,6 +51,7 @@ function sig_list($field, $conn, $cut=0) {
 
 function sig_query($select,$cond,$conn,$owh='') {
   global $conf;
+	$req = array();
 	if ($t = str_replace('mysql://','',$conf[select][$select])) {
 		$data = explode('/',$t);
 		foreach ($data as $d) {
@@ -63,7 +64,11 @@ function sig_query($select,$cond,$conn,$owh='') {
 	}
 	if ($cond) { $more = " where ".@implode(" and ",$cond); }
 	if ($owh) { $more .= " and ".@implode(" or ".$req[table][1].'.',$owh); }
-  $query = "select distinct ".$req[table][1].".* from ".$req[table][1]." left join ".$req[base][2].'.'.$req[table][2]." on ".$req[table][2].".".$req[champ][2]."=".$req[table][1].".".$req[champ][1]." $more;";
+  $query = "select distinct ".$req[table][1].".* from ".$req[table][1]." ";
+	if (($req[base][2]) and ("$req[base][2]/$req[table][2]/$req[champ][2]" != "$req[base][&]/$req[table][&]/$req[champ][&]")) {
+		$query.= "left join ".$req[base][2].'.'.$req[table][2]." on ".$req[table][2].".".$req[champ][2]."=".$req[table][1].".".$req[champ][1]." ";
+	}
+	$query.= "$more limit 50;";
   $res = mysql_db_query($req[base][1],$query,$conn) or die(mysql_error());
   if ($res) {
     $i = 1;
