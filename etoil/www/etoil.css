@@ -77,7 +77,8 @@ a:hover {
 .navmap {
 	background-color : #dff1d3;
 	vertical-align : middle;
-	}
+	cursor : pointer;
+}
 .nav {
 	width : 144px;
 	margin : 0px;
