@@ -1,4 +1,4 @@
-<? /* $Id: file.php,v 1.1 2002/10/21 00:38:33 mose Exp $
+<? /* $Id: file.php,v 1.2 2002/10/24 06:13:53 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -30,16 +30,24 @@ if (!is_file('etc/localis.conf')) die("etc/localis.conf not found<br>You need to
 $conf = parseconf('etc/localis.conf');
 $conn = sig_connect();
 
+
 if ($id and $table) {
 	$user = getinfos($table,$id);
 }
 
 echo inc("head");
+if (!$table) {
+	echo "no table selected. please try again, tenderfoot.";
+}
 echo "<table class=dashed><tr><td><table border=0>";
+if (is_array($user)) {
 next($user);
 while (list($k,$v) = each($user)) {
 	echo "<tr><td><div class=foot>$k</div></td><td><div class=menu>$v</div></td></tR>";
 	next($user);
+}
+} else {
+	echo "<tr><td><div class=foot>id $id in table $table ? pff</div></td></tR>";
 }
 echo "</table></td></tr></table>\n";
 echo inc("foot");
