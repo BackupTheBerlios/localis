@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.19 2002/10/25 12:40:06 mose Exp $
+<?  /* $Id: lib.php,v 1.20 2002/10/26 17:18:04 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -232,7 +232,7 @@ function dbf_gen($base,$jbase,$vres,$cond,$conn,$owh='',$pref='') {
 				$GLOBALS['m'][$v][y] = $sizey - geo2pix($qy,$ext[1],$ext[3],$sizey);
 				$point->setXY($qx,$qy);
 				$shapefile->addPoint($point);
-				$tmp = array(trim($v),$qx,$qy);
+				$tmp = array(utf8_encode(trim($v)),$qx,$qy);
 				$GLOBALS['coords']["$v"] = array('x'=>$qx, 'y'=>$qy);
 				dbase_add_record($did,$tmp);
 			}
