@@ -10,7 +10,7 @@
 {if count($tracks)}
 <map name="localisation" id="localisation">
 {section name=i loop=$tracks}
-<area href="#" name="{$tracks[i].parcours_id}" id="{$tracks[i].parcours_id}" shape="rect" coords="{$tracks[i].rect}" {popup text=$tracks[i].parcours_name} />
+<area href="#" name="{$tracks[i].parcours_id}" id="{$tracks[i].parcours_id}" shape="rect" coords="{$tracks[i].rect}" {popup text=$tracks[i].parcours_name|default:" "} />
 {/section}
 </map>
 {/if}

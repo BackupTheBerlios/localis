@@ -232,7 +232,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_cla = ms_newClassObj($e_lay);
 	$e_sty = ms_newStyleObj($e_cla);
 	$e_sty->set("symbolname","circle");
-	$e_sty->set("size",6); // chgt vince, je trouvais les traces un peu épaisses...
+	$e_sty->set("size",5); 
 	$e_sty->color->setRGB(0,0,0);
 
 	
