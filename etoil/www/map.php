@@ -2,6 +2,7 @@
 $title = "Cartographie";
 $db = true;
 include("setup.php");
+checkfontlist(PROOT."/maps");
 
 $mapfile = PROOT. "/maps/limousin.map";
 if (isset($_REQUEST['x'])) {
