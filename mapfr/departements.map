@@ -1,0 +1,22 @@
+LAYER
+  NAME "Départements"
+  TYPE polygon
+  DATA "dep"
+  STATUS on
+	GROUP "Fond"
+	CLASSITEM 'CODE_DEPT'
+	LABELITEM 'NOM_DEPT'
+  CLASS
+#		LABEL
+#			POSITION auto
+#			COLOR 0 60 120
+#			FONT arial_bold
+#			TYPE truetype
+#			SIZE 8
+#			ANTIALIAS true
+#		END
+    COLOR 240 230 200
+		OUTLINECOLOR 160 110 60
+  END
+  TOLERANCE 5
+END

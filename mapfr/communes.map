@@ -1,0 +1,20 @@
+LAYER
+  NAME "Communes"
+  TYPE point 
+  DATA "communeslambert2"
+  STATUS on
+	CLASSITEM 'NOM'
+	GROUP "Communes"
+	LABELITEM 'MAJ'
+  CLASS
+		LABEL
+			POSITION auto
+			COLOR 0 60 120
+			FONT arial_bold
+			TYPE truetype
+			SIZE 8
+			ANTIALIAS true
+		END
+  END
+  TOLERANCE 5
+END

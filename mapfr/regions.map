@@ -1,0 +1,15 @@
+LAYER
+  NAME "Région"
+  TYPE line
+  DATA "limdep"
+  STATUS on
+	GROUP "Région" 
+	CLASSITEM 'NATURE'
+  CLASS
+		EXPRESSION ('[NATURE]' eq 'Limite de région')
+		SIZE 2
+		COLOR 160 110 60
+		SYMBOL "circle"
+  END
+  TOLERANCE 5
+END
