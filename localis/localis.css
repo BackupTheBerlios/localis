@@ -12,7 +12,12 @@ option {
 body {
 	background: #efefef;
 }
-
+#mapImg {
+        display: block;
+}
+#mapInput {
+        display: none;
+}
 .submit { 
 	background:#efefef;
 	font-weight:bold; 
