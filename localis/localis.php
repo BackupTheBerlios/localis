@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.53 2003/02/05 01:29:25 mose Exp $
+<? /* $Id: localis.php,v 1.54 2003/02/05 03:53:07 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -98,7 +98,11 @@ if ($confdel and $drawlayer) {
 	$drawlayer = '';
 }
 if ($editlay['add']) {
-	$drawlayer = modlayer($editlay,$add['id']);
+	if ($add['id']) {
+		modlayer($editlay,$add['id']);
+	} else {
+		$drawlayer = modlayer($editlay,'');
+	}
 }
 
 // points modification
@@ -196,6 +200,7 @@ $extexploded = implode(' ',$ext);
 foreach($conf[layers] as $l=>$lv) {
 	if (@in_array(trim($l),$lay)) {
 		$check = 'checked';
+		$glob['query'].= "&layers[]=".urlencode($l);
 	} else {
 		$check = '';
 	}
@@ -272,7 +277,7 @@ if ($drawlayer and $dellayer) {
 	}
 	$glob['lid']     = $edlid;
 	$glob['lname']   = $edlname;
-	$glob['lgroup']  = $edlroup;
+	$glob['lgroup']  = $edlgroup;
 	$glob['ltype']   = domenu($laytype,$edltype);
 	$glob['lcolor']  = domenu($laycolors,$edlcolor);
 	$glob['lsize']   = domenu($laysize,$edlsize);
