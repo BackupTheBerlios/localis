@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.17 2002/10/21 00:39:19 mose Exp $
+<? /* $Id: localis.php,v 1.18 2002/10/21 01:16:47 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -67,7 +67,7 @@ foreach ($conf[form] as $field=>$f) {
 	}
 } 
 
-if ($addit and $addcity) {
+if ($addit and $addcity and ($addtype != 'all')) {
 	additem($addtype,addslashes($addcity),addslashes($addnom),addslashes($addemail),addslashes($addurl),addslashes($addnotes));
 }
 
@@ -75,6 +75,7 @@ if ($addit and $addcity) {
 if ($$field == 'all') {
 	array_shift($listres);
 	$mychoices = $listres ;
+	$type = '';
 } else {
 	$mychoices[] = $$field;
 }

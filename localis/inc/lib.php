@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.13 2002/10/21 00:52:05 mose Exp $
+<?  /* $Id: lib.php,v 1.14 2002/10/21 01:16:47 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -164,7 +164,7 @@ function prepare_list($wh,$conn,$type,$owh='') {
 }
 
 function build_list($found,$qu,$eff) {
-  global $tempath, $tpl, $PHP_SELF, $resultats, $coords, $sizex, $sizey, $layer_query, $type, $conf;
+  global $tempath, $tpl, $PHP_SELF, $resultats, $myc, $coords, $sizex, $sizey, $layer_query, $type, $conf;
 	$args = @implode('&',$qu);
   if (!$found) {
     $list.= $conf[gui][noresult];
@@ -175,7 +175,7 @@ function build_list($found,$qu,$eff) {
 			$list.= "&v=".urlencode($vres)."&size=400x400&".$layer_query."forcescale=600&$args ";
 			$list.= "class=base>$vres</a></div>";
       foreach ($found[$vres] as $kk) {
-				$list.= "<div class=list><a href=\"file.php?table=$type&id=".$kk['cid']."\" target=_new>";
+				$list.= "<div class=list><a href=\"file.php?table=$myc&id=".$kk['cid']."\" target=_new>";
         $list.= "<img src=images/mapzoom.png width=8 height=8 hspace=2 vspace=0 border=0 alt='look' align=baseline>&nbsp;";
 				$list.= "$kk[name]</a></div>\n";
 				$maplist[$vres].= "<div class=list><a href=file.php?table=$type&id=".$kk['cid']." target=_new><b>$kk[name]</b></a><br>".$kk[shortdesc]."</div>"; 
