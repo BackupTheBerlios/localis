@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.4 2002/10/16 19:54:20 mastre Exp $
+<?  /* $Id: lib.php,v 1.5 2002/10/16 21:22:49 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -60,7 +60,6 @@ function sig_query($select,$cond,$conn) {
 			$req[table][$i] = $dbinfo[1];
 			$req[champ][$i] = $dbinfo[2];
 		}
-			$GLOBALS['mymatch'] = $req[base][1];
 	}
 	if ($cond) { $more = "where ".@implode(" and ",$cond); }
   $query = "select distinct ".$req[table][1].".* from ".$req[table][1]." left join ".$req[base][2].'.'.$req[table][2]." on ".$req[table][2].".".$req[champ][2]."=".$req[table][1].".".$req[champ][1]." $more;";
