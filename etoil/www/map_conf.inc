@@ -26,4 +26,12 @@ $levels[4] = "4";
 $levels[5] = "5";
 $mapfile = "limousin.map";
 $sf = 6000; // distance autour d'une ville lors d'un focus ville
+
+// paramètres des tracés de couches postgis
+$intparcwdth=3; // épaisseur interne des traits de tracés
+$extparcwdth=5; // épaisseur externe des traits de tracés
+$parclabelsize=10;
+$parclabelfont="Verdana";
+$rapechelpix=5714; // rapport d'échelle
+$minscaledisplabels=100000; // echelle min a partir de laquelle on affiche les labels des parcours
 ?>

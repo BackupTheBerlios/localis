@@ -189,6 +189,8 @@ if (!empty($_REQUEST['p_name']) and $_SESSION['me']) {
 	$focus['edit'] = "focus";
 }
 
+$scale_r=$rapechelpix*($extmaxx-$extminx)/$sizex; // echelle recalculée (empirique ...)
+echo "scale_r=".$scale_r;
 if (isset($filtre) and is_array($filtre)) {
 	foreach ($filtre as $f=>$v) {
 		if (!empty($v)) {
@@ -211,7 +213,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_cla = ms_newClassObj($e_lay);
 	$e_sty = ms_newStyleObj($e_cla);
 	$e_sty->set("symbolname","circle");
-	$e_sty->set("size",5); 
+	$e_sty->set("size",$extparcwdth); 
 	$e_sty->color->setRGB(0,0,0);
 
 	
@@ -233,7 +235,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_cla2a->setExpression($extype);
 	$e_sty2a = ms_newStyleObj($e_cla2a);
 	$e_sty2a->set("symbolname","circle");
-	$e_sty2a->set("size",3);
+	$e_sty2a->set("size",$intparcwdth);
 	$e_sty2a->color->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	
 	$extype=2;
@@ -241,7 +243,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_cla2b->setExpression($extype);
 	$e_sty2b = ms_newStyleObj($e_cla2b);
 	$e_sty2b->set("symbolname","circle");
-	$e_sty2b->set("size",3);
+	$e_sty2b->set("size",$intparcwdth);
 	$e_sty2b->color->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 
 	$extype=3;
@@ -249,7 +251,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_cla2c->setExpression($extype);
 	$e_sty2c = ms_newStyleObj($e_cla2c);
 	$e_sty2c->set("symbolname","circle");
-	$e_sty2c->set("size",3);
+	$e_sty2c->set("size",$intparcwdth);
 	$e_sty2c->color->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	
 	$extype=4;
@@ -257,7 +259,7 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_cla2d->setExpression($extype);
 	$e_sty2d = ms_newstyleobj($e_cla2d);
 	$e_sty2d->set("symbolname","circle");
-	$e_sty2d->set("size",3);
+	$e_sty2d->set("size",$intparcwdth);
 	$e_sty2d->color->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	
 	$e_lay = ms_newLayerObj($e_map);
@@ -283,9 +285,11 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_stya = ms_newStyleObj($e_claa);
 	$e_laba = $e_claa->label;
 	$e_laba->set("position",MS_AUTO);
-	$e_laba->set("size","12");
+	$e_laba->backgroundshadowcolor->setRGB(200,200,200);
+
+	$e_laba->set("size",$parclabelsize);
 	$e_laba->set("type","truetype");
-	$e_laba->set("font","arial_bold_italic");
+	$e_laba->set("font",$parclabelfont);
 	$e_laba->color->setRGB(0,0,0);
 	$e_laba->backgroundcolor->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	$e_stya->set("symbolname","marche");
@@ -297,9 +301,11 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_styb = ms_newStyleObj($e_clab);
 	$e_labb = $e_clab->label;
 	$e_labb->set("position",MS_AUTO);
-	$e_labb->set("size","12");
+	$e_labb->backgroundshadowcolor->setRGB(200,200,200);
+
+	$e_labb->set("size",$parclabelsize);
 	$e_labb->set("type","truetype");
-	$e_labb->set("font","arial_bold_italic");
+	$e_labb->set("font",$parclabelfont);
 	$e_labb->color->setRGB(0,0,0);
 	$e_labb->backgroundcolor->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	$e_styb->set("symbolname","cheval");
@@ -311,9 +317,11 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_styc = ms_newStyleObj($e_clac);
 	$e_labc = $e_clac->label;
 	$e_labc->set("position",MS_AUTO);
-	$e_labc->set("size","12");
+	$e_labc->backgroundshadowcolor->setRGB(200,200,200);
+
+	$e_labc->set("size",$parclabelsize);
 	$e_labc->set("type","truetype");
-	$e_labc->set("font","arial_bold_italic");
+	$e_labc->set("font",$parclabelfont);
 	$e_labc->color->setRGB(0,0,0);
 	$e_labc->backgroundcolor->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	$e_styc->set("symbolname","vtt");
@@ -325,9 +333,11 @@ if (isset($filtre) and is_array($filtre)) {
 	$e_styd = ms_newStyleObj($e_clad);
 	$e_labd = $e_clad->label;
 	$e_labd->set("position",MS_AUTO);
-	$e_labd->set("size","12");
+	$e_labd->backgroundshadowcolor->setRGB(200,200,200);
+
+	$e_labd->set("size",$parclabelsize);
 	$e_labd->set("type","truetype");
-	$e_labd->set("font","arial_bold_italic");
+	$e_labd->set("font",$parclabelfont);
 	$e_labd->color->setRGB(0,0,0);
 	$e_labd->backgroundcolor->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
 	$e_styd->set("symbolname","canoe");
@@ -380,6 +390,7 @@ if (!empty($_SESSION['track'])) {
 	$e_style3 = ms_newStyleObj($e_class3);
 	$e_style3->set("symbolname",'flag2');
 }
+
 
 $e_image = $e_map->draw();
 $image = $e_image->saveWebImage();
