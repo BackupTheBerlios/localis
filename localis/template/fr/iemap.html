@@ -6,7 +6,8 @@
 <input type="hidden" name="forceextent" id="forceextent" value="">
 <input type="image" src="$ref_src" width="$conf.map.ref_sizex" 
 height="$conf.map.ref_sizey" name="ref" alt="$conf.map.name" hspace="0" vspace="0" border="0"><br>
-<a href="javascript:document.f.forceextent.value='1'; document.f.extent.value=''; document.f.scale.value=''; document.f.submit();" class="refbutton">Recadrer</a>
+<input type="submit" name="fit" value="$conf.gui.fit" class="submit" style="width: 60%;" id="106" onclick="document.f.forceextent.value='1'; document.f.extent.value=''; document.f.scale.value=''; document.f.submit();">
+<!--a href="javascript:document.f.forceextent.value='1'; document.f.extent.value=''; document.f.scale.value=''; document.f.submit();" class="refbutton">Recadrer</a-->
 <!--input type=image src=images/recadrer.png alt=Recadrer name=forceextent value="1" border=0 vspace=0 hspace=0-->
 </td></tr></table>
 <table border="0" cellpadding="4" cellspacing="0" width="$conf.gui.colwidth" class="dashed">
@@ -17,7 +18,7 @@ height="$conf.map.ref_sizey" name="ref" alt="$conf.map.name" hspace="0" vspace="
 <option value="800x800" $size_800x800>800x800</option>
 </select></td>
 <td align="center" valign="middle">
-<div><input type="submit" name="nothing" value=" &gt;&gt; " class="submit"></div>
+<div><input type="submit" name="resize" value=" &gt;&gt; " class="submit"></div>
 </td></tr></table>
 
 <table border="0" cellpadding="1" cellspacing="0" width="$conf.gui.colwidth" class="dashed">
@@ -53,7 +54,7 @@ onclick='document.f.zoomin.checked=true;' onmouseover="return overlib('<div clas
 <tr><td valign="top">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 $layer_menu</table>
-<input type="submit" name="submit" value="$conf.gui.refresh" class="submit" id="106">
+<input type="submit" name="refresh" value="$conf.gui.refresh" class="submit" id="106">
 </td></tr></table>
 
 <table border="0" cellpadding="8" cellspacing="0" width="100%"><tr><td valign="top">
@@ -65,7 +66,7 @@ $layer_menu</table>
 <input type="hidden" name="scale" value="$scl">
 </td>
 <td valign="top">
-<table border="0" cellpadding="0" cellspacing="0" class="maptable">
+<table border="0" cellpadding="0" cellspacing="0" class="dashed">
 <tr><td valign="top">
 <map name="localisation" id="localisation">
 $map_locations
