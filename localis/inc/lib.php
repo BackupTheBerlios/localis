@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.18 2002/10/24 14:43:33 mose Exp $
+<?  /* $Id: lib.php,v 1.19 2002/10/25 12:40:06 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -278,6 +278,20 @@ function clean_city($a) {
 }
 
 function domenu($list,$it) {
+  if (is_array($list)) {
+  	foreach ($list as $k=>$l) {
+    	if ((is_array($it) and in_array($k,$it)) or ($it == $k)) {
+				$ll = str_replace(' ','',strtolower($l));
+      	$back.= "<option value='$k' selected>$l\n";
+    	} else {
+      	$back.= "<option value='$k'>$l\n";
+    	}
+  	}
+ 		return "$back";
+ 	}
+}
+
+function doicons($list,$it) {
   if (is_array($list)) {
   	foreach ($list as $k=>$l) {
     	if ((is_array($it) and in_array($k,$it)) or ($it == $k)) {
