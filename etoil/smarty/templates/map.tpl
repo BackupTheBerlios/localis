@@ -145,6 +145,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 
 <input type="submit" class="button" name="action" value="{tr}Rechercher{/tr}" /><br />
 
+{if $tracks}
 <div class="bar">
 {section name=t loop=$tracks}
 {assign var=v value=$tracks[t].parcours_type}
@@ -152,6 +153,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <img src="{$icontypes.$v}" width="10" height="9" border="0" /> {$tracks[t].parcours_name}</a><br />
 {/section}
 </div>
+{/if}
 
 
 {if $smarty.session.admin}
