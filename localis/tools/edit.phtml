@@ -1,4 +1,4 @@
-<? /* $Id: edit.phtml,v 1.1 2002/10/12 08:56:30 mose Exp $
+<? /* $Id: edit.phtml,v 1.2 2002/10/19 23:08:59 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makinacorpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -53,12 +53,12 @@ include "../inc/parseconf.php";
 $conf = parseconf('../etc/localis.conf');
 foreach ($conf as $k=>$v) ${"conf_$k"} = $v;
 
-$where[templates] = $conf_tpl_path;
-$where[images] = $conf_root_path."/images";
-$where[conf] = $conf_root_path."/etc";
-$where[maps] = $conf_root_path."/maps";
-$where[data] = $conf_root_path."/maps/data";
-$where[fonts] = $conf_root_path."/maps/fonts";
+$where[templates] = $conf[general][tpl_path];
+$where[images] = $conf[general][img_path];
+$where[conf] = $conf[general][root_path]."/etc";
+$where[maps] = $conf[map][path];
+$where[data] = $conf[map][path]."/data";
+$where[fonts] = $conf[map][path]."/fonts";
 
 $wheres = array_keys($where);
 
@@ -287,7 +287,7 @@ function nav_where($wh) {
          or throw_error("Could not open directory <i>$directory</i>", true);
       
       while ($file = readdir($dirHandler)) {
-         if (substr($file,0,1) != ".") {
+         if ((substr($file,0,1) != ".") and ($file != "CVS")) {
    
             $fullName = $directory.($directory == "/" ? "" : "/").$file;
    
