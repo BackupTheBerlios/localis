@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.16 2002/10/20 02:18:54 mose Exp $
+<? /* $Id: localis.php,v 1.17 2002/10/21 00:39:19 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -27,9 +27,18 @@ $scl     = ($HTTP_GET_VARS['forcescale']) ? $HTTP_GET_VARS['forcescale'] : $HTTP
 $lay     = ($HTTP_GET_VARS['layers']) ? $HTTP_GET_VARS['layers'] : array("fond");
 $act     = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
 $size    = ($HTTP_GET_VARS['size']) ? $HTTP_GET_VARS['size'] : "400x400";
+$type    = ($HTTP_GET_VARS['type']) ? $HTTP_GET_VARS['type'] : "";
 $city    = $HTTP_GET_VARS['v'];
 $ext     = split(' ',trim($HTTP_GET_VARS['extent']));
 $view    = $HTTP_GET_VARS['tpl'];
+$addcity = $HTTP_GET_VARS['add_city'];
+$addtype = $HTTP_GET_VARS['add_type'];
+$addnom = $HTTP_GET_VARS['add_nom'];
+$addemail = $HTTP_GET_VARS['add_email'];
+$addurl = $HTTP_GET_VARS['add_url'];
+$addnotes = $HTTP_GET_VARS['add_notes'];
+$addit   = $HTTP_GET_VARS['addit'];
+
 if (strstr($HTTP_GET_VARS['size'],'x')) {
 	list($sizex,$sizey) = split('x',$HTTP_GET_VARS['size']);
 }
@@ -57,6 +66,10 @@ foreach ($conf[form] as $field=>$f) {
 		}
 	}
 } 
+
+if ($addit and $addcity) {
+	additem($addtype,addslashes($addcity),addslashes($addnom),addslashes($addemail),addslashes($addurl),addslashes($addnotes));
+}
 
 # Select layer to use
 if ($$field == 'all') {
@@ -152,8 +165,10 @@ if ($view != $conf[gui][list_button]) {
 			$zMap->zoompoint(-2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);		
 		} elseif ($act == "edition") {
 			$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);		
-			$coordx = pix2geo($click_x,$ext[0],$ext[2],$sizex);
-			$coordy = pix2geo($click_y,$ext[1],$ext[3],$sizey);
+			$coordx = pix2geo($click_x,$ext[0],$ext[2],$sizex) + $ext[0];
+			$coordy = $ext[3] - pix2geo($click_y,$ext[1],$ext[3],$sizey);
+			$flagid = dbf_flag($click_x, $click_y, $coordx, $coordy);
+			$addville = domenu(surrounding($coordx,$coordy,10000),'');
 		} elseif ($clicked and ($act == "travel")) {
 			$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
 		} elseif ($scl and $zClick) {
@@ -189,6 +204,12 @@ if ($view != $conf[gui][list_button]) {
 			if (!is_file($conf[general][tmp_path]."/$id.shx")) echo "$id.shx not found<br>";
 			if (!is_file($conf[general][tmp_path]."/$id.dbf")) echo "$id.dbf not found<br>";
 		}
+	}
+	if ($flagid) {
+		$zResult = $zMap->getLayerByName('flag');
+		$zResult->set('status',MS_ON);
+		$zResult->set('data',$conf[general][tmp_path]."/$flagid");
+		$zResult->draw($zImage);
 	}
 	# Create image, reference map & legend
 	$image_src = $zImage->saveWebImage(MS_PNG,0,0,-1);
@@ -230,7 +251,6 @@ if (is_array($m)) {
 		$map_locations.= " onmouseout='return nd();' onclick=\"return overlib('".addslashes($maplist[$vv])."', STICKY, CLOSECLICK, CAPTION, '&nbsp;".addslashes($vv)."', WIDTH, 150);\">\n";
 	}
 }
-
 mysql_close($conn);
 
 $colwidth = $conf[map][ref_sizex]+4;

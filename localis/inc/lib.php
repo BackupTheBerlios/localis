@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.11 2002/10/20 01:53:26 mose Exp $
+<?  /* $Id: lib.php,v 1.12 2002/10/21 00:39:19 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -63,7 +63,7 @@ function sig_query($select,$cond,$conn,$owh='') {
 	}
 	if ($cond) { $more = " where ".@implode(" and ",$cond); }
 	if ($owh) { $more .= " and ".@implode(" or ".$req[table][1].'.',$owh); }
-  $query = "select ".$req[table][1].".* from ".$req[table][1]." left join ".$req[base][2].'.'.$req[table][2]." on ".$req[table][2].".".$req[champ][2]."=".$req[table][1].".".$req[champ][1]." $more;";
+  $query = "select distinct ".$req[table][1].".* from ".$req[table][1]." left join ".$req[base][2].'.'.$req[table][2]." on ".$req[table][2].".".$req[champ][2]."=".$req[table][1].".".$req[champ][1]." $more;";
   $res = mysql_db_query($req[base][1],$query,$conn) or die(mysql_error());
   if ($res) {
     $i = 1;
@@ -75,6 +75,46 @@ function sig_query($select,$cond,$conn,$owh='') {
   } else {
     return false;
   }
+}
+
+function surrounding($x,$y,$delta) {
+	global $conf, $conn;
+	$minx = $x - $delta;
+	$maxx = $x + $delta;
+	$miny = $y - $delta;
+	$maxy = $y + $delta;
+	$query = "select * from ".$conf[general][sql_reftable]." where ";
+	$query.= "$minx < ".$conf[map][coord_x]." and ";
+	$query.= $conf[map][coord_x]." < $maxx and ";
+	$query.= "$miny < ".$conf[map][coord_y]." and ";
+	$query.= $conf[map][coord_y]." < $maxy";
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
+	if ($res) {
+		while ($r = mysql_fetch_array($res)) {
+			$n = $r[nom];
+			$back[$n] = $n;
+		}
+		return $back;
+	} else {
+		return false;
+	}
+}
+
+function getinfos($table,$id) {
+	global $conf, $conn;
+	$query = "select * from $table where id=$id;";
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
+	if ($res) {
+		return mysql_fetch_array($res);
+	} else {
+		return false;
+	}
+}
+
+function additem($where,$city,$nom,$email,$url,$notes) {
+	global $conf,$conn;
+	$query = "insert into $where (ville,nom,email,url,notes) values ('$city','$nom','$email','$url','$notes');";
+	$res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
 }
 
 # Fonction semi recursive, genere le html en fonction des nouveaux templates
@@ -124,7 +164,7 @@ function prepare_list($wh,$conn,$type,$owh='') {
 }
 
 function build_list($found,$qu,$eff) {
-  global $tempath, $tpl, $PHP_SELF, $resultats, $coords, $sizex, $sizey, $layer_query,$conf;
+  global $tempath, $tpl, $PHP_SELF, $resultats, $coords, $sizex, $sizey, $layer_query, $type, $conf;
 	$args = @implode('&',$qu);
   if (!$found) {
     $list.= $conf[gui][noresult];
@@ -138,7 +178,7 @@ function build_list($found,$qu,$eff) {
 				$list.= "<div class=list><a href=\"file.php?id=".$kk['cid']."\" target=_new>";
         $list.= "<img src=images/mapzoom.png width=8 height=8 hspace=2 vspace=0 border=0 alt='look' align=baseline>&nbsp;";
 				$list.= "$kk[name]</a></div>\n";
-				$maplist[$vres].= "<div class=list>- ".$kk[shortdesc]."<a href=file.php?id=".$kk['cid']." target=_new>$kk[name]</a></div>"; 
+				$maplist[$vres].= "<div class=list><a href=file.php?table=$type&id=".$kk['cid']." target=_new><b>$kk[name]</b></a><br>".$kk[shortdesc]."</div>"; 
       }
     }
   }
@@ -149,7 +189,7 @@ function build_list($found,$qu,$eff) {
 }
 
 function pix2geo($x,$minx,$maxx,$size) {
-	return floor((($maxx - $minx) * $x / $size) + $minx);
+	return floor(($x / $size) * ($maxx - $minx));
 }
 
 function geo2pix($x,$minx,$maxx,$size) {
@@ -192,6 +232,36 @@ function dbf_gen($base,$jbase,$vres,$cond,$conn,$owh='',$pref='') {
 			}
     }
   }
+  $shapefile->free();
+  dbase_close($did);
+  return $UNIQUE_ID;
+}
+
+function dbf_flag($click_x,$click_y, $qx, $qy) {
+  global $conf, $add_nom, $qinfo, $x, $y, $nature, $ext, $sizex, $sizey;
+	$path = $conf[general][tmp_path];
+  $UNIQUE_ID = $pref.uniqid('flag_');
+  $dbffile = "$path/$UNIQUE_ID.dbf";
+	$dbf_inf = explode('/',str_replace('dbf://','',$conf[map][dbf_def]));
+	$i=0;
+	foreach($dbf_inf as $d) {
+		$dd = explode(',',$d);
+		foreach($dd as $ddd) {
+			$dbfdef[$i][] = $ddd;
+		}
+		$i++;
+	}
+	$dbf = @dbase_create($dbffile,$dbfdef) or die ("dbf creation failed");
+	$did = @dbase_open("$dbffile",2) or die ("Unable to open dbf file");
+	$shapefile = ms_newShapefileObj("$path/$UNIQUE_ID", 1) or die("Error creating shapefile.");
+	$point = ms_newpointobj();
+	$GLOBALS['m']["$add_nom"][x] = $click_x;
+	$GLOBALS['m']["$add_nom"][y] = $click_y;
+	$GLOBALS['coords']["$add_nom"] = array('x' => $qx, 'y' => $qy );
+	$point->setXY($qx,$qy);
+	$shapefile->addPoint($point);
+	$tmp = array(trim($v),$qx,$qy);
+	dbase_add_record($did,$tmp);
   $shapefile->free();
   dbase_close($did);
   return $UNIQUE_ID;
