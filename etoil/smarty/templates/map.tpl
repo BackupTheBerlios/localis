@@ -4,20 +4,23 @@
 <form name="f">
 <input type="hidden" name="extent" value="{$extent}" />
 <table border="0" cellpadding="0" cellspacing="0">
-<tr><td>
+<tr><td width="{math equation="(x * 2) + y + 2" x=$mapmargin y=$sizex}">
 <map name="localisation" id="localisation">
 {$maplocations}
 </map>
-<input
-type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" /><input
-type="image" src="img/dot2.png" width="{$sizex+2}" height="{$mapmargin}" border="0" /><input
-type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" /><br /><input
-type="image" src="img/dot2.png" width="{$mapmargin}" height="{$sizey+2}" border="0" /><input
-type="image" src="{$mapimage}" width="{$sizex}" height="{$sizey}" alt="" border="1" hspace="0" vspace="0" class="map" usemap="#localisation" valign="top"><input
-type="image" src="img/dot2.png" width="{$mapmargin}" height="{$sizey+2}" border="0" /><br /><input
-type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" /><input
-type="image" src="img/dot2.png" width="{$sizex+2}" height="{$mapmargin}" border="0" /><input
-type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" /><br />
+<table cellspacing="0" cellpadding="0" border="0"><tr>
+<td width="{$mapmargin}"><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" /></td>
+<td width="{$sizex+2}"><input type="image" src="img/dot2.png" width="{$sizex+2}" height="{$mapmargin}" border="0" /></td>
+<td width="{$mapmargin}"><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" /></td>
+</tr><tr>
+<td><input type="image" src="img/dot2.png" width="{$mapmargin}" height="{$sizey+2}" border="0" /></td>
+<td><input type="image" src="{$mapimage}" width="{$sizex}" height="{$sizey}" alt="" border="1" hspace="0" vspace="0" class="map" usemap="#localisation" valign="top"></td>
+<td><input type="image" src="img/dot2.png" width="{$mapmargin}" height="{$sizey+2}" border="0" /></td>
+</tr><tr>
+<td><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" /></td>
+<td><input type="image" src="img/dot2.png" width="{$sizex+2}" height="{$mapmargin}" border="0" /></td>
+<td><input type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" border="0" /></td>
+</tr></table>
 
 <img src="{$legsrc}" border="1" alt="legende" align="right" hspace="9" vspace="4">
 <div class="foot" style="margin-left:10px;" id="light">{$mapscale} {$scale} {$mapscaleunit}</div>
