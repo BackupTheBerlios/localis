@@ -268,7 +268,7 @@ LAYER
 	LABELITEM 'NOM'
 	POSTLABELCACHE true
   CLASS
-		NAME "LUG"
+		NAME "Groupes"
 		SYMBOL tux
 		OUTLINECOLOR 128 128 128
  		LABEL
@@ -298,6 +298,34 @@ LAYER
   CLASS
 		NAME "Evenements"
 		SYMBOL flagblue
+		OUTLINECOLOR 128 128 128
+		LABEL
+			POSITION lc
+			OFFSET 0 5
+			COLOR 255 255 255
+			OUTLINECOLOR 0 20 56
+			FONT verdana_bold
+			TYPE truetype
+			ANTIALIAS true
+			SIZE 9
+		END
+  END
+  TOLERANCE 1
+END
+
+LAYER
+  NAME "communes6"
+  TYPE point 
+  DATA "communes"
+  STATUS off
+	GROUP "fond"
+	CLASSITEM 'code_postal'
+	LABELITEM 'nom'
+	POSTLABELCACHE true
+  CLASS
+		NAME "Communes"
+		SYMBOL ordi
+		SIZE 8
 		OUTLINECOLOR 128 128 128
 		LABEL
 			POSITION lc
