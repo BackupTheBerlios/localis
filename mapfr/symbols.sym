@@ -4,6 +4,12 @@ TYPE pixmap
 IMAGE "images/comp.png"
 END
 
+SYMBOL
+NAME "ordi2"
+TYPE pixmap
+IMAGE "images/comp2.png"
+END
+
 Symbol
 Name 'tent'
 Type VECTOR
