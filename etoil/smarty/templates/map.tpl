@@ -42,7 +42,6 @@
 </div>
 {elseif $city_info}
 <div class="found">
-{$city_info[0].xy}<br />
 {$city_info[0].code_postal}
 {$city_info[0].nom}
 </div>
@@ -50,20 +49,24 @@
 
 <table border="0" cellpadding="1" cellspacing="0" id="map">
 <tr><td valign="top" align="center">
-<input type="image" src="{$refsrc}" width="100" height="100" name="ref" alt="{$name}" hspace="0" vspace="0" border="0"><br>
-<input type="submit" name="fit" value="{tr}Recadrer{/tr}" class="submit" onclick="document.f.forceextent.value='1'; document.f.extent.value=''; document.f.scale.value=''; document.f.submit();">
+<input type="image" src="{$refsrc}" width="100" height="100" name="ref" alt="{$name}" hspace="0" vspace="0" border="0"><img 
+src="img/francepti.jpg" width="100" height="100" border="0" />
+<br />
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr><td valign="middle"><select name="size" class="submit" id="100">
+<tr><td valign="middle">
+<select name="size" class="submit" id="100" onchange="document.f.resize.value='y' ; document.f.submit();">
 <option value="240x240"{$sizecheck.240x240}>240x240</option>
 <option value="400x400"{$sizecheck.400x400}>400x400</option>
 <option value="600x600"{$sizecheck.600x600}>600x600</option>
 <option value="800x800"{$sizecheck.800x800}>800x800</option>
-</select></td>
-<td align="right" valign="middle">
-<div><input type="submit" name="resize" value="&gt;&gt;" class="submit" id="100"></div>
+</select>
+<input type="image" src="img/expand.png" width="16" height="11" name="fit" value="{tr}Recadrer{/tr}" class="submit" onclick="document.f.extent.value=''; document.f.submit();"
+{popup text="{tr}Recadrer{/tr} [ Alt-c ]"} accesskey="c" />
+</td>
+</tr></table>
 </td></tr></table>
-</td></tr></table>
+<input type="hidden" name="resize" value="n" />
 
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="navbar">
 <tr>

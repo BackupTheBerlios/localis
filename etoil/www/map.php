@@ -74,7 +74,7 @@ $extmaxy = $e_map->extent->maxy;
 $e_limit = ms_newRectObj();
 $e_limit->setextent($extminx,$extminy,$extmaxx,$extmaxy);
 
-if (isset($_REQUEST['extent'])) {
+if (!empty($_REQUEST['extent'])) {
 	list($extminx,$extminy,$extmaxx,$extmaxy) = split(' ',trim($_REQUEST['extent']));
 }
 $ext = array($extminx,$extminy,$extmaxx,$extmaxy);
@@ -96,6 +96,7 @@ if (!empty($_REQUEST['ville'])) {
 	if (!$cities or count($cities) == 0) {
 		$feedback[] = array('num'=>-1,'msg'=>'Désolé aucun nom de ville en Limousin ne commence par '.$_REQUEST['ville']);
 	} elseif (count($cities) == 1) {
+		$_REQUEST = array();
 		$_REQUEST['focusville'] = $cities[0]['nom'];
 	} else {
 		$smarty->assign('cities',$cities);
@@ -115,7 +116,7 @@ if (isset($_REQUEST['focusville'])) {
 		$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
 		$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_rect,$e_limit);
 	}
-} elseif (isset($_REQUEST['size']) and isset($_REQUEST['resize']) and $_REQUEST['resize'] == ">>") {
+} elseif (isset($_REQUEST['size']) and isset($_REQUEST['resize']) and $_REQUEST['resize'] == "y") {
 	$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
 	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 	$_REQUEST['action'] = "travel";
