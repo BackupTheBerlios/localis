@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.34 2002/10/28 04:05:57 mose Exp $
+<? /* $Id: localis.php,v 1.35 2002/10/28 04:30:07 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -250,7 +250,9 @@ if ($view != $conf[gui][list_button]) {
 			$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($myc));
 			prepare_list($wh,$conn,$myc,$owh);
 			$id = dbf_gen($conf[database][db_name],$conf[general][sql_reftable],$resultats,$wh,$conn,$owh);
-			$list .= build_list($found,$qu,$eff);
+			if (is_array($found)) {
+				$list .= build_list($found,$qu,$eff);
+			}
 			unset($found);
 			unset($nbres);
 			unset($nbresresultats);
@@ -313,7 +315,13 @@ if ($view != $conf[gui][list_button]) {
 	foreach($mychoices as $myc) {
 		$eff[] = sprintf($conf["general"]["search_listresult"], ucfirst($myc));
 		prepare_list($wh,$conn,$myc,$owh);
-		$list .= build_list($found,$qu,$eff);
+		if (is_array($found)) {
+			$list .= build_list($found,$qu,$eff);
+		}
+		unset($found);
+		unset($nbres);
+		unset($nbresresultats);
+		unset($resultats);
 	}
 }
 ${"action_$act"} = "checked";
