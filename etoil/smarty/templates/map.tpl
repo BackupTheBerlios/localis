@@ -143,7 +143,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 </select><br />
 </div>
 
-<input type="submit" class="button" name="action" value="{tr}Rechercher{/tr}" /><br />
+<input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" /><br />
 
 {if $tracks}
 <div class="bar">
