@@ -13,7 +13,7 @@ TRANSPARENT on
 INTERLACE on
 
 WEB
-	IMAGEPATH "../localis/tmp/"
+	IMAGEPATH "/var/www/mapserver/www/tmp/"
 	IMAGEURL "/tmp/"
 	MINSCALE 600000
 	MAXSCALE 4000000
@@ -30,6 +30,7 @@ END
 LEGEND
 	KEYSIZE 14 12
 	IMAGECOLOR 255 255 255
+	KEYSPACING 5 5
 	LABEL
 		FONT arial_bold
 		TYPE truetype
@@ -151,7 +152,6 @@ LAYER
   STATUS off
 	CLASSITEM 'nom'
 	GROUP "fond"
-	LABELITEM 'nom'
   CLASS
 		LABEL
 			POSITION auto 
@@ -161,6 +161,7 @@ LAYER
 			SIZE 8
 			ANTIALIAS true
 		END
+		NAME "Troll"
 		SYMBOL troll
 		OUTLINECOLOR 128 128 128
 		COLOR 255 0 0
@@ -185,7 +186,10 @@ LAYER
 			TYPE truetype
 			SIZE 8
 			ANTIALIAS true
+			partials true
+			buffer 0
 		END
+		NAME "Humains"
 		SYMBOL human
 		OUTLINECOLOR 128 128 128
 		COLOR 255 0 0
@@ -203,6 +207,7 @@ LAYER
 	GROUP "fond"
 	LABELITEM 'nom'
   CLASS
+		NAME "First jeudi"
 		LABEL
 			POSITION auto 
 			COLOR 0 60 120
@@ -235,6 +240,7 @@ LAYER
 			SIZE 8
 			ANTIALIAS true
 		END
+		NAME "LUG"
 		SYMBOL ordi2
 		OUTLINECOLOR 128 128 128
 		COLOR 255 0 0
