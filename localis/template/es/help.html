@@ -8,7 +8,7 @@ height="$conf.map.ref_sizey" name="ref" alt="$conf.map.name" hspace="0" vspace="
 
 <table border="0" cellpadding="8" cellspacing="0" class="dashed" width="$conf.gui.colwidth">
 <tr><td valign="top">
-<div class="foot">Localis se encuentra  <b>en desarrollo</b>, el funcionamiento de la interface puede, eventualmente, ser inestable.<br>
+<div class="foot">Localis se encuentra  <b>en desarrollo</b>, el funcionamiento de la interface puede ser inestable.<br>
 Contacto: <a href="mailto:mose@makina-corpus.net">mose</a>.</div>
 </td></tr></table>
 
@@ -17,49 +17,78 @@ Contacto: <a href="mailto:mose@makina-corpus.net">mose</a>.</div>
 
 <div class=corps>
 <h2>Ayuda</h2>
+Localis permite visualizar el resultado de una búsqueda en varias bases de datos. Además,
+Localis es una herramienta cartográfica contributiva en línea.
+Permite al usuario agregar y calificar puntos en un mapa, a los que pueden acceder a su vez
+otros usuarios. el conjunto de esas bases de datos georeferenciadas y cartográficas constituye
+"la fuente de información".
+<br><br>
+esta herramienta está compuesta de varios módulos para los usuarios : <br><br>
 
-La herramienta de búsqueda geográfica permite visualizar el resultado de una búsqueda en una base de datos contributiva. Está compuesta de varias interfaces.<br><br>
+<b>El modulo "formulario de búsqueda" : </b><br> 
+Se puede especificar los elementos a buscar a través de los distintos campos de ingreso de datos :
+<ul><li>El campo "Búsqueda" : es nada menos que un motor de búsqueda.</li>
+<li>El menú desplegable : se puede acceder a los objetos presentes en "la fuente de información"
+según las categorías precalificadas listadas en los menús desplegables.<br>
+Se pueden cruzar los elementos seleccionados, a partir de las diferentes opciones de ingreso de
+datos, para obtener respuestas más precisas.</li></ul>
 
-<b> La interfaz "formulario de búsqueda"</b><br>
-<dl>
-Seleccione los criterios de búsqueda :<br>
-<dl>- El campo "Búsqueda" permite buscar en los titulos y las breves descripciones de los puntos de ingreso.<br>
-3 menús desplegables que permiten elejir:<br>
-- el <b>tipo</b> de objeto referenciado que queremos consultar (texto, página html, url, foto, ..).<br>
-- la <b>categoria</b> contiene la clase de información presente en la base. Las categorias están previstas para multiplicarse con el uso.<br>
-- el <b>usuario</b> permite mostrar todos los puntos de ingreso de un usuario particular.
-</dl></dl>
-Nota de utilización :<br>
-Se pueden pedir cruces entre estos criterios para obtener un resultado que será entregado como un "mapa" en modo imagen, o como una lista en modo texto, en función del botón de validación que cliquee.<br>
+<ul><b>Nota :</b><br>
+Para pasar a la siguiente etapa, hay que seleccionar el modo de visualización de resultados :
+como un "mapa" en modo imagen, o como una "lista" en modo texto.
+Esta selección validará el conjunto de opciones elegidas por el usuario y someterá la petición
+al servidor.</ul>
 <br>
-<b> La interfaz "visualización de respuestas en modo lista (texto)"</b><br>
-<dl>
-Muestra cada lugar correspondiente a la petición, según puntos de interés, asi como un enlace hacia una ficha detallada sobre el lugar y su modalidad de funcionamiento.
-</dl>
-<b> La interfaz "visualización de respuestas en modo mapa (imagen)"</b><br>
-<dl>
-La lista está acompañada por la localización de los lugares en un mapa.<br>
-Muestra una "barra de navegación" y una "lista de calcos" a la derecha del formulario de búsqueda.<br><br>
-<dl>
-<li> La lista de calcos.<br>
-Todos los calcos están visibles cuando se ve el mapa por primera vez (departamentos, regiones, ...).<br><br>
 
-<li> La barra de navegación<br>
-Está compuesta de los siguientes elementos (de izquierda a derecha).<br>
-- El botón "recentrar".<br>
-Muestra el mapa completo de la región. Puede ser práctico volver a la vista general luego de haber navegado en un mapa.<br>
-- El menú desplegable "400x400"<br>
-Propone diferentes resoluciones gráficas para la visualización del mapa (200x200, 400x400, 600x600, 800x800).<br>
-Para cambiar la resolución y refrescar la página, cliquee sobre el botón de validación 'mapa', o sino en 'recentrar' si desea regresar a la vista completa con la nueva resolución.<br>
-Al cambiar de resolución, se mantienen tanto la búsqueda en curso asi como el encuadre elegido.<br>
-- Una "barra de herramientas".<br>
-Las herramientas se seleccionan cliqueando en el "botón radio", y se utilizan al cliquear en la carta.<br>
---&gt; la herramienta "lupa", cuyos iconos de zoom tienen los simbolos - (para alejarse) y + (para acercarse). El número (de 1 a 3) indica el nivel de zoom.<br>
---&gt; la herramienta "recentrar", cuyo icono es una cruz en el centro de la lupa, permite, cuando éste está seleccionado, moverse en el mapa. El punto cliqueado estará en el centro del mapa de la página siguiente.<br>
-</dl></dl>
-Nota :<br>
-Cuando se consigió la visualización de las informaciones y el nivel de visibilidad deseado (presencia de éste o aquel calco, dimensión de la imagen), se puede conservar la dirección de esta vista / página con todas sus informaciones, o sea, la petición a las bases (como una url) que permite construir la vista.<br>
-Esta particularidad tiene dos ventajas principales. Permite capitalizar sus "favoritos" (bookmarks), y el tiempo pasado en construir el documento personalizado (al guardar la petición en los favoritos). También le permite transmitir la dirección de la página a un interlocutor, para que éste no pierda tiempo reconstruyendo la vista, y estando seguro de trabajar sobre el mismo documento, al utilizar la misma petición para consultar las mismas bases.<br>
+<b>El módulo "modo lista (texto)" :</b><br>
+El conjunto de respuestas a la petición se presenta como una lista. Un enlace lleva hacia una
+ficha detallada para cada respuesta.
+<br><br><br>
+
+<b>El módulo "modo mapa (imagen)" :</b><br>
+La lista se acompaña con la localización de los puntos en un mapa.<br>
+Se puede acceder a las herramientas propias a este modo de visualización, éstas son :
+<ul>
+<li> El mapa de navegación : es una representación en escala fija de la totalidad de la zona  
+geográfica en cuestión y permite al usuario posicionar la representación visible en la imagen
+principal.</li>
+
+<li> El botón "recentrar" : muestra la totalidad del mapa de la región.
+Puede ser práctico volver a la vista general luego de haber navegado en un mapa sin perder la
+petición inicial.</li>
+
+<li> El menú desplegable "400x400" : Propone diferentes resoluciones gráficas para la visualización del
+mapa principal (200x200, 400x400, 600x600, 800x800).  Para cambiar la resolución y refrescar la página,
+cliquee sobre el botón de validación '>>'. Al cambiar de resolución, se mantienen tanto la búsqueda en
+curso asi como el encuadre elegido.</li>
+
+<li>las opciones de "clic" del ratón sobre el mapa : Las herramientas se seleccionan cliqueando en su
+"botón radio" correspondiente. <br>
+Las opciones accesibles son : <ul>
+<li>la opción <b>"Plantar una Bandera"</b> (la bandera dorada): al seleccionar esta opción, el usuario
+puede "plantar" la bandera en algún lugar del mapa. Luego, puede ingresar información para ese punto.
+Una vez el punto calificado, éste se encontrará accesible a la búsqueda para los otros usuarios.</li>
+<li>la opción <b>"Lupa"</b>, sus iconos de zoom tienen los simbolos - (para alejarse) y + (para acercarse).
+Tanto la escala como el indicador de distancia bajo el mapa son actualizados cada vez que se usa esta opción.
+<li>la opción <b>"Recentrar"</b> situada entre las lupas (ícono en forma de cruz) permite, al seleccionarse,
+desplazarse sobre el mapa. El punto seleccionado (con un clic) sobre el mapa estará en el centro del mapa
+de la página siguiente. El uso de esta opción es el mismo tanto sobre el mapa principal como sobre el mapa
+de navegación.</li>
+<br></ul>
+<li>Los elementos llamados "calcos" ("layers") aparte de filtrar la búsqueda, forman parte de la respuesta
+cartográfica y mejoran la lisibilidad del mapa. Estas pueden seleccionarse independientemente (nombre de las
+ciudades, contorno de las regiones...).<br>
+Para poder ver el calco deseado en forma sencilla y para una misma petición, el usuario cuenta con el botón
+"Recalcular".</li>
+</ul>
+<br>
+<b>Note sobre las URL de Localis :</b><br>
+
+Cuando se consigió la visualización de las informaciones y el nivel de visibilidad deseado (presencia de éste o aquel calco, dimensión de la imagen), se puede conservar la dirección de esta vista / página con todas sus informaciones, o sea, la petición a las bases (como una url) que permite construir la vista.<br><br>
+Esta particularidad tiene dos ventajas principales : <ul>
+<li>Permite capitalizar sus "favoritos" (bookmarks), y el tiempo pasado en construir el documento personalizado (al guardar la petición en los favoritos).</li>
+<li>Permite transmitir la dirección de la página a un interlocutor, para que éste no pierda tiempo reconstruyendo la vista, y estando seguro de trabajar sobre el mismo documento, al utilizar la misma petición para consultar las mismas bases.</li>
+</ul>
 <br>
 Tenga en cuenta que se trata de una herramienta en desarrollo, puede encontrarse con imperfecciones o problemas de funcionamiento.<br>
 De ser asi, av&iacute;sele a <a href=mailto:mose@makina-corpus.org>mose</a>.
