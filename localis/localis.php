@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.45 2003/02/03 02:53:02 mose Exp $
+<? /* $Id: localis.php,v 1.46 2003/02/03 08:28:44 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -158,11 +158,13 @@ if (!is_array($ext)) {
 
 $zClick = ms_newPointObj();
 if ($act and ($refx and $refy) and (sizeof($ext) > 3)) {
+	$refx = floor($refx*($sizex/$conf[map][ref_sizex]));
+	$refy = floor($refy*($sizey/$conf[map][ref_sizey]));
 	$zClick->setXY($refx,$refy,0);
 	$zMap->set("width",$sizex);
 	$zMap->set("height",$sizey);
 	#$zMap->zoomscale($scl*1000,$zClick,142,142,$zLimit,$zLimit);
-	$zMap->zoomscale($scl*2,$zClick,142,142,$zLimit,$zLimit);
+	$zMap->zoomscale($scl*1000,$zClick,$sizex,$sizey,$zLimit,$zLimit);
 } elseif ($city) {
 	$refx = geo2pix($click_x,$conf[map][ext_minx],$conf[map][ext_maxx],$sizex);
 	$refy = $sizey - geo2pix($click_y,$conf[map][ext_miny],$conf[map][ext_maxy],$sizey);
@@ -304,6 +306,7 @@ ${"check$interface"} = "checked";
 // ROU was here
 #${"action_$act"} = "checked";
 #${"size_".$sizex."x".$sizey}   = "selected";
+$glob["lang$lang"] = "selected";
 $glob["act".$act] = "checked";
 $glob["size".$sizex."x".$sizey] = "selected";
 $glob['sizex'] = $sizex;
@@ -314,8 +317,8 @@ if ($ext) {
 	$glob['query'].= "&extent=".urlencode($extexploded);
 	$glob['input'].= "<input type=\"hidden\" name=\"extent\" value=\"$extexploded\">";
 }
-$glob['query'].= "&scale=$scale";
-$glob['input'].= "<input type=\"hidden\" name=\"scale\" value=\"$scale\">";
+$glob['query'].= "&scale=".urlencode($scl);
+$glob['input'].= "<input type=\"hidden\" name=\"scale\" value=\"$scl\">";
 
 
 mysql_close($conn);

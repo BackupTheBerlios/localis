@@ -1,4 +1,4 @@
-<? /* $Id: index.php,v 1.4 2003/02/02 08:42:07 mose Exp $
+<? /* $Id: index.php,v 1.5 2003/02/03 08:28:44 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -48,6 +48,7 @@ if (is_file("$tpl_path/$lang/globals.php")) {
 	include "$tpl_path/$lang/globals.php";
 }
 
+$glob["lang$lang"] = "selected";
 
 echo inc("head");
 echo inc("search");
