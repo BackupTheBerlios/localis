@@ -9,11 +9,11 @@ if (!function_exists("pg_connect")) {
 } else {
 	$mes[] = array(1,"php-pgsql extension found.");
 }
-if (is_file(PROOT."libs/local.php")) {
-	$mes[] = array(1,"conf file found ".PROOT."libs/local.php found.");
+if (is_file(PROOT."/db/local.php")) {
+	$mes[] = array(1,"conf file found ".PROOT."/db/local.php found.");
 } else {
-	$mes[] = array(-1,"conf file ".PROOT."libs/local.php not found.");
-	$mes[] = array(0,"-- Please create it manually by copying ".PROOT."libs/local-dist.php");
+	$mes[] = array(-1,"conf file ".PROOT."/db/local.php not found.");
+	$mes[] = array(0,"-- Please create it manually by copying ".PROOT."/db/local-dist.php");
 	$bad = true;
 }
 if (!$bad) {

@@ -24,6 +24,15 @@ class db {
 		return $ret;
 	}
 
+	function strip_array($a) {
+		$ret = array();
+		foreach($a as $k=>$v) {
+			$k = stripslashes($k);
+			$ret[$k] = stripslashes($v);
+		}
+		return $ret;
+	}
+
 	function query($query,$return=false) {
 		$result = @ pg_query($this->conn,$query);
 		$ret = array();
@@ -34,7 +43,7 @@ class db {
 		if ($return) {
 			$rows = pg_num_rows($result);
 			for ($i = 0; $i < $rows; $i++) {
-				$ret[] = pg_fetch_array($result, $i, PGSQL_ASSOC);
+				$ret[] = $this->strip_array(pg_fetch_array($result, $i, PGSQL_ASSOC));
 			}
 			return $ret;
 		} else {
@@ -45,12 +54,24 @@ class db {
 	function queryone($query) {
 		$res = $this->query($query,true);
 		if ($res and $res[0]) {
-			return $res[0];
+			return $this->strip_array($res[0]);
 		} else {
 			return false;
 		}
 	}
 
+	function getone($query) {
+		$res = $this->query($query,true);
+		if ($res and isset($res[0])) {
+			$it = array_shift($res[0]);
+			return stripslashes($it);
+		} else {
+			return false;
+		}
+	}
+
+	/* ======== U S E R admin methods  ======= */
+	
 	function errorlogin($login,$pass) {
 		$login = addslashes($login);
 		$hash = $this->queryone("select pass,credential from users where login='$login'");
@@ -97,7 +118,7 @@ class db {
 		$mail = addslashes(trim($mail));
 		$bio = addslashes(trim($bio));
 		if ($login and $pass) {
-			if ($this->queryone("select count(*) from users where login='$login'" > 0)) {
+			if ($this->getone("select count(*) from users where login='$login'") > 0) {
 				$this->mes[] = "Ce login est déjà utilisé, merci d'en choisir un autre";
 				return false;
 			}
@@ -132,14 +153,59 @@ class db {
 		$query = "update users set credential=$cred where login='$login'";
     return $this->query($query);
 	}	
+
+	/* ======== conf admin methods  ======= */
+
+  function list_confs($offset=0,$limit=0,$find='') {
+    $more = '';
+    if ($find) {
+      $more.= " where name like '%$find%'";
+    }
+    if ($limit) {
+      if ($limit == '-1') $limit = 'all';
+      $more.= " limit $limit";
+      if ($offset) $more.= " offset $offset";
+    }
+    $query = "select *, oid from conf $more";
+    return $this->query($query,true);
+  }
+
+  function get_conf($name) {
+    $name = addslashes($name);
+    $query = "select * from conf where name='$name'";
+    return $this->queryone($query);
+  }
+
+  function mod_conf($name,$value) {
+    $name = addslashes(trim($name));
+    $value = addslashes(trim($value));
+    if ($name) {
+      if ($this->getone("select count(*) from conf where name='$name'") > 0) {
+        $query = "update conf set value='$value' where name='$name'";
+        return $this->query($query);
+      } else { 
+        $query = "insert into conf (name,value) values('$name','$value')";
+        return $this->query($query);
+      }
+    } else {
+      $this->mes[] = tra("Aucune variable indiquée");
+      return false;
+    }
+  } 
+
+  function del_conf($name) {
+    $query = "delete from conf where name='$name'";
+    return $this->query($query);
+  }
+
 }
 
-if (!is_file(dirname(__FILE__)."/local.php")) {
+if (!is_file(PROOT."/db/local.php")) {
 	header('Location: install.php');
 	exit;
 }
 
-include dirname(__FILE__)."/local.php";
+include PROOT."/db/local.php";
 $db = new db($dbhost,$dbport,$dbname,$dbuser,$dbpass);
 if (!$db->conn) {
 	$feedback[] = array('num'=>-1,'msg'=>$db->mes[0]);
