@@ -26,7 +26,7 @@ type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" borde
 </td>
 <td>
 
-<table border="0" cellpadding="1" cellspacing="0" width="$.colwidth$" class="dashed" id="map">
+<table border="0" cellpadding="1" cellspacing="0" class="dashed" id="map">
 <tr><td valign="top" align="center">
 <input type="image" src="{$refsrc}" width="100" height="100" name="ref" alt="{$name}" hspace="0" vspace="0" border="0"><br>
 <input type="submit" name="fit" value="{tr}Recadrer{/tr}" class="submit" id="106" onclick="document.f.forceextent.value='1'; document.f.extent.value=''; document.f.scale.value=''; document.f.submit();">
@@ -61,6 +61,11 @@ type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" borde
 
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="dashed">
 <tr>
+{if $smarty.session.admin}
+<td valign="top" width="25%" align="center" class="tool{$focus.edit}">
+<div><label for="edit"><img src="img/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edit" valign="top"></label><br />
+<input type="radio" id="edit" name="action" value="edit"{if $focus.edit eq 'focus'} checked="checked"{/if} accesskey="r" /></div></td>
+{/if}
 <td valign="top" width="25%" align="center" class="tool{$focus.zoomout}">
 <div><label for="zoomout"><img src="img/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"></label><br />
 <input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked"{/if} accesskey="a" /></div></td>
@@ -78,10 +83,69 @@ type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" borde
 {$layermenu}</table>
 <input type="submit" name="refresh" value="{tr}Rafraichir{/tr}" class="submit" id="106" />
 </td></tr></table>
-{if $map_click.x}
+
+<div class="bar">Selection</div>
+<select name="moyen">
+<option value="">{tr}Moyen de locomotion{/tr}</option>
+<option value="">{tr}... Indifférent{/tr}</option>
+{section name=i loop=$moyens}
+<option value="{$moyens[i]}">{$moyens[i]}</option>
+{/section}
+</select><br />
+
+<select name="duree">
+<option value="">{tr}Durée du parcours{/tr}</option>
+<option value="">{tr}... Indifférent{/tr}</option>
+{section name=i loop=$durees}
+<option value="{$durees[i]}">{$durees[i]}</option>
+{/section}
+</select><br />
+
+<select name="difficulte">
+<option value="">{tr}Niveau de difficulté{/tr}</option>
+<option value="">{tr}... Indifférent{/tr}</option>
+{section name=i loop=$difficultes}
+<option value="{$difficultes[i]}">{$difficultes[i]}</option>
+{/section}
+</select><br />
+
+<input type="submit" name="action" value="{tr}Rechercher{/tr}" /><br />
+
+{if $smarty.request.save eq 'all'}
+<table>
+<tr><td>Nom</td><td><input type="text" name="p_name" value="" /></td></tr>
+<tr><td>Moyen de locomotion</td><td><select name="p_moyen">
+{section name=i loop=$moyens}
+<option value="{$moyens[i]}">{$moyens[i]}</option>
+{/section}
+</select></td></tr>
+<tr><td>Duree</td><td>
+<select name="p_duree">
+{section name=i loop=$durees}
+<option value="{$durees[i]}">{$durees[i]}</option>
+{/section}
+</select></td></tr>
+
+<tr><td>Difficulté (1 facile, 5 tres dur)</td><td>
+<select name="p_difficulte">
+{section name=i loop=$difficultes}
+<option value="{$difficultes[i]}">{$difficultes[i]}</option>
+{/section}
+</select></td></tr>
+<tr><td></td><td><input type="submit" name="action" value="Enregistrer" /></td></tr>
+</table>
+{/if}
+{if $smarty.session.admin}
 click x : {$map_click.x}<br />
 click y : {$map_click.y}<br />
-extent : {$extent}
+extent : {$extent}<br />
+<hr />
+{foreach item=x from=$smarty.session.track}
+<a href="{$url}?del={$x|escape:"url"}">[x]</a> <a href="">{$x}</a><br />
+{/foreach}
+<a href="{$url}?purge=all">purge</a>
+<a href="{$url}?save=all">save</a>
+<hr />
 {/if}
 </td></tr></table>
 </form>

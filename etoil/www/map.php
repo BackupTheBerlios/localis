@@ -26,9 +26,30 @@ if (isset($_REQUEST['act'])) {
 } else {
 	$act = 'nothing';
 }
+if (isset($_REQUEST['purge']) and $_REQUEST['purge'] == 'all') {
+	$_SESSION['track'] = array();
+}
 $lay = array("fond");
 
 $e_map = ms_newMapObj($mapfile);
+$moyens[] = "Pédestre";
+$moyens[] = "Equestre";
+$moyens[] = "Cyclable";
+$moyens[] = "Kayak";
+$smarty->assign('moyens',$moyens);
+
+$durees[] = "moins d'une demi-heure";
+$durees[] = "moins d'une heure";
+$durees[] = "une à deux heures";
+$durees[] = "plus de deux heures";
+$smarty->assign('durees',$durees);
+
+$difficultes[] = "1";
+$difficultes[] = "2";
+$difficultes[] = "3";
+$difficultes[] = "4";
+$difficultes[] = "5";
+$smarty->assign('difficultes',$difficultes);
 
 // ========================================================================
 
@@ -98,7 +119,47 @@ if ($clicked and isset($_REQUEST['action'])) {
 	} elseif ($_REQUEST['action'] == "travel") {
 		$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 		$focus['travel'] = "focus";
+	} elseif ($_REQUEST['action'] == "edit" and $_SESSION['admin']) {
+		$focus['edit'] = "focus";
+		$_SESSION['track'][] = $map_click['x']." ".$map_click['y'];
 	}
+}
+
+if (isset($_REQUEST['p_name'])) {
+	
+}
+
+if (!empty($_SESSION['track'])) {
+	$e_shape = ms_newShapeObj(MS_SHAPE_LINE);
+	$e_line = ms_newLineObj();
+	foreach($_SESSION['track'] as $coord) {
+		list($x,$y) = split(' ',$coord);
+		$e_line->addXY($x,$y);
+	}
+	$e_shape->add($e_line);
+	
+	$e_track2 = ms_newLayerObj($e_map);
+	$e_track2->set('name','temptrackback');
+	$e_track2->set('status',MS_ON);
+	$e_track2->set('type',MS_LAYER_LINE);
+	$e_track2->addFeature($e_shape);
+	$e_class2 = ms_newClassObj($e_track2);
+	$e_style2 = ms_newStyleObj($e_class2);
+	$e_style2->color->setRGB(200,160,100);
+	$e_style2->set("size",7);
+	$e_style2->set("symbolname",'circle');
+
+	$e_track = ms_newLayerObj($e_map);
+	$e_track->set('name','temptrack');
+	$e_track->set('status',MS_ON);
+	$e_track->set('type',MS_LAYER_LINE);
+	$e_track->addFeature($e_shape);
+	$e_class = ms_newClassObj($e_track);
+	$e_style = ms_newStyleObj($e_class);
+	$e_style->color->setRGB(255,255,255);
+	$e_style->set("size",3);
+	$e_style->set("symbolname",'circle');
+
 }
 
 $e_layer = ms_newLayerObj($e_map);
@@ -106,7 +167,7 @@ $e_layer->set('name','tracks');
 $e_layer->set('status',MS_ON);
 $e_layer->set('connectiontype',MS_POSTGIS);
 $e_layer->set('connectiontype',$db->connstr);
-$e_layer->set('data',"point_geom from points where point_parcours_id=1");
+$e_layer->set('data',"parcours_centre from parcours where point_parcours_id=1");
 $e_layer->set('type',MS_LAYER_POINT);
 $e_layer->set('labelitem','point_time');
 $e_layer->set('connectiontype',$db->connstr);
