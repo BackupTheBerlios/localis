@@ -33,6 +33,24 @@ function tra($str) {
 	}
 }
 
+function exact_time($time) {
+  $float = strtok($time,' ');
+  $sec = strtok(' ');
+  return $sec + $float;
+}
+
+function elapsed_time() {
+	return number_format(exact_time(microtime()) - exact_time(TIMER_START),4);
+}
+
+function pix2geo($x,$minx,$maxx,$size) {
+  return floor(($x / $size) * ($maxx - $minx));
+}
+
+function geo2pix($x,$minx,$maxx,$size) {
+  return floor($size * ($x - $minx) / ($maxx - $minx));
+}
+
 function checkfontlist($path) {
 	$fonts = '';
   if (!is_file("$path/fonts/fontset")) {
@@ -49,7 +67,6 @@ function checkfontlist($path) {
     fputs($fp,$fonts);
     fclose($fp);
   }
-
 }
 
 ?>

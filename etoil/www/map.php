@@ -1,5 +1,6 @@
 <?php 
 $title = "Cartographie";
+$db = true;
 include("setup.php");
 
 $mapfile = PROOT. "/maps/limousin.map";
@@ -35,12 +36,14 @@ $extminx = $e_map->extent->minx;
 $extminy = $e_map->extent->miny;
 $extmaxx = $e_map->extent->maxx;
 $extmaxy = $e_map->extent->maxy;
+
+$e_limit = ms_newRectObj();
+$e_limit->setextent($extminx,$extminy,$extmaxx,$extmaxy);
+
 if (isset($_REQUEST['extent'])) {
 	list($extminx,$extminy,$extmaxx,$extmaxy) = split(' ',trim($_REQUEST['extent']));
 }
 $ext = array($extminx,$extminy,$extmaxx,$extmaxy);
-$e_limit = ms_newRectObj();
-$e_limit->setextent($extminx,$extminy,$extmaxx,$extmaxy);
 
 $e_extent = ms_newRectObj();
 $e_extent->setextent($ext[0],$ext[1],$ext[2],$ext[3]);
@@ -57,7 +60,6 @@ if (isset($_REQUEST['size'])) {
 $smarty->assign('sizex',$sizex);
 $smarty->assign('sizey',$sizey);
 $smarty->assign('sizecheck',$sizecheck);
-
 $smarty->assign('mapmargin',12);
 
 // ========================================================================
@@ -77,10 +79,13 @@ foreach ($layers as $l) {
 $e_click = ms_newPointObj();
 if ($click_x and $click_y) {
 	$e_click->setXY($click_x,$click_y,0);
+	$map_click['x'] = $extminx + pix2geo($click_x,$extminx,$extmaxx,$sizex);
+	$map_click['y'] = $extmaxy - pix2geo($click_y,$extminy,$extmaxy,$sizey);
 	$clicked = TRUE;
 } else {
 	$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
 	$clicked = FALSE;
+	$map_click = array();
 }
 $focus = array();
 if ($clicked and isset($_REQUEST['action'])) {
@@ -95,6 +100,23 @@ if ($clicked and isset($_REQUEST['action'])) {
 		$focus['travel'] = "focus";
 	}
 }
+
+$e_layer = ms_newLayerObj($e_map);
+$e_layer->set('name','tracks');
+$e_layer->set('status',MS_ON);
+$e_layer->set('connectiontype',MS_POSTGIS);
+$e_layer->set('connectiontype',$db->connstr);
+$e_layer->set('data',"point_geom from points where point_parcours_id=1");
+$e_layer->set('type',MS_LAYER_POINT);
+$e_layer->set('labelitem','point_time');
+$e_layer->set('connectiontype',$db->connstr);
+$e_class = ms_newClassObj($e_layer);
+$e_label = $e_class->label;
+$e_label->set("position",MS_CC);
+$e_style = ms_newStyleObj($e_class);
+$e_style->set("size",8);
+$e_style->outlinecolor->setRGB(128,0,0);
+
 $e_image = $e_map->draw();
 $image = $e_image->saveWebImage();
 $e_ref = $e_map->drawreferencemap();
@@ -110,6 +132,8 @@ $smarty->assign('extent',"$extminx $extminy $extmaxx $extmaxy");
 $smarty->assign('refsrc',$refsrc);
 $smarty->assign('legsrc',$legsrc);
 $smarty->assign('focus',$focus);
+$smarty->assign('map_click',$map_click);
 $smarty->assign('mapimage',$image);
 $smarty->display("map.tpl");
+echo elapsed_time();
 ?>

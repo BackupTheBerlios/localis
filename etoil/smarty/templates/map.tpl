@@ -63,13 +63,13 @@ type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" borde
 <tr>
 <td valign="top" width="25%" align="center" class="tool{$focus.zoomout}">
 <div><label for="zoomout"><img src="img/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"></label><br />
-<input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked"{/if} /></div></td>
+<input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked"{/if} accesskey="a" /></div></td>
 <td valign="top" width="25%" align="center" class="tool{$focus.travel}">
 <div><label for="travel"><img src="img/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top"></label><br />
-<input type="radio" id="travel" name="action" value="travel"{if $focus.travel eq 'focus'} checked="checked"{/if} /></div></tD>
+<input type="radio" id="travel" name="action" value="travel"{if $focus.travel eq 'focus'} checked="checked"{/if} accesskey="z" /></div></tD>
 <td valign="top" width="25%" align="center" class="tool{$focus.zoomin}">
 <div><label for="zoomin"><img src="img/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom avant" valign="top"></lable><br />
-<input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked"{/if} /></div></td>
+<input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked"{/if}  accesskey="e" /></div></td>
 </td></tr></table>
 
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="dashed">
@@ -78,8 +78,11 @@ type="image" src="img/dot1.png" width="{$mapmargin}" height="{$mapmargin}" borde
 {$layermenu}</table>
 <input type="submit" name="refresh" value="{tr}Rafraichir{/tr}" class="submit" id="106" />
 </td></tr></table>
-
-
+{if $map_click.x}
+click x : {$map_click.x}<br />
+click y : {$map_click.y}<br />
+extent : {$extent}
+{/if}
 </td></tr></table>
 </form>
 </div>

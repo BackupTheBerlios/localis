@@ -7,4 +7,5 @@ if (isset($_REQUEST['loggedok'])) {
 }
 
 $smarty->display("home.tpl");
+echo elapsed_time();
 ?>

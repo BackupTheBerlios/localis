@@ -4,6 +4,7 @@ class db {
 
 	var $conn;
 	var $mes = array();
+	var $connstr;
 
 	function db($host='',$port='',$name='',$user='',$pass='') {
 		$str = array();
@@ -12,7 +13,8 @@ class db {
 		if ($name) $str[] = "dbname=$name";
 		if ($user) $str[] = "user=$user";
 		if ($pass) $str[] = "password=$pass";
-		$this->conn = @ pg_connect(implode(' ',$str));
+		$this->connstr = implode(' ',$str);
+		$this->conn = @ pg_connect($this->connstr);
 		if (!$this->conn) {
 			$this->mes[] = tra("Connection à la base impossible.");
 		}
