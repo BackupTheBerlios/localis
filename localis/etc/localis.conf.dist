@@ -1,5 +1,3 @@
-# Localis Configuration file.
-
 # Database parameters
 #######################
 # best choice is to create a mysql user specific to that usage
@@ -7,85 +5,89 @@
 # mysqladmin -uroot -p -e "grant all privileges on sig.* to sig@localhost identified by 'pass';"
 # mysqladmin -uroot -p flush-privileges
 [Database]
-db_host      = localhost    # where mysql database is located
-db_name      = localis 			# the name of the database
-db_user      = localis      		# database username
-db_pass  		 = localis      	# user password
-# Search parameters
-#####################
-# search_fields_list are fields in database that refer to another table
-# with a list of items. each space separated table has to be referef as
-# ref_XXXX in the main info table.
-# CREATE TABLE XXXX ( XXXX_ref int(11) NOT NULL auto_increment,
-# XXXX_name char(50) default NULL, PRIMARY KEY  (XXXX_ref) )
-#search_list = type 
-#search_listresult = %s : <u>%s</u>
-# search_fields_text are fields searched 'as-is' with standard final % wildcard
-# in the main table
+db_host      = localhost
+db_name      = localis_littoral
+db_user      = localis
+db_pass  		 = localis
 
 [General]
-titre        = Localis
-baseline     = Contributive Online GIS
-company      = Localis Workgroup
-company_url  = http://localis.berlios.de
-editor_name  = Localis : Edit
-root_path    = /var/www/mapserver/www
-tpl_path     = /var/www/mapserver/www/template
-tmp_path     = /var/www/mapserver/www/tmp
-img_path     = /var/www/mapserver/www/images
-sql_reftable = communes
+root_path    = /usr/local/mapserver/www
+tpl_path     = /usr/local/mapserver/www/localis_littoral/localis/template
+tmp_path     = /usr/local/mapserver/www/localis_littoral/localis/tmp
+img_path     = /usr/local/mapserver/www/localis_littoral/localis/images
+sql_reftable = points
 sql_cityname = nom
 search_listresult = <u>%s</u>
 lang         = fr
 
+[Globals]
+name         = L'Ile de Ré
+minimap      = /maps/mini_re2.png
+minimapx     = 142
+minimapy     = 71
+colwidth     = 146
+
+# index.php
+# +query  : query string appended in url
+# +input  : contextual fields in forms 
+
+# localis.php
+# +imgsrc : image url
+# +refsrc : ref image url
+# +legsrc : legend image url
+# +sizeXXXxXXX : size of display = selected
+# +actXXX : action (edition, zoomin, travel, zoomout)
+# +layermenu : layers (geo background)
+# +catmenu   : categories (data foreground)
+# +sizex
+# +sizey
+# +scale
+
 [Map]
-name         = france
-path 		     = /CVS_work/mapfr
-file         = france.map
-url          = /mapfr
-ext_minx     = 0
-ext_maxx     = 1267000
-ext_miny     = 1630000
-ext_maxy     = 2690000
+name         = re2
+path 		     = /usr/local/mapserver/www/localis_littoral/re
+file         = re.map
+url          = /maps
+minimap      = /maps/mini_re2.png
+defext       = 295000 2130000 328000 2150000
 ref_sizex    = 142
-ref_sizey    = 142
+ref_sizey    = 71
 coord_x      = E
 coord_y      = N
 dbf_def      = dbf://NOM,C,64,0/E,N,12,4/N,N,12,4
 
 [Infos]
 # Rows fetched (cityname, id, name, short description), layer name
-lug			 = rows://ville,id,nom,notes/communes2
-trolls 			 = rows://ville,id,nom,notes/communes3
-human 			 = rows://ville,id,nom,notes/communes4
+points			 = rows://nom,id,nom,description/communes
+#trolls 			 = rows://ville,id,nom,notes/communes3
+#human 			 = rows://ville,id,nom,notes/communes4
 
 [Layers]
-fond         = file://france.map
-regions      = file://regions.map
+fond         = Fond
+ortho        = SigLittoral
+detail       = Détails
+communes     = Communes
 
 [Select]
-lug          = mysql://localis,lug,ville/localis,communes,NOM
-trolls       = mysql://localis,trolls,ville/localis,communes,NOM
-human        = mysql://localis,human,ville/localis,communes,NOM
+#points          = mysql://localis_littoral,points,nom/
+#trolls       = mysql://localis_littoral,trolls,ville/localis_littoral,communes,NOM
+#human        = mysql://localis_littoral,human,ville/localis_littoral,communes,NOM
 
 [Gui]
-fond         = Fond
 departements = Departements
-regions      = Regions
+agglomerations      = Agglomerations
 communes     = Communes
 type         = Type
+fit          = Recadrer
 refresh      = Recalculer
 map_button   = Carte
 list_button  = Liste
 search       = Recherche
 colwidth     = 146
 debug        = 0
-lug          = LUG
-trolls       = Trolls
-human        = Humains
 noresult     = Aucun résultat.
-defaultmapsize = 400x400
-
-[Form]
-search       = text://20/ville,nom
-type  			 = select_list://all->[ Tous ],lug->Groupes,trolls->Trolls,human->Humains
+moveleft_button    = l
+moveright_button   = r
+moveup_button      = u
+movebottom_button  = b
+defaultmapsize     = 400x400
