@@ -1,4 +1,4 @@
-# $Id: evenements.sql,v 1.3 2002/10/17 13:17:13 mastre Exp $
+# $Id: libre.sql,v 1.1 2002/10/20 13:56:28 mose Exp $
 #
 # Serveur: localhost
 # Généré le : Jeudi 17 Octobre 2002 à 15:10
@@ -91,3 +91,22 @@ INSERT INTO lug VALUES (30, 'redon', 'La TROLL West (Troupe Redonnaise Orientée 
 INSERT INTO lug VALUES (31, 'Nancy', 'Groupe des Utilisateurs de Linux de Nancy et ses environs  \\n http://www.mirabellug.fr.fm/', '0000-00-00 00:00:00', 'Mirabellug');
 INSERT INTO lug VALUES (32, 'Thones', 'Savoie-Aravis Linux Users Group SALUG est un groupe dutilisateurs de Linux des vallées des Aravis dont lobjet est la promotion des logiciels libres et l\'\'entraide entre les membres. \\n http://salug.tuxfamily.org/', '0000-00-00 00:00:00', 'SALUG');
 
+#
+# Structure de la table `trolls`
+#
+
+DROP TABLE IF EXISTS trolls;
+CREATE TABLE trolls (
+  id int(11) NOT NULL auto_increment,
+  nom varchar(255) NOT NULL default '',
+  email varchar(255) NOT NULL default '',
+  description varchar(255) NOT NULL default '',
+  date datetime NOT NULL default '0000-00-00 00:00:00',
+  KEY id (id),
+) TYPE=MyISAM;
+
+#
+# Contenu de la table `trolls`
+#
+
+INSERT INTO trolls VALUES (1, 'mose', 'mose@localis.org', 'Auteur de Logiciels Libres.', '0000-00-00 00:00:00');
