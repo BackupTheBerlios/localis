@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.37 2003/02/05 06:08:42 mose Exp $
+<?  /* $Id: lib.php,v 1.38 2003/02/05 06:37:34 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -51,7 +51,7 @@ function sig_list($field, $conn, $cut=0) {
 
 function layerslist() {
   global $conn,$conf;
-  $query = "select * from layer";
+  $query = "select * from layer order by layername";
   $res = mysql_db_query($conf[database][db_name],$query,$conn) or die(mysql_error());
   while ($r = mysql_fetch_array($res)) {
     $back["$r[layerid]"] = $r;

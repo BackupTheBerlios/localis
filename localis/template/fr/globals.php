@@ -17,7 +17,7 @@ $laycolors["200 120 50"] = "Orange";
 $laycolors["200 50 0"] = "Rouge";
 
 $laysymbols["ordi"]   = "Ordi";
-$laysymbols["flag"]   = "Drapeau";
+$laysymbols["flagblue"]   = "Drapeau";
 $laysymbols["tux"]    = "Tux";
 $laysymbols["human"]  = "Humain";
 $laysymbols["troll"]  = "Troll";
