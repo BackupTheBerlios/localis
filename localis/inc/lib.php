@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.23 2002/10/28 04:30:07 mose Exp $
+<?  /* $Id: lib.php,v 1.24 2002/11/07 15:49:14 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -202,6 +202,16 @@ function pix2geo($x,$minx,$maxx,$size) {
 
 function geo2pix($x,$minx,$maxx,$size) {
 	return floor($size * ($x - $minx) / ($maxx - $minx));
+}
+
+function move_map($minx='',$maxx='',$sens) {
+	global $ext;
+	switch($sens) { 
+		case "left" :
+			
+		break;
+	}
+	return $ext;
 }
 
 function dbf_gen($base,$jbase,$vres,$cond,$conn,$owh='',$pref='') {

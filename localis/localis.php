@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.37 2002/11/07 07:55:50 mose Exp $
+<? /* $Id: localis.php,v 1.38 2002/11/07 15:49:13 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -35,6 +35,8 @@ $addemail = $HTTP_GET_VARS['add_email'];
 $addurl = $HTTP_GET_VARS['add_url'];
 $addnotes = $HTTP_GET_VARS['add_notes'];
 $addit   = $HTTP_GET_VARS['addit'];
+$fzoom   = $HTTP_GET_VARS['fzoom'];
+$fzoomout   = $HTTP_GET_VARS['fzoomout'];
 
 if (strstr($HTTP_GET_VARS['size'],'x')) {
 	list($sizex,$sizey) = split('x',$HTTP_GET_VARS['size']);
@@ -224,6 +226,12 @@ if ($view != $conf[gui][list_button]) {
 			$extmap = $zExtent;
 			$clicked = FALSE;
 		}
+		if (!empty($fzoom)) {
+			$zMap->zoompoint(2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
+		}
+		if (!empty($fzoomout)) {
+			$zMap->zoompoint(-2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
+		}
 		if ($clicked and ($act == "zoomin")) {
 			$zMap->zoompoint(2,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
 		} elseif ($clicked and ($act == "zoomout")) {
@@ -236,7 +244,7 @@ if ($view != $conf[gui][list_button]) {
 			$addville = domenu(surrounding($coordx,$coordy,10000),'');
 		} elseif ($clicked and ($act == "travel")) {
 			$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
-		} elseif ($scl and $zClick) {
+		} elseif ($scl and $zClick and empty($fzoom) and empty($fzoomout)) {
 			$zMap->zoompoint(1,$zClick,$sizemapx,$sizemapy,$extmap,$zLimit);
 			$act = "travel";
 		}
