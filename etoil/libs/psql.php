@@ -175,7 +175,7 @@ class db {
   function get_conf($name) {
     $name = addslashes($name);
     $query = "select * from conf where name='$name'";
-    return $this->getone($query);
+    return $this->queryone($query);
   }
 
   function mod_conf($name,$value) {
@@ -243,7 +243,11 @@ class db {
 			}
 		}
 		return $this->query($query,true);
-		
+	}
+
+	function get_parcours_info($id) {
+		$query = "select *,asText(Envelope(parcours_geom)) as ext from parcours where parcours_id=$id";
+		return $this->queryone($query,true);
 	}
 	
 }

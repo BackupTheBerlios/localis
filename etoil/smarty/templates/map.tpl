@@ -149,7 +149,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <div class="bar">
 {section name=t loop=$tracks}
 {assign var=v value=$tracks[t].parcours_type}
-<a href="#" onmouseover="getElementById({$tracks[t].parcours_id}).border='1';">
+<a href="{$url}?pid={$tracks[t].parcours_id}" onmouseover="getElementById({$tracks[t].parcours_id}).border='1';">
 <img src="{$icontypes.$v}" width="10" height="9" border="0" /> {$tracks[t].parcours_name}</a><br />
 {/section}
 </div>

@@ -127,6 +127,15 @@ if (isset($_REQUEST['focusville'])) {
 	$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
 	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 	$clicked = false;
+} elseif (isset($_REQUEST['pid'])) {
+	$parcours_info = $db->get_parcours_info($_REQUEST['pid']);
+	preg_match("/POLYGON\(\(([\.0-9]*) ([\.0-9]*),[\.0-9]* ([\.0-9]*),([\.0-9]*) [\.0-9]*,[\.0-9]* [\.0-9]*,[\.0-9]* [\.0-9]*\)\)/",$parcours_info['ext'],$m);		
+	$d = (($m[4] - $m[1]) / 10);
+	$b = (($m[3] - $m[2]) / 10);
+	$e_extent->setextent($m[1] - $d,$m[2] - $d,$m[4] + $b,$m[3] + $d);
+	$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
+	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+	$clicked = false;
 }
 
 $e_map->set('width',$sizex);
