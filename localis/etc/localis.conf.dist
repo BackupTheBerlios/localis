@@ -85,4 +85,5 @@ noresult     = Aucun résultat.
 
 [Form]
 search       = text://20/ville,nom
-type  			 = select_list://all->[ Tous ],lug->LUG,firstjeudi->First Jeudi,trolls->Trolls
+type  			 = select_list://->[ Aucun ],lug->LUG,firstjeudi->First Jeudi,trolls->Trolls,all->[ Tous ]
+
