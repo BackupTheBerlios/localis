@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.46 2003/02/03 08:28:44 mose Exp $
+<? /* $Id: localis.php,v 1.47 2003/02/03 19:51:59 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -32,24 +32,15 @@ $refy    = ($HTTP_GET_VARS['ref_y']) ? $HTTP_GET_VARS['ref_y'] : $HTTP_GET_VARS[
 $scl     = ($HTTP_GET_VARS['forcescale']) ? $HTTP_GET_VARS['forcescale'] : $HTTP_GET_VARS['scale'];
 $lay     = ($HTTP_GET_VARS['layers']) ? $HTTP_GET_VARS['layers'] : array("fond");
 $act     = ($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : 'travel';
-$drawlayer    = $HTTP_GET_VARS['drawlayer'];
 $city    = $HTTP_GET_VARS['v'];
 $view    = $HTTP_GET_VARS['tpl'];
-$addnom = $HTTP_GET_VARS['addnom'];
-$addlat = $HTTP_GET_VARS['addlat'];
-$addlong = $HTTP_GET_VARS['addlong'];
-$addstatut = $HTTP_GET_VARS['addstatut'];
-$addemail = $HTTP_GET_VARS['addemail'];
-$adddesc = $HTTP_GET_VARS['adddesc'];
-$addit   = $HTTP_GET_VARS['addit'];
+$add     = $HTTP_GET_VARS['add'];
 $fzoom   = $HTTP_GET_VARS['fzoom'];
 $fzoomout   = $HTTP_GET_VARS['fzoomout'];
 $fsens   = $HTTP_GET_VARS['fsens'];
-// ROU check if user agent is IE
+$drawlayer    = $HTTP_GET_VARS['drawlayer'];
 $mode = ereg("MSIE",getenv("HTTP_USER_AGENT")) ? "ie" : "";
-// ROU handle map interface type value (map or point)
 $interface  = ($HTTP_GET_VARS['interface']) ? $HTTP_GET_VARS['interface'] : 'mapImg';
-// ROU was here
 
 if (strstr($HTTP_GET_VARS['size'],'x')) {
 	list($sizex,$sizey) = split('x',$HTTP_GET_VARS['size']);
@@ -78,20 +69,21 @@ if (is_file("$tpl_path/$lang/globals.php")) {
   include "$tpl_path/$lang/globals.php";
 }
 
-if ($HTTP_GET_VARS['forceextent.x'] or $HTTP_GET_VARS['forceextent_x']) {
-	$ext = array($conf[map][ext_minx],$conf[map][ext_miny],$conf[map][ext_maxx],$conf[map][ext_maxy]);
+if ($HTTP_GET_VARS['forceextent']) {
+	$ext = split(' ',$conf[map][defext]);
 } elseif ($HTTP_GET_VARS['extent']) {
 	$ext = split(' ',trim($HTTP_GET_VARS['extent']));
 } else {
-	$ext = array($conf[map][ext_minx],$conf[map][ext_miny],$conf[map][ext_maxx],$conf[map][ext_maxy]);
+	$ext = split(' ',$conf[map][defext]);
 }
 
+list($extminx,$extminy,$extmaxx,$extmaxy) = split(' ',$conf[map][defext]);
 $size    = ($HTTP_GET_VARS['size']) ? $HTTP_GET_VARS['size'] : $conf[gui]['defaultmapsize'];
 
 $conn = sig_connect();
 
 if ($addit and ($addtype != 'all')) {
-	additem($addnom,$addemail,$adddesc,$addstatut,$addlat,$addlong);
+	additem($add[nom],$add[sign],$add[desc],$add[statut],$add[lat],$add[long]);
 }
 
 $userlayers = layerslist();
@@ -135,7 +127,7 @@ foreach ($lys as $l) {
 	}
 }	
 $zLimit = ms_newRectObj();
-$zLimit->setextent($conf[map][ext_minx],$conf[map][ext_miny],$conf[map][ext_maxx],$conf[map][ext_maxy]);
+$zLimit->setextent($extminx,$extminy,$extmaxx,$extmaxy);
 if (!$sizex) {
 	$zSizex = $zMap->width;
 	$zSizey = $zMap->height;
@@ -160,14 +152,6 @@ $zClick = ms_newPointObj();
 if ($act and ($refx and $refy) and (sizeof($ext) > 3)) {
 	$refx = floor($refx*($sizex/$conf[map][ref_sizex]));
 	$refy = floor($refy*($sizey/$conf[map][ref_sizey]));
-	$zClick->setXY($refx,$refy,0);
-	$zMap->set("width",$sizex);
-	$zMap->set("height",$sizey);
-	#$zMap->zoomscale($scl*1000,$zClick,142,142,$zLimit,$zLimit);
-	$zMap->zoomscale($scl*1000,$zClick,$sizex,$sizey,$zLimit,$zLimit);
-} elseif ($city) {
-	$refx = geo2pix($click_x,$conf[map][ext_minx],$conf[map][ext_maxx],$sizex);
-	$refy = $sizey - geo2pix($click_y,$conf[map][ext_miny],$conf[map][ext_maxy],$sizey);
 	$zClick->setXY($refx,$refy,0);
 	$zMap->set("width",$sizex);
 	$zMap->set("height",$sizey);
@@ -303,15 +287,14 @@ if (is_array($userlayers)) {
 
 // ROU used by ie map
 ${"check$interface"} = "checked";
-// ROU was here
-#${"action_$act"} = "checked";
-#${"size_".$sizex."x".$sizey}   = "selected";
 $glob["lang$lang"] = "selected";
 $glob["act".$act] = "checked";
 $glob["size".$sizex."x".$sizey] = "selected";
 $glob['sizex'] = $sizex;
 $glob['sizey'] = $sizey;
 $glob['scale'] = $scl;
+$glob['coordx'] = $coordx;
+$glob['coordy'] = $coordy;
 
 if ($ext) {
 	$glob['query'].= "&extent=".urlencode($extexploded);
@@ -343,6 +326,10 @@ if ($drawlayer == "NEW") {
 
 	$glob['right'] = inc("editlayer");
 } elseif ($act == "edition") {
+	$glob['statusmenu'] = domenu(array(0,1,2,3,4,5),0);
+	if ($showpoint) {
+		
+	}
 	$glob['right'] = inc("edit");
 } else {
 	$glob['right'] = $list;

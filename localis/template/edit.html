@@ -1,34 +1,29 @@
 <div class="dashed" id="form">
-<table border=0 cellspacing=0 cellpadding=2 width=100%>
-<input type=hidden name=addlong value=$coordx>
-<input type=hidden name=addlat value=$coordy>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
 <tr>
-<td colspan=2><div class=localis>Ajout de Point</div></td></tr>
-<td colspan=2><div class=foot>X = $coordx</div></td></tr>
-<td colspan=2><div class=foot>Y = $coordy</div></td></tr>
+<td colspan="2"><div class="localis">$edittitre$</div></td></tr>
+<td colspan="2"><div>X
+<input type="text" size="18" name="add[long]" value="$+coordx$"></div></td></tr>
+<td colspan="2"><div>Y
+<input type="text" size="18" name="add[lat]" value="$+coordy$"></div></td></tr>
 <tr>
-<td colspan=2><div class=foot>Priorité</div>
-<select name=addstatut>
-<option>1</option>
-<option>2</option>
-<option>3</option>
-<option>4</option>
-<option>5</option>
+<td colspan="2"><div>$editstatus$</div>
+<select name="add[statut]">
+$+statusmenu$
 </select></td>
 </tr>
-<tr>
-<td colspan=2><div class=foot>Sujet</div>
-<input type=text size=18 name=addnom value="$addnom"></td>
+<tr><td colspan="2"><div>$editsubject$</div>
+<input type="text" size="18" name="add[nom]" value="$+addnom$"></td>
 </tr>
 <tr>
-<td colspan=2><div class=foot>Email</div>
-<input type=text size=18 name=addemail value="$addemail"></td>
+<td colspan="2"><div>$editdesc$</div>
+<textarea cols="15" rows="5" name="add[desc]">$+adddesc$</textarea></td>
 </tr>
 <tr>
-<td colspan=2><div class=foot>Description</div>
-<textarea cols=15 rows=5 name=adddesc>$adddesc</textarea></td>
+<td colspan="2"><div>$editsign$</div>
+<input type="text" size="18" name="add[sign]" value="$+addemail$"></td>
 </tr>
-<tr><td colspan=2 align=left>
-<input type=submit name=addit value=Ajouter>
+<tr><td colspan="2" align="left">
+<input type="submit" name="addit" value="$editsubmit$">
 </td></tr></table>
 </div>
