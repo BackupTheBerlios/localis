@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.51 2003/02/04 19:04:34 mose Exp $
+<? /* $Id: localis.php,v 1.52 2003/02/04 21:41:26 mose Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -88,7 +88,7 @@ $conn = sig_connect();
 
 checkfontlist($conf["map"]['path']);
 
-if ($addit and (is_array($add)) {
+if ($addit and (is_array($add))) {
 	#additem($add[nom],$add[sign],$add[desc],$add[statut],$add[lat],$add[long]);
 	addobj($add);
 }
@@ -191,7 +191,7 @@ foreach($conf[layers] as $l=>$lv) {
 if (is_array($userlayers)) {
   foreach ($userlayers as $ulnum=>$ul) {
     if ($drawlayer == $ulnum) {
-			$glob['input'].= "<input type=\"hidden\" name=\"drawlayer\" value=\"$ulnum\">\n";
+			#$glob['input'].= "<input type=\"hidden\" name=\"drawlayer\" value=\"$ulnum\">\n";
       $glob['catmenu'].= "<option value=$ulnum selected style=background-color:#FFCC99>$ul[layername]</option>";
     } else {
       $glob['catmenu'].= "<option value=$ulnum>$ul[layername]</option>";
@@ -218,7 +218,7 @@ $glob['input'].= "<input type=\"hidden\" name=\"scale\" value=\"$scl\">";
 
 $colwidth = $conf[map][ref_sizex]+4;
 
-if ($drawlayer) {
+if ($drawlayer and ($drawlayer != 'x') and ($drawlayer != 'NEW')) {
 	$points = lcls_drawlayer($drawlayer);
 	if (is_array($points)) {
 		foreach ($points as $where=>$what) {
@@ -252,18 +252,10 @@ $scl = number_format($zMap->scale,0,',',' ');
 echo inc("head");
 echo inc("search");
 if ($drawlayer == "NEW") {
-	$colors["50 120 200"] = "Bleu";
-	$colors["255 255 255"] = "Blanc";
-	$colors["0 0 0"] = "Noir";
-	$colors["50 200 120"] = "Vert";
-	$colors["200 120 50"] = "Orange";
-	$colors["200 50 0"] = "Rouge";
-	$symbols["ordi"] = "Ordi";
-	$symbols["flag"] = "Drapeau";
-	$ftype_menu = domenu(array('point'=>'point','line'=>'traits'),$ftype);
-	$fsize_menu = domenu(array(0,1,2,3,4,5),$fsize);
-	$fcolor_menu = domenu($colors,$fcolor);
-	$fsymbol_menu = domenu($symbols,$fsymbol);
+	$glob['ltype'] = domenu($laytype,'');
+	$glob['lcolor'] = domenu($laycolors,'');
+	$glob['lsize'] = domenu($laysize,'');
+	$glob['lsymbol'] = domenu($laysymbols,'');
 
 	$glob['right'] = inc("editlayer");
 } elseif ($act == "edition") {
