@@ -1,6 +1,6 @@
 Localis : INSTALL 
 ----------------
-$Id: INSTALL,v 1.1 2002/10/12 10:52:09 mose Exp $
+$Id: INSTALL,v 1.2 2003/02/10 13:52:43 mose Exp $
 -------------------
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis - http://localis.makina-corpus.org
@@ -36,14 +36,30 @@ mapserver with php in CGI mode for use with Localis.
 You can get EasyMapServer at 
   http://developer.berlios.de/projects/easymapserver
 
+This set of data files has been done for use with 
+Localis (http://developer.berlios.de/projects/localis) 
+but can be use with other software 
+  Mapserver http://mapserver.gis.unm.edu
+  Grass     http://grass.itc.it
+  OpenEV    http://openev.sf.net
+
 
 Install
 -------
-Setup the mysql database with content of sql/, and put mapfr/ directory 
-in a space accessible by web user, change etc/localis.conf accordingly.
 
-Then put the whole localis directory in a web space and browse.
+Setup the mysql database with content of sql/
+For example, you may type :
+
+mysqladmin -u root create localis
+cat sql/*.sql | mysql -u root localis
+
+Then put the mapfr directory into the www directory of the mapserver
+installation.
+
+Change etc/localis.conf accordingly in localis directory (probably in
+/usr/local/mapserver/www/localis/etc/localis.conf)
 
 
+(thanks to Arnaud Bienvenu for most of this text)
 -------------------
 EOF
