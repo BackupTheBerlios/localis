@@ -6,25 +6,25 @@
 # mysqladmin -uroot -p flush-privileges
 [Database]
 db_host      = localhost
-db_name      = localis_littoral
+db_name      = localis
 db_user      = localis
-db_pass  		 = localis
+db_pass      = localis
 
 [General]
-root_path    = /usr/local/mapserver/www
-tpl_path     = /usr/local/mapserver/www/localis_littoral/localis/template
-tmp_path     = /usr/local/mapserver/www/localis_littoral/localis/tmp
-img_path     = /usr/local/mapserver/www/localis_littoral/localis/images
-sql_reftable = points
+root_path    = /var/www/mapserver/www
+tpl_path     = /var/www/mapserver/www/template
+tmp_path     = /var/www/mapserver/www/tmp
+img_path     = /var/www/mapserver/www/images
+sql_reftable = communes
 sql_cityname = nom
 search_listresult = <u>%s</u>
 lang         = fr
 
 [Globals]
-name         = L'Ile de Ré
-minimap      = /maps/mini_re2.png
+name         = Localis
+minimap      = /mapfr/mini_france.png
 minimapx     = 142
-minimapy     = 71
+minimapy     = 142
 colwidth     = 146
 
 # index.php
@@ -44,50 +44,58 @@ colwidth     = 146
 # +scale
 
 [Map]
-name         = re2
-path 		     = /usr/local/mapserver/www/localis_littoral/re
-file         = re.map
-url          = /maps
-minimap      = /maps/mini_re2.png
-defext       = 295000 2130000 328000 2150000
+name         = france
+path 		     = /usr/local/mapserver/www/mapfr
+file         = france.map
+url          = /mapfr
+minimap      = /mapfr/mini_france.png
+defext       = 1 1630000 1267000 2690000 
 ref_sizex    = 142
-ref_sizey    = 71
+ref_sizey    = 142
 coord_x      = E
 coord_y      = N
 dbf_def      = dbf://NOM,C,64,0/E,N,12,4/N,N,12,4
 
 [Infos]
 # Rows fetched (cityname, id, name, short description), layer name
-points			 = rows://nom,id,nom,description/communes
-#trolls 			 = rows://ville,id,nom,notes/communes3
-#human 			 = rows://ville,id,nom,notes/communes4
-
+lug                      = rows://ville,id,nom,notes/communes2
+trolls 			 = rows://ville,id,nom,notes/communes3
+human 			 = rows://ville,id,nom,notes/communes4
 [Layers]
 fond         = Fond
-ortho        = SigLittoral
-detail       = Détails
-communes     = Communes
+regions      = Regions
 
 [Select]
-#points          = mysql://localis_littoral,points,nom/
-#trolls       = mysql://localis_littoral,trolls,ville/localis_littoral,communes,NOM
-#human        = mysql://localis_littoral,human,ville/localis_littoral,communes,NOM
+lug          = mysql://localis,lug,ville/localis,communes,nom
+trolls       = mysql://localis,trolls,ville/localis,communes,NOM
+human        = mysql://localis,human,ville/localis,communes,NOM
+
 
 [Gui]
-departements = Departements
-agglomerations      = Agglomerations
-communes     = Communes
-type         = Type
-fit          = Recadrer
-refresh      = Recalculer
-map_button   = Carte
-list_button  = Liste
-search       = Recherche
-colwidth     = 146
-debug        = 0
-noresult     = Aucun résultat.
-moveleft_button    = l
-moveright_button   = r
-moveup_button      = u
-movebottom_button  = b
-defaultmapsize     = 400x400
+fond                 = Fond
+departements         = Departements
+regions              = Regions
+agglomerations       = Agglomerations
+communes             = Communes
+type                 = Type
+fit                  = Recadrer
+refresh              = Recalculer
+map_button           = Carte
+list_button          = Liste
+search               = Recherche
+colwidth             = 146
+debug                = 0
+noresult             = Aucun résultat.
+moveleft_button      = l
+moveright_button     = r
+moveup_button        = u
+movebottom_button    = b
+defaultmapsize       = 400x400
+lug                  = LUG
+trolls               = Trolls
+human                = Humains
+
+[Form]
+search = text://20/ville,nom
+type   = select_list://all->[ Tous ],lug->Groupes,trolls->Trolls,human->Humains
+
