@@ -1,6 +1,6 @@
 Localis : INSTALL 
 ----------------
-$Id: INSTALL,v 1.1 2002/10/12 08:56:25 mose Exp $
+$Id: INSTALL,v 1.2 2002/10/19 23:45:49 mose Exp $
 -------------------
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis - http://localis.makina-corpus.org
@@ -39,14 +39,15 @@ You can get EasyMapServer at
 
 Install
 -------
-To install Localis, modify etc/localis.conf, the default values are setup
-for use with module mapfr released with Localis.
+To install Localis, copy the file etc/localis.conf.dist to etc/localis.conf.
+The default values are setup for use with module mapfr released with Localis.
+In localis.conf, modify database access and path information (at least).
 
 Setup the mysql database with content of mapfr/sql, and put mapfr/ directory 
 in a space accessible by web user, change localis.conf accordingly.
 
 Then put the whole localis directory in a web space and browse.
 
-
+(hrum. yes. a real installer is planned. hope soon, yes.)
 -------------------
 EOF
