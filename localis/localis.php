@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.35 2002/10/28 04:30:07 mose Exp $
+<? /* $Id: localis.php,v 1.36 2002/11/05 14:34:14 mastre Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -97,13 +97,15 @@ foreach ($conf[form] as $field=>$f) {
 	}
 } 
 
-$dir = opendir("etc/dbdata");
-while (false !== ($dd = readdir($dir))) {
-  if (substr($dd,0,1) != '.') {
-	  $donf[$dd] = parseconf("etc/views/$dd");
+if (is_dir("etc/dbdata")) {
+	$dir = opendir("etc/dbdata");
+	while (false !== ($dd = readdir($dir))) {
+		if (substr($dd,0,1) != '.') {
+			$donf[$dd] = parseconf("etc/views/$dd");
+		}
 	}
+	closedir($dir);
 }
-closedir($dir);
 
 if ($addit and $addcity and ($addtype != 'all')) {
 	additem($addtype,$addcity,$addnom,$addemail,$addurl,$addnotes);
