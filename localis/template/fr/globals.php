@@ -16,8 +16,10 @@ $laycolors["50 200 120"] = "Vert";
 $laycolors["200 120 50"] = "Orange";
 $laycolors["200 50 0"] = "Rouge";
 
-$laysymbols["ordi"] = "Ordi";
-$laysymbols["flag"] = "Drapeau";
+$laysymbols["ordi"]   = "Ordi";
+$laysymbols["flag"]   = "Drapeau";
+$laysymbols["disk"]   = "Rond";
+$laysymbols["square"] = "Carré";
 
 $laytype['point'] = "Points";
 $laytype['line'] = "Lignes";
@@ -26,6 +28,8 @@ $laysize[0] = 0;
 $laysize[1] = 1;
 $laysize[2] = 2;
 $laysize[3] = 3;
-$laysize[4] = 4;
 $laysize[5] = 5;
+$laysize[10] = 10;
+$laysize[15] = 15;
+$laysize[20] = 20;
 ?>
