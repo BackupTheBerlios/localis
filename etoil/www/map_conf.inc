@@ -1,3 +1,4 @@
+<?
 $mapmargin = 11; // taille de la bordure clicable de navigation perpendiculaire
 $blockspc=7; // espaces entre les blocks de droite
 $types[1] = "Pédestre";
@@ -25,3 +26,4 @@ $levels[4] = "4";
 $levels[5] = "5";
 $mapfile = "limousin.map";
 $sf = 6000; // distance autour d'une ville lors d'un focus ville
+?>
