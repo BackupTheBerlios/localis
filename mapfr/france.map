@@ -37,7 +37,7 @@ LEGEND
 		FORCE on
 		COLOR 60 60 60
 	END
-	TRANSPARENT off
+	TRANSPARENT on
 	OUTLINECOLOR 255 255 255
 	STATUS on
 END
@@ -179,20 +179,23 @@ LAYER
   TYPE point 
   DATA "communes"
   STATUS off
-	CLASSITEM 'nom'
 	GROUP "fond"
+	CLASSITEM 'nom'
 	LABELITEM 'NOM'
+	POSTLABELCACHE true
   CLASS
 		NAME "Trolls"
 		SYMBOL troll
+		OUTLINECOLOR 128 128 128
 		LABEL
 			POSITION lc 
-			COLOR 0 60 120
-			FONT arial_bold
+			OFFSET 0 5
+			COLOR 42 42 42
+			OUTLINECOLOR 42 242 42 
+			FONT verdana
 			TYPE truetype
-			MINSIZE 2
-			MAXSIZE 8
 			ANTIALIAS true
+			SIZE 8
 		END
 		OUTLINECOLOR 128 128 128
 		COLOR 255 0 0
@@ -206,23 +209,24 @@ LAYER
   TYPE point 
   DATA "communes"
   STATUS off
-	CLASSITEM 'nom'
 	GROUP "fond"
+	CLASSITEM 'nom'
 	LABELITEM nom
+	POSTLABELCACHE true
   CLASS
-		LABEL
-			POSITION auto 
-			COLOR 0 60 120
-			FONT arial_bold
-			TYPE truetype
-			SIZE 8
-			ANTIALIAS true
-			partials true
-			buffer 0
-		END
 		NAME "Humains"
 		SYMBOL human
 		OUTLINECOLOR 128 128 128
+		LABEL
+			POSITION lc
+			OFFSET 0 5
+			COLOR 0 0 0
+			OUTLINECOLOR 100 160 220
+			FONT verdana
+			TYPE truetype
+			ANTIALIAS true
+			SIZE 8
+		END
   END
   TOLERANCE 1
 END
@@ -233,22 +237,24 @@ LAYER
   TYPE point 
   DATA "communes"
   STATUS off
-	CLASSITEM 'nom'
 	GROUP "fond"
+	CLASSITEM 'nom'
 	LABELITEM 'nom'
+	POSTLABELCACHE true
   CLASS
-		LABEL
-			POSITION auto 
-			COLOR 0 60 120
-			FONT arial_bold
-			TYPE truetype
-			SIZE 8
-			ANTIALIAS true
-		END
 		NAME "First jeudi"
 		SYMBOL ordi2
 		OUTLINECOLOR 128 128 128
-		COLOR 255 0 0
+		LABEL
+			POSITION lc
+			OFFSET 0 5
+			COLOR 0 0 0
+			OUTLINECOLOR 255 150 130
+			FONT verdana
+			TYPE truetype
+			ANTIALIAS true
+			SIZE 8
+		END
   END
   TOLERANCE 1
 END
@@ -258,23 +264,24 @@ LAYER
   TYPE point 
   DATA "communes"
   STATUS off
-	CLASSITEM 'nom'
-	GROUP "fond"
-	LABELITEM 'nom'
+	CLASSITEM 'NOM'
+	LABELITEM 'NOM'
+	POSTLABELCACHE true
   CLASS
-		LABEL
-			POSITION auto 
-			COLOR 0 60 120
-			FONT arial_bold
-			TYPE truetype
-			SIZE 8
-			ANTIALIAS true
-		END
 		NAME "LUG"
 		SYMBOL tux
 		OUTLINECOLOR 128 128 128
-		COLOR 255 0 0
-  END
+ 		LABEL
+			POSITION lc
+			OFFSET 0 5
+			COLOR 0 0 0
+			OUTLINECOLOR 255 255 255
+			FONT verdana_bold
+			TYPE truetype
+			ANTIALIAS true
+			SIZE 8
+		END
+ 	END
   TOLERANCE 1
 END
 
@@ -284,22 +291,24 @@ LAYER
   TYPE point 
   DATA "communes"
   STATUS off
-	CLASSITEM 'nom'
 	GROUP "fond"
+	CLASSITEM 'nom'
 	LABELITEM 'nom'
+	POSTLABELCACHE true
   CLASS
-		LABEL
-			POSITION auto 
-			COLOR 0 60 120
-			FONT arial_bold
-			TYPE truetype
-			SIZE 8
-			ANTIALIAS true
-		END
 		NAME "Evenements"
 		SYMBOL flagblue
 		OUTLINECOLOR 128 128 128
-		COLOR 255 0 0
+		LABEL
+			POSITION lc
+			OFFSET 0 5
+			COLOR 255 255 255
+			OUTLINECOLOR 0 20 56
+			FONT verdana_bold
+			TYPE truetype
+			ANTIALIAS true
+			SIZE 9
+		END
   END
   TOLERANCE 1
 END
