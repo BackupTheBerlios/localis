@@ -56,14 +56,16 @@ dbf_def      = dbf://NOM,C,64,0/E,N,12,4/N,N,12,4
 # Rows fetched (cityname, id, name, short description), layer name
 firstjeudi   = rows://ville,id,nom,description/communes
 lug   			 = rows://ville,id,nom,description/communes2
+trolls 			 = rows://ville,id,nom,description/communes3
 
 [Layers]
 fond         = file://france.map
 regions      = file://regions.map
 
 [Select]
-firstjeudi   = mysql://evenements,firstjeudi,ville/localis,communes,NOM
-lug          = mysql://evenements,lug,ville/localis,communes,NOM
+firstjeudi   = mysql://localis,firstjeudi,ville/localis,communes,NOM
+lug          = mysql://localis,lug,ville/localis,communes,NOM
+trolls       = mysql://localis,trolls,ville/localis,communes,NOM
 
 [Gui]
 fond         = Fond
@@ -83,4 +85,4 @@ noresult     = Aucun résultat.
 
 [Form]
 search       = text://20/ville,nom
-type  			 = select_list://all->[ Tous ],lug->LUG,firstjeudi->First Jeudi
+type  			 = select_list://all->[ Tous ],lug->LUG,firstjeudi->First Jeudi,trolls->Trolls
