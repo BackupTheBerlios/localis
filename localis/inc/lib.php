@@ -1,4 +1,4 @@
-<?  /* $Id: lib.php,v 1.25 2002/11/07 17:25:24 mastre Exp $
+<?  /* $Id: lib.php,v 1.26 2002/12/11 16:49:53 ramzi Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -185,7 +185,7 @@ function build_list($found,$qu,$eff) {
 					$list.= "<div class=list><a href=\"file.php?table=$myc&id=".$kk['cid']."\" target=_new>";
 					$list.= "<img src=images/mapzoom.png width=8 height=8 hspace=2 vspace=0 border=0 alt='look' align=baseline>&nbsp;";
 					$list.= "$kk[name]</a></div>\n";
-					$maplist[$vres].= "<div class=list><a href=file.php?table=$type&id=".$kk['cid']." target=_new><b>$kk[name]</b></a><br>".$kk[shortdesc]."</div>"; 
+					$maplist[$vres].= "<div class=list><a href=file.php?table=$myc&id=".$kk['cid']." target=_new><b>$kk[name]</b></a><br>".$kk[shortdesc]."</div>"; 
 				}
 			}
 		}

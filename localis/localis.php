@@ -1,4 +1,4 @@
-<? /* $Id: localis.php,v 1.40 2002/12/10 20:49:59 ramzi Exp $
+<? /* $Id: localis.php,v 1.41 2002/12/11 16:49:53 ramzi Exp $
 Copyright (C) 2002, Makina Corpus, http://makina-corpus.org
 This file is a component of Localis <http://localis.makina-corpus.org>
 Created by mose@makina-corpus.org and mastre@makina-corpus.org
@@ -149,7 +149,10 @@ if ($type == 'all') {
 }
 
 # Build layer selection (left menu)
-$js_start = 11; # erk !! I have to fix that hard coded value
+if (!$browser)
+  $js_start = 10;
+else
+  $js_start = 11; # erk !! I have to fix that hard coded value
 foreach($conf[layers] as $def_layer=>$res_layer) {
 	$lol += 1;
 	unset($lys);
