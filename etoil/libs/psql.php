@@ -39,7 +39,7 @@ class db {
 		$result = @ pg_query($this->conn,$query);
 		$ret = array();
 		if (!$result) {
-			$this->mes[] = "xx : db request error<br /><b>$query</b><br />". pg_last_error();
+			$this->mes[] = "xx : db request error<br /><b>$query</b><br />". @ pg_last_error();
 			return false;
 		}
 		if ($return) {

@@ -186,7 +186,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 {/foreach}
 </select></td></tr>
 <tr><td>&nbsp;</td><td>
-<input type="submit" class="button" name="action" value="{tr}Rechercher{/tr}" />
+<input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />
 </td></tr></table>
 
 {if $tracks}

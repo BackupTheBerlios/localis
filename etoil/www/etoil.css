@@ -107,12 +107,20 @@ a:hover {
 	padding : 0px 5px;
 	border : 1px solid #666;
 }
-.phperror {
+.debug {
 	padding : 10px;
-	margin : 3px;
+	margin : 1px 3px;
 	border : 1px solid #990000;
 	background-color : #dedeae;
 	color : #660000;
+}
+.debugtitle {
+	padding : 2px 10px;
+	margin : 0 3px;
+	background-color : #900;
+	color : #fff;
+	font-weight : bold;
+	-moz-border-radius : 10px 10px 0 0 ;
 }
 .feedback {
 	border : 0;

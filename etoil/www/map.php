@@ -3,11 +3,7 @@ $title = "Cartographie";
 $db = true;
 include("setup.php");
 checkfontlist(PROOT."/maps");
-
-// valeurs a mettre en conf -----------
-include_once("map_conf.inc");
-// elles y sont 
-// ------------------------------------
+include_once(PROOT."/libs/conf.php");
 
 $mapfile = PROOT. "/maps/$mapfile";
 if (isset($_REQUEST['x'])) {
@@ -32,6 +28,7 @@ if (isset($_REQUEST['purge']) and $_REQUEST['purge'] == 'all') {
 	$_SESSION['track'] = array();
 }
 $lay = array("fond");
+$filtre = array();
 
 if (isset($_REQUEST['filtre'])) {
 	$filtre = $_REQUEST['filtre'];
@@ -190,14 +187,8 @@ if (!empty($_REQUEST['p_name']) and $_SESSION['me']) {
 	$focus['edit'] = "focus";
 }
 
-// essai de calcul du facteur d'echelle avant affichage
-// pour affichage conditionnel des labels (en laissant les pictos tjrs On)
-// sans rajouter une couche supplémentaire 
-// ce calcul ne fonctionne pas, donc on verra plus tard...
-$scale_r=$rapechelpix*($extmaxx-$extminx)/$sizex; // echelle recalculée (empirique ...)
-//echo "scale_r=".$scale_r;
+if (isset($filtre) and is_array($filtre) and count($filtre)) {
 
-if (isset($filtre) and is_array($filtre)) {
 	foreach ($filtre as $f=>$v) {
 		if (!empty($v)) {
 			$wh[] = "parcours_$f=$v";
@@ -205,81 +196,83 @@ if (isset($filtre) and is_array($filtre)) {
 	}
 	$where = '';
 	
-// affichage des contours en noir de tous les parcours qqsoit la discipline
-	$e_lay = ms_newLayerObj($e_map);
-	$e_lay->set('name','parcoursline');
-	$e_lay->set('status',MS_ON);
-	$e_lay->set('connectiontype',MS_POSTGIS);
-	$e_lay->set('connection',$db->connstr);
-	$query = "parcours_geom from parcours";
-	if (isset($wh) and is_array($wh) and count($wh)) {
-		$e_lay->setFilter(implode(' and ',$wh));
-	}
-	$e_lay->set('data',$query);
-	$e_lay->set('type',MS_LAYER_LINE);
-	$e_cla = ms_newClassObj($e_lay);
-	$e_sty = ms_newStyleObj($e_cla);
-	$e_sty->set("symbolname","circle");
-	$e_sty->set("size",$extparcwdth); 
-	$e_sty->color->setRGB(0,0,0);
+	if (isset($wh) and count($wh)) {
+		// affichage des contours en noir de tous les parcours qqsoit la discipline
+		$e_lay = ms_newLayerObj($e_map);
+		$e_lay->set('name','parcoursline');
+		$e_lay->set('status',MS_ON);
+		$e_lay->set('connectiontype',MS_POSTGIS);
+		$e_lay->set('connection',$db->connstr);
+		$query = "parcours_geom from parcours";
+		if (isset($wh) and is_array($wh) and count($wh)) {
+			$e_lay->setFilter(implode(' and ',$wh));
+		}
+		$e_lay->set('data',$query);
+		$e_lay->set('type',MS_LAYER_LINE);
+		$e_cla = ms_newClassObj($e_lay);
+		$e_sty = ms_newStyleObj($e_cla);
+		$e_sty->set("symbolname","circle");
+		$e_sty->set("size",$extparcwdth); 
+		$e_sty->color->setRGB(0,0,0);
 
-// autre couche utilisée pour l'intérieur de la ligne, dont la couleur varie suivant la discipline	
-	$e_lay2 = ms_newLayerObj($e_map);
-	$e_lay2->set('name','parcourslineover');
-	$e_lay2->set('status',MS_ON);
-	$e_lay2->set('connectiontype',MS_POSTGIS);
-	$e_lay2->set('connection',$db->connstr);
-	$query = "parcours_geom from parcours";
-	if (isset($wh) and is_array($wh) and count($wh)) {
-		$e_lay2->setFilter(implode(' and ',$wh));
-	}
-	$e_lay2->set('data',$query);
-	$e_lay2->set('type',MS_LAYER_LINE);
-	$e_lay2->set('classitem','parcours_type');
-	
-	for ($extype=1;$extype<=count($types);$extype++) {
-		$e_cla2[$extype] = ms_newClassObj($e_lay2);
-		$e_cla2[$extype]->setExpression($extype);
-		$e_sty2[$extype] = ms_newStyleObj($e_cla2[$extype]);
-		$e_sty2[$extype]->set("symbolname","circle");
-		$e_sty2[$extype]->set("size",$intparcwdth);
-		$e_sty2[$extype]->color->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));	
-	}
+		// autre couche utilisée pour l'intérieur de la ligne, dont la couleur varie suivant la discipline	
+		$e_lay2 = ms_newLayerObj($e_map);
+		$e_lay2->set('name','parcourslineover');
+		$e_lay2->set('status',MS_ON);
+		$e_lay2->set('connectiontype',MS_POSTGIS);
+		$e_lay2->set('connection',$db->connstr);
+		$query = "parcours_geom from parcours";
+		if (isset($wh) and is_array($wh) and count($wh)) {
+			$e_lay2->setFilter(implode(' and ',$wh));
+		}
+		$e_lay2->set('data',$query);
+		$e_lay2->set('type',MS_LAYER_LINE);
+		$e_lay2->set('classitem','parcours_type');
+		
+		for ($extype=1;$extype<=count($types);$extype++) {
+			$e_cla2[$extype] = ms_newClassObj($e_lay2);
+			$e_cla2[$extype]->setExpression($extype);
+			$e_sty2[$extype] = ms_newStyleObj($e_cla2[$extype]);
+			$e_sty2[$extype]->set("symbolname","circle");
+			$e_sty2[$extype]->set("size",$intparcwdth);
+			$e_sty2[$extype]->color->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));	
+		}
 
-	$e_lay = ms_newLayerObj($e_map);
-	$e_lay->set('name','parcours');
-	$e_lay->set('status',MS_ON);
-	$e_lay->set('labelcache',MS_ON); // par défaut
+		$e_lay = ms_newLayerObj($e_map);
+		$e_lay->set('name','parcours');
+		$e_lay->set('status',MS_ON);
+		$e_lay->set('labelcache',MS_ON); // par défaut
 
-	$e_lay->set('connectiontype',MS_POSTGIS);
-	$e_lay->set('connection',$db->connstr);
-	$query = "parcours_start from parcours";
-	if (isset($wh) and is_array($wh) and count($wh)) {
-		$e_lay->setFilter(implode(' and ',$wh));
+		$e_lay->set('connectiontype',MS_POSTGIS);
+		$e_lay->set('connection',$db->connstr);
+		$query = "parcours_start from parcours";
+		if (isset($wh) and is_array($wh) and count($wh)) {
+			$e_lay->setFilter(implode(' and ',$wh));
+		}
+		$e_lay->set('data',$query);
+		$e_lay->set('type',MS_LAYER_POINT);
+		$e_lay->set('labelitem','parcours_name');
+		$e_lay->set('classitem','parcours_type');
+		
+		for ($extype=1;$extype<=count($types);$extype++) {
+			$e_cla3[$extype] = ms_newClassObj($e_lay);
+			$e_cla3[$extype]->set('name',$name[$extype]);
+			$e_cla3[$extype]->setExpression($extype);
+			$e_sty3[$extype] = ms_newStyleObj($e_cla3[$extype]);
+			$e_lab[$extype] = $e_cla3[$extype]->label;
+			$e_lab[$extype]->set("position",MS_AUTO);
+			$e_lab[$extype]->backgroundshadowcolor->setRGB(200,200,200);
+
+			$e_lab[$extype]->set("size",$parclabelsize);
+			$e_lab[$extype]->set("type","truetype");
+			$e_lab[$extype]->set("font",$parclabelfont);
+			$e_lab[$extype]->color->setRGB(0,0,0);
+			$e_lab[$extype]->backgroundcolor->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
+			$e_sty3[$extype]->set("symbolname",$name[$extype]);
+		}
 	}
-	$e_lay->set('data',$query);
-	$e_lay->set('type',MS_LAYER_POINT);
-	$e_lay->set('labelitem','parcours_name');
-	$e_lay->set('classitem','parcours_type');
-	
-	for ($extype=1;$extype<=count($types);$extype++) {
-		$e_cla3[$extype] = ms_newClassObj($e_lay);
-		$e_cla3[$extype]->set('name',$name[$extype]);
-		$e_cla3[$extype]->setExpression($extype);
-		$e_sty3[$extype] = ms_newStyleObj($e_cla3[$extype]);
-		$e_lab[$extype] = $e_cla3[$extype]->label;
-		$e_lab[$extype]->set("position",MS_AUTO);
-		$e_lab[$extype]->backgroundshadowcolor->setRGB(200,200,200);
-
-		$e_lab[$extype]->set("size",$parclabelsize);
-		$e_lab[$extype]->set("type","truetype");
-		$e_lab[$extype]->set("font",$parclabelfont);
-		$e_lab[$extype]->color->setRGB(0,0,0);
-		$e_lab[$extype]->backgroundcolor->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
-		$e_sty3[$extype]->set("symbolname",$name[$extype]);
-	}
-
 }
+
 // trace dessinée en temps réel en ligne
 if (!empty($_SESSION['track'])) {
 	$e_shape = ms_newShapeObj(MS_SHAPE_LINE);
@@ -335,6 +328,7 @@ $e_ref = $e_map->drawreferencemap();
 $refsrc = $e_ref->saveWebImage('MS_PNG',0,0,-1);
 
 // reconstitue la légende avec les pictos
+$legends = array();
 for ($i=0; $i<$e_map->numlayers; $i++) {
 	$layer = $e_map->getLayer($i);
 	if ($layer->status != MS_OFF && $layer->type != MS_LAYER_QUERY) {
@@ -347,9 +341,9 @@ for ($i=0; $i<$e_map->numlayers; $i++) {
 		}
 	}
 }
-if (isset($legends)) $smarty->assign('legends',$legends);
+$smarty->assign('legends',$legends);
 
-if (isset($filtre)) {
+if (isset($filtre) and is_array($filtre) and count($filtre)) {
 	/* calcule la liste des parcours correspondant aux critères de requête 
 	et se trouvant dans la zone affichée
 	calcule les coord xy (pix) des rectangles correspondant aux pictos
@@ -385,5 +379,6 @@ $smarty->assign('times',$times);
 $smarty->assign('levels',$levels);
 
 $smarty->display("map.tpl");
-echo "<small>".elapsed_time()."</small>";
+echo "<div style='font-size:9px;padding:3px;'>". tra('Temps').' : '. elapsed_time()." s</div>";
+debug('tracks');
 ?>

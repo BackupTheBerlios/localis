@@ -24,6 +24,15 @@ function errorlogin($login,$pass) {
 	}
 }
 
+function debug($var,$die=false) {
+	global $$var;
+	echo '<span class="debugtitle">debug : $'.$var.'</span><br />';
+	echo '<pre class="debug">';
+	var_dump($$var);
+	echo "</pre>";
+	if ($die) die;
+}
+
 function tra($str) {
 	global $lang;
 	if (!empty($lang[$str])) {
