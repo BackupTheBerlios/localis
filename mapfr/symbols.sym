@@ -1,4 +1,10 @@
 SYMBOL
+NAME "debian"
+TYPE pixmap
+IMAGE "images/debian.png"
+END
+
+SYMBOL
 NAME "human"
 TYPE pixmap
 IMAGE "images/human.png"
