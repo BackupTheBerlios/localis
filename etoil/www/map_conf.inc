@@ -8,6 +8,14 @@ $types[4] = "Kayak";
 $types[5] = "Cyclotourisme";
 $types[6] = "Attelage";
 
+// utilisé pour les couches et les symboles mapserver
+$name[1] = "marche";
+$name[2] = "cheval";
+$name[3] = "vtt";
+$name[4] = "canoe";
+$name[5] = "vtc";
+$name[6] = "attel";
+
 $typescolor[1]="fea034"; // couleurs correspondant à chaque type, en hexa sur *6* caract !!
 $typescolor[2]="2f9535"; // vert d'orgine ne ressort pas assez sur les cartes"8cdc8c"; 
 $typescolor[3]="f25254"; 
