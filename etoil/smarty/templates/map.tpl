@@ -10,7 +10,7 @@
 {if count($tracks)}
 <map name="localisation" id="localisation">
 {section name=i loop=$tracks}
-<area href="#" name="{$tracks[i].parcours_id}" id="{$tracks[i].parcours_id}" shape="rect" coords="{$tracks[i].rect}" {popup text=$tracks[i].parcours_name|default:" "} />
+<area href="{$url}?pid={$tracks[i].parcours_id}" name="{$tracks[i].parcours_id}" id="{$tracks[i].parcours_id}" shape="rect" coords="{$tracks[i].rect}" {popup text=$tracks[i].parcours_name|default:" "} />
 {/section}
 </map>
 {/if}
@@ -84,7 +84,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <div class="found">
 {section name=o loop=$cities}
 {$cities[o].code_postal}
-<a href="{$url}?focusville={$cities[o].nom|escape:"url"}">{$cities[o].nom}</a><br />
+<a href="{$url}?idfocusville={$cities[o].id}&focusville={$cities[o].nom|escape:"url"}">{$cities[o].nom}</a><br />
 {/section}
 </div>
 {elseif $city_info}
@@ -141,14 +141,15 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <option value="{$k}"{if $filtre.level eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
 </select></td></tr>
-<tr><td></td><td><input type="submit" class="button" name="action" value="{tr}Enregistrer{/tr}" /></td></tr>
+<tr><td><input type="submit" class="button" name="do" value="{tr}Effacer{/tr}" /></td><td><input type="submit" class="button" name="action" value="{tr}Enregistrer{/tr}" /></td></tr>
 </table>
 {/if}
 {if count($smarty.session.track)}
 <div class="bar">{tr}Coordonnées du tracé{/tr}</div>
 {if $smarty.request.do ne "{tr}Enregistrer{/tr}"}
 <input type="submit" class="button" name="do" value="{tr}Effacer{/tr}" />
-<input type="submit" class="button" name="do" value="{tr}Enregistrer{/tr}" />
+<input type="submit" class="button" name="do" value="{tr}Undo{/tr}" />
+<input type="submit" class="button" name="do" value="{tr}Enregistrer{/tr}" /><br />
 {/if}
 {foreach item=x from=$smarty.session.track}
 <a href="{$url}?del={$x|escape:"url"}">[x]</a> <a href="">{$x}</a><br />

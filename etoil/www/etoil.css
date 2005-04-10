@@ -52,6 +52,13 @@ a:hover {
 	border-left : 1px solid #000;
 	overflow : hidden;
 }
+.headbarWI {
+	height : 0px;
+	background-color : #dff1d3;
+	margin : 0;
+	border-left : 1px solid #000;
+	overflow : hidden;
+}
 .leftbar {
 	width : 139px;
 	background-image : url("etoil/bandeau_vert.jpg");
@@ -184,7 +191,7 @@ a:hover {
 }
 
 .toolfocus {
-	background-color : #ddd;
+	background-color : #dff1d3;
 	border : 1px solid #000;
 }
 .tool {
@@ -226,7 +233,7 @@ a:hover {
 	font-size : 11px;
 }
 .inputable {
-	background-color : #eee;
+	background-color : #100000;
 	padding : 10px;
 	border : 1px solid #000;
 }
