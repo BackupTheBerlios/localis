@@ -1,11 +1,15 @@
 ********************************
 * Todo list... et commentaires *
 ********************************
-
+* bugs *
+--------
+- dysfonctionnements sous IE, notamment fleches de direction autour de la carte
+- si pas d'outils sélectionné (zoom, deplacement), le deplacement doit etre pris par défaut
+- zoom - doit agir sans clic sur la carte
 * Multilangues *
 ----------------
 - passer en multilangues
-- prÃ©voir des champs dans la bdd stockant les la belle des champs suivant la langue
+- prevoir des champs dans la bdd stockant les la belle des champs suivant la langue
 
 * BDD *
 -------
