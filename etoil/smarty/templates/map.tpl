@@ -3,6 +3,7 @@
 
 
 <div class="central">
+{if $bool_map_disp}
 <form name="f">
 <input type="hidden" name="extent" value="{$extent}" />
 <table border="0" cellpadding="0" cellspacing="0">
@@ -57,7 +58,7 @@
 <div class="bar">{tr}Affichage{/tr}</div>
 <table border="0" cellpadding="1" cellspacing="0" id="map">
 <tr><td valign="top" align="center">
-<input type="image" src="{$refsrc}" width="100" height="100" name="ref" alt="{$name}" hspace="0" vspace="0" border="0"><img 
+<input type="image" src="{$refsrc}" width="{$refwidth}" height="{$refheight}" name="ref" alt="{$name}" hspace="0" vspace="0" border="0"><img 
 src="img/francepti.jpg" width="100" height="100" border="0" />
 <br />
 
@@ -105,7 +106,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 {/if}
 <td valign="top" width="25%" align="center" class="tool{$focus.zoomout}" id='tool_zoomout'>
 <div {popup text="{tr}Eloigner{/tr} [ Alt-e ]"}><label for="zoomout" accesskey="e"><img src="img/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"></label>
-<input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomout')" /></div></td>
+<input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomout'); if (this.checked) document.f.submit();"/></div></td>
 <td valign="top" width="25%" align="center" class="tool{$focus.travel}" id='tool_travel'>
 <div {popup text="{tr}Déplacer{/tr} [ Alt-d ]"}><label for="travel" accesskey="d"><img src="img/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top"></label>
 <input type="radio" id="travel" name="action" value="travel"{if $focus.travel eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_travel')" /></div></tD>
@@ -150,10 +151,11 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <input type="submit" class="button" name="do" value="{tr}Effacer{/tr}" />
 <input type="submit" class="button" name="do" value="{tr}Undo{/tr}" />
 <input type="submit" class="button" name="do" value="{tr}Enregistrer{/tr}" /><br />
-{/if}
+{/if}<span class="small">
 {foreach item=x from=$smarty.session.track}
-<a href="{$url}?del={$x|escape:"url"}">[x]</a> <a href="">{$x}</a><br />
+<a href="{$url}?del={$x|escape:"url"}">[x]</a> {$x}<br />
 {/foreach}
+</span>
 <hr />
 {/if}
 {/if}
@@ -202,8 +204,14 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 {/if}
 
 </td></tr></table>
-
 </form>
+{ else } 
+Sur ce site prototype de test, il est nécéssaire de s'identifier et d'être habilité pour pouvoir consulter les cartes.<br/>
+<br/>
+Veuillez contacter {mailto address="artec.vm@nerim.net" encode="javascript" subject="Activer un compte sur e-toil.net"} pour activer un compte.
+
+Merci.
+{ /if}
 </div>
 
 {include file="foot.tpl"}

@@ -6,6 +6,7 @@ define('PROOT', dirname(dirname(__FILE__)).'/');
 session_start();
 /* --------------------------------------------------------------- */
 error_reporting(E_ALL);
+
 ini_set('register_globals','off');
 ini_set('error_prepend_string','<div class="phperror">');
 ini_set('error_append_string','</div>');

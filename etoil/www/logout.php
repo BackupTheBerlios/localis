@@ -3,6 +3,7 @@ $title = 'Entrer';
 include("setup.php");
 
 unset($_SESSION['me']);
+unset($_SESSION['profile']);
 unset($_SESSION['admin']);
 
 if (isset($_REQUEST['from'])) {

@@ -80,6 +80,7 @@ class db {
 		if ($hash and is_array($hash)) {
 			if ($hash['pass'] == md5($pass)) {
 				$_SESSION['me'] = $login;
+				$_SESSION['profile']=$hash['credential'];
 				if ($hash['credential'] == 1) {
 					$_SESSION['admin'] = true;
 				} else {
@@ -200,7 +201,7 @@ class db {
     return $this->query($query);
   }
 
-	/* ======== conf admin methods  ======= */
+	/* ======== parcours methods  ======= */
 
 	function add_parcours($name,$user,$type,$geom,$level=0,$time=0) {
 		$line = implode(",",$geom);

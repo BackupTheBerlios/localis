@@ -23,12 +23,6 @@ $typescolor[4]="9cc9e1";
 $typescolor[5]="f79b9d"; 
 $typescolor[6]="9ad47f";
 
-/* marche pô
-$icontypes[1] = "maps/images/p_marche.png";
-$icontypes[2] = "../maps/images/p_cheval.png";
-$icontypes[3] = "/maps/images/p_vtt.png";
-$icontypes[4] = "/maps/images/p_canoe.png"; */
-
 $times[1] = "< 1/2h";
 $times[2] = "< 1h";
 $times[3] = "1 à 2 h";
@@ -42,11 +36,15 @@ $mapfile = "limousin.map";
 $sf = 6000; // distance autour d'une ville lors d'un focus ville
 $deptsregion="(19,23,87)";
 $pcarpc=7; // pourcentage de marge autour d'un parcours lors d'un zoom
-
+$refwidth=100; //largeur de la carte de reference
+$refheight=100; //largeur de la carte de reference
 // paramètres des tracés de couches postgis
+
 $intparcwdth=3; // épaisseur interne des traits de tracés
+$minscaledispextparc=100000; // echelle min a partir de laquelle on affiche les contours en noir des traces de parcours
 $extparcwdth=7; // épaisseur externe des traits de tracés
 $parclabelsize=10;
 $parclabelfont="Verdana";
 $minscaledisplabels=100000; // echelle min a partir de laquelle on affiche les labels des parcours
+$anonym_disp_maps=false; // affichage carte aux anonymes (pour le proto, on n'affiche les cartes que si on est identifi�)
 ?>

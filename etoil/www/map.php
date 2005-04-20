@@ -5,7 +5,10 @@ include("setup.php");
 checkfontlist(PROOT."/maps");
 include_once(PROOT."/libs/conf.php");
 
-$mapfile = PROOT. "/maps/$mapfile";
+// sur le proto, on n'affiche la carte que si on est loggé avec un profil >=1 et que le code profil
+$bool_map_disp=(!empty($_SESSION['me']) && $_SESSION['profile']>=1 ) || $anonym_disp_maps;
+$smarty->assign('bool_map_disp',$bool_map_disp);
+
 if (isset($_REQUEST['x'])) {
 	$click_x = $_REQUEST['x'];
 	$click_y = $_REQUEST['y'];
@@ -13,18 +16,12 @@ if (isset($_REQUEST['x'])) {
 	$click_x = $click_y = false;
 }
 
+if (!isset($_REQUEST['action']))  $_REQUEST['action'] = "travel";
+$zoom_factor=1; // défaut
 
-
-if (isset($_REQUEST['act'])) {
-	$act = $_REQUEST['act'];
-} else {
-	$act = 'nothing';
-}
 if (isset($_REQUEST['purge']) and $_REQUEST['purge'] == 'all') {
 	$_SESSION['track'] = array();
 }
-$lay = array("fond");
-$filtre = array();
 
 if (isset($_REQUEST['filtre'])) {
 	$filtre = $_REQUEST['filtre'];
@@ -35,16 +32,50 @@ if (isset($_REQUEST['filtre'])) {
 } elseif (isset($_SESSION['filtre'])) {
 	$filtre = $_SESSION['filtre'];
 }
-if (isset($filtre)) $smarty->assign('filtre',$filtre);
+
+if (isset($filtre)) {
+	$smarty->assign('filtre',$filtre);
+	foreach ($filtre as $f=>$v) {
+		if (!empty($v)) $wh[] = "parcours_$f=$v";
+	}
+}
 
 // ========================================================================
+// special hack: si paramètre spécial spcsc25=tux129 passé en get (par l'url)
+// utilise un fichier map specifique limousinhck.map)
+$mapfile = PROOT. "/maps/$mapfile";
+
+if (!empty($_REQUEST['spcsc25'])) {
+	if ($_REQUEST['spcsc25']=="tux129") {
+	$_SESSION['spcsc25']="tux129";
+	}
+	else unset($_SESSION['spcsc25']);
+}	
+$mapfile=(!empty($_SESSION['spcsc25']) ? PROOT. "/maps/limousinhck.map" : $mapfile);
 
 $e_map = ms_newMapObj($mapfile);
 // ces paramètres sont récupérés dans le mapfile static
-$extminx = $e_map->extent->minx;
-$extminy = $e_map->extent->miny;
-$extmaxx = $e_map->extent->maxx;
-$extmaxy = $e_map->extent->maxy;
+$extminx = $extminxmf = $e_map->extent->minx;
+$extminy = $extminymf = $e_map->extent->miny;
+$extmaxx = $extmaxxmf = $e_map->extent->maxx;
+$extmaxy = $extmaxymf = $e_map->extent->maxy;
+
+// fonction qui désactive dans le mapfile toutes les couches qui
+// ne font pas partie du groupe "fond"
+// Pourquoi ?????
+$lay = array("fond");
+$layers = $e_map->getAllGroupNames();
+foreach ($layers as $l) {
+	$maplayer[] = $l;
+	$tl = $e_map->getLayersIndexByGroup($l);
+	if ((is_array($tl)) and (!in_array($l,$lay))) {
+		foreach ($tl as $t) {
+			$e_layer = $e_map->getLayer($t);
+			echo "tl=$tl -> t=$t <br/>";
+			$e_layer->set("status",MS_OFF);
+		}
+	}			
+}
 
 $e_limit = ms_newRectObj();
 $e_limit->setextent($extminx,$extminy,$extmaxx,$extmaxy);
@@ -57,6 +88,7 @@ $ext = array($extminx,$extminy,$extmaxx,$extmaxy);
 $e_extent = ms_newRectObj();
 $e_extent->setextent($ext[0],$ext[1],$ext[2],$ext[3]);
 
+// changement de taille d'image-carte en pixels
 if (!isset($_REQUEST['size'])) {
 	$sizex = $e_map->width;
 	$sizey = $e_map->height;
@@ -64,10 +96,13 @@ if (!isset($_REQUEST['size'])) {
 	list($sizex,$sizey) = split('x',$_REQUEST['size']);
 }
 $sizecheck["{$sizex}x{$sizey}"] = " selected=\"selected\"";
+$e_map->set('width',$sizex);
+$e_map->set('height',$sizey);
 
 $e_click = ms_newPointObj();
-$e_click->setXY(floor($sizex/2),floor($sizey/2),0);
+$e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par défaut, au centre
 
+// recherche des villes correspondant aux critères
 if (!empty($_REQUEST['ville'])) {
 	$cities = $db->get_cities($_REQUEST['ville'],$deptsregion); // filtre rajouté pour les depts de la région
 	if (!$cities or count($cities) == 0) {
@@ -81,6 +116,8 @@ if (!empty($_REQUEST['ville'])) {
 		$smarty->assign('cities',$cities);
 	}
 }
+$action_OK=false; // par défaut, les actions (zoom, travel) qui a le focus n'est PAS appliquée
+// il peut y avoir plein d'autres actions (recherche, resize, etc ..)
 
 if (isset($_REQUEST['focusville'])) {
 	$city_info = $db->get_city_info($_REQUEST['idfocusville']);
@@ -89,94 +126,46 @@ if (isset($_REQUEST['focusville'])) {
 	} else {
 		$smarty->assign('city_info',$city_info);
 		preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$city_info[0]['xy'],$m);
-		//$e_rect = ms_newRectObj();
 		$e_extent->setextent(floor($m[1]-$sf),floor($m[2]-$sf),floor($m[1]+$sf),floor($m[2]+$sf));
-		$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-		//print_r("1,$e_click,$sizex,$sizey,$e_rect,$e_limit");
 	}
-} elseif (isset($_REQUEST['size']) and isset($_REQUEST['resize']) and $_REQUEST['resize'] == "y") {
-	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-	$_REQUEST['action'] = "travel";
-	$clicked = TRUE;
-} elseif (isset($_REQUEST['search']) and $_REQUEST['search'] == tra('Rechercher')) {
-	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-	$clicked = false;
 } elseif (isset($_REQUEST['pid'])) {
 	$parcours_info = $db->get_parcours_info($_REQUEST['pid']);
 	preg_match("/POLYGON\(\(([\.0-9]*) ([\.0-9]*),[\.0-9]* ([\.0-9]*),([\.0-9]*) [\.0-9]*,[\.0-9]* [\.0-9]*,[\.0-9]* [\.0-9]*\)\)/",$parcours_info['ext'],$m);
 	$d = (($m[4] - $m[1]) / $pcarpc); //$pcarpc=% autour du parcours
 	$b = (($m[3] - $m[2]) / $pcarpc);
 	$e_extent->setextent($m[1] - $d,$m[2] - $d,$m[4] + $b,$m[3] + $d);
-	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-	$clicked = false;
-} elseif (isset($_REQUEST['ref_x']) or isset($_REQUEST['ref.x'])) {
-	// on a le clic dans la carte de reference
-	$refx = ($_REQUEST['ref_x']) ? $_REQUEST['ref_x'] : $_REQUEST['ref.x'];
-	$refy = ($_REQUEST['ref_y']) ? $_REQUEST['ref_y'] : $_REQUEST['ref.y'];
-	echo "xy=$refx $refy <br>";
-	$wx=($ext[2]-$ext[0])/2;
-	$wy=($ext[3]-$ext[1])/2;
-	$e_extent->setextent($refx/100*($extmaxx-$extminx)+$extminx-$wx,(1-$refx/100)*($extmaxy-$extminy)+$extminy-$wy,$refx/100*($extmaxx-$extminx)+$extminx+$wx,(1-$refx/100)*($extmaxy-$extminy)+$extminy+$wy);
-	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-//print_r ($ext);
-	}
+} elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == "zoomout") { // si zoom out, on zoome out sans attendre le click sur la carte, on fait comme si on avait cliqué au centre
+	$click_x=floor($sizex/2);
+	$click_y=floor($sizey/2);
+	$zoom_factor=-2;
+} 
 
-$e_map->set('width',$sizex);
-$e_map->set('height',$sizey);
-$smarty->assign('sizex',$sizex);
-$smarty->assign('sizey',$sizey);
-$smarty->assign('sizecheck',$sizecheck);
-$smarty->assign('mapmargin',$mapmargin);
-$smarty->assign('blockspc',$blockspc);
-
-$layers = $e_map->getAllGroupNames();
-foreach ($layers as $l) {
-	$maplayer[] = $l;
-	$tl = $e_map->getLayersIndexByGroup($l);
-	if ((is_array($tl)) and (!in_array($l,$lay))) {
-		foreach ($tl as $t) {
-			$e_layer = $e_map->getLayer($t);
-			$e_layer->set("status",MS_OFF);
-		}
-	}			
-}
-
-if ($click_x and $click_y) {
+if ($click_x and $click_y) { // click "normal" dans la carte 
+	$map_click['x'] = floor($extminx + pix2geo($click_x,$extminx,$extmaxx,$sizex));
+	$map_click['y'] = floor($extmaxy - pix2geo($click_y,$extminy,$extmaxy,$sizey));
 	$e_click->setXY($click_x,$click_y,0);
-	$map_click['x'] = $extminx + pix2geo($click_x,$extminx,$extmaxx,$sizex);
-	$map_click['y'] = $extmaxy - pix2geo($click_y,$extminy,$extmaxy,$sizey);
-	$clicked = TRUE;
-} elseif (!empty($_REQUEST['dir'])) {
+
+} elseif (!empty($_REQUEST['dir'])) { // clic sur les fleches de dir autour
 	list($fx,$fy) = $_REQUEST['dir'];
 	$ffx['l'] = $ffx['t'] = -1;
 	$ffx['c'] = 0;
 	$ffx['r'] = $ffx['b'] = 1;
 	$e_click->setXY(floor(($sizex/2)+($ffx[$fx]*$sizex/2)),floor(($sizey/2)+($ffx[$fy]*$sizey/2)),0);
-	$_REQUEST['action'] = "travel";
-	$clicked = TRUE;
-	$map_click = array();
-} else {
-	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-	$clicked = false;
-	$map_click = array();
 }
+
 $focus = array();
-if ($clicked) {
-	if (isset($_REQUEST['action'])) {
-		if ($_REQUEST['action'] == "zoomin") {
-			$e_map->zoompoint(2,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-			$focus['zoomin'] = "focus";
-		} elseif ($_REQUEST['action'] == "zoomout") {
-			$e_map->zoompoint(-2,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-			$focus['zoomout'] = "focus";
-		} elseif ($_REQUEST['action'] == "travel") {
-			$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-			$focus['travel'] = "focus";
-		} elseif ($_REQUEST['action'] == "edit" and isset($_SESSION['admin']) and $_SESSION['admin']) {
-			$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
-			$focus['edit'] = "focus";
-			$_SESSION['track'][] = $map_click['x']." ".$map_click['y'];
-		}
+if (isset($_REQUEST['action'])) {
+	if ($_REQUEST['action'] == "zoomin") {
+		if (isset($map_click)) $zoom_factor=2;
+		$focus['zoomin'] = "focus";
+	} elseif ($_REQUEST['action'] == "zoomout") {
+		if (isset($map_click)) $zoom_factor=-2;
+		$focus['zoomout'] = "focus";
+	} elseif ($_REQUEST['action'] == "travel") {
+		$focus['travel'] = "focus";
+	} elseif ($_REQUEST['action'] == "edit" and isset($_SESSION['admin']) and $_SESSION['admin']) {
+		$focus['edit'] = "focus";
+		if (isset($map_click)) $_SESSION['track'][] = $map_click['x']." ".$map_click['y'];
 	}
 }
 
@@ -186,46 +175,51 @@ if (!empty($_REQUEST['p_name']) and $_SESSION['me']) {
 	} else {
 		$_SESSION['track'] = array();
 	}
-	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 } elseif (isset($_REQUEST['do']) and $_REQUEST['do'] == tra('Enregistrer')) {
-	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 	$focus['edit'] = "focus";
 }
 elseif (isset($_REQUEST['do']) and $_REQUEST['do'] == tra('Effacer')) {
-	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 	$focus['edit'] = "focus";
 	unset($_SESSION['track']);
 }
 elseif (isset($_REQUEST['do']) and $_REQUEST['do'] == tra('Undo')) {
-	$e_map->zoompoint(1,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 	$focus['edit'] = "focus";
 	unset($_SESSION['track'][count($_SESSION['track'])-1]);
 }
 
-foreach ($filtre as $f=>$v) {
-	if (!empty($v)) {
-		$wh[] = "parcours_$f=$v";
+// on a un clic dans la carte de reference
+if (isset($_REQUEST['ref_x']) or isset($_REQUEST['ref.x'])) {
+	$refx = ($_REQUEST['ref_x']) ? $_REQUEST['ref_x'] : $_REQUEST['ref.x'];
+	$refy = ($_REQUEST['ref_y']) ? $_REQUEST['ref_y'] : $_REQUEST['ref.y'];
+	$wx=($ext[2]-$ext[0])/2; // demi-largeur en échelle carte
+	$wy=($ext[3]-$ext[1])/2; // demi-hauteur en échelle carte
+	$e_extent->setextent($extminxmf+$refx/$refwidth*($extmaxxmf-$extminxmf)-$wx,$extminymf+(1-$refy/$refheight)*($extmaxymf-$extminymf)-$wy,$extminxmf+$refx/$refwidth*($extmaxxmf-$extminxmf)+$wx,$extminymf+(1-$refy/$refheight)*($extmaxymf-$extminymf)+$wy);
 	}
-}
 
+$e_map->zoompoint($zoom_factor,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+	
+		
 if (isset($filtre) and is_array($filtre) and count($filtre)) {
 	// affichage des contours en noir de tous les parcours qqsoit la discipline
-	$e_lay = ms_newLayerObj($e_map);
-	$e_lay->set('name','parcoursline');
-	$e_lay->set('status',MS_ON);
-	$e_lay->set('connectiontype',MS_POSTGIS);
-	$e_lay->set('connection',$db->connstr);
-	$query = "parcours_geom from parcours";
-	if (isset($wh) and is_array($wh) and count($wh)) {
-		$e_lay->setFilter(implode(' and ',$wh));
-	}
-	$e_lay->set('data',$query);
-	$e_lay->set('type',MS_LAYER_LINE);
-	$e_cla = ms_newClassObj($e_lay);
-	$e_sty = ms_newStyleObj($e_cla);
-	$e_sty->set("symbolname","circle");
-	$e_sty->set("size",$extparcwdth); 
-	$e_sty->color->setRGB(0,0,0);
+	// uniquement si échelle assez faible
+	if ($e_map->scale < $minscaledispextparc) {
+		$e_lay = ms_newLayerObj($e_map);
+		$e_lay->set('name','parcoursline');
+		$e_lay->set('status',MS_ON);
+		$e_lay->set('connectiontype',MS_POSTGIS);
+		$e_lay->set('connection',$db->connstr);
+		$query = "parcours_geom from parcours";
+		if (isset($wh) and is_array($wh) and count($wh)) {
+			$e_lay->setFilter(implode(' and ',$wh));
+		}
+		$e_lay->set('data',$query);
+		$e_lay->set('type',MS_LAYER_LINE);
+		$e_cla = ms_newClassObj($e_lay);
+		$e_sty = ms_newStyleObj($e_cla);
+		$e_sty->set("symbolname","circle");
+		$e_sty->set("size",$extparcwdth); 
+		$e_sty->color->setRGB(0,0,0);
+	} // fin si echelle assez grande pour afficher contours noirs
 
 	// autre couche utilisée pour l'intérieur de la ligne, dont la couleur varie suivant la discipline	
 	$e_lay2 = ms_newLayerObj($e_map);
@@ -250,7 +244,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre)) {
 		$e_sty2[$extype]->color->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));	
 	}
 
-	// couches avec des couleurs différentes suivant les types
+	// couches de labels/pictos avec des couleurs différentes suivant les types
 	$e_lay = ms_newLayerObj($e_map);
 	$e_lay->set('name','parcours');
 	$e_lay->set('status',MS_ON);
@@ -272,7 +266,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre)) {
 		$e_cla3[$extype]->set('name',$name[$extype]);
 		$e_cla3[$extype]->setExpression($extype);
 		$e_sty3[$extype] = ms_newStyleObj($e_cla3[$extype]);
-		if ($e_map->scale < $minscaledisplabels || $e_map->scale==-1) {
+		if (isset($e_map->scale) &&  $e_map->scale < $minscaledisplabels && $e_map->scale!=-1) {
 			$e_lab[$extype] = $e_cla3[$extype]->label;
 			$e_lab[$extype]->set("position",MS_AUTO);
 			$e_lab[$extype]->backgroundshadowcolor->setRGB(200,200,200);
@@ -286,7 +280,6 @@ if (isset($filtre) and is_array($filtre) and count($filtre)) {
 		$e_sty3[$extype]->set("symbolname",$name[$extype]);
 	} // fin boucle sur les types de parcours
 }
-
 // trace dessinée en temps réel en ligne
 if (!empty($_SESSION['track'])) {
 	$e_shape = ms_newShapeObj(MS_SHAPE_LINE);
@@ -379,12 +372,19 @@ if (isset($filtre) and is_array($filtre) and count($filtre)) {
 	$smarty->assign('tracks',$tracks);
 } // fin si filtre défini
 
+$smarty->assign('sizex',$sizex);
+$smarty->assign('sizey',$sizey);
+$smarty->assign('sizecheck',$sizecheck);
+$smarty->assign('mapmargin',$mapmargin);
+$smarty->assign('blockspc',$blockspc);
 $smarty->assign('extent',"$extminx $extminy $extmaxx $extmaxy");
 $scale = $e_map->scale;
-$smarty->assign('scale',$scale);
+$smarty->assign('scale',floor($scale));
 $smarty->assign('refsrc',$refsrc);
+$smarty->assign('refwidth',$refwidth);
+$smarty->assign('refheight',$refheight);
 $smarty->assign('focus',$focus);
-$smarty->assign('map_click',$map_click);
+if (isset($map_click)) $smarty->assign('map_click',$map_click);
 $smarty->assign('mapimage',$image);
 $smarty->assign('types',$types);
 $smarty->assign('typescolor',$typescolor);
@@ -394,5 +394,5 @@ $smarty->assign('levels',$levels);
 
 $smarty->display("map.tpl");
 echo "<div style='font-size:9px;padding:3px;'>". tra('Temps').' : '. elapsed_time()." s</div>";
-//debug('tracks');
+
 ?>
