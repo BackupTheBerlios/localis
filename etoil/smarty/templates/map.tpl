@@ -162,7 +162,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr><td>{tr}Discipline{/tr}&nbsp;</td><td>
 <select class="selection" name="filtre[type]" id="ftype">
-<option value="">{tr}... Indifférent{/tr}</option>
+<option value="none">{tr}Aucune{/tr}</option>
 {foreach key=k item=i from=$types}
 <option style="color:#{$typescolor.$k}" value="{$k}"{if $filtre.type eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
