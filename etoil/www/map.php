@@ -205,6 +205,7 @@ if (isset($_REQUEST['ref_x']) or isset($_REQUEST['ref.x'])) {
 	}
 
 $e_map->zoompoint($zoom_factor,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+
 if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!="none") {
 	// affichage des contours en noir de tous les parcours qqsoit la discipline
 	// uniquement si échelle assez faible
@@ -356,8 +357,7 @@ for ($i=0; $i<$e_map->numlayers; $i++) {
 }
 $smarty->assign('legends',$legends);
 
-if (isset($filtre) and is_array($filtre) and count($filtre) and false) {
-//if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre['type']!="none") {
+if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!="none") {
 	/* calcule la liste des parcours correspondant aux critères de requête 
 	et se trouvant dans la zone affichée
 	calcule les coord xy (pix) des rectangles correspondant aux pictos
