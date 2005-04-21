@@ -100,7 +100,7 @@ a:hover {
 	border : 1px solid #aaaaaa;
 	border-top : 0;
 	border-left : 0;
-	background-image : url("/etoil/fond_som.jpg");
+	background-image : url("etoil/fond_som.jpg");
 	background-repeat : repeat-y;
 }
 .navitem {

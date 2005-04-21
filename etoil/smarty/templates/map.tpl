@@ -151,11 +151,11 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <input type="submit" class="button" name="do" value="{tr}Effacer{/tr}" />
 <input type="submit" class="button" name="do" value="{tr}Undo{/tr}" />
 <input type="submit" class="button" name="do" value="{tr}Enregistrer{/tr}" /><br />
-{/if}<span class="small">
+{/if}<small>
 {foreach item=x from=$smarty.session.track}
-<a href="{$url}?del={$x|escape:"url"}">[x]</a> {$x}<br />
+<a href="#"><img src="img/small_edit.gif" border="0"></a> <a href="#"><img src="img/small_garbage.gif" border="0"></a> <a href="#"><img src="img/small_info.gif" border="0"></a> {$x}<br />
 {/foreach}
-</span>
+</small>
 <hr />
 {/if}
 {/if}
