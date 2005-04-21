@@ -1,4 +1,6 @@
 <?
+$anonym_disp_maps=false; // affichage carte aux anonymes (pour le proto, on n'affiche les cartes que si on est identifié)
+$coef_fd=1.5; // coefficient de déplacement lors du clic sur les flèches de direction
 $mapmargin = 11; // taille de la bordure clicable de navigation perpendiculaire
 $blockspc=7; // espaces entre les blocks de droite
 $types[1] = "P&eacute;destre";
@@ -46,5 +48,4 @@ $extparcwdth=7; // Ã©paisseur externe des traits de tracÃ©s
 $parclabelsize=10;
 $parclabelfont="Verdana";
 $minscaledisplabels=100000; // echelle min a partir de laquelle on affiche les labels des parcours
-$anonym_disp_maps=false; // affichage carte aux anonymes (pour le proto, on n'affiche les cartes que si on est identifié)
 ?>

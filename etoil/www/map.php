@@ -144,13 +144,21 @@ if ($click_x and $click_y) { // click "normal" dans la carte
 	$map_click['x'] = floor($extminx + pix2geo($click_x,$extminx,$extmaxx,$sizex));
 	$map_click['y'] = floor($extmaxy - pix2geo($click_y,$extminy,$extmaxy,$sizey));
 	$e_click->setXY($click_x,$click_y,0);
+}
+// cause soucis avec IE, change la façon de traiter les clics sur les flèches de dir
+// lors d'un clic sur une input type=img name=dir value="titi", IE n'envoie que les variables dir_x et dir_y (coord en pixels du clic sur l'immage, et contrairement à firefox PAS le couple variable=valeur dir=titi
+$dx=$dy=0;
+if (isset($_REQUEST['dir_lt_x'])) {$dx=-1;$dy=-1;}
+if (isset($_REQUEST['dir_ct_x'])) {$dx= 0;$dy=-1;}
+if (isset($_REQUEST['dir_rt_x'])) {$dx= 1;$dy=-1;}
+if (isset($_REQUEST['dir_lc_x'])) {$dx=-1;$dy= 0;}
+if (isset($_REQUEST['dir_rc_x'])) {$dx= 1;$dy= 0;}
+if (isset($_REQUEST['dir_lb_x'])) {$dx=-1;$dy= 1;}
+if (isset($_REQUEST['dir_cb_x'])) {$dx= 0;$dy= 1;}
+if (isset($_REQUEST['dir_rb_x'])) {$dx= 1;$dy= 1;}
 
-} elseif (!empty($_REQUEST['dir'])) { // clic sur les fleches de dir autour
-	list($fx,$fy) = $_REQUEST['dir'];
-	$ffx['l'] = $ffx['t'] = -1;
-	$ffx['c'] = 0;
-	$ffx['r'] = $ffx['b'] = 1;
-	$e_click->setXY(floor(($sizex/2)+($ffx[$fx]*$sizex/2)),floor(($sizey/2)+($ffx[$fy]*$sizey/2)),0);
+if ($dx!=0 || $dy!=0) { // clic sur les fleches de dir autour: on simule un clic..
+	$e_click->setXY(floor(($sizex/2)+($dx*$sizex/$coef_fd)),floor(($sizey/2)+($dy*$sizey/$coef_fd)),0);
 }
 
 $focus = array();

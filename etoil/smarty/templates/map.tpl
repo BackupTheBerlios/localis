@@ -7,31 +7,26 @@
 <form name="f">
 <input type="hidden" name="extent" value="{$extent}" />
 <table border="0" cellpadding="0" cellspacing="0">
-<tr><td width="{math equation="(x * 2) + y + 2" x=$mapmargin y=$sizex}">
+<tr><td width="{math equation="(x * 2) + y + 2" x=$mapmargin y=$sizex}" valign="top">
 {if count($tracks)}
-<map name="localisation" id="localisation">
-{section name=i loop=$tracks}
-<area href="{$url}?pid={$tracks[i].parcours_id}" name="{$tracks[i].parcours_id}" id="{$tracks[i].parcours_id}" shape="rect" coords="{$tracks[i].rect}" {popup text=$tracks[i].parcours_name|default:" "} />
-{/section}
-</map>
-{/if}
-<input type="image" src="img/dot1.png" width="1" height="1" border="0" name="dir" value="cc" />
+<map name="localisation" id="localisation">{section name=i loop=$tracks}<area href="{$url}?pid={$tracks[i].parcours_id}" name="{$tracks[i].parcours_id}" id="{$tracks[i].parcours_id}" shape="rect" coords="{$tracks[i].rect}" {popup text=$tracks[i].parcours_name|default:" "} />{/section}</map>{/if}
+<!--<input type="image" src="img/dot1.png" width="10" height="10" border="3" name="dir" value="cc" />-->
 <table cellspacing="0" cellpadding="0" border="0"><tr>
-<td width="{$mapmargin}"><input {popup text="{tr}Vers le Nord-Ouest{/tr}"} type="image" src="img/flecheHG.gif" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir" value="lt" /></td>
+<td width="{$mapmargin}"><input {popup text="{tr}Vers le Nord-Ouest{/tr}"} type="image" src="img/flecheHG.gif" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir_lt" value="lt" /></td>
 <td width="{$sizex+2}" align="center" class="navmap" onclick="document.getElementById('ct').click();" {popup text="{tr}Vers le Nord{/tr}"} 
-><input id="ct" type="image" src="img/flecheH.gif" border="0" name="dir" value="ct" /></td>
-<td width="{$mapmargin}"><input {popup text="{tr}Vers le Nord-Est{/tr}"} type="image" src="img/flecheHD.gif" border="0" name="dir" value="rt" /></td>
+><input id="ct" type="image" src="img/flecheH.gif" border="0" name="dir_ct" value="ct" /></td>
+<td width="{$mapmargin}"><input {popup text="{tr}Vers le Nord-Est{/tr}"} type="image" src="img/flecheHD.gif" border="0" name="dir_rt" value="rt" /></td>
 </tr><tr>
 <td class="navmap" onclick="document.getElementById('lc').click();" {popup text="{tr}Vers l'Ouest{/tr}"}
-><input id="lc" type="image" src="img/flecheG.gif" border="0" name="dir" value="lc" /></td>
+><input id="lc" type="image" src="img/flecheG.gif" border="0" name="dir_lc" value="lc" /></td>
 <td><input type="image" src="{$mapimage}" width="{$sizex}" height="{$sizey}" alt="" border="1" hspace="0" vspace="0" class="map" usemap="#localisation" valign="top"></td>
 <td class="navmap" onclick="document.getElementById('rc').click();" {popup text="{tr}Vers l'Est{/tr}"} 
-><input id="rc" type="image" src="img/flecheD.gif" border="0" name="dir" value="rc" /></td>
+><input id="rc" type="image" src="img/flecheD.gif" border="0" name="dir_rc" value="rc" /></td>
 </tr><tr>
-<td><input {popup text="{tr}Vers le Sud-Ouest{/tr}"} type="image" src="img/flecheBG.gif" border="0" name="dir" value="lb" /></td>
+<td><input {popup text="{tr}Vers le Sud-Ouest{/tr}"} type="image" src="img/flecheBG.gif" border="0" name="dir_lb" value="lb" /></td>
 <td class="navmap" align="center" onclick="document.getElementById('cb').click();" {popup text="{tr}Vers le Sud{/tr}"} 
-><input id="cb" type="image" src="img/flecheB.gif" border="0" name="dir" value="cb" /></td>
-<td><input {popup text="{tr}Vers le Sud-Est{/tr}"} type="image" src="img/flecheBD.gif" border="0" name="dir" value="rb" /></td>
+><input id="cb" type="image" src="img/flecheB.gif" border="0" name="dir_cb" value="cb" /></td>
+<td><input {popup text="{tr}Vers le Sud-Est{/tr}"} type="image" src="img/flecheBD.gif" border="0" name="dir_rb" value="rb" /></td>
 </tr><tr>
 <td colspan="3"><img src="img/dot0.png" height="{$blockspc}"></td>
 </tr>

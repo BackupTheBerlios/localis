@@ -8,15 +8,7 @@ body {
 td {
 	vertical-align : top;
 }
-.title {
-	font-size : 12pt;
-	letter-spacing : .1em;
-	background-color : #dff1d3;
-	padding : 0 10px;
-	border : 1px solid #000;
-	border-right : 0;
-	clear : both;
-}
+form {display:inline; }
 h1 {
 	font-size : 16pt;
 	margin : 0;
@@ -44,6 +36,15 @@ a {
 a:hover {
 	color : #FF0000;
 	background-color : #dedede;
+}
+.title {
+	font-size : 12pt;
+	letter-spacing : .1em;
+	background-color : #dff1d3;
+	padding : 0 10px;
+	border : 1px solid #000;
+	border-right : 0;
+	clear : both;
 }
 .headbar {
 	height : 101px;
