@@ -3,7 +3,7 @@ $title = "Cartographie";
 $db = true;
 include("setup.php");
 checkfontlist(PROOT."/maps");
-include_once(PROOT."/libs/conf.php");
+//include_once(PROOT."/libs/conf.php"); fait ds le setup
 
 // sur le proto, on n'affiche la carte que si on est loggé avec un profil >=1 et que le code profil
 $bool_map_disp=(!empty($_SESSION['me']) && $_SESSION['profile']>=1 ) || $anonym_disp_maps;
@@ -27,17 +27,11 @@ if (isset($_REQUEST['filtre'])) {
 	$filtre = $_REQUEST['filtre'];
 	$_SESSION['filtre'] = array();
 	foreach ($filtre as $f=>$v) {
-		$_SESSION["filtre"][$f] = $v;
+		$_SESSION['filtre'][$f] = $v; // ex: SESSION[filtre][type]="1" (pédestre)
 	}
 } elseif (isset($_SESSION['filtre'])) {
 	$filtre = $_SESSION['filtre'];
-}
-
-if (isset($filtre)) {
-	$smarty->assign('filtre',$filtre);
-	foreach ($filtre as $f=>$v) {
-		if (!empty($v)) $wh[] = "parcours_$f=$v";
-	}
+//} else { $filtre=array();
 }
 
 // ========================================================================
@@ -54,16 +48,18 @@ if (!empty($_REQUEST['spcsc25'])) {
 $mapfile=(!empty($_SESSION['spcsc25']) ? PROOT. "/maps/limousinhck.map" : $mapfile);
 
 $e_map = ms_newMapObj($mapfile);
-// ces paramètres sont récupérés dans le mapfile static
+// ces paramètres sont récupérés par défaut dans le mapfile static
+// ils seront maj si la variable extent est définie
+// celle-ci est passée en hidden
 $extminx = $extminxmf = $e_map->extent->minx;
 $extminy = $extminymf = $e_map->extent->miny;
 $extmaxx = $extmaxxmf = $e_map->extent->maxx;
 $extmaxy = $extmaxymf = $e_map->extent->maxy;
 
-// fonction qui désactive dans le mapfile toutes les couches qui
+// fonction qui désactivait dans le mapfile toutes les couches qui
 // ne font pas partie du groupe "fond"
 // Pourquoi ?????
-$lay = array("fond");
+/*$lay = array("fond");
 $layers = $e_map->getAllGroupNames();
 foreach ($layers as $l) {
 	$maplayer[] = $l;
@@ -76,12 +72,13 @@ foreach ($layers as $l) {
 		}
 	}			
 }
+*/
 
 $e_limit = ms_newRectObj();
 $e_limit->setextent($extminx,$extminy,$extmaxx,$extmaxy);
 
 if (!empty($_REQUEST['extent'])) {
-	list($extminx,$extminy,$extmaxx,$extmaxy) = split(' ',trim($_REQUEST['extent']));
+	list($extminx,$extminy,$extmaxx,$extmaxy) = split(' ',trim(urldecode($_REQUEST['extent'])));
 }
 $ext = array($extminx,$extminy,$extmaxx,$extmaxy);
 
@@ -100,7 +97,7 @@ $e_map->set('width',$sizex);
 $e_map->set('height',$sizey);
 
 $e_click = ms_newPointObj();
-$e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par défaut, au centre
+$e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par défaut, clic au centre
 
 // recherche des villes correspondant aux critères
 if (!empty($_REQUEST['ville'])) {
@@ -108,7 +105,6 @@ if (!empty($_REQUEST['ville'])) {
 	if (!$cities or count($cities) == 0) {
 		$feedback[] = array('num'=>-1,'msg'=>sprintf(tra('Désolé, aucun nom de ville en Limousin ne commence par %s.'),$_REQUEST['ville']));
 	} elseif (count($cities) == 1) {
-		$_REQUEST = array();
 		$_REQUEST['focusville'] = $cities[0]['nom'];
 		$_REQUEST['idfocusville'] = $cities[0]['id'];
 
@@ -116,7 +112,7 @@ if (!empty($_REQUEST['ville'])) {
 		$smarty->assign('cities',$cities);
 	}
 }
-$action_OK=false; // par défaut, les actions (zoom, travel) qui a le focus n'est PAS appliquée
+$action_OK=false; // par défaut, l'action(zoom, travel) qui a le focus n'est PAS appliquée
 // il peut y avoir plein d'autres actions (recherche, resize, etc ..)
 
 if (isset($_REQUEST['focusville'])) {
@@ -146,7 +142,7 @@ if ($click_x and $click_y) { // click "normal" dans la carte
 	$e_click->setXY($click_x,$click_y,0);
 }
 // cause soucis avec IE, change la façon de traiter les clics sur les flèches de dir
-// lors d'un clic sur une input type=img name=dir value="titi", IE n'envoie que les variables dir_x et dir_y (coord en pixels du clic sur l'immage, et contrairement à firefox PAS le couple variable=valeur dir=titi
+// lors d'un clic sur une input type=img name=dir value="titi", IE n'envoie que les variables dir_x et dir_y (coord en pixels du clic sur l'immage, et (contrairement à firefox) PAS le couple variable=valeur dir=titi
 $dx=$dy=0;
 if (isset($_REQUEST['dir_lt_x'])) {$dx=-1;$dy=-1;}
 if (isset($_REQUEST['dir_ct_x'])) {$dx= 0;$dy=-1;}
@@ -177,11 +173,11 @@ if (isset($_REQUEST['action'])) {
 	}
 }
 
-if (!empty($_REQUEST['p_name']) and $_SESSION['me']) {
+if (!empty($_REQUEST['p_name']) and $_SESSION['me']) { // enregistrement d'une track tracée en bdd
 	if (!$db->add_parcours($_REQUEST['p_name'],$_SESSION['me'],$_REQUEST['p_type'],$_SESSION['track'],$_REQUEST['p_level'],$_REQUEST['p_time'])) {
 		$feedback[] = array('num'=>-1,'msg'=>$db->mes[0]);
 	} else {
-		$_SESSION['track'] = array();
+		$_SESSION['track'] = array(); // vide tableau tracé
 	}
 } elseif (isset($_REQUEST['do']) and $_REQUEST['do'] == tra('Enregistrer')) {
 	$focus['edit'] = "focus";
@@ -195,7 +191,7 @@ elseif (isset($_REQUEST['do']) and $_REQUEST['do'] == tra('Undo')) {
 	unset($_SESSION['track'][count($_SESSION['track'])-1]);
 }
 
-// on a un clic dans la carte de reference
+// clic dans la carte de reference
 if (isset($_REQUEST['ref_x']) or isset($_REQUEST['ref.x'])) {
 	$refx = ($_REQUEST['ref_x']) ? $_REQUEST['ref_x'] : $_REQUEST['ref.x'];
 	$refy = ($_REQUEST['ref_y']) ? $_REQUEST['ref_y'] : $_REQUEST['ref.y'];
@@ -203,12 +199,21 @@ if (isset($_REQUEST['ref_x']) or isset($_REQUEST['ref.x'])) {
 	$wy=($ext[3]-$ext[1])/2; // demi-hauteur en échelle carte
 	$e_extent->setextent($extminxmf+$refx/$refwidth*($extmaxxmf-$extminxmf)-$wx,$extminymf+(1-$refy/$refheight)*($extmaxymf-$extminymf)-$wy,$extminxmf+$refx/$refwidth*($extmaxxmf-$extminxmf)+$wx,$extminymf+(1-$refy/$refheight)*($extmaxymf-$extminymf)+$wy);
 	}
-
+// ************************************************************************
 $e_map->zoompoint($zoom_factor,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 
+// affichage des parcours
 if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!="none") {
+	$smarty->assign('filtre',$filtre);
+	// calcul du where parcours
+	// => nom_champ_bdd=parcours_$f
+	$where_parc='';
+	foreach ($filtre as $f=>$v) {
+		if (!empty($v)) $where_parc.= "parcours_$f=$v"." AND ";
+	}
+	if ($where_parc!='') $where_parc=substr($where_parc,0, strlen($where_parc) -5); 
 	// affichage des contours en noir de tous les parcours qqsoit la discipline
-	// uniquement si échelle assez faible
+	// ce uniquement si échelle assez faible
 	if ($e_map->scale < $minscaledispextparc) {
 		$e_lay = ms_newLayerObj($e_map);
 		$e_lay->set('name','parcoursline');
@@ -216,9 +221,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!
 		$e_lay->set('connectiontype',MS_POSTGIS);
 		$e_lay->set('connection',$db->connstr);
 		$query = "parcours_geom from parcours";
-		if (isset($wh) and is_array($wh) and count($wh)) {
-			$e_lay->setFilter(implode(' and ',$wh));
-		}
+		if ($where_parc!="")	$e_lay->setFilter($where_parc);
 		$e_lay->set('data',$query);
 		$e_lay->set('type',MS_LAYER_LINE);
 		$e_cla = ms_newClassObj($e_lay);
@@ -235,9 +238,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!
 	$e_lay2->set('connectiontype',MS_POSTGIS);
 	$e_lay2->set('connection',$db->connstr);
 	$query = "parcours_geom from parcours";
-	if (isset($wh) and is_array($wh) and count($wh)) {
-		$e_lay2->setFilter(implode(' and ',$wh));
-	}
+	if ($where_parc!="")	$e_lay2->setFilter($where_parc);
 	$e_lay2->set('data',$query);
 	$e_lay2->set('type',MS_LAYER_LINE);
 	$e_lay2->set('classitem','parcours_type');
@@ -260,9 +261,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!
 	$e_lay->set('connectiontype',MS_POSTGIS);
 	$e_lay->set('connection',$db->connstr);
 	$query = "parcours_start from parcours";
-	if (isset($wh) and is_array($wh) and count($wh)) {
-		$e_lay->setFilter(implode(' and ',$wh));
-	}
+	if ($where_parc!="")	$e_lay->setFilter($where_parc);
 	$e_lay->set('data',$query);
 	$e_lay->set('type',MS_LAYER_POINT);
 	$e_lay->set('labelitem','parcours_name');
@@ -273,6 +272,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!
 		$e_cla3[$extype]->set('name',$name[$extype]);
 		$e_cla3[$extype]->setExpression($extype);
 		$e_sty3[$extype] = ms_newStyleObj($e_cla3[$extype]);
+		// affichagage des labels slt en dessous d'une certaine échelle
 		if (isset($e_map->scale) &&  $e_map->scale < $minscaledisplabels && $e_map->scale!=-1) {
 			$e_lab[$extype] = $e_cla3[$extype]->label;
 			$e_lab[$extype]->set("position",MS_AUTO);
@@ -286,7 +286,8 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!
 		} // fin si echelle assez grande pour afficher les labels
 		$e_sty3[$extype]->set("symbolname",$name[$extype]);
 	} // fin boucle sur les types de parcours
-}
+} // fin si il y des parcours à afficher
+
 // trace dessinée en temps réel en ligne
 if (!empty($_SESSION['track'])) {
 	$e_shape = ms_newShapeObj(MS_SHAPE_LINE);
@@ -357,17 +358,20 @@ for ($i=0; $i<$e_map->numlayers; $i++) {
 }
 $smarty->assign('legends',$legends);
 
+$extminx = floor($e_map->extent->minx);
+$extminy = floor($e_map->extent->miny);
+$extmaxx = floor($e_map->extent->maxx);
+$extmaxy = floor($e_map->extent->maxy);
+// l'extent est ensuite passé par une variable cachée ds map.tpl
+$smarty->assign('extent',urlencode("$extminx $extminy $extmaxx $extmaxy"));
+
 if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!="none") {
+//if (isset($filtre) and is_array($filtre) and count($filtre) ) {
 	/* calcule la liste des parcours correspondant aux critères de requête 
 	et se trouvant dans la zone affichée
 	calcule les coord xy (pix) des rectangles correspondant aux pictos
 	définissant les zones cliquables dans la maparea
 	*/
-	$extminx = $e_map->extent->minx;
-	$extminy = $e_map->extent->miny;
-	$extmaxx = $e_map->extent->maxx;
-	$extmaxy = $e_map->extent->maxy;
-
 	$tracks = $db->get_parcours(array($extminx,$extminy,$extmaxx,$extmaxy),$filtre);
 	for ($i=0;$i<count($tracks);$i++) {
 		if (preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$tracks[$i]['coord'],$m)) {
@@ -384,7 +388,6 @@ $smarty->assign('sizey',$sizey);
 $smarty->assign('sizecheck',$sizecheck);
 $smarty->assign('mapmargin',$mapmargin);
 $smarty->assign('blockspc',$blockspc);
-$smarty->assign('extent',"$extminx $extminy $extmaxx $extmaxy");
 $scale = $e_map->scale;
 $smarty->assign('scale',floor($scale));
 $smarty->assign('refsrc',$refsrc);

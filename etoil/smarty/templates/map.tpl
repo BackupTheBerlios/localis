@@ -8,8 +8,13 @@
 <input type="hidden" name="extent" value="{$extent}" />
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td width="{math equation="(x * 2) + y + 2" x=$mapmargin y=$sizex}" valign="top">
+<map name="localisation" id="localisation">
 {if count($tracks)}
-<map name="localisation" id="localisation">{section name=i loop=$tracks}<area href="{$url}?pid={$tracks[i].parcours_id}" name="{$tracks[i].parcours_id}" id="{$tracks[i].parcours_id}" shape="rect" coords="{$tracks[i].rect}" {popup text=$tracks[i].parcours_name|default:" "} />{/section}</map>{/if}
+{section name=i loop=$tracks}
+<area href="{$url}?pid={$tracks[i].parcours_id}" name="{$tracks[i].parcours_id}" id="{$tracks[i].parcours_id}" shape="rect" coords="{$tracks[i].rect}" {popup text=$tracks[i].parcours_name|default:" "} />
+{/section}
+{/if}
+</map>
 <!--<input type="image" src="img/dot1.png" width="10" height="10" border="3" name="dir" value="cc" />-->
 <table cellspacing="0" cellpadding="0" border="0"><tr>
 <td width="{$mapmargin}"><input {popup text="{tr}Vers le Nord-Ouest{/tr}"} type="image" src="img/flecheHG.gif" width="{$mapmargin}" height="{$mapmargin}" border="0" name="dir_lt" value="lt" /></td>
@@ -201,9 +206,9 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 </td></tr></table>
 </form>
 { else } 
-Sur ce site prototype de test, il est nécéssaire de s'identifier et d'être habilité pour pouvoir consulter les cartes.<br/>
+Sur ce site prototype de test, il est nécessaire de s'identifier et d'être habilité pour pouvoir consulter les cartes.<br/>
 <br/>
-Veuillez contacter {mailto address="artec.vm@nerim.net" encode="javascript" subject="Activer un compte sur e-toil.net"} pour activer un compte.
+Veuillez contacter {mailto address="artec.vm@nerim.net" encode="javascript" subject="Activer un compte sur e-toil.net"} pour créer ou activer un compte.
 
 Merci.
 { /if}

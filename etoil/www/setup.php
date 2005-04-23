@@ -16,6 +16,8 @@ if (get_magic_quotes_gpc()) {
   } 
 }
 require_once (PROOT.'libs/etoil.lib.php');
+include_once(PROOT."/libs/conf.php");
+
 /* --------------------------------------------------------------- */
 if (isset($_REQUEST['lang']) and is_file(PROOT."lang/".$_REQUEST['lang'].".php")) {
 	$_SESSION['lang'] = $_REQUEST['lang'];
