@@ -17,8 +17,7 @@
       <p>Pour des informations détaillées, télécharger le 
             <b><a target="_blank" href="docs/Dossier_presentation_e-toiL.pdf">dossier de présentation complet</a> </b>
       <font size="1">(fichier pdf 1Mo)</font>
-</div>
- <hr color="#C0C0C0" size="1">
+ <hr color="#C0C0C0" size="1" width="70%">
           <table border="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" id="AutoNumber4" cellpadding="3" width="100%">
             <tr>
               <td valign="bottom" colspan="5"><b><font size="2">&nbsp;<br>
@@ -75,4 +74,6 @@
 
             </tr>
           </table>
+	  </div>
+
 {include file="foot.tpl"}
