@@ -11,7 +11,8 @@
 <a href="techdata.php" class="adminlink">Tech Data</a>
 {else}
 &nbsp;
-{/if}Copyright &copy; e-TOIL 2005 - Site conçu pour un écran configuré en 1024x768 ou plus
+{/if}Copyright &copy; e-TOIL 2005 - Site conçu pour un écran configuré en 1024x768 ou plus<br/>
+et optimisé pour les navigateurs libres <a href="http://www.mozilla.org" target="_blank">Mozilla/Firefox</a> 
 </td></tr></table>
 </td></tr></table>
 </body>

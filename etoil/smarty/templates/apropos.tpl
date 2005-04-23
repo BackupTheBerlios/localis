@@ -14,8 +14,8 @@
       PDA...) permettant à des randonneurs à pied, à cheval, à vélo ou en canoë 
       kayak de créer leur propre itinéraire à travers l'ensemble des chemins 
       accessibles.
-      <p>Pour plus des informations plus détaillées :
-            <b><a target="_blank" href="docs/Dossier_presentation_e-toiL.pdf">cliquez ici</a> </b>
+      <p>Pour des informations détaillées, télécharger le 
+            <b><a target="_blank" href="docs/Dossier_presentation_e-toiL.pdf">dossier de présentation complet</a> </b>
       <font size="1">(fichier pdf 1Mo)</font>
 </div>
  <hr color="#C0C0C0" size="1">
