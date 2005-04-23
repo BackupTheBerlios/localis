@@ -22,7 +22,6 @@ $zoom_factor=1; // défaut
 if (isset($_REQUEST['purge']) and $_REQUEST['purge'] == 'all') {
 	$_SESSION['track'] = array();
 }
-
 if (isset($_REQUEST['filtre'])) {
 	$filtre = $_REQUEST['filtre'];
 	$_SESSION['filtre'] = array();
@@ -98,6 +97,12 @@ $e_map->set('height',$sizey);
 
 $e_click = ms_newPointObj();
 $e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par défaut, clic au centre
+
+//print_r($_REQUEST);
+if (!empty($_REQUEST['trackfileimp'])) {
+// marche pas, en get le fichier ne passe pas
+echo (import_track("/tmp/".$_REQUEST['trackfileimp'],"trk","wgs84")) ;
+}
 
 // recherche des villes correspondant aux critères
 if (!empty($_REQUEST['ville'])) {

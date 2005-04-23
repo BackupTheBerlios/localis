@@ -4,7 +4,7 @@
 
 <div class="central">
 {if $bool_map_disp}
-<form name="f">
+<form name="f" enctype="multipart/form-data">
 <input type="hidden" name="extent" value="{$extent}" />
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td width="{math equation="(x * 2) + y + 2" x=$mapmargin y=$sizex}" valign="top">
@@ -99,11 +99,6 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <div class="bar">{tr}Navigation{/tr}</div>
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="navbar">
 <tr>
-{if $smarty.session.admin}
-<td valign="top" width="25%" align="center" class="tool{$focus.edit}" id='tool_edit'>
-<div {popup text="{tr}Ajouter{/tr} [ Alt-a ]"}><label for="edit" accesskey="a"><img src="img/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edit" valign="top"></label>
-<input type="radio" id="edit" name="action" value="edit"{if $focus.edit eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_edit');"/></div></td>
-{/if}
 <td valign="top" width="25%" align="center" class="tool{$focus.zoomout}" id='tool_zoomout'>
 <div {popup text="{tr}Eloigner{/tr} [ Alt-e ]"}><label for="zoomout" accesskey="e"><img src="img/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"></label>
 <input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomout'); if (this.checked) document.f.submit();"/></div></td>
@@ -115,8 +110,19 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomin')" /></div></td>
 </td></tr></table>
 
+{* bloc d'outils d'edition, import de tracés(conditionnel, si user non blaireau) *}
+{if $smarty.session.admin} 
+<img src="img/dot0.png" height="{$blockspc}">
+<div class="bar">{tr}Edition import de tracé{/tr}</div>
+<table border="0" cellpadding="2" cellspacing="1" width="100%" class="navbar">
+<tr>
+<td valign="top" width="30%" align="center" class="tool{$focus.edit}" id='tool_edit'>
+<div {popup text="{tr}Ajouter{/tr} [ Alt-a ]"}><label for="edit" accesskey="a"><img src="img/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edit" valign="top"></label>
+<input type="radio" id="edit" name="action" value="edit"{if $focus.edit eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_edit');"/></div></td>
+<td colspan="2" width="70%"><input {popup text="{tr}Importer{/tr}"} type="file" size="10" name="trackfileimp" /></td>
+</tr></table>
+
 {* bloc d'enregistrement/modification de tracé (conditionnel, si user non blaireau) *}
-{if $smarty.session.admin}
 <img src="img/dot0.png" height="{$blockspc}">
 {if $smarty.request.do eq "{tr}Enregistrer{/tr}"}
 <div class="bar">{tr}Edition/ajout de tracé{/tr}</div>

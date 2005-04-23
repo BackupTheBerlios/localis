@@ -1,5 +1,28 @@
 <?php
 
+function import_track($file,$format,$cs="wgs84") {
+	$msg="import succeed !";
+	if (!($handle=fopen($file,"rb"))) return ("error: cannot open $file !");
+	$_SESSION['track'] = array(); // vide la var de session
+	while (!feof($handle)) {
+		$tb=explode(" ",fgets($handle));
+		if ($tb[0]=="T") { // ligne de coordonnées
+			$tb[2]=substr($tb[2],1); // enlève le car E
+			$tb[3]=substr($tb[3],1); // enlève le car N
+			//echo "N=$tb[2], E=$tb[3], Z=$tb[6] => "; //" ".$tb[6].
+			$cmd="cs2cs +proj=latlong +datum=WGS84 +to +init=lambfr:27585 <<EOF\n".$tb[3]." ".$tb[2]."\nEOF\n";
+			$out=shell_exec($cmd);
+			//echo "cmd out# ".$out."<br />";
+			// renvoie X (tab) y (espace) z??
+			$out=str_replace(chr(9)," ",$out);
+			$tb=explode(" ",$out);
+			//print_r($tb);
+			$_SESSION['track'][]=floor($tb[0])." ".floor($tb[1]);
+		}
+	} // fin boucle sur les lignes du fichier
+	fclose($handle);
+	return($msg);
+}
 function list_dir($path,$pattern,$i) {
 	$back = false;
 	if (!is_dir($path)) {
