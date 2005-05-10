@@ -1,6 +1,13 @@
 {include file="head.tpl"}
 {popup_init src="js/overlib.js"}
 
+{literal}
+<script language="JavaScript">
+function ChgMeth() {
+document.f.method="POST";
+}
+</script>
+{/literal}
 
 <div class="central">
 {if $bool_map_disp}
@@ -119,7 +126,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <td valign="top" width="30%" align="center" class="tool{$focus.edit}" id='tool_edit'>
 <div {popup text="{tr}Ajouter{/tr} [ Alt-a ]"}><label for="edit" accesskey="a"><img src="img/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edit" valign="top"></label>
 <input type="radio" id="edit" name="action" value="edit"{if $focus.edit eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_edit');"/></div></td>
-<td colspan="2" width="70%"><input {popup text="{tr}Importer{/tr}"} type="file" size="10" name="trackfileimp" /></td>
+<td colspan="2" width="70%"><input {popup text="{tr}Importer{/tr}"} type="file" size="10" name="trackfileimp" Onchange="ChgMeth()"/></td>
 </tr></table>
 
 {* bloc d'enregistrement/modification de tracé (conditionnel, si user non blaireau) *}

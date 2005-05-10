@@ -99,9 +99,8 @@ $e_click = ms_newPointObj();
 $e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par défaut, clic au centre
 
 //print_r($_REQUEST);
-if (!empty($_REQUEST['trackfileimp'])) {
-// marche pas, en get le fichier ne passe pas
-echo (import_track("/tmp/".$_REQUEST['trackfileimp'],"trk","wgs84")) ;
+if (!empty($_FILES['trackfileimp']['name'])) {
+echo (import_track($_FILES['trackfileimp']['tmp_name'],"trk","wgs84")) ;
 }
 
 // recherche des villes correspondant aux critères
