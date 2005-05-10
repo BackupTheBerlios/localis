@@ -101,6 +101,7 @@ $e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par défaut, clic au centr
 //print_r($_REQUEST);
 if (!empty($_FILES['trackfileimp']['name'])) {
 echo (import_track($_FILES['trackfileimp']['tmp_name'],"trk","wgs84")) ;
+unlink($_FILES['trackfileimp']['tmp_name']); // efface le fichier téléchargé
 }
 
 // recherche des villes correspondant aux critères

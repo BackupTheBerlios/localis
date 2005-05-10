@@ -3,6 +3,8 @@
 
 {literal}
 <script language="JavaScript">
+// cette fonction est appelée quand on vuet télécharger (uploader) un fichier
+// en effet, les upload ne marchent correctement qu'en méthode POST
 function ChgMeth() {
 document.f.method="POST";
 }
