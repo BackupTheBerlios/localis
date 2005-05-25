@@ -49,5 +49,10 @@ $minscaledispextparc=100000; // echelle min a partir de laquelle on affiche les 
 $extparcwdth=7; // épaisseur externe des traits de tracés
 $parclabelsize=10;
 $parclabelfont="Verdana";
-$minscaledisplabels=100000; // echelle min a partir de laquelle on affiche les labels des parcours
+$minscaledisplabels=100000; // echelle min a partir de laquelle on affiche les labels des parcours et des points LEI
+
+// parametres couche LEI
+$leilabelsize=8;
+$leilabelfont="arial_italic";
+
 ?>

@@ -1,4 +1,4 @@
-<?php 
+f<?php 
 $title = "Cartographie";
 $db = true;
 include("setup.php");
@@ -100,6 +100,7 @@ $e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par défaut, clic au centr
 
 //print_r($_REQUEST);
 if (!empty($_FILES['trackfileimp']['name'])) {
+//debug("_FILES");
 echo (import_track($_FILES['trackfileimp']['tmp_name'],"trk","wgs84")) ;
 unlink($_FILES['trackfileimp']['tmp_name']); // efface le fichier téléchargé
 }
@@ -292,6 +293,47 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!
 		$e_sty3[$extype]->set("symbolname",$name[$extype]);
 	} // fin boucle sur les types de parcours
 } // fin si il y des parcours à afficher
+
+// couches de labels/pictos des objets LEI
+$bool_lei=true;
+$where_lei_f="";
+if ($bool_lei) {
+	$lei_lay = ms_newLayerObj($e_map);
+	$lei_lay->set('name','lei_fiche');
+	$lei_lay->set('status',MS_ON);
+	$lei_lay->set('labelcache',MS_ON); // par défaut
+
+	$lei_lay->set('connectiontype',MS_POSTGIS);
+	$lei_lay->set('connection',$db->connstr);
+	$query = "lei_f_pos from lei_fiches";
+	if ($where_lei_f!="")	$lei_lay->setFilter($where_lei_f);
+	$lei_lay->set('data',$query);
+	$lei_lay->set('type',MS_LAYER_POINT);
+	$lei_lay->set('labelitem','lei_f_libelle');
+	$lei_lay->set('classitem','lei_f_idcat');
+	$lei_cla = ms_newClassObj($lei_lay);
+	$lei_sty = ms_newStyleObj($lei_cla);
+	//$lei_sty->set("symbolname","circle");
+	//$lei_sty->set("size",5); 
+	//$lei_sty->color->setRGB(255,0,0);
+	$lei_sty->set("symbolname",'hotel');
+	if (isset($e_map->scale) &&  $e_map->scale < $minscaledisplabels && $e_map->scale!=-1) {
+		$extype=1;
+		$lei_lab[$extype] = $lei_cla->label;
+		$lei_lab[$extype]->set("position",MS_AUTO);
+		//$lei_lab[$extype]->backgroundshadowcolor->setRGB(200,200,200);
+
+		$lei_lab[$extype]->set("size",$leilabelsize);
+		$lei_lab[$extype]->set("type","truetype");
+		$lei_lab[$extype]->set("font",$leilabelfont);
+		$lei_lab[$extype]->color->setRGB(255,0,0);
+		$lei_lab[$extype]->backgroundcolor->setRGB(200,200,200);
+	} // fin si echelle assez grande pour afficher les labels LEI
+	//$e_class3 = ms_newClassObj($e_track3);
+	//$e_style3 = ms_newStyleObj($e_class3);
+	//$e_style3->set("symbolname",'flag2');
+
+}
 
 // trace dessinée en temps réel en ligne
 if (!empty($_SESSION['track'])) {
