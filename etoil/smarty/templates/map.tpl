@@ -178,7 +178,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 
 {* bloc de sélection critères tracés *}
 <img src="img/dot0.png" height="{$blockspc}">
-<div class="bar">Selection</div>
+<div class="bar">Selection des parcours</div>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr><td>{tr}Discipline{/tr}&nbsp;</td><td>
 <select class="selection" name="filtre[type]" id="ftype">
@@ -220,14 +220,16 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 
 {* bloc de sélection points du LEI *}
 <img src="img/dot0.png" height="{$blockspc}">
-<div class="bar">Selection</div>
+<div class="bar">Sélections des points LEI</div>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr><td>{tr}Points d'intérêt{/tr}&nbsp;</td><td>
-
+<tr><td>
+{$ldfiltptslei}
 </td></tr>
+<tr><td>
 <input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />
 </td></tr></table>
-</td></tr></table>
+
+</td></tr></table> {* fin du grand tableau général de colonnes *}
 </form>
 { else } 
 Sur ce site prototype de test, il est nécessaire de s'identifier et d'être habilité pour pouvoir consulter les cartes.<br/>

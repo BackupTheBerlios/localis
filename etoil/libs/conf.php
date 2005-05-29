@@ -42,14 +42,17 @@ $deptsregion="(19,23,87)";
 $pcarpc=7; // pourcentage de marge autour d'un parcours lors d'un zoom
 $refwidth=100; //largeur de la carte de reference
 $refheight=100; //largeur de la carte de reference
-// paramètres des tracés de couches postgis
 
+// paramètres des tracés de couches postgis
+// concernant les parcours
 $intparcwdth=3; // épaisseur interne des traits de tracés
 $minscaledispextparc=100000; // echelle min a partir de laquelle on affiche les contours en noir des traces de parcours
 $extparcwdth=7; // épaisseur externe des traits de tracés
 $parclabelsize=10;
 $parclabelfont="Verdana";
 $minscaledisplabels=100000; // echelle min a partir de laquelle on affiche les labels des parcours et des points LEI
+$xd2pp=10; // dimension x picto parcours div par 2: sert pour les maparea d�finissant les zones cliquables sur les pictos des parcours
+$yd2pp=10; // id y
 
 // parametres couche LEI
 $leilabelsize=8;

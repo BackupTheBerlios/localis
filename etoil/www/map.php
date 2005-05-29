@@ -1,7 +1,8 @@
-f<?php 
+<?php 
 $title = "Cartographie";
 $db = true;
 include("setup.php");
+
 checkfontlist(PROOT."/maps");
 //include_once(PROOT."/libs/conf.php"); fait ds le setup
 
@@ -412,23 +413,36 @@ $extmaxy = floor($e_map->extent->maxy);
 // l'extent est ensuite passé par une variable cachée ds map.tpl
 $smarty->assign('extent',urlencode("$extminx $extminy $extmaxx $extmaxy"));
 
-if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!="none") {
-//if (isset($filtre) and is_array($filtre) and count($filtre) ) {
-	/* calcule la liste des parcours correspondant aux critères de requête 
+/* calcule la liste des parcours correspondant aux critères de requête 
 	et se trouvant dans la zone affichée
 	calcule les coord xy (pix) des rectangles correspondant aux pictos
 	définissant les zones cliquables dans la maparea
 	*/
+if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!="none") {
+//if (isset($filtre) and is_array($filtre) and count($filtre) ) {
 	$tracks = $db->get_parcours(array($extminx,$extminy,$extmaxx,$extmaxy),$filtre);
 	for ($i=0;$i<count($tracks);$i++) {
 		if (preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$tracks[$i]['coord'],$m)) {
 			$xx = geo2pix($m[1],$extminx,$extmaxx,$sizex);
 			$yy = geo2pix($m[2],$extmaxy,$extminy,$sizey);
-			$tracks[$i]['rect'] = ($xx - 10) .','. ($yy - 10) .','. ($xx + 10) .','. ($yy + 10);
+			$tracks[$i]['rect'] = ($xx - $xd2pp) .','. ($yy - $yd2pp) .','. ($xx + $xd2pp) .','. ($yy + $yd2pp);
 		}
 	}
 	$smarty->assign('tracks',$tracks);
 } // fin si filtre défini
+
+// nouvel objet pour sélection liste déroulante LEI
+$ObjSeLEI=new PYAobj();
+$ObjSeLEI->NmBase=$dbname;
+$ObjSeLEI->NmTable="lei_fiches";
+$ObjSeLEI->NmChamp="lei_f_idcat";
+
+$ObjSeLEI->InitPO();
+$ObjSeLEI->DirEcho=false;
+$ldfiltptslei=$ObjSeLEI->EchoFilt(false);
+
+$smarty->assign('ldfiltptslei',$ldfiltptslei);
+
 
 $smarty->assign('sizex',$sizex);
 $smarty->assign('sizey',$sizey);

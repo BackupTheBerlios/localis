@@ -5,7 +5,7 @@ define('PWWW', dirname(__FILE__).'/');
 define('PROOT', dirname(dirname(__FILE__)).'/');
 session_start();
 /* --------------------------------------------------------------- */
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 
 ini_set('register_globals','off');
 ini_set('upload_tmp_dir','/tmp');
@@ -18,6 +18,9 @@ if (get_magic_quotes_gpc()) {
 }
 require_once (PROOT.'libs/etoil.lib.php');
 include_once(PROOT."/libs/conf.php");
+include_once("fonctions.php");
+include_once PROOT."/db/local.php";
+$_SESSION['db_type']="pgsql";
 
 /* --------------------------------------------------------------- */
 if (isset($_REQUEST['lang']) and is_file(PROOT."lang/".$_REQUEST['lang'].".php")) {

@@ -1,6 +1,19 @@
 <?php
 
+if (!is_file(PROOT."/db/local.php")) {
+	header('Location: install.php');
+	exit;
+}
+
+include PROOT."/db/local.php";
+$db = new db($dbhost,$dbport,$dbname,$dbuser,$dbpass);
+
+if (!$db->conn) {
+	$feedback[] = array('num'=>-1,'msg'=>$db->mes[0]);
+}
+
 class db {
+
 
 	var $conn;
 	var $mes = array();
@@ -252,15 +265,5 @@ class db {
 	
 }
 
-if (!is_file(PROOT."/db/local.php")) {
-	header('Location: install.php');
-	exit;
-}
-
-include PROOT."/db/local.php";
-$db = new db($dbhost,$dbport,$dbname,$dbuser,$dbpass);
-if (!$db->conn) {
-	$feedback[] = array('num'=>-1,'msg'=>$db->mes[0]);
-}
 
 ?>
