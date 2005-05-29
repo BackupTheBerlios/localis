@@ -223,7 +223,8 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <div class="bar">Sélections des points LEI</div>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr><td>
-{$ldfiltptslei}
+<div class="ldlei">
+{$LD_filt_pts_LEI}</div>
 </td></tr>
 <tr><td>
 <input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />

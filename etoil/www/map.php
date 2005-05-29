@@ -298,7 +298,14 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!
 // couches de labels/pictos des objets LEI
 $bool_lei=true;
 $where_lei_f="";
-if ($bool_lei) {
+	$where_lei_f='';
+	foreach ($_REQUEST['rq_lei_f_idcat'] as $idcat) {
+		if ($idcat==0) $bool_lei=false;
+		$where_lei_f.= "lei_f_idcat=$idcat OR ";
+	}
+	if ($where_lei_f!='') $where_lei_f=substr($where_lei_f,0, strlen($where_lei_f) -4); // enlève le dernier " OR "
+
+if ($bool_lei && $where_lei_f!="") {
 	$lei_lay = ms_newLayerObj($e_map);
 	$lei_lay->set('name','lei_fiche');
 	$lei_lay->set('status',MS_ON);
@@ -439,9 +446,8 @@ $ObjSeLEI->NmChamp="lei_f_idcat";
 
 $ObjSeLEI->InitPO();
 $ObjSeLEI->DirEcho=false;
-$ldfiltptslei=$ObjSeLEI->EchoFilt(false);
 
-$smarty->assign('ldfiltptslei',$ldfiltptslei);
+$smarty->assign('LD_filt_pts_LEI',$ObjSeLEI->EchoFilt(false));
 
 
 $smarty->assign('sizex',$sizex);
