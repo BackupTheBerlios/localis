@@ -57,5 +57,5 @@ $yd2pp=10; // id y
 // parametres couche LEI
 $leilabelsize=8;
 $leilabelfont="arial_italic";
-
+$lei_f_url="http://193.108.140.161/etoil/cgi/interface.pyt?page=gab-produit.sk&boucle=p,prest2,p2,plink,crdp,crdp,hor,desext,listass2&critselect1=1900178&critselect2=1900067&produit=";
 ?>

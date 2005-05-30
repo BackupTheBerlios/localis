@@ -340,7 +340,6 @@ if ($bool_lei && $where_lei_f!="") {
 	//$e_class3 = ms_newClassObj($e_track3);
 	//$e_style3 = ms_newStyleObj($e_class3);
 	//$e_style3->set("symbolname",'flag2');
-
 }
 
 // trace dessinée en temps réel en ligne
@@ -438,6 +437,20 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!
 	$smarty->assign('tracks',$tracks);
 } // fin si filtre défini
 
+// idem pour les pictos LEI
+if ($bool_lei && $where_lei_f!="") {
+	$ppmplei = $db->get_lei_pts(array($extminx,$extminy,$extmaxx,$extmaxy,$where_lei_f));
+	for ($i=0;$i<count($ppmplei);$i++) {
+		if (preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$ppmplei[$i]['coord'],$m)) {
+			$xx = geo2pix($m[1],$extminx,$extmaxx,$sizex);
+			$yy = geo2pix($m[2],$extmaxy,$extminy,$sizey);
+			$ppmplei[$i]['rect'] = ($xx - $xd2pp) .','. ($yy - $yd2pp) .','. ($xx + $xd2pp) .','. ($yy + $yd2pp);
+		}
+	}
+	$smarty->assign('ppmplei',$ppmplei);
+	$smarty->assign('lei_f_url',$lei_f_url);// Assigne l'url  à rallonge du skel (cf conf.php)
+}
+
 // nouvel objet pour sélection liste déroulante LEI
 $ObjSeLEI=new PYAobj();
 $ObjSeLEI->NmBase=$dbname;
@@ -445,9 +458,16 @@ $ObjSeLEI->NmTable="lei_fiches";
 $ObjSeLEI->NmChamp="lei_f_idcat";
 
 $ObjSeLEI->InitPO();
-$ObjSeLEI->DirEcho=false;
+$tabLD=ttChpLink($ObjSeLEI->Valeurs);
 
-$smarty->assign('LD_filt_pts_LEI',$ObjSeLEI->EchoFilt(false));
+foreach($tabLD as $k=>$v) {
+	if (in_array($k,$_REQUEST['rq_lei_f_idcat'])) $tabLD[$k]=$VSLD.$v;
+}
+$tabLD=array(0=>"Aucun")+$tabLD;
+
+
+
+$smarty->assign('LD_filt_pts_LEI',DispLD($tabLD,"rq_lei_f_idcat","yes","",false));
 
 
 $smarty->assign('sizex',$sizex);

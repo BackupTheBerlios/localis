@@ -19,10 +19,18 @@ document.f.method="POST";
 <tr><td width="{math equation="(x * 2) + y + 2" x=$mapmargin y=$sizex}" valign="top">
 <map name="localisation" id="localisation">
 {if count($tracks)}
+{*definit des area cliquables sur les pictos des parcours*}
 {section name=i loop=$tracks}
 <area href="{$url}?pid={$tracks[i].parcours_id}" name="{$tracks[i].parcours_id}" id="{$tracks[i].parcours_id}" shape="rect" coords="{$tracks[i].rect}" {popup text=$tracks[i].parcours_name|default:" "} />
 {/section}
 {/if}
+{*definit des area cliquables sur les pictos des points LEI*}
+{if count($ppmplei)}
+{section name=i loop=$ppmplei}
+<area href="fiche lei" onclick="return(popup('{$lei_f_url}{$ppmplei[i].lei_f_id}'));" name="{$ppmplei[i].lei_f_libelle}" id="{$ppmplei[i].lei_f_id}" shape="rect" coords="{$ppmplei[i].rect}" {popup text=$ppmplei[i].lei_f_libelle|default:" "} />
+{/section}
+{/if}
+
 </map>
 <!--<input type="image" src="img/dot1.png" width="10" height="10" border="3" name="dir" value="cc" />-->
 <table cellspacing="0" cellpadding="0" border="0"><tr>
@@ -222,7 +230,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <img src="img/dot0.png" height="{$blockspc}">
 <div class="bar">Sélections des points LEI</div>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr><td>
+<tr height="215"><td>
 <div class="ldlei">
 {$LD_filt_pts_LEI}</div>
 </td></tr>

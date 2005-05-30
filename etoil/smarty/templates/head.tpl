@@ -18,6 +18,46 @@ function toggletool(id) {literal}{{/literal}
 	document.getElementById(id).style.border='1px solid #000';
 	document.getElementById(id).style.backgroundColor='#dff1d3';
 {literal}}{/literal}
+{literal}
+var oPopupWin; // stockage du handle de la popup
+function popup(page, width, height) {
+    NavVer=navigator.appVersion;
+    var defwidth='400';
+    var defheight='500';
+    if (NavVer.indexOf("MSIE 5.5",0) == -1 && NavVer.indexOf("MSIE 6.",0) == -1) {
+        var undefined;
+        undefined='';
+        }
+
+    var tmp;
+    if (oPopupWin) {
+        // Make sure oPopupWin is empty before
+        // calling .close() or we could throw an
+        // exception and never set it to null.
+        tmp = oPopupWin;
+        oPopupWin = null;
+        // Only works in IE...  Netscape crashes
+        // if you have previously closed it by hand
+        if (navigator.appName != "Netscape") tmp.close();
+      }
+  if (width==undefined)
+  width=defwidth;
+  if (height==undefined)
+  height=defheight;
+    oPopupWin = window.open(page, "IntlPopup", "alwaysRaised=1,dependent=1,height=" + height + ",location=0,menubar=0,personalbar=0,scrollbars=1,status=0,toolbar=0,width=" + width + ",resizable=1");
+	oPopupWin.focus();
+	// valeur de retour différente suivant navigateur (merdique a souhait) !!!
+	var bAgent = window.navigator.userAgent;
+	var bAppName = window.navigator.appName;
+	if ((bAppName.indexOf("Explorer") >= 0) && (bAgent.indexOf("Mozilla/3") >= 0) && (bAgent.indexOf("Mac") >= 0))
+		return true; // dont follow link
+	else return false; // dont follow link
+	//return !oPopupWin;
+
+}
+
+{/literal}
+
 </script>
 </head>
 <body>

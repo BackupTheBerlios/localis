@@ -263,6 +263,11 @@ class db {
 		return $this->queryone($query,true);
 	}
 	
+	function get_lei_pts($ex) {
+		$query = "select lei_f_id,lei_f_idcat,lei_f_libelle,AsText(lei_f_pos) as coord from lei_fiches";
+		$query.= " where (lei_f_pos && GeomFromText('POLYGON(($ex[0] $ex[1],$ex[0] $ex[3],$ex[2] $ex[3],$ex[0] $ex[1]))',-1)) AND ($ex[4])";
+		return $this->query($query,true);
+	}	
 }
 
 

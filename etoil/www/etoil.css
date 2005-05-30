@@ -244,9 +244,8 @@ a:hover {
 	background-color : #fff;
 	font-size : 12px;
 }
-.ldlei select, .ldlei {
+.ldlei select, .ldlei small{
 	font-size : 9px;
-	width : 200px;
+	width : 210px;
 	height : 200px;
-	line-height: 8px;
 }
