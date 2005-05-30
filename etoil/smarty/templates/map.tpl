@@ -137,7 +137,9 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <div {popup text="{tr}Ajouter{/tr} [ Alt-a ]"}><label for="edit" accesskey="a"><img src="img/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edit" valign="top"></label>
 <input type="radio" id="edit" name="action" value="edit"{if $focus.edit eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_edit');"/></div></td>
 <td colspan="2" width="70%"><input {popup text="{tr}Importer{/tr}"} type="file" size="10" name="trackfileimp" Onchange="ChgMeth()"/></td>
-</tr></table>
+</tr>
+<tr><TD>&nbsp;</TD><TD colspan="2"><input {popup text="{tr}pas de visu préalable ni de choix de nom{/tr}"} type="checkbox" name="tf_dir_import" value="yes">{tr}Import direct{/tr}</TD></tr>
+</table>
 
 {* bloc d'enregistrement/modification de tracé (conditionnel, si user non blaireau) *}
 <img src="img/dot0.png" height="{$blockspc}">

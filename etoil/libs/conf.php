@@ -50,12 +50,14 @@ $minscaledispextparc=100000; // echelle min a partir de laquelle on affiche les 
 $extparcwdth=7; // épaisseur externe des traits de tracés
 $parclabelsize=10;
 $parclabelfont="Verdana";
-$minscaledisplabels=100000; // echelle min a partir de laquelle on affiche les labels des parcours et des points LEI
+$minscaledisplabels=100000; // echelle min a partir de laquelle on affiche les labels des parcours 
 $xd2pp=10; // dimension x picto parcours div par 2: sert pour les maparea d�finissant les zones cliquables sur les pictos des parcours
 $yd2pp=10; // id y
 
 // parametres couche LEI
+$minscaledisp_leilabs=50000;
 $leilabelsize=8;
 $leilabelfont="arial_italic";
-$lei_f_url="http://193.108.140.161/etoil/cgi/interface.pyt?page=gab-produit.sk&boucle=p,prest2,p2,plink,crdp,crdp,hor,desext,listass2&critselect1=1900178&critselect2=1900067&produit=";
+//$lei_f_url="http://193.108.140.161/etoil/cgi/interface.pyt?page=gab-produit.sk&boucle=p,prest2,p2,plink,crdp,crdp,hor,desext,listass2&critselect1=1900178&critselect2=1900067&produit=";
+$lei_f_url="interface.htm?idbid=";
 ?>

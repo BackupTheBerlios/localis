@@ -34,6 +34,11 @@ if (isset($_REQUEST['filtre'])) {
 //} else { $filtre=array();
 }
 
+if (isset($_REQUEST['rq_lei_f_idcat'])) {
+	$_SESSION['rq_lei_f_idcat'] = $_REQUEST['rq_lei_f_idcat'];
+} elseif (isset($_SESSION['rq_lei_f_idcat'])) {
+	 $_REQUEST['rq_lei_f_idcat']=$_SESSION['rq_lei_f_idcat'];
+}
 // ========================================================================
 // special hack: si paramètre spécial spcsc25=tux129 passé en get (par l'url)
 // utilise un fichier map specifique limousinhck.map)
@@ -102,7 +107,8 @@ $e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par défaut, clic au centr
 //print_r($_REQUEST);
 if (!empty($_FILES['trackfileimp']['name'])) {
 //debug("_FILES");
-echo (import_track($_FILES['trackfileimp']['tmp_name'],"trk","wgs84")) ;
+echo (import_track($_FILES['trackfileimp']['tmp_name'],"trk","wgs84"));
+
 unlink($_FILES['trackfileimp']['tmp_name']); // efface le fichier téléchargé
 }
 
@@ -319,15 +325,36 @@ if ($bool_lei && $where_lei_f!="") {
 	$lei_lay->set('type',MS_LAYER_POINT);
 	$lei_lay->set('labelitem','lei_f_libelle');
 	$lei_lay->set('classitem','lei_f_idcat');
-	$lei_cla = ms_newClassObj($lei_lay);
-	$lei_sty = ms_newStyleObj($lei_cla);
-	//$lei_sty->set("symbolname","circle");
-	//$lei_sty->set("size",5); 
-	//$lei_sty->color->setRGB(255,0,0);
-	$lei_sty->set("symbolname",'hotel');
-	if (isset($e_map->scale) &&  $e_map->scale < $minscaledisplabels && $e_map->scale!=-1) {
+	
+	$i=0;	
+	foreach ($_REQUEST['rq_lei_f_idcat'] as $idcat) {
+		$lei_cla[$i] = ms_newClassObj($lei_lay);
+		$lei_cla[$i]->setExpression($idcat);
+		$lei_sty[$i] = ms_newStyleObj($lei_cla[$i]);
+		$lei_sty[$i]->set("symbolname",RecupLib("lei_categ","lei_cat_id", "lei_cat_symb", $idcat));
+		
+		$lei_stylab[$i] = ms_newStyleObj($lei_cla[$i]);
+		if (isset($e_map->scale) &&  $e_map->scale < $minscaledisp_leilabs && $e_map->scale!=-1) {
+			$lei_lab[$i] = $lei_cla[$i]->label;
+			$lei_lab[$i]->set("position",MS_AUTO);
+			//$lei_lab[$extype]->backgroundshadowcolor->setRGB(200,200,200);
+	
+			$lei_lab[$i]->set("size",$leilabelsize);
+			$lei_lab[$i]->set("type","truetype");
+			$lei_lab[$i]->set("font",$leilabelfont);
+			$lei_lab[$i]->color->setRGB(222,16,23);
+			$lei_lab[$i]->backgroundcolor->setRGB(4,130,50);
+		}
+		$i++;
+			
+	}
+	
+	
+	$lei_clalab = ms_newClassObj($lei_lay);
+	$lei_stylab = ms_newStyleObj($lei_clalab);
+	//if (isset($e_map->scale) &&  $e_map->scale < $minscaledisplabels && $e_map->scale!=-1) {
 		$extype=1;
-		$lei_lab[$extype] = $lei_cla->label;
+		$lei_lab[$extype] = $lei_clalab->label;
 		$lei_lab[$extype]->set("position",MS_AUTO);
 		//$lei_lab[$extype]->backgroundshadowcolor->setRGB(200,200,200);
 
@@ -336,10 +363,7 @@ if ($bool_lei && $where_lei_f!="") {
 		$lei_lab[$extype]->set("font",$leilabelfont);
 		$lei_lab[$extype]->color->setRGB(255,0,0);
 		$lei_lab[$extype]->backgroundcolor->setRGB(200,200,200);
-	} // fin si echelle assez grande pour afficher les labels LEI
-	//$e_class3 = ms_newClassObj($e_track3);
-	//$e_style3 = ms_newStyleObj($e_class3);
-	//$e_style3->set("symbolname",'flag2');
+	//} // fin si echelle assez grande pour afficher les labels LEI */
 }
 
 // trace dessinée en temps réel en ligne
@@ -448,25 +472,24 @@ if ($bool_lei && $where_lei_f!="") {
 		}
 	}
 	$smarty->assign('ppmplei',$ppmplei);
-	$smarty->assign('lei_f_url',$lei_f_url);// Assigne l'url  à rallonge du skel (cf conf.php)
+	$smarty->assign('lei_f_url',$lei_f_url);// Assigne l'url  à rallonge du skel (cf conf.php), ou un exemple statique
 }
 
-// nouvel objet pour sélection liste déroulante LEI
+// nouvel objet pour sélection liste déroulante points LEI
 $ObjSeLEI=new PYAobj();
 $ObjSeLEI->NmBase=$dbname;
 $ObjSeLEI->NmTable="lei_fiches";
 $ObjSeLEI->NmChamp="lei_f_idcat";
-
 $ObjSeLEI->InitPO();
 $tabLD=ttChpLink($ObjSeLEI->Valeurs);
 
-foreach($tabLD as $k=>$v) {
-	if (in_array($k,$_REQUEST['rq_lei_f_idcat'])) $tabLD[$k]=$VSLD.$v;
+if (is_array($_REQUEST['rq_lei_f_idcat'])) { // s'il y des valeurs sélectionnées
+// recherche des valeurs précédemment selectionnnée pour les remettre en sélection
+	foreach($tabLD as $k=>$v) {
+		if (in_array($k,$_REQUEST['rq_lei_f_idcat'])) $tabLD[$k]=$VSLD.$v;
+	}
 }
 $tabLD=array(0=>"Aucun")+$tabLD;
-
-
-
 $smarty->assign('LD_filt_pts_LEI',DispLD($tabLD,"rq_lei_f_idcat","yes","",false));
 
 

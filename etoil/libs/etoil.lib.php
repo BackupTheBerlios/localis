@@ -4,7 +4,17 @@ function import_track($file,$format,$cs="wgs84") {
 	$msg="import succeed !";
 	if (!($handle=fopen($file,"rb"))) return ("error: cannot open $file !");
 	$_SESSION['track'] = array(); // vide la var de session
-	while (!feof($handle)) {
+	$bool_ok=true;
+	if ($_REQUEST['tf_dir_import']=="yes") {
+		global $db; 
+		$i=1;
+		$p_name=substr($_FILES['trackfileimp']['name'],0,strlen($_FILES['trackfileimp']['name'])-4);
+		if ( $_SESSION['filtre']['type']=="none") {
+		$msg="ERREUR d'IMPORT: vous devez sélectionner une discipline !";
+		$bool_ok=false;
+		}
+	}
+	while (!feof($handle) && $bool_ok) {
 		$tb=explode(" ",fgets($handle));
 		if ($tb[0]=="T") { // ligne de coordonnées
 			$tb[2]=substr($tb[2],1); // enlève le car E
@@ -18,10 +28,18 @@ function import_track($file,$format,$cs="wgs84") {
 			$tb=explode(" ",$out);
 			//print_r($tb);
 			$_SESSION['track'][]=floor($tb[0])." ".floor($tb[1]);
+		} elseif ($_REQUEST['tf_dir_import']=="yes" && count($_SESSION['track'])>0)  {
+			$db->add_parcours($p_name."_".$i,$_SESSION['me'],$_SESSION['filtre']['type'],$_SESSION['track']);
+			$_SESSION['track']=array();
+			$i++;
 		}
 	} // fin boucle sur les lignes du fichier
+	if ($_REQUEST['tf_dir_import']=="yes" && count($_SESSION['track'])>0) { 
+		$db->add_parcours($p_name."_".$i,$_SESSION['me'],$_SESSION['filtre']['type'],$_SESSION['track']);
+		}
+	if ($_REQUEST['tf_dir_import']=="yes") $msg.="; $i tronçons importés avec le préfixe $p_name_";
 	fclose($handle);
-	return($msg);
+	return("<PRE>".$msg."</PRE>");
 }
 function list_dir($path,$pattern,$i) {
 	$back = false;
