@@ -6,7 +6,7 @@
 <h2>E-TOIL</h2>
 <div class="base"><b>e</b>-<b>T</b>echnologie d'<b>O</b>rientation  <b>I</b>nteractive en <b>L</b>imousin</div>
 </div>
-<br /><br />
+<br />
 <b>Le projet :</b><br>
       E-toil est un projet régional visant à établir un topoguide 
       informatique des sentiers et chemins d'eau du Limousin. L'objectif est de 
@@ -17,6 +17,22 @@
       <p>Pour des informations détaillées, télécharger le 
             <b><a target="_blank" href="docs/Dossier_presentation_e-toiL.pdf">dossier de présentation complet</a> </b>
       <font size="1">(fichier pdf 1Mo)</font>
+
+<p> <b>L'architecture technique :</b></p>
+     
+     Le coeur d'e-toiL est constitué des logiciels et outils libres suivants :<ul>
+<LI>le serveur cartographique  <a href="http://mapserver.gis.umn.edu" target_"blank">mapserver</a> mapscript</li>
+<LI>intégré sous forme de cgi au célèbre serveur web <a href="http://www.apache.org" target_"blank">Apache</a>
+ tournant sous  <a href="http://www.debian.org" target_"blank">Linux Debian</a></LI>
+<LI>base de données  <a href="http://www.postgresql.org" target_"blank">PostGresql</a> </LI>
+<LI>doté des  extensions spatiales  <a href="http://www.postgis.org" target_"blank">PostGIS</a>  </LI>
+<LI>seront aussi utilisés le langage de script  <a href="http://www.php.net" target_"blank">php</a>
+ et <a href="http://smarty.php.net" target_"blank">smarty</a></LI>
+</ul>
+E-toil sera publié en licence GPL dès le 1er janvier 2006.
+     
+      <p>Est disponible le <b><a target="_blank" href="docs/doc_install_mapserver.sxw">document OpenOffice</a></b> détaillant l'installation des outils mapserver , PostGres, PostGis sous debian
+
  <hr color="#C0C0C0" size="1" width="70%">
           <table border="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" id="AutoNumber4" cellpadding="3" width="100%">
             <tr>

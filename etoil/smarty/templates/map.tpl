@@ -220,12 +220,16 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 {if $tracks}
 <img src="img/dot0.png" height="{$blockspc}">
 <div class="smbar">Parcours correspondant aux critères</div>
+{if count($tracks) < 15}
 <ul style="font-size:9pt;">
 {section name=t loop=$tracks}
 {assign var=v value=$tracks[t].parcours_type}
 <li style="color:#{$typescolor.$v}"><a style="color:#{$typescolor.$v}" href="{$url}?pid={$tracks[t].parcours_id}">{$tracks[t].parcours_name}</a></li>
 {/section}
 </ul>
+{else}
+Il y a plus de 15 parcours correspondants à vos critères. Veuillez zoomer pour en afficher la liste...
+{/if}
 {/if}
 
 {* bloc de sélection points du LEI *}
