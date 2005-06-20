@@ -21,7 +21,7 @@
 <p> <b>L'architecture technique :</b></p>
      
      Le coeur d'e-toiL est constitué des logiciels et outils libres suivants :<ul>
-<LI>le serveur cartographique  <a href="http://mapserver.gis.umn.edu" target_"blank">mapserver</a> mapscript</li>
+<LI>le serveur cartographique  <a href="http://mapserver.gis.umn.edu" target_"blank">mapserver</a> piloté avec php/mapscript</li>
 <LI>intégré sous forme de cgi au célèbre serveur web <a href="http://www.apache.org" target_"blank">Apache</a>
  tournant sous  <a href="http://www.debian.org" target_"blank">Linux Debian</a></LI>
 <LI>base de données  <a href="http://www.postgresql.org" target_"blank">PostGresql</a> </LI>
@@ -71,10 +71,14 @@ E-toil sera publié en licence GPL dès le 1er janvier 2006.
               19230 POMPADOUR<br>
               Tél. : 05.55.98.52.15<br>
 
-              <a href="mailto:artec.vm@nerim.net">artec.vm@nerim.net</a></span></h6>
+              <a href="mailto:artec.vm(chez)nerim.net">artec.vm(chez)nerim.net</a></span></h6>
               </td>
-              <td align="center" valign="top">
-              &nbsp;</td>
+              <td align="center" valign="top"><h6>Mose<br/>
+	      <a href="mailto:mose(chez)mose.com">
+              mose(chez)mose.com</a></span><br>
+	      <a href="http://www.mose.fr">www.mose.fr</a></span>
+	      </h6>
+              </td>
               <td align="center" valign="top">
               <h6>Laure ESLAN, LE Multimedi@<br>
               <span style="font-weight: 400">
