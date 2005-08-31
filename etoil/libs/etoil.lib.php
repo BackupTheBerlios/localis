@@ -16,19 +16,25 @@ function import_track($file,$format,$cs="wgs84") {
 	}
 	while (!feof($handle) && $bool_ok) {
 		$tb=explode(" ",fgets($handle));
+		$zprec="-9999";
 		if ($tb[0]=="T") { // ligne de coordonnées
 			$tb[2]=substr($tb[2],1); // enlève le car E
 			$tb[3]=substr($tb[3],1); // enlève le car N
 			//echo "N=$tb[2], E=$tb[3], Z=$tb[6] => "; //" ".$tb[6].
+			$zorig=$tb[6];
 			$cmd="cs2cs +proj=latlong +datum=WGS84 +to +init=lambfr:27585 <<EOF\n".$tb[3]." ".$tb[2]."\nEOF\n";
 			$out=shell_exec($cmd);
 			//echo "cmd out# ".$out."<br />";
-			// renvoie X (tab) y (espace) z??
-			$out=str_replace(chr(9)," ",$out);
+			// renvoie X (tab) y (espace) offset z
+			$out=str_replace(chr(9)," ",$out); // remplace le tab par l'espace
 			$tb=explode(" ",$out);
 			//print_r($tb);
-			$_SESSION['track'][]=floor($tb[0])." ".floor($tb[1]);
+			if ($zorig >0) {
+				$zprec=$zorig + $tb[2];
+			}
+			$_SESSION['track'][]=floor($tb[0])." ".floor($tb[1])." ".$zprec;
 		} elseif ($_REQUEST['tf_dir_import']=="yes" && count($_SESSION['track'])>0)  {
+			// si import direct, enregistre LES morceaux avec des indices _$i
 			$db->add_parcours($p_name."_".$i,$_SESSION['me'],$_SESSION['filtre']['type'],$_SESSION['track']);
 			$_SESSION['track']=array();
 			$i++;

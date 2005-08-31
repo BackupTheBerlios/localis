@@ -458,6 +458,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!
 			$tracks[$i]['rect'] = ($xx - $xd2pp) .','. ($yy - $yd2pp) .','. ($xx + $xd2pp) .','. ($yy + $yd2pp);
 		}
 	}
+	//debug("tracks");
 	$smarty->assign('tracks',$tracks);
 } // fin si filtre défini
 
