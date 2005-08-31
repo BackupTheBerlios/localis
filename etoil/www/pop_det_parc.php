@@ -1,10 +1,16 @@
 <?php 
-$title = "Cartographie";
+$title = "Détails du parcours";
 $db = true;
 include("setup.php");
-
+?>
+<html>
+<head><TITLE><?=$title?></TITLE>
+<link rel="stylesheet" type="text/css" href="etoil.css">
+</head>
+<blockquote>
+<?php 
 $parc_name=RecupLib("parcours","parcours_id","parcours_name",$_REQUEST["parcours_id"]);
-echo "<H3>Parcours ".$parc_name."</H3>";
+echo "<H3>Parcours : ".$parc_name."</H3>";
 $nbpoints=$db->getone("select NumPoints(parcours_geom) from parcours where parcours_id=".$_REQUEST["parcours_id"]);
 $parc_length=floor($db->getone("select Length2D(parcours_geom) from parcours where parcours_id=".$_REQUEST["parcours_id"]));
 
@@ -30,7 +36,7 @@ for ($i=1;$i<=$nbpoints;$i++) {
 		}
 		//echo ($dist-$distc)." | ".$nbptm."<br/>";
 		if (($dist-$distc) > $cst_distm) { // on calcule la moyenne de hauteur ts les $cst_distm m
-			if ($nbptm>0) $datas[$dist]= ($moyzc / $nbptm) ;
+			if ($nbptm>0) $datas[round($dist,-2)]= ($moyzc / $nbptm) ;
 			$nbptm=0;
 			$moyzc=0;
 			$distc=$dist;
@@ -61,5 +67,7 @@ if ($denivtot>0) {
 } else {
 echo "Les informations de dénivellé ne sont pas disponibles pour ce parcours<br/><br/>";
 }
-echo '<a href"#" onclick="window.close();">[fermer]</a>';
+echo '<br/><br/><a href="#" class="button" onclick="window.close();">&nbsp;fermer&nbsp;</a>';
 ?>
+</blockquote>
+</body></html>
