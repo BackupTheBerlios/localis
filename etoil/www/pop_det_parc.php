@@ -3,21 +3,18 @@ $title = "Détails du parcours";
 $db = true;
 include("setup.php");
 ?>
-<html>
-<head><TITLE><?=$title?></TITLE>
-<link rel="stylesheet" type="text/css" href="etoil.css">
-</head>
-<blockquote>
+
 <?php 
 $parc_name=RecupLib("parcours","parcours_id","parcours_name",$_REQUEST["parcours_id"]);
-echo "<H3>Parcours : ".$parc_name."</H3>";
+$smarty->assign('parc_name',$parc_name);
+
 $nbpoints=$db->getone("select NumPoints(parcours_geom) from parcours where parcours_id=".$_REQUEST["parcours_id"]);
 $parc_length=floor($db->getone("select Length2D(parcours_geom) from parcours where parcours_id=".$_REQUEST["parcours_id"]));
 
+$smarty->assign('parc_length',$parc_length);
+
 //$parc_geom=$db->getone("select asEWKT(parcours_geom) from parcours where parcours_id=".$_REQUEST["parcours_id"]);
 //echo $parc_geom."\n";
-
-echo "Ce parcours a une longueur de $parc_length m<br/><br/>";
 
 // calcul du dénivellé positif
 $nbpaltOk=0;
@@ -51,23 +48,22 @@ for ($i=1;$i<=$nbpoints;$i++) {
 $denivtot=0;
 $i=0;
 if (is_array($datas)) {	// on a des données d'altitude
+	$deniv_ok=true;
 	foreach ($datas as $h) {
 		$i++;
 		if ($i!=1 && ($h> $zppc)) $denivtot += ($h - $zppc);
 		$zppc=$h;
 	}
 }
+$smarty->assign('deniv_ok',$deniv_ok);
 
-if ($denivtot>0) {
-	echo "Ce parcours a un dénivellé positif total de ".floor($denivtot)." m<br/><br/>";
-	$_SESSION['datas']=$datas;
-	?>
-	<img src="imgpostgraph.php?parcours_id=<?=$_REQUEST["parcours_id"]?>" align="middle">
-	<?
-} else {
-echo "Les informations de dénivellé ne sont pas disponibles pour ce parcours<br/><br/>";
-}
-echo '<br/><br/><a href="#" class="button" onclick="window.close();">&nbsp;fermer&nbsp;</a>';
+if ($deniv_ok) {
+	$smarty->assign('denivtot',floor($denivtot));
+	$_SESSION['datas']=$datas; // pour imgpostgraph.php
+} 
+
+$smarty->display("pop_det_parc.tpl");
+
 ?>
 </blockquote>
 </body></html>
