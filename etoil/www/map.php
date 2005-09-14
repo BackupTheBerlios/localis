@@ -102,7 +102,7 @@ $e_map->set('width',$sizex);
 $e_map->set('height',$sizey);
 
 $e_click = ms_newPointObj();
-$e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par défaut, clic au centre
+$e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par défaut, comme un clic au centre
 
 //print_r($_REQUEST);
 if (!empty($_FILES['trackfileimp']['name'])) {
@@ -134,8 +134,12 @@ if (isset($_REQUEST['focusville'])) {
 		$feedback[] = array('num'=>-1,'msg'=>sprintf(tra('Désolé, aucun nom de ville en Limousin ne correspond à %s.'),$_REQUEST['focusville']));
 	} else {
 		$smarty->assign('city_info',$city_info);
+		//debug ("city_info");
 		preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$city_info[0]['xy'],$m);
-		$e_extent->setextent(floor($m[1]-$sf),floor($m[2]-$sf),floor($m[1]+$sf),floor($m[2]+$sf));
+		// ce coef de 1.33 est déterminé par empirisme; sinon ça décale la carte.
+		$m[1] += 1.33 * $sf ; //8100;
+		$m[2] -=  1.33 * $sf; //8000;
+		$e_extent->setextent(floor($m[1] - $sf),floor($m[2] - $sf),floor($m[1] + $sf),floor($m[2] + $sf));
 	}
 } elseif (isset($_REQUEST['pid'])) {
 	$parcours_info = $db->get_parcours_info($_REQUEST['pid']);
