@@ -56,7 +56,7 @@ document.f.method="POST";
 
 <table cellpadding="0" cellspacing="0" border="0"><tr>
 {foreach name=leg key=k item=i from=$legends}
-{if $filtre.type eq $smarty.foreach.leg.iteration}
+{if $filtre.discp eq $smarty.foreach.leg.iteration}
 <td class="bar2" width="20" style="width:20px;"><img src="{$i}" width="20" height="18" hspace="0" vspace="0" border="0" alt="" /></td>
 <td class="bar2"><b style="margin: 0 15px 0 3px;font-size:12px;">{$k}</b></td><td>&nbsp;</td>
 {else}
@@ -148,9 +148,9 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <table class="inputable">
 <tr><td>Nom</td><td><input type="text" name="p_name" value="" /></td></tr>
 <tr><td>{tr}Discipline{/tr}</td><td>
-<select name="p_type">
-{foreach key=k item=i from=$types}
-<option value="{$k}"{if $filtre.type eq $k} selected="selected"{/if}>{$i}</option>
+<select name="p_discp">
+{foreach key=k item=i from=$discps}
+<option value="{$k}"{if $filtre.discp eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
 </select></td></tr>
 
@@ -191,10 +191,10 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <div class="bar">Selection des parcours</div>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr><td>{tr}Discipline{/tr}&nbsp;</td><td>
-<select class="selection" name="filtre[type]" id="ftype">
+<select class="selection" name="filtre[discp]" id="ftype">
 <option value="none">{tr}Aucune{/tr}</option>
-{foreach key=k item=i from=$types}
-<option style="color:#{$typescolor.$k}" value="{$k}"{if $filtre.type eq $k} selected="selected"{/if}>{$i}</option>
+{foreach key=k item=i from=$discps}
+<option style="color:#{$discpcolor.$k}" value="{$k}"{if $filtre.discp eq $k} selected="selected"{/if}>{$i}</option>
 {/foreach}
 </select></td></tr>
 
@@ -224,8 +224,8 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 {if count($tracks) < 15}
 <ul style="font-size:9pt;">
 {section name=t loop=$tracks}
-{assign var=v value=$tracks[t].parcours_type}
-<li style="color:#{$typescolor.$v}"><a style="color:#{$typescolor.$v}" href="{$url}?pid={$tracks[t].parcours_id}">{$tracks[t].parcours_name}</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}" target="_blank">[->CE3]</a> <a href="#" onclick="popup('pop_det_parc.php?parcours_id={$tracks[t].parcours_id}');">[?]</a></li>
+{assign var=v value=$tracks[t].parcours_discp}
+<li style="color:#{$discpcolor.$v}"><a style="color:#{$discpcolor.$v}" href="{$url}?pid={$tracks[t].parcours_id}" {popup text="{tr}ParcZoom{/tr}"}>{$tracks[t].parcours_name}</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}" target="_blank" {popup text="{tr}CE3Down{/tr}"}>[->CE3]</a> <a href="#" onclick="popup('pop_det_parc.php?parcours_id={$tracks[t].parcours_id}');"{popup text="{tr}ParcMoreInfos{/tr}"}>[?]</a></li>
 {/section}
 </ul>
 {else}

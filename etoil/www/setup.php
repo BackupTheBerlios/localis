@@ -17,7 +17,7 @@ if (get_magic_quotes_gpc()) {
   } 
 }
 require_once (PROOT.'libs/etoil.lib.php');
-include_once(PROOT."/libs/conf.php");
+//include_once(PROOT."/libs/conf.php");  deplacé à la fin après la connexion db et la création de l'objet $db
 include_once("fonctions.php");
 include_once PROOT."/db/local.php";
 $_SESSION['db_type']="pgsql";
@@ -51,6 +51,7 @@ $smarty->assign('url', basename($_SERVER['PHP_SELF']));
 $smarty->assign('title', $title);
 
 if (!empty($db)) {
-	include (PROOT.'libs/psql.php');
+	include_once (PROOT.'libs/psql.php');
+	include_once(PROOT."/libs/conf.php");
 }
 ?>

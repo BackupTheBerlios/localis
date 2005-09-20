@@ -61,6 +61,49 @@ if ($deniv_ok) {
 	$smarty->assign('denivtot',floor($denivtot));
 	$_SESSION['datas']=$datas; // pour imgpostgraph.php
 } 
+//
+
+$reqcust="select parcours_level,parcours_balisage,balis_ico,parcours_ttop,parcours_desc,parcours_guides,guid_url,parcours_equipt,parcours_interet,parcours_topo,parcours_photo,parcours_environmt from parcours,balisages,guides where parcours_id=".$_REQUEST["parcours_id"]." and balis_id=parcours_balisage and guid_id = parcours_guides" ;
+$req=msq($reqcust);
+
+$tbValChp=db_fetch_array($req);
+//print_r($tbValChp);
+
+$ECT=InitPOReq($reqcust,"etoil");
+
+$tb_infparc.='<TABLE BORDER="1" BORDERCOLOR="#FFF3F3" CELLSPACING="0" CELLPADDING="2">';
+
+foreach ($ECT as $PYAObj) {
+  $PYAObj->TypEdit="C"; // en consultation seule en readonly ou eq spéciale
+  $PYAObj->DirEcho=false;
+  $NM_CHAMP=$PYAObj->NmChamp;
+  
+  //if ($modif!="") 
+  $PYAObj->ValChp=$tbValChp[$NM_CHAMP];
+
+  // ICI les traitements avant Mise à Jour
+  if ($modif==2) { // en cas de COPIE on annule la valeur auto incrémentée
+    if (stristr($PYAObj->FieldExtra,"auto_increment")) $PYAObj->ValChp="";
+    }
+
+  // traitement valeurs avant MAJ
+  $PYAObj->InitAvMaj($$VarNomUserMAJ);
+
+  if ($PYAObj->TypeAff!="HID") {
+      $tb_infparc.="<TR><TD>".$PYAObj->Libelle;
+
+    if ($PYAObj->Comment!="") $tb_infparc.="<BR><span class=\"legendes9px\">".$PYAObj->Comment."</span>";
+     $tb_infparc.="</TD>\n<TD>";
+
+    $tb_infparc.=$PYAObj->EchoEditAll(false); // !!!!!!!!!!!!!!!! //
+     $tb_infparc.="</TD>\n</TR>"; //finit la ligne du tableau
+   } else
+        $tb_infparc.=$PYAObj->EchoEditAll(true); // !!!!!!!!!!!!!!!! /
+
+  } // fin while
+$tb_infparc.="</table>";
+
+$smarty->assign('tb_infparc',$tb_infparc);
 
 $smarty->display("pop_det_parc.tpl");
 

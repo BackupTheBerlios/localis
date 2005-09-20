@@ -3,6 +3,8 @@ $title = "Cartographie";
 $db = true;
 include("setup.php");
 
+//debug ("_SESSION");
+
 checkfontlist(PROOT."/maps");
 //include_once(PROOT."/libs/conf.php"); fait ds le setup
 
@@ -27,12 +29,16 @@ if (isset($_REQUEST['filtre'])) {
 	$filtre = $_REQUEST['filtre'];
 	$_SESSION['filtre'] = array();
 	foreach ($filtre as $f=>$v) {
-		$_SESSION['filtre'][$f] = $v; // ex: SESSION[filtre][type]="1" (pédestre)
+		$_SESSION['filtre'][$f] = $v; // ex: SESSION[filtre][discp]="1" (pédestre)
 	}
+	$_SESSION['discp_c']=$_SESSION['filtre']['discp'];
 } elseif (isset($_SESSION['filtre'])) {
 	$filtre = $_SESSION['filtre'];
+	
 //} else { $filtre=array();
 }
+$discp_c=$_SESSION['discp_c'];
+
 
 if (isset($_REQUEST['rq_lei_f_idcat'])) {
 	$_SESSION['rq_lei_f_idcat'] = $_REQUEST['rq_lei_f_idcat'];
@@ -191,7 +197,8 @@ if (isset($_REQUEST['action'])) {
 }
 
 if (!empty($_REQUEST['p_name']) and $_SESSION['me']) { // enregistrement d'une track tracée en bdd
-	if (!$db->add_parcours($_REQUEST['p_name'],$_SESSION['me'],$_REQUEST['p_type'],$_SESSION['track'],$_REQUEST['p_level'],$_REQUEST['p_time'])) {
+	
+	if (!$db->add_parcours($_REQUEST['p_name'],$_SESSION['me'],$_REQUEST['p_discp'],$_SESSION['track'],$_REQUEST['p_level'],$_REQUEST['p_time'])) {
 		$feedback[] = array('num'=>-1,'msg'=>$db->mes[0]);
 	} else {
 		$_SESSION['track'] = array(); // vide tableau tracé
@@ -220,7 +227,7 @@ if (isset($_REQUEST['ref_x']) or isset($_REQUEST['ref.x'])) {
 $e_map->zoompoint($zoom_factor,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 
 // affichage des parcours
-if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!="none") {
+if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]!="none") {
 	$smarty->assign('filtre',$filtre);
 	// calcul du where parcours
 	// => nom_champ_bdd=parcours_$f
@@ -258,15 +265,15 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!
 	if ($where_parc!="")	$e_lay2->setFilter($where_parc);
 	$e_lay2->set('data',$query);
 	$e_lay2->set('type',MS_LAYER_LINE);
-	$e_lay2->set('classitem','parcours_type');
+	$e_lay2->set('classitem','parcours_discp');
 		
-	for ($extype=1;$extype<=count($types);$extype++) {
-		$e_cla2[$extype] = ms_newClassObj($e_lay2);
-		$e_cla2[$extype]->setExpression($extype);
-		$e_sty2[$extype] = ms_newStyleObj($e_cla2[$extype]);
-		$e_sty2[$extype]->set("symbolname","circle");
-		$e_sty2[$extype]->set("size",$intparcwdth);
-		$e_sty2[$extype]->color->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));	
+	for ($i_disc=1;$i_disc<=count($discps);$i_disc++) {
+		$e_cla2[$i_disc] = ms_newClassObj($e_lay2);
+		$e_cla2[$i_disc]->setExpression($i_disc);
+		$e_sty2[$i_disc] = ms_newStyleObj($e_cla2[$i_disc]);
+		$e_sty2[$i_disc]->set("symbolname","circle");
+		$e_sty2[$i_disc]->set("size",$intparcwdth);
+		$e_sty2[$i_disc]->color->setRGB(hexdec(substr($discpcolor[$i_disc],0,2)),hexdec(substr($discpcolor[$i_disc],2,2)),hexdec(substr($discpcolor[$i_disc],4,2)));	
 	}
 
 	// couches de labels/pictos avec des couleurs différentes suivant les types
@@ -282,26 +289,26 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!
 	$e_lay->set('data',$query);
 	$e_lay->set('type',MS_LAYER_POINT);
 	$e_lay->set('labelitem','parcours_name');
-	$e_lay->set('classitem','parcours_type');
+	$e_lay->set('classitem','parcours_discp');
 	
-	for ($extype=1;$extype<=count($types);$extype++) {
-		$e_cla3[$extype] = ms_newClassObj($e_lay);
-		$e_cla3[$extype]->set('name',$name[$extype]);
-		$e_cla3[$extype]->setExpression($extype);
-		$e_sty3[$extype] = ms_newStyleObj($e_cla3[$extype]);
+	for ($i_disc=1;$i_disc<=count($discps);$i_disc++) {
+		$e_cla3[$i_disc] = ms_newClassObj($e_lay);
+		$e_cla3[$i_disc]->set('name',$name[$i_disc]);
+		$e_cla3[$i_disc]->setExpression($i_disc);
+		$e_sty3[$i_disc] = ms_newStyleObj($e_cla3[$i_disc]);
 		// affichagage des labels slt en dessous d'une certaine échelle
 		if (isset($e_map->scale) &&  $e_map->scale < $minscaledisplabels && $e_map->scale!=-1) {
-			$e_lab[$extype] = $e_cla3[$extype]->label;
-			$e_lab[$extype]->set("position",MS_AUTO);
-			$e_lab[$extype]->backgroundshadowcolor->setRGB(200,200,200);
+			$e_lab[$i_disc] = $e_cla3[$i_disc]->label;
+			$e_lab[$i_disc]->set("position",MS_AUTO);
+			$e_lab[$i_disc]->backgroundshadowcolor->setRGB(200,200,200);
 
-			$e_lab[$extype]->set("size",$parclabelsize);
-			$e_lab[$extype]->set("type","truetype");
-			$e_lab[$extype]->set("font",$parclabelfont);
-			$e_lab[$extype]->color->setRGB(0,0,0);
-			$e_lab[$extype]->backgroundcolor->setRGB(hexdec(substr($typescolor[$extype],0,2)),hexdec(substr($typescolor[$extype],2,2)),hexdec(substr($typescolor[$extype],4,2)));
+			$e_lab[$i_disc]->set("size",$parclabelsize);
+			$e_lab[$i_disc]->set("type","truetype");
+			$e_lab[$i_disc]->set("font",$parclabelfont);
+			$e_lab[$i_disc]->color->setRGB(0,0,0);
+			$e_lab[$i_disc]->backgroundcolor->setRGB(hexdec(substr($discpcolor[$i_disc],0,2)),hexdec(substr($discpcolor[$i_disc],2,2)),hexdec(substr($discpcolor[$i_disc],4,2)));
 		} // fin si echelle assez grande pour afficher les labels
-		$e_sty3[$extype]->set("symbolname",$name[$extype]);
+		$e_sty3[$i_disc]->set("symbolname",$name[$i_disc]);
 	} // fin boucle sur les types de parcours
 } // fin si il y des parcours à afficher
 
@@ -341,7 +348,7 @@ if ($bool_lei && $where_lei_f!="") {
 		if (isset($e_map->scale) &&  $e_map->scale < $minscaledisp_leilabs && $e_map->scale!=-1) {
 			$lei_lab[$i] = $lei_cla[$i]->label;
 			$lei_lab[$i]->set("position",MS_AUTO);
-			//$lei_lab[$extype]->backgroundshadowcolor->setRGB(200,200,200);
+			//$lei_lab[$i_disc]->backgroundshadowcolor->setRGB(200,200,200);
 	
 			$lei_lab[$i]->set("size",$leilabelsize);
 			$lei_lab[$i]->set("type","truetype");
@@ -357,16 +364,16 @@ if ($bool_lei && $where_lei_f!="") {
 	$lei_clalab = ms_newClassObj($lei_lay);
 	$lei_stylab = ms_newStyleObj($lei_clalab);
 	//if (isset($e_map->scale) &&  $e_map->scale < $minscaledisplabels && $e_map->scale!=-1) {
-		$extype=1;
-		$lei_lab[$extype] = $lei_clalab->label;
-		$lei_lab[$extype]->set("position",MS_AUTO);
-		//$lei_lab[$extype]->backgroundshadowcolor->setRGB(200,200,200);
+		$i_disc=1;
+		$lei_lab[$i_disc] = $lei_clalab->label;
+		$lei_lab[$i_disc]->set("position",MS_AUTO);
+		//$lei_lab[$i_disc]->backgroundshadowcolor->setRGB(200,200,200);
 
-		$lei_lab[$extype]->set("size",$leilabelsize);
-		$lei_lab[$extype]->set("type","truetype");
-		$lei_lab[$extype]->set("font",$leilabelfont);
-		$lei_lab[$extype]->color->setRGB(255,0,0);
-		$lei_lab[$extype]->backgroundcolor->setRGB(200,200,200);
+		$lei_lab[$i_disc]->set("size",$leilabelsize);
+		$lei_lab[$i_disc]->set("type","truetype");
+		$lei_lab[$i_disc]->set("font",$leilabelfont);
+		$lei_lab[$i_disc]->color->setRGB(255,0,0);
+		$lei_lab[$i_disc]->backgroundcolor->setRGB(200,200,200);
 	//} // fin si echelle assez grande pour afficher les labels LEI */
 }
 
@@ -452,7 +459,7 @@ $smarty->assign('extent',urlencode("$extminx $extminy $extmaxx $extmaxy"));
 	calcule les coord xy (pix) des rectangles correspondant aux pictos
 	définissant les zones cliquables dans la maparea
 	*/
-if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["type"]!="none") {
+if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]!="none") {
 //if (isset($filtre) and is_array($filtre) and count($filtre) ) {
 	$tracks = $db->get_parcours(array($extminx,$extminy,$extmaxx,$extmaxy),$filtre);
 	for ($i=0;$i<count($tracks);$i++) {
@@ -511,8 +518,8 @@ $smarty->assign('refheight',$refheight);
 $smarty->assign('focus',$focus);
 if (isset($map_click)) $smarty->assign('map_click',$map_click);
 $smarty->assign('mapimage',$image);
-$smarty->assign('types',$types);
-$smarty->assign('typescolor',$typescolor);
+$smarty->assign('discps',$discps);
+$smarty->assign('discpcolor',$discpcolor);
 //$smarty->assign('icontypes',$icontypes);
 $smarty->assign('times',$times);
 $smarty->assign('levels',$levels);

@@ -4,12 +4,24 @@ $coef_fd=1.5; // coefficient de dÈplacement lors du clic sur les flËches de dire
 $mapmargin = 11; // taille de la bordure clicable de navigation perpendiculaire
 $blockspc=7; // espaces entre les blocks de droite
 
-$types[1] = "P&eacute;destre";
-$types[2] = "Equestre";
-$types[3] = "VTT";
-$types[4] = "Kayak";
-$types[5] = "Cyclotourisme";
-$types[6] = "Attelage";
+$tbidiscp=$db->query("select disc_id, disc_nom, disc_name, disc_color,disc_vitmoy from disciplines where disc_act=true order by disc_id",true);
+//debug("tbidiscp");
+
+foreach ($tbidiscp as $discp) {
+	$discps[$discp['disc_id']]=$discp['disc_nom'];
+	$name[$discp['disc_id']]=$discp['disc_name'];
+	$discpcolor[$discp['disc_id']]=$discp['disc_color'];
+	if ($_SESSION['discp_c']==$discp['disc_id']) {
+		$_SESSION['vitmoy']=$discp['disc_vitmoy'];
+	}
+}
+/*
+$discps[1] = "P&eacute;destre";
+$discps[2] = "Equestre";
+$discps[3] = "VTT";
+$discps[4] = "Kayak";
+$discps[5] = "Cyclotourisme";
+$discps[6] = "Attelage";
 
 // utilis√© pour les couches et les symboles mapserver
 $name[1] = "marche";
@@ -19,13 +31,13 @@ $name[4] = "canoe";
 $name[5] = "vtc";
 $name[6] = "attel";
 
-$typescolor[1]="fea034"; // couleurs correspondant √† chaque type, en hexa sur *6* caract !!
-$typescolor[2]="2f9535";
-$typescolor[3]="f25254"; 
-$typescolor[4]="9cc9e1"; 
-$typescolor[5]="f79b9d"; 
-$typescolor[6]="9ad47f";
-
+$discpcolor[1]="fea034"; // couleurs correspondant √† chaque type, en hexa sur *6* caract !!
+$discpcolor[2]="2f9535";
+$discpcolor[3]="f25254"; 
+$discpcolor[4]="9cc9e1"; 
+$discpcolor[5]="f79b9d"; 
+$discpcolor[6]="9ad47f";
+*/
 $selectedcolor="ff0000";
 
 $times[1] = "< 1/2h";

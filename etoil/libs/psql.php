@@ -48,6 +48,10 @@ class db {
 		return $ret;
 	}
 
+	function s_query($query) { // simple query
+		return (pg_query($this->conn,$query));
+	}
+	
 	function query($query,$return=false) {
 		$result = @ pg_query($this->conn,$query);
 		$ret = array();
@@ -58,7 +62,8 @@ class db {
 		if ($return) {
 			$rows = pg_num_rows($result);
 			for ($i = 0; $i < $rows; $i++) {
-				$ret[] = $this->strip_array(pg_fetch_array($result, $i, PGSQL_ASSOC));
+				$ret[] = pg_fetch_assoc($result);
+				//$ret[] = $this->strip_array(pg_fetch_array($result, $i, PGSQL_ASSOC));
 			}
 			return $ret;
 		} else {
@@ -216,17 +221,24 @@ class db {
 
 	/* ======== parcours methods  ======= */
 
-	function add_parcours($name,$user,$type,$geom,$level=0,$time=0) {
+	function add_parcours($name,$user,$discp,$geom,$level=0,$time=0) {
 		$line = implode(",",$geom);
-		$query = "insert into parcours (parcours_name,parcours_user,parcours_type,parcours_geom,parcours_level,parcours_time) values ";
-		//$query.= "('". addslashes($name)."','". addslashes($user)."','". addslashes($type). "',LinestringFromText('LINESTRING($line)',-1),'". addslashes($level)."',$time);";
-		$query.= "('". addslashes($name)."','". addslashes($user)."','". addslashes($type). "',GeomFromEWKT('SRID=-1;LINESTRING($line)'),'". addslashes($level)."',$time);";
-		if (!$this->query($query)) {
-			$this->mes[] = "db error: ". pg_last_error();
+		$query = "insert into parcours (parcours_name,parcours_user,parcours_discp,parcours_geom,parcours_level,parcours_time) values ";
+		$query.= "('". addslashes($name)."','". addslashes($user)."','". addslashes($discp). "',GeomFromEWKT('SRID=-1;LINESTRING($line)'),'". addslashes($level)."',$time);";
+		$resins=$this->s_query($query);
+		if (!$resins) {
+			$this->mes[] = "Requete: $query \n error: ". pg_last_error();
 			return false;
 		} else {
-			$query = "update parcours set parcours_length=Length(parcours_geom), parcours_start=StartPoint(parcours_geom);";
-			return $this->query($query);
+			if ($_SESSION['vitmoy']==0 || $_SESSION['vitmoy']=="") $_SESSION['vitmoy']=80; // 80=~ 5km/h
+			$last_oid=pg_last_oid($resins);
+			$query = "update parcours set parcours_length=Length2D(parcours_geom), parcours_start=StartPoint(parcours_geom),parcours_time=ceil(Length2D(parcours_geom)/".($_SESSION['vitmoy']*1000/60).") where parcours.oid=".pg_last_oid($resins).";";
+			//echo $query;
+			$resup=$this->s_query($query);
+			if (!$resup) {
+				$this->mes[] = "Requete: $query \n error: ". pg_last_error();
+				return false;
+			} else return true;
 		}
 	}
 /* ======== info methods  ======= */
@@ -242,7 +254,7 @@ class db {
 	}
 
 	function get_parcours($ex) {
-		$query = "select parcours_id,parcours_name,parcours_type,AsText(parcours_start) as coord from parcours";
+		$query = "select parcours_id,parcours_name,parcours_discp,AsText(parcours_start) as coord from parcours";
 		$query.= " where parcours_start && GeomFromText('POLYGON(($ex[0] $ex[1],$ex[0] $ex[3],$ex[2] $ex[3],$ex[0] $ex[1]))',-1)";
 		if (isset($_SESSION['filtre'])) {
 			$wh = array();

@@ -9,7 +9,7 @@ function import_track($file,$format,$cs="wgs84") {
 		global $db; 
 		$i=1;
 		$p_name=substr($_FILES['trackfileimp']['name'],0,strlen($_FILES['trackfileimp']['name'])-4);
-		if ( $_SESSION['filtre']['type']=="none") {
+		if ( $_SESSION['filtre']['discp']=="none") {
 		$msg="ERREUR d'IMPORT: vous devez sélectionner une discipline !";
 		$bool_ok=false;
 		}
@@ -21,6 +21,7 @@ function import_track($file,$format,$cs="wgs84") {
 			$tb[2]=substr($tb[2],1); // enlève le car E
 			$tb[3]=substr($tb[3],1); // enlève le car N
 			//echo "N=$tb[2], E=$tb[3], Z=$tb[6] => "; //" ".$tb[6].
+			// on gère l'ffset d'altitude, je ne sais pas si c'est judicieux...
 			$zorig=$tb[6];
 			$cmd="cs2cs +proj=latlong +datum=WGS84 +to +init=lambfr:27585 <<EOF\n".$tb[3]." ".$tb[2]."\nEOF\n";
 			$out=shell_exec($cmd);
@@ -35,15 +36,19 @@ function import_track($file,$format,$cs="wgs84") {
 			$_SESSION['track'][]=floor($tb[0])." ".floor($tb[1])." ".$zprec;
 		} elseif ($_REQUEST['tf_dir_import']=="yes" && count($_SESSION['track'])>0)  {
 			// si import direct, enregistre LES morceaux avec des indices _$i
-			$db->add_parcours($p_name."_".$i,$_SESSION['me'],$_SESSION['filtre']['type'],$_SESSION['track']);
+			$addp=$db->add_parcours($p_name."_".$i,$_SESSION['me'],$_SESSION['filtre']['discp'],$_SESSION['track']);
+			if (!$addp) $msg.="Insertion ne fonctionne pas pour le parcours d'indice $i\n";
 			$_SESSION['track']=array();
 			$i++;
 		}
 	} // fin boucle sur les lignes du fichier
 	if ($_REQUEST['tf_dir_import']=="yes" && count($_SESSION['track'])>0) { 
-		$db->add_parcours($p_name."_".$i,$_SESSION['me'],$_SESSION['filtre']['type'],$_SESSION['track']);
+		$addp=$db->add_parcours($p_name."_".$i,$_SESSION['me'],$_SESSION['filtre']['discp'],$_SESSION['track']);
+		if (!$addp) $msg.="Insertion ne fonctionne pas pour le parcours d'indice $i\n";
 		}
-	if ($_REQUEST['tf_dir_import']=="yes") $msg.="; $i tronçons importés avec le préfixe $p_name_";
+	else $i--;
+	
+	if ($_REQUEST['tf_dir_import']=="yes") $msg.="; $i tronçons importés avec le préfixe $p_name";
 	fclose($handle);
 	return("<PRE>".$msg."</PRE>");
 }

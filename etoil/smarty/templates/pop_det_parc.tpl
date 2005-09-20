@@ -10,6 +10,7 @@
 {else}
 {tr}No_deniv_infos{/tr}<br/><br/>
 {/if}
+{$tb_infparc}
 <a href="#" class="button" onclick="window.close();">[&nbsp;{tr}fermer{/tr}&nbsp;]</a>
 </div>
 </body>
