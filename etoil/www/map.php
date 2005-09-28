@@ -304,7 +304,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 		$e_sty2[$i_disc]->color->setRGB(hexdec(substr($discpcolor[$i_disc],0,2)),hexdec(substr($discpcolor[$i_disc],2,2)),hexdec(substr($discpcolor[$i_disc],4,2)));	
 	}
 
-	if ($e_map->scale < $minscaledispictos || count($tracks) < 15) {
+	if ($e_map->scale < $minscaledispictos ) {
 		// couches de labels/pictos avec des couleurs différentes suivant les types
 		$e_lay = ms_newLayerObj($e_map);
 		$e_lay->set('name','parcours');
