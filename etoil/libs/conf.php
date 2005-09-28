@@ -60,10 +60,12 @@ $refheight=100; //largeur de la carte de reference
 // concernant les parcours
 $intparcwdth=3; // épaisseur interne des traits de tracés
 $minscaledispextparc=100000; // echelle min a partir de laquelle on affiche les contours en noir des traces de parcours
+$minscaledisplabels=100000; // echelle min a partir de laquelle on affiche les labels des parcours 
+$minscaledispictos=250000; // echelle min a partir de laquelle on affiche les pictos des parcours 
+
 $extparcwdth=7; // épaisseur externe des traits de tracés
 $parclabelsize=10;
 $parclabelfont="Verdana";
-$minscaledisplabels=100000; // echelle min a partir de laquelle on affiche les labels des parcours 
 $xd2pp=10; // dimension x picto parcours div par 2: sert pour les maparea d�finissant les zones cliquables sur les pictos des parcours
 $yd2pp=10; // id y
 

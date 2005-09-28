@@ -226,9 +226,37 @@ if (isset($_REQUEST['ref_x']) or isset($_REQUEST['ref.x'])) {
 // ************************************************************************
 $e_map->zoompoint($zoom_factor,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 
+$extminx = floor($e_map->extent->minx);
+$extminy = floor($e_map->extent->miny);
+$extmaxx = floor($e_map->extent->maxx);
+$extmaxy = floor($e_map->extent->maxy);
+// l'extent est ensuite passé par une variable cachée ds map.tpl
+$smarty->assign('extent',urlencode("$extminx $extminy $extmaxx $extmaxy"));
+
+
 // affichage des parcours
 if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]!="none") {
 	$smarty->assign('filtre',$filtre);
+	
+	/* calcule la liste des parcours correspondant aux critères de requête 
+	et se trouvant dans la zone affichée */
+	
+	$tracks = $db->get_parcours(array($extminx,$extminy,$extmaxx,$extmaxy),$filtre);
+	if ($e_map->scale < $minscaledispictos) {
+	/*calcule les coord xy (pix) des rectangles correspondant aux pictos
+	définissant les zones cliquables dans la maparea
+	*/
+		for ($i=0;$i<count($tracks);$i++) {
+			if (preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$tracks[$i]['coord'],$m)) {
+				$xx = geo2pix($m[1],$extminx,$extmaxx,$sizex);
+				$yy = geo2pix($m[2],$extmaxy,$extminy,$sizey);
+				$tracks[$i]['rect'] = ($xx - $xd2pp) .','. ($yy - $yd2pp) .','. ($xx + $xd2pp) .','. ($yy + $yd2pp);
+			}
+		}
+	}
+	//debug("tracks");
+	$smarty->assign('tracks',$tracks);
+	
 	// calcul du where parcours
 	// => nom_champ_bdd=parcours_$f
 	$where_parc='';
@@ -276,40 +304,42 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 		$e_sty2[$i_disc]->color->setRGB(hexdec(substr($discpcolor[$i_disc],0,2)),hexdec(substr($discpcolor[$i_disc],2,2)),hexdec(substr($discpcolor[$i_disc],4,2)));	
 	}
 
-	// couches de labels/pictos avec des couleurs différentes suivant les types
-	$e_lay = ms_newLayerObj($e_map);
-	$e_lay->set('name','parcours');
-	$e_lay->set('status',MS_ON);
-	$e_lay->set('labelcache',MS_ON); // par défaut
-
-	$e_lay->set('connectiontype',MS_POSTGIS);
-	$e_lay->set('connection',$db->connstr);
-	$query = "parcours_start from parcours";
-	if ($where_parc!="")	$e_lay->setFilter($where_parc);
-	$e_lay->set('data',$query);
-	$e_lay->set('type',MS_LAYER_POINT);
-	$e_lay->set('labelitem','parcours_name');
-	$e_lay->set('classitem','parcours_discp');
+	if ($e_map->scale < $minscaledispictos || count($tracks) < 15) {
+		// couches de labels/pictos avec des couleurs différentes suivant les types
+		$e_lay = ms_newLayerObj($e_map);
+		$e_lay->set('name','parcours');
+		$e_lay->set('status',MS_ON);
+		$e_lay->set('labelcache',MS_ON); // par défaut
 	
-	for ($i_disc=1;$i_disc<=count($discps);$i_disc++) {
-		$e_cla3[$i_disc] = ms_newClassObj($e_lay);
-		$e_cla3[$i_disc]->set('name',$name[$i_disc]);
-		$e_cla3[$i_disc]->setExpression($i_disc);
-		$e_sty3[$i_disc] = ms_newStyleObj($e_cla3[$i_disc]);
-		// affichagage des labels slt en dessous d'une certaine échelle
-		if (isset($e_map->scale) &&  $e_map->scale < $minscaledisplabels && $e_map->scale!=-1) {
-			$e_lab[$i_disc] = $e_cla3[$i_disc]->label;
-			$e_lab[$i_disc]->set("position",MS_AUTO);
-			$e_lab[$i_disc]->backgroundshadowcolor->setRGB(200,200,200);
-
-			$e_lab[$i_disc]->set("size",$parclabelsize);
-			$e_lab[$i_disc]->set("type","truetype");
-			$e_lab[$i_disc]->set("font",$parclabelfont);
-			$e_lab[$i_disc]->color->setRGB(0,0,0);
-			$e_lab[$i_disc]->backgroundcolor->setRGB(hexdec(substr($discpcolor[$i_disc],0,2)),hexdec(substr($discpcolor[$i_disc],2,2)),hexdec(substr($discpcolor[$i_disc],4,2)));
-		} // fin si echelle assez grande pour afficher les labels
-		$e_sty3[$i_disc]->set("symbolname",$name[$i_disc]);
-	} // fin boucle sur les types de parcours
+		$e_lay->set('connectiontype',MS_POSTGIS);
+		$e_lay->set('connection',$db->connstr);
+		$query = "parcours_start from parcours";
+		if ($where_parc!="")	$e_lay->setFilter($where_parc);
+		$e_lay->set('data',$query);
+		$e_lay->set('type',MS_LAYER_POINT);
+		$e_lay->set('labelitem','parcours_id');
+		$e_lay->set('classitem','parcours_discp');
+		
+		for ($i_disc=1;$i_disc<=count($discps);$i_disc++) {
+			$e_cla3[$i_disc] = ms_newClassObj($e_lay);
+			$e_cla3[$i_disc]->set('name',$name[$i_disc]);
+			$e_cla3[$i_disc]->setExpression($i_disc);
+			$e_sty3[$i_disc] = ms_newStyleObj($e_cla3[$i_disc]);
+			// affichagage des labels slt en dessous d'une certaine échelle
+			if (isset($e_map->scale) &&  $e_map->scale < $minscaledisplabels && $e_map->scale!=-1) {
+				$e_lab[$i_disc] = $e_cla3[$i_disc]->label;
+				$e_lab[$i_disc]->set("position",MS_AUTO);
+				$e_lab[$i_disc]->backgroundshadowcolor->setRGB(200,200,200);
+	
+				$e_lab[$i_disc]->set("size",$parclabelsize);
+				$e_lab[$i_disc]->set("type","truetype");
+				$e_lab[$i_disc]->set("font",$parclabelfont);
+				$e_lab[$i_disc]->color->setRGB(0,0,0);
+				$e_lab[$i_disc]->backgroundcolor->setRGB(hexdec(substr($discpcolor[$i_disc],0,2)),hexdec(substr($discpcolor[$i_disc],2,2)),hexdec(substr($discpcolor[$i_disc],4,2)));
+			} // fin si echelle assez grande pour afficher les labels
+			$e_sty3[$i_disc]->set("symbolname",$name[$i_disc]);
+		} // fin boucle sur les types de parcours
+	} // fin si echelle suffisante pour afficher les pictos..
 } // fin si il y des parcours à afficher
 
 // couches de labels/pictos des objets LEI
@@ -447,33 +477,8 @@ for ($i=0; $i<$e_map->numlayers; $i++) {
 }
 $smarty->assign('legends',$legends);
 
-$extminx = floor($e_map->extent->minx);
-$extminy = floor($e_map->extent->miny);
-$extmaxx = floor($e_map->extent->maxx);
-$extmaxy = floor($e_map->extent->maxy);
-// l'extent est ensuite passé par une variable cachée ds map.tpl
-$smarty->assign('extent',urlencode("$extminx $extminy $extmaxx $extmaxy"));
 
-/* calcule la liste des parcours correspondant aux critères de requête 
-	et se trouvant dans la zone affichée
-	calcule les coord xy (pix) des rectangles correspondant aux pictos
-	définissant les zones cliquables dans la maparea
-	*/
-if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]!="none") {
-//if (isset($filtre) and is_array($filtre) and count($filtre) ) {
-	$tracks = $db->get_parcours(array($extminx,$extminy,$extmaxx,$extmaxy),$filtre);
-	for ($i=0;$i<count($tracks);$i++) {
-		if (preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$tracks[$i]['coord'],$m)) {
-			$xx = geo2pix($m[1],$extminx,$extmaxx,$sizex);
-			$yy = geo2pix($m[2],$extmaxy,$extminy,$sizey);
-			$tracks[$i]['rect'] = ($xx - $xd2pp) .','. ($yy - $yd2pp) .','. ($xx + $xd2pp) .','. ($yy + $yd2pp);
-		}
-	}
-	//debug("tracks");
-	$smarty->assign('tracks',$tracks);
-} // fin si filtre défini
-
-// idem pour les pictos LEI
+// idem pour les pictos LEI: calcul des coords pour l'image pap
 if ($bool_lei && $where_lei_f!="") {
 	$ppmplei = $db->get_lei_pts(array($extminx,$extminy,$extmaxx,$extmaxy,$where_lei_f));
 	for ($i=0;$i<count($ppmplei);$i++) {

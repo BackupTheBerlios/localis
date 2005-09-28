@@ -225,7 +225,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <ul style="font-size:9pt;">
 {section name=t loop=$tracks}
 {assign var=v value=$tracks[t].parcours_discp}
-<li style="color:#{$discpcolor.$v}"><a style="color:#{$discpcolor.$v}" href="{$url}?pid={$tracks[t].parcours_id}" {popup text="{tr}ParcZoom{/tr}"}>{$tracks[t].parcours_name}</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}" target="_blank" {popup text="{tr}CE3Down{/tr}"}>[->CE3]</a> <a href="#" onclick="popup('pop_det_parc.php?parcours_id={$tracks[t].parcours_id}');"{popup text="{tr}ParcMoreInfos{/tr}"}>[?]</a></li>
+<li style="color:#{$discpcolor.$v}"><a style="color:#{$discpcolor.$v}" href="{$url}?pid={$tracks[t].parcours_id}" {popup text="{tr}ParcZoom{/tr}"}>#{$tracks[t].parcours_id}: {$tracks[t].parcours_name}</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}" target="_blank" {popup text="{tr}CE3Down{/tr}"}>[->CE3]</a> <a href="#" onclick="popup('pop_det_parc.php?parcours_id={$tracks[t].parcours_id}');"{popup text="{tr}ParcMoreInfos{/tr}"}>[?]</a></li>
 {/section}
 </ul>
 {else}
