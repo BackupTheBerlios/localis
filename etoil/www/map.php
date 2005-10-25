@@ -491,6 +491,7 @@ if ($bool_lei && $where_lei_f!="") {
 	$smarty->assign('ppmplei',$ppmplei);
 	$smarty->assign('lei_f_url',$lei_f_url);// Assigne l'url  à rallonge du skel (cf conf.php), ou un exemple statique
 }
+//debug("ppmplei");
 
 // nouvel objet pour sélection liste déroulante points LEI
 $ObjSeLEI=new PYAobj();
