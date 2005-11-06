@@ -11,9 +11,9 @@ include("setup.php");
 <h3>Actions disponibles:</h3>
 <h4>Import du SIG Régional en shp</h4>
 Opérations à réaliser pour un import Kayak du SIG Regional:<br><pre>
-- Supprimer la table temporaire zimptmp_parc_kk
+- Supprimer la table temporaire zimptmp_parc_kk (plus obligé si option -d passé à shp2pgsql)
 - exécuter les commandes
-/usr/local/pgsql/bin/shp2pgsql Parcours.shp zimptmp_parc_kk > /tmp/zimptmp_parc_kk.sql
+/usr/local/pgsql/bin/shp2pgsql -d Parcours.shp zimptmp_parc_kk > /tmp/zimptmp_parc_kk.sql
 - puis (en user pguser)
 psql etoil < /tmp/zimptmp_parc_kk.sql
 </pre>
@@ -21,9 +21,9 @@ psql etoil < /tmp/zimptmp_parc_kk.sql
 <hr/>
 <h4>Import du CPIE en shp</h4>
 Opérations à réaliser pour un import du cpie :<br><pre>
-- Supprimer la table temporaire zimptmp_iti_cpie
+- Supprimer la table temporaire zimptmp_iti_cpie (plus obligé si option -d passé à shp2pgsql)
 - exécuter les commandes
-/usr/local/pgsql/bin/shp2pgsql itinéraire_polyline.shp zimptmp_iti_cpie > /tmp/zimptmp_iti_cpie.sql
+/usr/local/pgsql/bin/shp2pgsql -d itinéraire_polyline.shp zimptmp_iti_cpie > /tmp/zimptmp_iti_cpie.sql
 puis (en user pguser)
 psql etoil < /tmp/zimptmp_iti_cpie.sql
 </pre>
@@ -32,14 +32,18 @@ psql etoil < /tmp/zimptmp_iti_cpie.sql
 <h4>Import Cyclotourisme CG19 </h4>
 Opérations à réaliser pour un import cyclotourisme du cg19 :<br>
 <pre>
-- Supprimer la table temporaire zimptmp_ctcg19
+- Supprimer la table temporaire zimptmp_ctcg19 (plus obligé si option -d passé à shp2pgsql)
 - Pour convertir le mif en shp, exécuter la commande  
 ogr2ogr -f "ESRI Shapefile" cg.shp N4_Meymac.MIF
 - pour convertir le shp en postgis:
-/usr/local/pgsql/bin/shp2pgsql cg.shp zimptmp_ctcg19 > zimptmp_ctcg19.sql
+/usr/local/pgsql/bin/shp2pgsql -d cg.shp zimptmp_ctcg19 > zimptmp_ctcg19.sql
 - puis (en user pguser)
 psql etoil < /tmp/zimptmp_ctcg19.sql
+
+Pour effectuer toutes ces opérations, un script nommé cvctcg19.sh a ete placé dans etoil/bin
+pour l'invoquer : cvctcg19 toto , avec toto= nom du fichier shape sans extension
 <input type="radio" name="actionname" value="impctcg19">Import CycloTourisme CG19<BR/>
+<b>Nom par défaut <input type="text" name="nom_ctcg19" value="Import mapinfo cg19"></b>
 <input type="submit">
 </form>
  
@@ -282,6 +286,7 @@ $parcours_discp="5"; // cyclotourisme
 $vitmoy=RecupLib("disciplines","disc_id","disc_vitmoy",$parcours_discp);
 $srcg_id=3; // CG19, CycloT
 $usermajcartoctcg19="smilgram";
+$i=0;
 
 echo "vitmoy: $vitmoy <br/>";
 
@@ -290,6 +295,8 @@ echo "vitmoy: $vitmoy <br/>";
 	$qu_sel="select * from zimptmp_ctcg19";
 	$rep=$db->s_query($qu_sel);
 	while ($row=pg_fetch_assoc($rep)) {
+		$i++;
+		$parcours_name=$_REQUEST[nom_ctcg19]." ".addslashes($row[nom])." (".$i.")";
 		$req_ins="insert into parcours (
 		parcours_name,
 		parcours_user,
@@ -304,7 +311,7 @@ echo "vitmoy: $vitmoy <br/>";
 		parcours_usmaj,
 		parcours_marqimp)
 		VALUES (
-		'test import mapinfo cg19".addslashes($row[nom])."',
+		'".$parcours_name."',
 		'".$usermajcartoctcg19."',
 		".$parcours_discp.",
 		'".$row[the_geom]."',
@@ -321,7 +328,7 @@ echo "vitmoy: $vitmoy <br/>";
 		$querup="update parcours set parcours_length=Length2D(parcours_geom), parcours_start=StartPoint(parcours_geom),parcours_time=ceil(Length2D(parcours_geom)/".($vitmoy*1000/60).") where parcours.oid=".pg_last_oid($resins).";";
 		$resup=$db->s_query($querup) or die("req up $querup INVALIDE");
 		
-		echo "Parcours". $row[nom]." ajouté en base <BR/>";
+		echo "Parcours". $parcours_name ." ajouté en base <BR/>";
 	} // fin boucle
 } // fin si imp-cpie	
 unset($_REQUEST);

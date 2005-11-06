@@ -510,6 +510,9 @@ if (is_array($_REQUEST['rq_lei_f_idcat'])) { // s'il y des valeurs sélectionnées
 $tabLD=array(0=>"Aucun")+$tabLD;
 $smarty->assign('LD_filt_pts_LEI',DispLD($tabLD,"rq_lei_f_idcat","yes","",false));
 
+// nbre max de traces affichées dans la liste
+$maxdisptracks=($_SESSION['admin'] ? 100 : 15);
+$smarty->assign('maxdisptracks',$maxdisptracks);
 
 $smarty->assign('sizex',$sizex);
 $smarty->assign('sizey',$sizey);

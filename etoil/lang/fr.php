@@ -9,7 +9,7 @@ $lang = array(
 "Deniv_parcours" => "Ce parcours a un d&eacute;nivell&eacute; positif total de ",
 "No_deniv_infos" => "Aucune information de d&eacute;nivell&eacute; n'est disponible pour ce parcours",
 "CE3Down" => "T&eacute;l&eacute;charger le parcours pour exploitation dans CartoExplorer3",
-"ParcMoreInfos" => "Informations compl&eagrave;tes sur ce parcours",
+"ParcMoreInfos" => "Informations complètes sur ce parcours",
 "ParcZoom" => "Ajuster la carte autour de ce parcours",
 
 "###end###" => "###end###"
