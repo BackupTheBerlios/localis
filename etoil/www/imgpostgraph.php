@@ -3,14 +3,14 @@ session_start();
 
 include('postgraph.class.php');
 
-$graph = new PostGraph(550,330);
+$graph = new PostGraph(300,250); // (largeur,hauteur)
 
 $graph->setGraphTitles('Dénivellé du parcours', 'x (m)', 'z (m)');
 
 $graph->setYNumberFormat('integer');
 
 $graph->setYTicks(10);
-$graph->xTicks=15;
+$graph->xTicks=10;
 
 $graph->setData($_SESSION['datas']);
 
@@ -25,4 +25,5 @@ $graph->setXTextOrientation('horizontal');
 $graph->drawImage();
 
 $graph->printImage();
+unset($_SESSION['datas']); // pour libérer de la mémoire
 ?>

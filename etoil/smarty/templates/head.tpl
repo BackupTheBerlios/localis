@@ -5,7 +5,7 @@
 <link rel="StyleSheet" type="text/css" href="etoil.css" />
 <script>
 function toggletool(id) {literal}{{/literal}
-{if $smarty.session.admin}
+{if $smarty.session.admin && !($smarty.session.pid)}
 	document.getElementById('tool_edit').style.border='0';
 	document.getElementById('tool_edit').style.backgroundColor='#fff';
 {/if}
@@ -67,7 +67,7 @@ function popup(page, width, height) {
 </td>
 <td colspan="2">
 <div class="headbar{if $title==Cartographie}WI{/if}">
-
+{* les images de fond sont dans la classe, et il n'y a en pas pour la carto (WI=without images) *}
 </div>
 
 <div class="title">{if $langs}
@@ -81,8 +81,9 @@ function popup(page, width, height) {
 </span>
 {/if}
 {if $title}
-<a href="{$url}">{tr}{$title}{/tr}</a>
-{/if}</div>
+{tr}{$title}{/tr}
+{/if}
+</div>
 
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" style="clear:both;">

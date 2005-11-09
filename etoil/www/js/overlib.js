@@ -137,7 +137,7 @@ if (typeof ol_closefont == 'undefined') { var ol_closefont = "Verdana,Arial,Helv
 
 // Font size for the main text
 // When using CSS this will be very small.
-if (typeof ol_textsize == 'undefined') { var ol_textsize = "3";}
+if (typeof ol_textsize == 'undefined') { var ol_textsize = "2";}
 
 // Font size for the caption
 // When using CSS this will be very small.

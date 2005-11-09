@@ -15,8 +15,17 @@ document.f.method="POST";
 {if $bool_map_disp}
 <form name="f" enctype="multipart/form-data">
 <input type="hidden" name="extent" value="{$extent}" />
-<table border="0" cellpadding="0" cellspacing="0">
+<table border="0" cellpadding="0" cellspacing="0"> { * table principale à 2 colonnes*}
+
+{if $smarty.session.pid}
+<tr><td colspan="2" class="feedback">
+<div class="positive"><img src="img/ico/notice.png" width="14" height="14" alt="notice" border="0" hspace="2" vspace="0" align="baseline" />Vous affichez actuellement les détails du parcours <u>{$parc_name}</u></div>
+</div></td></tr>
+<tr><td colspan="2"><img src="img/dot0.png" height="{$blockspc}"></td></tr>
+{/if}
+
 <tr><td width="{math equation="(x * 2) + y + 2" x=$mapmargin y=$sizex}" valign="top">
+{* carte principale *}
 <map name="localisation" id="localisation">
 {if count($tracks)}
 {*definit des area cliquables sur les pictos des parcours*}
@@ -54,6 +63,7 @@ document.f.method="POST";
 </tr>
 </table>
 
+{* legende sous la carte avec les icônes de disciplines*}
 <table cellpadding="0" cellspacing="0" border="0"><tr>
 {foreach name=leg key=k item=i from=$legends}
 {if $filtre.discp eq $smarty.foreach.leg.iteration}
@@ -65,20 +75,23 @@ document.f.method="POST";
 {/if}
 {/foreach}
 </tr></table>
-<div class="foot" style="margin-left:10px;" id="light">Echelle: {$scale} {if $smarty.session.admin and $map_click}[x {$map_click.x} - y {$map_click.y} ]{/if}
+{* aff. echelle *}
+<div class="foot" style="margin-left:10px;" id="light">Echelle: {$scale}
+{if $smarty.session.admin and $map_click}[x {$map_click.x} - y {$map_click.y} ]{/if}
 </div>
-<div class="foot" style="margin-top:10px;margin-bottom:2px;margin-left:10px;"><a href="{$mapimage}" target="_new" class="submit">{tr}Télécharger{/tr}</a></div>
-
+<div class="foot" style="margin-top:10px;margin-bottom:2px;margin-left:10px;"><a href="{$mapimage}" target="_new" class="submit" {popup text="{tr}TelechImgCol{/tr}"}>{tr}TelechImgC{/tr}</a></div>
 </td>
-<td style="padding-left : 10px;">
+{* colonne de droite tableau principal*}
 
+<td style="padding-left : 10px;">
 <div class="bar">{tr}Affichage{/tr}</div>
 <table border="0" cellpadding="1" cellspacing="0" id="map">
+{* carte de localisation *}
 <tr><td valign="top" align="center">
 <input type="image" src="{$refsrc}" width="{$refwidth}" height="{$refheight}" name="ref" alt="{$name}" hspace="0" vspace="0" border="0"><img 
 src="img/francepti.jpg" width="100" height="100" border="0" />
 <br />
-
+{* choix de la taille*}
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr><td valign="middle">
 <select name="size" class="submit" id="100" onchange="document.f.resize.value='y' ; document.f.submit();">
@@ -90,12 +103,16 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <input type="image" src="img/expand.png" width="16" height="11" name="fit" value="{tr}Recadrer{/tr}" class="submit" onclick="document.f.extent.value=''; document.f.submit();"
 {popup text="{tr}Recadrer{/tr} [ Alt-c ]"} accesskey="c" />
 </td>
-</tr></table>
+</tr>
+</table>
+
 </td></tr>
 <tr><td><img src="img/dot0.png" height="{$blockspc}"></td></tr>
 </table>
 
 <input type="hidden" name="resize" value="n" />
+
+{* recherche par commune *}
 <div class="bar">{tr}Localiser une commune{/tr}</div>
 <input type="text" name="ville" value="" style="width:100%;" /><br />
 {if $cities}
@@ -127,125 +144,149 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomin')" /></div></td>
 </td></tr></table>
 
-{* bloc d'outils d'edition, import de tracés(conditionnel, si user non blaireau) *}
-{if $smarty.session.admin} 
-<img src="img/dot0.png" height="{$blockspc}">
-<div class="bar">{tr}Edition import de tracé{/tr}</div>
-<table border="0" cellpadding="2" cellspacing="1" width="100%" class="navbar">
-<tr>
-<td valign="top" width="30%" align="center" class="tool{$focus.edit}" id='tool_edit'>
-<div {popup text="{tr}Ajouter{/tr} [ Alt-a ]"}><label for="edit" accesskey="a"><img src="img/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edit" valign="top"></label>
-<input type="radio" id="edit" name="action" value="edit"{if $focus.edit eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_edit');"/></div></td>
-<td colspan="2" width="70%"><input {popup text="{tr}Importer{/tr}"} type="file" size="10" name="trackfileimp" Onchange="ChgMeth()"/></td>
-</tr>
-<tr><TD>&nbsp;</TD><TD colspan="2"><input {popup text="{tr}pas de visu préalable ni de choix de nom{/tr}"} type="checkbox" name="tf_dir_import" value="yes">{tr}Import direct{/tr}</TD></tr>
-</table>
+{if $pid eq "" }
+	{* bloc d'outils d'edition, import de tracés(conditionnel, si user non blaireau) *}
+	{if $smarty.session.admin} 
+	<img src="img/dot0.png" height="{$blockspc}">
+	<div class="bar">{tr}Edition import de tracé{/tr}</div>
+	<table border="0" cellpadding="2" cellspacing="1" width="100%" class="navbar">
+	<tr>
+	<td valign="top" width="30%" align="center" class="tool{$focus.edit}" id='tool_edit'>
+	<div {popup text="{tr}Ajouter{/tr} [ Alt-a ]"}><label for="edit" accesskey="a"><img src="img/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edit" valign="top"></label>
+	<input type="radio" id="edit" name="action" value="edit"{if $focus.edit eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_edit');"/></div></td>
+	<td colspan="2" width="70%"><input {popup text="{tr}Importer{/tr}"} type="file" size="10" name="trackfileimp" Onchange="ChgMeth()"/></td>
+	</tr>
+	<tr><TD>&nbsp;</TD><TD colspan="2"><input {popup text="{tr}pas de visu préalable ni de choix de nom{/tr}"} type="checkbox" name="tf_dir_import" value="yes">{tr}Import direct{/tr}</TD></tr>
+	</table>
+	
+	{* bloc d'enregistrement/modification de tracé (conditionnel, si user non blaireau) *}
+	<img src="img/dot0.png" height="{$blockspc}">
+	{if $smarty.request.do eq "{tr}Enregistrer{/tr}"}
+	<div class="bar">{tr}Edition/ajout de tracé{/tr}</div>
+	<table class="inputable">
+	<tr><td>Nom</td><td><input type="text" name="p_name" value="" /></td></tr>
+	<tr><td>{tr}Discipline{/tr}</td><td>
+	<select name="p_discp">
+	{foreach key=k item=i from=$discps}
+	<option value="{$k}"{if $filtre.discp eq $k} selected="selected"{/if}>{$i}</option>
+	{/foreach}
+	</select></td></tr>
+	
+	<tr><td>{tr}Durée{/tr}</td><td>
+	<select name="p_time">
+	{foreach key=k item=i from=$times}
+	<option value="{$k}"{if $filtre.time eq $k} selected="selected"{/if}>{$i}</option>
+	{/foreach}
+	</select></td></tr>
+	
+	<tr><td>{tr}Difficulté{/tr} (1 facile, 5 tres dur)</td><td>
+	<select name="p_level">
+	{foreach key=k item=i from=$levels}
+	<option value="{$k}"{if $filtre.level eq $k} selected="selected"{/if}>{$i}</option>
+	{/foreach}
+	</select></td></tr>
+	<tr><td><input type="submit" class="button" name="do" value="{tr}Effacer{/tr}" /></td><td><input type="submit" class="button" name="action" value="{tr}Enregistrer{/tr}" /></td></tr>
+	</table>
+	{/if}
+	{if count($smarty.session.track)}
+	<div class="bar">{tr}Coordonnées du tracé{/tr}</div>
+	{if $smarty.request.do ne "{tr}Enregistrer{/tr}"}
+	<input type="submit" class="button" name="do" value="{tr}Effacer{/tr}" />
+	<input type="submit" class="button" name="do" value="{tr}Undo{/tr}" />
+	<input type="submit" class="button" name="do" value="{tr}Enregistrer{/tr}" /><br />
+	{/if}<small>
+	{foreach item=x from=$smarty.session.track}
+	<a href="#"><img src="img/small_edit.gif" border="0"></a> <a href="#"><img src="img/small_garbage.gif" border="0"></a> <a href="#"><img src="img/small_info.gif" border="0"></a> {$x}<br />
+	{/foreach}
+	</small>
+	<hr />
+	{/if}
+	{/if}
+	{* FIN bloc d'enregistrement/modification de tracé *}
+	
+	{* bloc de sélection critères tracés *}
+	<img src="img/dot0.png" height="{$blockspc}">
+	<div class="bar">Selection des parcours</div>
+	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr><td>{tr}Discipline{/tr}&nbsp;</td><td>
+	<select class="selection" name="filtre[discp]" id="ftype">
+	<option value="none">{tr}Aucune{/tr}</option>
+	{foreach key=k item=i from=$discps}
+	<option style="color:#{$discpcolor.$k}" value="{$k}"{if $filtre.discp eq $k} selected="selected"{/if}>{$i}</option>
+	{/foreach}
+	</select></td></tr>
+	
+	<tr><td>{tr}Durée{/tr}&nbsp;</td><td>
+	<select  class="selection" name="filtre[time]">
+	<option value="">{tr}... Indifférent{/tr}</option>
+	{foreach key=k item=i from=$times}
+	<option value="{$k}"{if $filtre.time eq $k} selected="selected"{/if}>{$i}</option>
+	{/foreach}
+	</select></td></tr>
+	
+	<tr><td>{tr}Difficulté{/tr}&nbsp;</td><td>
+	<select  class="selection" name="filtre[level]">
+	<option value="">{tr}... Indifférent{/tr}</option>
+	{foreach key=k item=i from=$levels}
+	<option value="{$k}"{if $filtre.level eq $k} selected="selected"{/if}>{$i}</option>
+	{/foreach}
+	</select></td></tr>
+	<tr><td>&nbsp;</td><td>
+	<input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />
+	</td></tr></table>
+	
+	{* liste des parcours correspondant à la sélection *}
+	{if $tracks}
+	<img src="img/dot0.png" height="{$blockspc}">
+	<div class="smbar">Parcours correspondant aux critères</div>
+	{if count($tracks) < $maxdisptracks}
+	<ul style="font-size:9pt;">
+	{section name=t loop=$tracks}
+	{assign var=v value=$tracks[t].parcours_discp}
+	<li style="color:#{$discpcolor.$v}"><a style="color:#{$discpcolor.$v}" href="{$url}?pid={$tracks[t].parcours_id}" {popup text="{tr}ParcZoom{/tr}"}>#{$tracks[t].parcours_id}: {$tracks[t].parcours_name}</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}" target="_blank" {popup text="{tr}CE3Down{/tr}"}>[->CE3]</a></li>
+	{/section}
+	</ul>
+	{else}
+	{tr}TomuchLparc{/tr}
+	{/if}
+	{/if}
+	
+	{* bloc de sélection points du LEI *}
+	<img src="img/dot0.png" height="{$blockspc}">
+	<div class="bar">Sélections des points LEI</div>
+	<div class="ldlei">
+	{$LD_filt_pts_LEI}</div>
+	<input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />
 
-{* bloc d'enregistrement/modification de tracé (conditionnel, si user non blaireau) *}
-<img src="img/dot0.png" height="{$blockspc}">
-{if $smarty.request.do eq "{tr}Enregistrer{/tr}"}
-<div class="bar">{tr}Edition/ajout de tracé{/tr}</div>
-<table class="inputable">
-<tr><td>Nom</td><td><input type="text" name="p_name" value="" /></td></tr>
-<tr><td>{tr}Discipline{/tr}</td><td>
-<select name="p_discp">
-{foreach key=k item=i from=$discps}
-<option value="{$k}"{if $filtre.discp eq $k} selected="selected"{/if}>{$i}</option>
-{/foreach}
-</select></td></tr>
-
-<tr><td>{tr}Durée{/tr}</td><td>
-<select name="p_time">
-{foreach key=k item=i from=$times}
-<option value="{$k}"{if $filtre.time eq $k} selected="selected"{/if}>{$i}</option>
-{/foreach}
-</select></td></tr>
-
-<tr><td>{tr}Difficulté{/tr} (1 facile, 5 tres dur)</td><td>
-<select name="p_level">
-{foreach key=k item=i from=$levels}
-<option value="{$k}"{if $filtre.level eq $k} selected="selected"{/if}>{$i}</option>
-{/foreach}
-</select></td></tr>
-<tr><td><input type="submit" class="button" name="do" value="{tr}Effacer{/tr}" /></td><td><input type="submit" class="button" name="action" value="{tr}Enregistrer{/tr}" /></td></tr>
-</table>
+	
+{else} {* mode tracé unique *}
+	<div class="bar">{tr}Det_parcours{/tr}<br/>
+	<em>{$parc_name}</em></div>
+	<br/>{tr}Long_parcours{/tr} {$parc_length} km
+	{if $deniv_ok}
+	{tr}Deniv_parcours{/tr} {$denivtot} m<br/>
+	<ul>
+	<LI>{tr}CE3Down{/tr}:<a href="file_export.php?parcours_id={$pid}" target="_blank" {popup text="{tr}CE3Down2{/tr}"}><img src="img/ce3_ico.jpg" border="0"></a></LI>
+	<li><a href="#mdet" {popup text="{tr}MoreDet2{/tr}"}>{tr}MoreDet{/tr}</a></li>
+	</ul>
+	<br/>
+	<img src="imgpostgraph.php" align="middle"><br/>
+	{else}
+	{tr}No_deniv_infos{/tr}<br/>
+	{/if}
+	<input id="hnu" type="hidden" name="notunique" value="false">
+	<input type="submit"  onclick="document.getElementById('hnu').value='true'; document.f.submit()" class="button" name="toto" value="{tr}FermePU{/tr}" {popup text="{tr}FermePUDesc{/tr}"}/>
 {/if}
-{if count($smarty.session.track)}
-<div class="bar">{tr}Coordonnées du tracé{/tr}</div>
-{if $smarty.request.do ne "{tr}Enregistrer{/tr}"}
-<input type="submit" class="button" name="do" value="{tr}Effacer{/tr}" />
-<input type="submit" class="button" name="do" value="{tr}Undo{/tr}" />
-<input type="submit" class="button" name="do" value="{tr}Enregistrer{/tr}" /><br />
-{/if}<small>
-{foreach item=x from=$smarty.session.track}
-<a href="#"><img src="img/small_edit.gif" border="0"></a> <a href="#"><img src="img/small_garbage.gif" border="0"></a> <a href="#"><img src="img/small_info.gif" border="0"></a> {$x}<br />
-{/foreach}
-</small>
-<hr />
-{/if}
-{/if}
-{* FIN bloc d'enregistrement/modification de tracé *}
 
-{* bloc de sélection critères tracés *}
-<img src="img/dot0.png" height="{$blockspc}">
-<div class="bar">Selection des parcours</div>
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr><td>{tr}Discipline{/tr}&nbsp;</td><td>
-<select class="selection" name="filtre[discp]" id="ftype">
-<option value="none">{tr}Aucune{/tr}</option>
-{foreach key=k item=i from=$discps}
-<option style="color:#{$discpcolor.$k}" value="{$k}"{if $filtre.discp eq $k} selected="selected"{/if}>{$i}</option>
-{/foreach}
-</select></td></tr>
-
-<tr><td>{tr}Durée{/tr}&nbsp;</td><td>
-<select  class="selection" name="filtre[time]">
-<option value="">{tr}... Indifférent{/tr}</option>
-{foreach key=k item=i from=$times}
-<option value="{$k}"{if $filtre.time eq $k} selected="selected"{/if}>{$i}</option>
-{/foreach}
-</select></td></tr>
-
-<tr><td>{tr}Difficulté{/tr}&nbsp;</td><td>
-<select  class="selection" name="filtre[level]">
-<option value="">{tr}... Indifférent{/tr}</option>
-{foreach key=k item=i from=$levels}
-<option value="{$k}"{if $filtre.level eq $k} selected="selected"{/if}>{$i}</option>
-{/foreach}
-</select></td></tr>
-<tr><td>&nbsp;</td><td>
-<input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />
-</td></tr></table>
-
-{* liste des parcours correspondant à la sélection *}
-{if $tracks}
-<img src="img/dot0.png" height="{$blockspc}">
-<div class="smbar">Parcours correspondant aux critères</div>
-{if count($tracks) < $maxdisptracks}
-<ul style="font-size:9pt;">
-{section name=t loop=$tracks}
-{assign var=v value=$tracks[t].parcours_discp}
-<li style="color:#{$discpcolor.$v}"><a style="color:#{$discpcolor.$v}" href="{$url}?pid={$tracks[t].parcours_id}" {popup text="{tr}ParcZoom{/tr}"}>#{$tracks[t].parcours_id}: {$tracks[t].parcours_name}</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}" target="_blank" {popup text="{tr}CE3Down{/tr}"}>[->CE3]</a> <a href="#" onclick="popup('pop_det_parc.php?parcours_id={$tracks[t].parcours_id}');"{popup text="{tr}ParcMoreInfos{/tr}"}>[?]</a></li>
-{/section}
-</ul>
-{else}
-Il y a plus de {$maxdisptracks} parcours correspondants à vos critères. Veuillez zoomer pour en afficher la liste...
-{/if}
-{/if}
-
-{* bloc de sélection points du LEI *}
-<img src="img/dot0.png" height="{$blockspc}">
-<div class="bar">Sélections des points LEI</div>
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr height="215"><td>
-<div class="ldlei">
-{$LD_filt_pts_LEI}</div>
-</td></tr>
-<tr><td>
-<input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />
-</td></tr></table>
 
 </td></tr></table> {* fin du grand tableau général de colonnes *}
+{if $pid ne "" }
+<a name="mdet" />
+<div class="bar">{tr}Det_parcours{/tr} <em>{$parc_name}</em></div>
+
+{$tb_infparc}
+{/if}
+
 </form>
 { else } 
 Sur ce site prototype de test, il est nécessaire de s'identifier et d'être habilité pour pouvoir consulter les cartes.<br/>

@@ -1,14 +1,33 @@
 <?php
-$title = "Gestion des utilisateurs";
+$title = "Utilitaires d'importation";
 $db = true;
 $mod = false;
 $feedback = $focus = array();
 include("setup.php");
 ?>
-<h2>Bienvenue sur la page d'importation directe des tracés</h2>
+<h2>Bienvenue sur la page d'importation directe de fichiers de tracés ou points</h2>
  <form method="post" action="admin-import.php">
 <b>id de marquage de l'import <input type="text" name="marqimp" value="<?= date("dmy")?>"></b>
+
 <h3>Actions disponibles:</h3>
+
+<h4>Import de fichiers trk ou wpt (CartoExplorer)</h4>
+Sélectionner une discpline dans la liste :<br/>
+<?
+// nouvel objet pour sélection liste déroulante disciplines
+$ObjSeLD=new PYAobj();
+$ObjSeLD->NmBase=$dbname;
+$ObjSeLD->NmTable="parcours";
+$ObjSeLD->NmChamp="parcours_discp";
+$ObjSeLD->InitPO();
+$tabLD=ttChpLink($ObjSeLD->Valeurs);
+$tabLD=array(0=>"Aucun")+$tabLD;
+DispLD($tabLD,"LDCats","no","");
+?>
+Sélectionner le fichier à importer : <input type="file" name="ce3file"><BR/>
+<input type="radio" name="actionname" value="impce3file">Import Fichier CE3<BR/>
+<hr/>
+
 <h4>Import du SIG Régional en shp</h4>
 Opérations à réaliser pour un import Kayak du SIG Regional:<br><pre>
 - Supprimer la table temporaire zimptmp_parc_kk (plus obligé si option -d passé à shp2pgsql)
@@ -19,6 +38,7 @@ psql etoil < /tmp/zimptmp_parc_kk.sql
 </pre>
 <input type="radio" name="actionname" value="impkksigrshp">Import Kayak SIG R (shp)<BR/>
 <hr/>
+
 <h4>Import du CPIE en shp</h4>
 Opérations à réaliser pour un import du cpie :<br><pre>
 - Supprimer la table temporaire zimptmp_iti_cpie (plus obligé si option -d passé à shp2pgsql)
@@ -29,6 +49,7 @@ psql etoil < /tmp/zimptmp_iti_cpie.sql
 </pre>
 <input type="radio" name="actionname" value="impcpie">Import CPIE<BR/>
 <hr/>
+
 <h4>Import Cyclotourisme CG19 </h4>
 Opérations à réaliser pour un import cyclotourisme du cg19 :<br>
 <pre>

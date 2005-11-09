@@ -37,7 +37,19 @@ if (isset($_REQUEST['filtre'])) {
 	
 //} else { $filtre=array();
 }
+if ($_REQUEST['pid']!="") { // mode affichage parcours unique
+	$_SESSION['pid']=$_REQUEST['pid'];
+	}
+elseif ($_REQUEST['notunique']=="true") unset($_SESSION['pid']);
+
+// mode affichage parcours unique
+if ($_SESSION['pid']) {
+	// inclus ce qui était au départ la popup
+	include ("pop_det_parc.php");
+}
+
 $discp_c=$_SESSION['discp_c'];
+
 
 
 if (isset($_REQUEST['rq_lei_f_idcat'])) {
@@ -260,10 +272,16 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 	// calcul du where parcours
 	// => nom_champ_bdd=parcours_$f
 	$where_parc='';
-	foreach ($filtre as $f=>$v) {
-		if (!empty($v)) $where_parc.= "parcours_$f=$v"." AND ";
+	if ($_SESSION['pid']!="") {
+		$where_parc="parcours_id=".$_SESSION['pid'];
 	}
-	if ($where_parc!='') $where_parc=substr($where_parc,0, strlen($where_parc) -5); 
+	else { // pas de parcours unique
+		foreach ($filtre as $f=>$v) {
+			if (!empty($v)) $where_parc.= "parcours_$f=$v"." AND ";
+		}
+		if ($where_parc!='') $where_parc=substr($where_parc,0, strlen($where_parc) -5); 
+	}
+	if (!$_SESSION['admin']) $where_parc.=" AND parcours_ouvert=true";
 	// affichage des contours en noir de tous les parcours qqsoit la discipline
 	// ce uniquement si échelle assez faible
 	if ($e_map->scale < $minscaledispextparc) {
@@ -281,6 +299,29 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 		$e_sty->set("symbolname","circle");
 		$e_sty->set("size",$extparcwdth); 
 		$e_sty->color->setRGB(0,0,0);
+		
+		$e_lay->set('labelitem','parcours_id');
+		$e_lay->set('labelcache',MS_ON); // par défaut
+
+		// label
+		$e_labl=$e_cla->label;
+		$e_labl->set("position",MS_AUTO);
+		$e_labl->set("angle",MS_AUTO);
+		$e_labl->set("size",10);
+		//$e_labl->set("mindistance",50);
+		$e_labl->set("minfeaturesize",50);
+		
+		// $e_labl->set("buffer",3); sert à rien
+		$e_labl->set("force",MS_TRUE);
+		$e_labl->set("type","truetype");
+		$e_labl->set("font",$parclabelfont);
+		$e_labl->color->setRGB(0,0,0);
+		$e_labl->backgroundcolor->setRGB(hexdec(substr($discpcolor[$discp_c],0,2)),hexdec(substr($discpcolor[$discp_c],2,2)),hexdec(substr($discpcolor[$discp_c],4,2)));
+		//$e_labl->outlinecolor->setRGB(0,0,255);
+		//$e_labl->backgroundcolor->setRGB(255,255,255);
+		//$e_labl->backgroundshadowcolor->setRGB(255,255,255);
+		
+//		echo $e_labl->color;
 	} // fin si echelle assez grande pour afficher contours noirs
 
 	// autre couche utilisée pour l'intérieur de la ligne, dont la couleur varie suivant la discipline	
@@ -294,7 +335,8 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 	$e_lay2->set('data',$query);
 	$e_lay2->set('type',MS_LAYER_LINE);
 	$e_lay2->set('classitem','parcours_discp');
-		
+
+	// boucle inutile car 	on n'affiche qu'une discipline à la fois, on le laisse au cas où
 	for ($i_disc=1;$i_disc<=count($discps);$i_disc++) {
 		$e_cla2[$i_disc] = ms_newClassObj($e_lay2);
 		$e_cla2[$i_disc]->setExpression($i_disc);
@@ -302,8 +344,10 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 		$e_sty2[$i_disc]->set("symbolname","circle");
 		$e_sty2[$i_disc]->set("size",$intparcwdth);
 		$e_sty2[$i_disc]->color->setRGB(hexdec(substr($discpcolor[$i_disc],0,2)),hexdec(substr($discpcolor[$i_disc],2,2)),hexdec(substr($discpcolor[$i_disc],4,2)));	
-	}
+	} // fin boucle sur discp
 
+	 
+// affichage des pictos, sur le point de départ du parcours
 	if ($e_map->scale < $minscaledispictos ) {
 		// couches de labels/pictos avec des couleurs différentes suivant les types
 		$e_lay = ms_newLayerObj($e_map);
@@ -511,10 +555,11 @@ $tabLD=array(0=>"Aucun")+$tabLD;
 $smarty->assign('LD_filt_pts_LEI',DispLD($tabLD,"rq_lei_f_idcat","yes","",false));
 
 // nbre max de traces affichées dans la liste
-$maxdisptracks=($_SESSION['admin'] ? 100 : 15);
+$maxdisptracks=($_SESSION['admin'] ? 100 : 20);
 $smarty->assign('maxdisptracks',$maxdisptracks);
 
 $smarty->assign('sizex',$sizex);
+$smarty->assign('pid',$_SESSION['pid']);
 $smarty->assign('sizey',$sizey);
 $smarty->assign('sizecheck',$sizecheck);
 $smarty->assign('mapmargin',$mapmargin);

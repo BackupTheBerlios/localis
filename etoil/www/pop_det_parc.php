@@ -1,26 +1,30 @@
 <?php 
+/* 
+AU début ce fichier était affiché via une popup. Mais comm e cela merde avec IE, il est affiché dans le map en mode "unique"
+
 $title = "Détails du parcours";
 $db = true;
 include("setup.php");
+*/
 ?>
 
 <?php 
-$parc_name=RecupLib("parcours","parcours_id","parcours_name",$_REQUEST["parcours_id"]);
+$parc_name=RecupLib("parcours","parcours_id","parcours_name",$_SESSION['pid']);
 $smarty->assign('parc_name',$parc_name);
 
-$nbpoints=$db->getone("select NumPoints(parcours_geom) from parcours where parcours_id=".$_REQUEST["parcours_id"]);
-$parc_length=floor($db->getone("select Length2D(parcours_geom) from parcours where parcours_id=".$_REQUEST["parcours_id"]));
+$nbpoints=$db->getone("select NumPoints(parcours_geom) from parcours where parcours_id=".$_SESSION['pid']);
+$parc_length=floor($db->getone("select Length2D(parcours_geom) from parcours where parcours_id=".$_SESSION['pid'])/100)/10;
 
 $smarty->assign('parc_length',$parc_length);
 
-//$parc_geom=$db->getone("select asEWKT(parcours_geom) from parcours where parcours_id=".$_REQUEST["parcours_id"]);
+//$parc_geom=$db->getone("select asEWKT(parcours_geom) from parcours where parcours_id=".$_SESSION['pid']);
 //echo $parc_geom."\n";
 
 // calcul du dénivellé positif
 $nbpaltOk=0;
 $cst_distm=50;
 for ($i=1;$i<=$nbpoints;$i++) {
-	$Cpoint=$db->queryone("select X(PointN(parcours_geom,$i)),Y(PointN(parcours_geom,$i)),Z(PointN(parcours_geom,$i)) from parcours where parcours_id=".$_REQUEST["parcours_id"]);
+	$Cpoint=$db->queryone("select X(PointN(parcours_geom,$i)),Y(PointN(parcours_geom,$i)),Z(PointN(parcours_geom,$i)) from parcours where parcours_id=".$_SESSION['pid']);
 	
 	// si le premier est bon, on le prend a chaque coup
 	if ($i==1 && $Cpoint[z] > 0) $datas[0]=$Cpoint[z];
@@ -63,16 +67,18 @@ if ($deniv_ok) {
 } 
 //
 
-$reqcust="select parcours_level,parcours_balisage,balis_ico,parcours_ttop,parcours_desc,parcours_guides,guid_url,parcours_equipt,parcours_interet,parcours_topo,parcours_photo,parcours_environmt from parcours,balisages,guides where parcours_id=".$_REQUEST["parcours_id"]." and balis_id=parcours_balisage and guid_id = parcours_guides" ;
-$req=msq($reqcust);
+//$reqcust="select parcours_level,parcours_balisage,balis_ico,parcours_ttop,parcours_desc,parcours_guides,guid_url,parcours_equipt,parcours_interet,parcours_topo,parcours_photo,parcours_environmt from parcours,balisages,guides where parcours_id=".$_SESSION['pid']." and balis_id=parcours_balisage and guid_id = parcours_guides" ;
+
+$reqcust="select parcours_level,parcours_balisage,parcours_ttop,parcours_desc,parcours_guides,parcours_equipt,parcours_interet,parcours_topo,parcours_photo,parcours_environmt from parcours where parcours_id=".$_SESSION['pid']." " ;
+$req=db_query($reqcust);
 
 $tbValChp=db_fetch_array($req);
-//print_r($tbValChp);
+//debug($tbValChp);
 
 $ECT=InitPOReq($reqcust,"etoil");
 
-$tb_infparc.='<TABLE BORDER="1" BORDERCOLOR="#FFF3F3" CELLSPACING="0" CELLPADDING="2">';
-
+$tb_infparc.='<TABLE class="table">';
+$tb_infparc.='<thead><th>Attribut</th><th>Valeur</th></thead>';
 foreach ($ECT as $PYAObj) {
   $PYAObj->TypEdit="C"; // en consultation seule en readonly ou eq spéciale
   $PYAObj->DirEcho=false;
@@ -80,6 +86,7 @@ foreach ($ECT as $PYAObj) {
   
   //if ($modif!="") 
   $PYAObj->ValChp=$tbValChp[$NM_CHAMP];
+  $debug="nm chp:".$NM_CHAMP."; val".$tbValChp[$NM_CHAMP];
 
   // ICI les traitements avant Mise à Jour
   if ($modif==2) { // en cas de COPIE on annule la valeur auto incrémentée
@@ -89,24 +96,19 @@ foreach ($ECT as $PYAObj) {
   // traitement valeurs avant MAJ
   $PYAObj->InitAvMaj($$VarNomUserMAJ);
 
-  if ($PYAObj->TypeAff!="HID") {
+  if ($PYAObj->TypeAff!="HID" && $tbValChp[$NM_CHAMP]!="NULL" && $tbValChp[$NM_CHAMP]!="") {
       $tb_infparc.="<TR><TD>".$PYAObj->Libelle;
 
-    if ($PYAObj->Comment!="") $tb_infparc.="<BR><span class=\"legendes9px\">".$PYAObj->Comment."</span>";
      $tb_infparc.="</TD>\n<TD>";
-
-    $tb_infparc.=$PYAObj->EchoEditAll(false); // !!!!!!!!!!!!!!!! //
+     $tb_infparc.=$PYAObj->EchoEdit(true);
+     
      $tb_infparc.="</TD>\n</TR>"; //finit la ligne du tableau
-   } else
-        $tb_infparc.=$PYAObj->EchoEditAll(true); // !!!!!!!!!!!!!!!! /
+   }
+   // else $tb_infparc.=$PYAObj->EchoEditAll(true); // !!!!!!!!!!!!!!!! /
 
   } // fin while
 $tb_infparc.="</table>";
-
 $smarty->assign('tb_infparc',$tb_infparc);
 
-$smarty->display("pop_det_parc.tpl");
-
+//$smarty->display("pop_det_parc.tpl");
 ?>
-</blockquote>
-</body></html>
