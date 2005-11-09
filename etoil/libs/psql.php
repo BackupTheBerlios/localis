@@ -255,7 +255,8 @@ class db {
 
 	function get_parcours($ex) {
 		$query = "select parcours_id,parcours_name,parcours_discp,AsText(parcours_start) as coord from parcours";
-		$query.= " where parcours_start && GeomFromText('POLYGON(($ex[0] $ex[1],$ex[0] $ex[3],$ex[2] $ex[3],$ex[0] $ex[1]))',-1)";
+		//$query.= " where parcours_start && GeomFromText('POLYGON(($ex[0] $ex[1],$ex[0] $ex[3],$ex[2] $ex[3],$ex[0] $ex[1]))',-1)";
+		$query.= " where parcours_geom && GeomFromText('POLYGON(($ex[0] $ex[1],$ex[0] $ex[3],$ex[2] $ex[3],$ex[0] $ex[1]))',-1)";
 		if (isset($_SESSION['filtre'])) {
 			$wh = array();
 			foreach ($_SESSION['filtre'] as $k=>$v) {
@@ -267,7 +268,9 @@ class db {
 			if (count($wh)) {
 				$query.= " and ". implode(' and ',$wh);
 			}
+			
 		}
+		if (!$_SESSION['admin']) $query.=" AND parcours_ouvert=true";
 		return $this->query($query,true);
 	}
 
