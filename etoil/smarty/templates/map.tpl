@@ -224,9 +224,16 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 	{/foreach}
 	</select></td></tr>
 	
+	
 	<tr><td>{tr}Nom{/tr}</td><td>
 	<input type="text" name="filtre[name]" value="{$filtre.name}">
 	</td></tr>
+	
+	{if $smarty.session.admin}
+	<tr><td>{tr}Id{/tr}</td><td>
+	<input type="text" name="filtre[id]" value="{$filtre.id}">
+	</td></tr>
+	{/if}
 	
 	<tr><td>{tr}Durée{/tr}&nbsp;</td><td>
 	<select  class="selection" name="filtre[time]">
