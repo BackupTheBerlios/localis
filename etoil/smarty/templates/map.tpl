@@ -3,6 +3,7 @@
 
 {literal}
 <script language="JavaScript">
+
 // cette fonction est appelée quand on vuet télécharger (uploader) un fichier
 // en effet, les upload ne marchent correctement qu'en méthode POST
 function ChgMeth() {
@@ -76,7 +77,11 @@ document.f.method="POST";
 {/foreach}
 </tr></table>
 {* aff. echelle *}
-<div class="foot" style="margin-left:10px;" id="light">Echelle: {$scale}
+<div class="foot" style="margin-left:10px;" id="light">Echelle: {$scale} 
+{if $booldisplegscan100}
+&nbsp;&nbsp;&nbsp;<a href="#legend">->{tr}LLegenscan100{/tr}</a>
+{/if}
+
 {if $smarty.session.admin and $map_click}[x {$map_click.x} - y {$map_click.y} ]{/if}
 </div>
 <div class="foot" style="margin-top:10px;margin-bottom:2px;margin-left:10px;"><a href="{$mapimage}" target="_new" class="submit" {popup text="{tr}TelechImgCol{/tr}"}>{tr}TelechImgC{/tr}</a></div>
@@ -128,7 +133,9 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 {$city_info[0].nom}
 </div>
 {/if}
-
+{if $pid ne "" }
+ <input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />{/if}
+ 
 <img src="img/dot0.png" height="{$blockspc}">
 <div class="bar">{tr}Navigation{/tr}</div>
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="navbar">
@@ -185,6 +192,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 	<option value="{$k}"{if $filtre.level eq $k} selected="selected"{/if}>{$i}</option>
 	{/foreach}
 	</select></td></tr>
+	
 	<tr><td><input type="submit" class="button" name="do" value="{tr}Effacer{/tr}" /></td><td><input type="submit" class="button" name="action" value="{tr}Enregistrer{/tr}" /></td></tr>
 	</table>
 	{/if}
@@ -215,6 +223,10 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 	<option style="color:#{$discpcolor.$k}" value="{$k}"{if $filtre.discp eq $k} selected="selected"{/if}>{$i}</option>
 	{/foreach}
 	</select></td></tr>
+	
+	<tr><td>{tr}Nom{/tr}</td><td>
+	<input type="text" name="filtre[name]" value="{$filtre.name}">
+	</td></tr>
 	
 	<tr><td>{tr}Durée{/tr}&nbsp;</td><td>
 	<select  class="selection" name="filtre[time]">
@@ -249,34 +261,41 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 	{else}
 	{tr}TomuchLparc{/tr}
 	{/if}
+	{else}
+	<div class="negative">{tr}0Lparc{/tr}</div>
 	{/if}
 	
-	{* bloc de sélection points du LEI *}
-	<img src="img/dot0.png" height="{$blockspc}">
-	<div class="bar">Sélections des points LEI</div>
-	<div class="ldlei">
-	{$LD_filt_pts_LEI}</div>
-	<input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />
-
 	
 {else} {* mode tracé unique *}
 	<div class="bar">{tr}Det_parcours{/tr}<br/>
 	<em>{$parc_name}</em></div>
-	<br/>{tr}Long_parcours{/tr} {$parc_length} km
-	{if $deniv_ok}
-	{tr}Deniv_parcours{/tr} {$denivtot} m<br/>
 	<ul>
-	<LI>{tr}CE3Down{/tr}:<a href="file_export.php?parcours_id={$pid}" target="_blank" {popup text="{tr}CE3Down2{/tr}"}><img src="img/ce3_ico.jpg" border="0"></a></LI>
-	<li><a href="#mdet" {popup text="{tr}MoreDet2{/tr}"}>{tr}MoreDet{/tr}</a></li>
-	</ul>
-	<br/>
-	<img src="imgpostgraph.php" align="middle"><br/>
+	<li>{tr}Long_parcours{/tr} {$parc_length} m</li>
+	<li>{tr}ptime{/tr} {$parc_time} h</li>
+	
+	<li>
+	{if $denivtot>0}
+	{tr}Deniv_parcours{/tr} {$denivtot} m</li>
 	{else}
 	{tr}No_deniv_infos{/tr}<br/>
 	{/if}
+	
+	<LI>{tr}CE3Down{/tr}:<a href="file_export.php?parcours_id={$pid}" target="_blank" {popup text="{tr}CE3Down2{/tr}"}><img src="img/ce3_ico.jpg" border="0"></a></LI>
+	<li><a href="#mdet" {popup text="{tr}MoreDet2{/tr}"}>{tr}MoreDet{/tr}</a></li>
+	</ul>
+	<!-- <img src="imgpostgraph.php" align="middle"><br/>-->
 	<input id="hnu" type="hidden" name="notunique" value="false">
-	<input type="submit"  onclick="document.getElementById('hnu').value='true'; document.f.submit()" class="button" name="toto" value="{tr}FermePU{/tr}" {popup text="{tr}FermePUDesc{/tr}"}/>
+	<input type="submit" onclick="document.getElementById('hnu').value=true; document.f.submit()" class="button" name="toto" value="{tr}FermePU{/tr}" {popup text="{tr}FermePUDesc{/tr}"}/>
+	<br/>
 {/if}
+	
+{* bloc de sélection points du LEI *}
+<img src="img/dot0.png" height="{$blockspc}">
+<div class="bar"  {popup text="{tr}LEIPointsInfo{/tr}"}>{tr}LEIPointsSel{/tr}</div>
+<div class="ldlei">
+{$LD_filt_pts_LEI}</div>
+<small>{tr}LEIComment{/tr}</small>
+<input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />
 
 
 </td></tr></table> {* fin du grand tableau général de colonnes *}
@@ -285,6 +304,7 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 <div class="bar">{tr}Det_parcours{/tr} <em>{$parc_name}</em></div>
 
 {$tb_infparc}
+<br/><p align="center"><input type="submit" onclick="document.getElementById('hnu').value=true; document.f.submit()" class="button" name="toto" value="{tr}FermePU{/tr}" {popup text="{tr}FermePUDesc{/tr}"}/></p>
 {/if}
 
 </form>
@@ -292,9 +312,14 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 Sur ce site prototype de test, il est nécessaire de s'identifier et d'être habilité pour pouvoir consulter les cartes.<br/>
 <br/>
 Veuillez contacter {mailto address="artec.vm@nerim.net" encode="javascript" subject="Activer un compte sur e-toil.net"} pour créer ou activer un compte.
-
 Merci.
-{ /if}
+{/if}
+{if $booldisplegscan100}
+<a name="legend" />
+<div class="bar">{tr}Legenscan100{/tr}</div>
+<IMG src="../img/legend1_scan100.jpg" alt="Legende 1" border="0">
+<br/>
+<IMG src="../img/legend2_scan100.jpg" alt="Legende 1" border="0">
+{/if}
 </div>
-
 {include file="foot.tpl"}

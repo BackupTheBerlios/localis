@@ -99,7 +99,7 @@ class db {
 			if ($hash['pass'] == md5($pass)) {
 				$_SESSION['me'] = $login;
 				$_SESSION['profile']=$hash['credential'];
-				if ($hash['credential'] == 1) {
+				if ($hash['credential'] == 19230) {
 					$_SESSION['admin'] = true;
 				} else {
 					$_SESSION['admin'] = false;
@@ -262,15 +262,20 @@ class db {
 			foreach ($_SESSION['filtre'] as $k=>$v) {
 				if (!empty($v)) {
 					$v = addslashes($v);
-					$wh[] = "parcours_$k='$v'";
+					if ($k == "name") {
+						$wh[] = "lower(parcours_$k) LIKE lower('%$v%')";
+						}
+					else $wh[] = "parcours_$k='$v'";
 				}
 			}
 			if (count($wh)) {
-				$query.= " and ". implode(' and ',$wh);
+				$where.= " and ". implode(' and ',$wh);
 			}
 			
 		}
-		if (!$_SESSION['admin']) $query.=" AND parcours_ouvert=true";
+		if (!$_SESSION['admin']) $where.=" AND parcours_ouvert=true";
+		$_SESSION['where_parc']=substr($where,5);
+		$query.= $where;
 		return $this->query($query,true);
 	}
 

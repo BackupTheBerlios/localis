@@ -4,6 +4,13 @@ $coef_fd=1.5; // coefficient de dÈplacement lors du clic sur les flËches de dire
 $mapmargin = 11; // taille de la bordure clicable de navigation perpendiculaire
 $blockspc=7; // espaces entre les blocks de droite
 
+
+$chem_abs_genimgtmp="/usr/local/etoil/www/temp/";
+$chem_web_genimgtmp="/temp/";
+// trucs pour utilisation PYA
+$TBDname="DESC_TABLES";
+$NmChDT="TABLE0COMM";
+
 $tbidiscp=$db->query("select disc_id, disc_nom, disc_name, disc_color,disc_vitmoy from disciplines where disc_act=true order by disc_id",true);
 //debug("tbidiscp");
 
@@ -59,6 +66,7 @@ $refheight=100; //largeur de la carte de reference
 // param√®tres des trac√©s de couches postgis
 // concernant les parcours
 $intparcwdth=3; // √©paisseur interne des traits de trac√©s
+$minscaledispscan100legend=100000; // echelle min a partir de laquelle on affiche la lÈgende de carte scan100
 $minscaledispextparc=100000; // echelle min a partir de laquelle on affiche les contours en noir des traces de parcours
 $minscaledisplabels=100000; // echelle min a partir de laquelle on affiche les labels des parcours 
 $minscaledispictos=250000; // echelle min a partir de laquelle on affiche les pictos des parcours 

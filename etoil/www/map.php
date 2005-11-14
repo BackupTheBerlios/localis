@@ -2,7 +2,6 @@
 $title = "Cartographie";
 $db = true;
 include("setup.php");
-
 //debug ("_REQUEST");
 //debug ("_SESSION");
 
@@ -255,7 +254,10 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 	/* calcule la liste des parcours correspondant aux critères de requête 
 	et se trouvant dans la zone affichée */
 	
+	// c'est dans cette fonction qu'en MAJ $_SESSION[where_parc] 
 	$tracks = $db->get_parcours(array($extminx,$extminy,$extmaxx,$extmaxy),$filtre);
+	//echo $_SESSION['where_parc'];
+
 	if ($e_map->scale < $minscaledispictos) {
 	/*calcule les coord xy (pix) des rectangles correspondant aux pictos
 	définissant les zones cliquables dans la maparea
@@ -278,12 +280,16 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 		$where_parc="parcours_id=".$_SESSION['pid'];
 	}
 	else { // pas de parcours unique
-		foreach ($filtre as $f=>$v) {
+		
+		$where_parc=$_SESSION['where_parc'];
+		/*foreach ($filtre as $f=>$v) {
 			if (!empty($v)) $where_parc.= "parcours_$f=$v"." AND ";
 		}
 		if ($where_parc!='') $where_parc=substr($where_parc,0, strlen($where_parc) -5); 
+		*/
+		
 	}
-	if (!$_SESSION['admin']) $where_parc.=" AND parcours_ouvert=true";
+	
 	// affichage des contours en noir de tous les parcours qqsoit la discipline
 	// ce uniquement si échelle assez faible
 	
@@ -555,6 +561,7 @@ if (is_array($_REQUEST['rq_lei_f_idcat'])) { // s'il y des valeurs sélectionnées
 	}
 }
 $tabLD=array(0=>"Aucun")+$tabLD;
+$DispMsg=false; // n'affiche pas la mention en bas de la liste déroulante
 $smarty->assign('LD_filt_pts_LEI',DispLD($tabLD,"rq_lei_f_idcat","yes","",false));
 
 // nbre max de traces affichées dans la liste

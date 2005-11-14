@@ -18,11 +18,17 @@ $lang = array(
 "CE3Down" => "T&eacute;l&eacute;charger au format CE3 (trk)",
 "CE3Down2" => "T&eacute;l&eacute;charger le parcours pour exploitation dans CartoExplorer3",
 "ParcMoreInfos" => "Informations complètes sur ce parcours",
+"0Lparc" => "Aucun parcours ne correspond aux critères ! Essayant-en des moins restrictifs",
 "MoreDet" => "+ d'infos",
 "MoreDet2" => "Plus d'informations sur ce parcours",
 "ParcZoom" => "Ajuster la carte autour de ce parcours et en affiche les informations détaillées",
 "Affichage" => "Position et taille de la carte",
-
+"Legenscan100" => "Legende du fond de carte (IGN scan 100)",
+"LLegenscan100" => "Legende du fond de carte",
+"LEIPointsSel" => "Infos pratiques, hébergements, patrimoine...",
+"LEIComment" => "Sélectionner une (ou plusieurs en maintenant la touche Ctrl enfoncée) catégorie(s) pour afficher les pictos correspondants sur la carte; cliquer sur un des pictos ouvrira une fenêtre avec une fiche détaillée",
+"LEIPointsInfo" => "Affiche des points correspondant aux services, hébergements, restaurants... Informations en provenance du LEI, la base de données du Comité régional du Tourisme du Limousin",
+"ptime" => "Le temps de parcours estimé est de ",
 "###end###" => "###end###"
 );
 ?>
