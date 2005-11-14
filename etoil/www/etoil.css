@@ -29,7 +29,8 @@ h1 a {
 ul {
 	margin : 0;
 }
-small { font-size : 10pt;}
+small { font-size : 10pt;
+	font-weight:normal;}
 a {
 	color : #008000;
 	font-weight : bold;
@@ -61,7 +62,7 @@ a:hover {
 .headbarWI {
 	height : 0px;
 	background-color : #dff1d3;
-	margin : 0;
+	margin : 0;$PYAObj->EchoEdit
 	border-left : 1px solid #000;
 	overflow : hidden;
 }
@@ -78,7 +79,8 @@ a:hover {
 	border-collapse : collapse;
 	min-height : 300px;
 }
-.admin {
+.admin {	border-bottom : 1px solid #000;
+
 	background-color : #fec;
 }
 .cartouche {
@@ -87,6 +89,13 @@ a:hover {
 .button {
 	color : #fff;
 	background-color : #008000; 
+	border-bottom-color : #dff1d3;
+	border-right-color : #dff1d3;
+}
+
+.redbutton {
+	color : #fff;
+	background-color : #800000; 
 	border-bottom-color : #dff1d3;
 	border-right-color : #dff1d3;
 }
@@ -171,8 +180,8 @@ a:hover {
 }
 .table {
 	border-spacing : 0;
-	border-left : 1px solid #000;
-	border-right : 1px solid #000;
+/*	border-left : 1px solid #000;
+	border-right : 1px solid #000; */
 }
 .table th {
 	background-color : #242;
@@ -180,21 +189,28 @@ a:hover {
 	font-weight : bold;
 	text-align : left;
 }
-.table tr {
-	background-color : transparent;
+.table td {
+	border-left : thin solid #242;
+	border-bottom : thin solid #242;
+	padding: 5px;
 }
+
+.table td:last-child {
+	border-right : thin solid #242;}
+
 /*.table tr:hover {
-	background-color : #fe7;*/
-}
-.table tr td {
-	border-top : 1px solid #000;
+	background-color : #fe7;
 }
 .table tr:last-child td {
 	border-bottom : 1px solid #000;
-}
+}*/
+
 .table td, .table th {
 	padding : 0px 7px;
 }
+
+.colattribut {background-color : #fe7;
+	font-weight : bold;}
 
 .toolfocus {
 	background-color : #dff1d3;
@@ -250,7 +266,7 @@ a:hover {
 	font-size : 12px;
 }
 .ldlei select, .ldlei small{
-	font-size : 9px;
-	width : 210px;
-	height : 200px;
+	font-size : 11px;
+	width : 250px;
+	height : 240px;
 }

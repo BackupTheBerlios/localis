@@ -21,6 +21,8 @@ require_once (PROOT.'libs/etoil.lib.php');
 include_once("fonctions.php");
 include_once PROOT."/db/local.php";
 $_SESSION['db_type']="pgsql";
+$_SESSION['DBHost'] = $dbhost;
+$_SESSION['DBName'] = $dbname;
 
 /* --------------------------------------------------------------- */
 if (isset($_REQUEST['lang']) and is_file(PROOT."lang/".$_REQUEST['lang'].".php")) {

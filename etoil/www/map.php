@@ -3,6 +3,7 @@ $title = "Cartographie";
 $db = true;
 include("setup.php");
 
+//debug ("_REQUEST");
 //debug ("_SESSION");
 
 checkfontlist(PROOT."/maps");
@@ -244,7 +245,8 @@ $extmaxx = floor($e_map->extent->maxx);
 $extmaxy = floor($e_map->extent->maxy);
 // l'extent est ensuite passé par une variable cachée ds map.tpl
 $smarty->assign('extent',urlencode("$extminx $extminy $extmaxx $extmaxy"));
-
+// affichage légende du scan100
+if ($e_map->scale<$minscaledispscan100legend) $smarty->assign('booldisplegscan100',true);
 
 // affichage des parcours
 if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]!="none") {
@@ -284,6 +286,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 	if (!$_SESSION['admin']) $where_parc.=" AND parcours_ouvert=true";
 	// affichage des contours en noir de tous les parcours qqsoit la discipline
 	// ce uniquement si échelle assez faible
+	
 	if ($e_map->scale < $minscaledispextparc) {
 		$e_lay = ms_newLayerObj($e_map);
 		$e_lay->set('name','parcoursline');
