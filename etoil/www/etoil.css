@@ -242,8 +242,10 @@ a:hover {
 .selection select,.selection input[type=submit] {
 	width : 100%;
 }
-.navbar {
-	border : 1px solid #dff1d3;
+.navbar td {
+	width : 150px;
+	height : 40px;
+	border : 2px solid #dff1d3;
 	border-spacing : 0;
 }
 .navbar input[type=radio] {

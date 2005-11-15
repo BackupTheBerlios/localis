@@ -86,39 +86,50 @@ document.f.method="POST";
 </div>
 <div class="foot" style="margin-top:10px;margin-bottom:2px;margin-left:10px;"><a href="{$mapimage}" target="_new" class="submit" {popup text="{tr}TelechImgCol{/tr}"}>{tr}TelechImgC{/tr}</a></div>
 </td>
+
+
 {* colonne de droite tableau principal*}
 
 <td style="padding-left : 10px;">
+
 <div class="bar">{tr}Affichage{/tr}</div>
+
 <table border="0" cellpadding="1" cellspacing="0" id="map">
+<tr><td style="width: 40px; padding-right : 20px;" valign="middle">
+{* zooms et déplacement *}
+<table border="0" cellpadding="2" cellspacing="1" class="navbar">
+<td valign="middle" align="center" class="tool{$focus.zoomout}" id='tool_zoomout'>
+<div {popup text="{tr}Eloigner{/tr} [ Alt-e ]"}><label for="zoomout" accesskey="e"><img src="img/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"></label>
+<input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomout'); if (this.checked) document.f.submit();"/></div></td></tr><tr>
+<td valign="middle" width="25%"  align="center" class="tool{$focus.travel}" id='tool_travel'>
+<div {popup text="{tr}Déplacer{/tr} [ Alt-d ]"}><label for="travel" accesskey="d"><img src="img/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top"></label>
+<input type="radio" id="travel" name="action" value="travel"{if $focus.travel eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_travel')" /></div></td><tr></tr>
+<td valign="middle" align="center" class="tool{$focus.zoomin}" id='tool_zoomin'>
+<div {popup text="{tr}Rapprocher{/tr} [ Alt-r ]"}><label for="zoomin" accesskey="r"><img src="img/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom avant" valign="top"></label>
+<input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomin')" /></div></td>
+</td></tr></table></td>
+
 {* carte de localisation *}
-<tr><td valign="top" align="center">
-<input type="image" src="{$refsrc}" width="{$refwidth}" height="{$refheight}" name="ref" alt="{$name}" hspace="0" vspace="0" border="0"><img 
-src="img/francepti.jpg" width="100" height="100" border="0" />
-<br />
+<td valign="top" align="left">
+<input type="image" src="{$refsrc}" width="{$refwidth}" height="{$refheight}" name="ref" alt="{$name}" hspace="0" vspace="0" border="0"><img src="img/francepti.jpg" width="100" height="100" border="0" />
 {* choix de la taille*}
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr><td valign="middle">
-<select name="size" class="submit" id="100" onchange="document.f.resize.value='y' ; document.f.submit();">
+<br/>
+<select name="size" class="submit" id="100" onchange="document.f.resize.value='y' ; document.f.submit();" {popup text="{tr}ImgSize{/tr}"}>
 <option value="240x240"{$sizecheck.240x240}>240x240</option>
 <option value="400x400"{$sizecheck.400x400}>400x400</option>
 <option value="600x600"{$sizecheck.600x600}>600x600</option>
 <option value="800x800"{$sizecheck.800x800}>800x800</option>
 </select>
+&nbsp;&nbsp;&nbsp;
 <input type="image" src="img/expand.png" width="16" height="11" name="fit" value="{tr}Recadrer{/tr}" class="submit" onclick="document.f.extent.value=''; document.f.submit();"
-{popup text="{tr}Recadrer{/tr} [ Alt-c ]"} accesskey="c" />
-</td>
+{popup text="{tr}Recadrer{/tr} [ Alt-c ]"} accesskey="c" /></td>
 </tr>
-</table>
-
-</td></tr>
-<tr><td><img src="img/dot0.png" height="{$blockspc}"></td></tr>
 </table>
 
 <input type="hidden" name="resize" value="n" />
 
 {* recherche par commune *}
-<div class="bar">{tr}Localiser une commune{/tr}</div>
+<div class="smbar">{tr}Localiser une commune{/tr}</div>
 <input type="text" name="ville" value="" style="width:100%;" /><br />
 {if $cities}
 <div class="found">
@@ -136,20 +147,6 @@ src="img/francepti.jpg" width="100" height="100" border="0" />
 {if $pid ne "" }
  <input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />{/if}
  
-<img src="img/dot0.png" height="{$blockspc}">
-<div class="bar">{tr}Navigation{/tr}</div>
-<table border="0" cellpadding="2" cellspacing="1" width="100%" class="navbar">
-<tr>
-<td valign="top" width="25%" align="center" class="tool{$focus.zoomout}" id='tool_zoomout'>
-<div {popup text="{tr}Eloigner{/tr} [ Alt-e ]"}><label for="zoomout" accesskey="e"><img src="img/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"></label>
-<input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomout'); if (this.checked) document.f.submit();"/></div></td>
-<td valign="top" width="25%" align="center" class="tool{$focus.travel}" id='tool_travel'>
-<div {popup text="{tr}Déplacer{/tr} [ Alt-d ]"}><label for="travel" accesskey="d"><img src="img/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top"></label>
-<input type="radio" id="travel" name="action" value="travel"{if $focus.travel eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_travel')" /></div></tD>
-<td valign="top" width="25%" align="center" class="tool{$focus.zoomin}" id='tool_zoomin'>
-<div {popup text="{tr}Rapprocher{/tr} [ Alt-r ]"}><label for="zoomin" accesskey="r"><img src="img/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom avant" valign="top"></label>
-<input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomin')" /></div></td>
-</td></tr></table>
 
 {if $pid eq "" }
 	{* bloc d'outils d'edition, import de tracés(conditionnel, si user non blaireau) *}
