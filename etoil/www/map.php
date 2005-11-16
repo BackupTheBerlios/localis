@@ -245,7 +245,8 @@ $extmaxy = floor($e_map->extent->maxy);
 // l'extent est ensuite passé par une variable cachée ds map.tpl
 $smarty->assign('extent',urlencode("$extminx $extminy $extmaxx $extmaxy"));
 // affichage légende du scan100
-if ($e_map->scale<$minscaledispscan100legend) $smarty->assign('booldisplegscan100',true);
+
+
 
 // affichage des parcours
 if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]!="none") {
@@ -514,6 +515,11 @@ $image = $e_image->saveWebImage();
 $e_ref = $e_map->drawreferencemap();
 $refsrc = $e_ref->saveWebImage('MS_PNG',0,0,-1);
 
+// affichage légende
+if ($e_map->scale < $minscaledispscan100legend) $smarty->assign('booldisplegscan100',true);
+// outil zoom + séléectionné par défaut au dela d'une certaine échelle
+if ($e_map->scale > $minscaledispzoomp) $focus['zoomin'] = "focus";
+
 // reconstitue la légende avec les pictos
 $legends = array();
 for ($i=0; $i<$e_map->numlayers; $i++) {
@@ -560,7 +566,7 @@ if (is_array($_REQUEST['rq_lei_f_idcat'])) { // s'il y des valeurs sélectionnées
 		if (in_array($k,$_REQUEST['rq_lei_f_idcat'])) $tabLD[$k]=$VSLD.$v;
 	}
 }
-$tabLD=array(0=>"Aucun")+$tabLD;
+//$tabLD=array(0=>"Aucun")+$tabLD;
 $DispMsg=false; // n'affiche pas la mention en bas de la liste déroulante
 $smarty->assign('LD_filt_pts_LEI',DispLD($tabLD,"rq_lei_f_idcat","yes","",false));
 

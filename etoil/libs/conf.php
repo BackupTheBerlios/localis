@@ -66,6 +66,7 @@ $refheight=100; //largeur de la carte de reference
 // paramÃ¨tres des tracÃ©s de couches postgis
 // concernant les parcours
 $intparcwdth=3; // Ã©paisseur interne des traits de tracÃ©s
+$minscaledispzoomp=600000; // echelele au dessus de laquelel l'outil zoom + est sélectionné par défaut
 $minscaledispscan100legend=100000; // echelle min a partir de laquelle on affiche la légende de carte scan100
 $minscaledispextparc=100000; // echelle min a partir de laquelle on affiche les contours en noir des traces de parcours
 $minscaledisplabels=100000; // echelle min a partir de laquelle on affiche les labels des parcours 

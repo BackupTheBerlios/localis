@@ -267,6 +267,17 @@ a:hover {
 	background-color : #fff;
 	font-size : 12px;
 }
+
+.optld1 {
+	font-size : 12px;
+	font-weight: bold;
+	}
+
+.optld2 {
+	font-size : 11px;
+	font-weight: bold;
+	}
+
 .ldlei select, .ldlei small{
 	font-size : 11px;
 	width : 250px;

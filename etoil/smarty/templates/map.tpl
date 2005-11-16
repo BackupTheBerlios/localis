@@ -100,13 +100,13 @@ document.f.method="POST";
 <table border="0" cellpadding="2" cellspacing="1" class="navbar">
 <td valign="middle" align="center" class="tool{$focus.zoomout}" id='tool_zoomout'>
 <div {popup text="{tr}Eloigner{/tr} [ Alt-e ]"}><label for="zoomout" accesskey="e"><img src="img/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"></label>
-<input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomout'); if (this.checked) document.f.submit();"/></div></td></tr><tr>
+<input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked" {/if} onchange="toggletool('tool_zoomout'); if (this.checked) document.f.submit();"/></div></td></tr><tr>
 <td valign="middle" width="25%"  align="center" class="tool{$focus.travel}" id='tool_travel'>
 <div {popup text="{tr}Déplacer{/tr} [ Alt-d ]"}><label for="travel" accesskey="d"><img src="img/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top"></label>
-<input type="radio" id="travel" name="action" value="travel"{if $focus.travel eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_travel')" /></div></td><tr></tr>
+<input type="radio" id="travel" name="action" value="travel"{if $focus.travel eq 'focus'} checked="checked" {/if} onchange="toggletool('tool_travel')" /></div></td><tr></tr>
 <td valign="middle" align="center" class="tool{$focus.zoomin}" id='tool_zoomin'>
 <div {popup text="{tr}Rapprocher{/tr} [ Alt-r ]"}><label for="zoomin" accesskey="r"><img src="img/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom avant" valign="top"></label>
-<input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_zoomin')" /></div></td>
+<input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked" {/if} onchange="toggletool('tool_zoomin')" /></div></td>
 </td></tr></table></td>
 
 {* carte de localisation *}
@@ -266,7 +266,7 @@ document.f.method="POST";
 	{tr}TomuchLparc{/tr}
 	{/if}
 	{else}
-	<div class="negative">{tr}0Lparc{/tr}</div>
+	{if $filtre}<div class="negative">{tr}0Lparc{/tr}</div>{/if}
 	{/if}
 	
 	
@@ -295,7 +295,7 @@ document.f.method="POST";
 	
 {* bloc de sélection points du LEI *}
 <img src="img/dot0.png" height="{$blockspc}">
-<div class="bar"  {popup text="{tr}LEIPointsInfo{/tr}"}>{tr}LEIPointsSel{/tr}</div>
+<div class="smbar"  {popup text="{tr}LEIPointsInfo{/tr}"}>{tr}LEIPointsSel{/tr}</div>
 <div class="ldlei">
 {$LD_filt_pts_LEI}</div>
 <small>{tr}LEIComment{/tr}</small>
