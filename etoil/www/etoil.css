@@ -38,7 +38,7 @@ a {
 }
 a:hover {
 	color : #FF0000;
-	background-color : #dedede;
+	background-color : #dff1d3;
 }
 .title {
 	font-size : 12pt;
@@ -73,8 +73,8 @@ a:hover {
 	border-bottom : 1px solid #000;
 }
 .central {
-	padding : 10px;
-	border : 1px solid #000;
+	padding : 5px;
+	border : 1px solid #008000;
 	border-top : 0;
 	border-collapse : collapse;
 	min-height : 300px;
@@ -109,19 +109,20 @@ a:hover {
 	cursor : pointer;
 }
 .nav {
-	width : 144px;
+	width : 120px;
 	margin : 0px;
-	border : 1px solid #aaaaaa;
+	/* border : 1px solid #aaaaaa;*/
 	border-top : 0;
 	border-left : 0;
 	background-image : url("etoil/fond_som.jpg");
 	background-repeat : repeat-y;
 }
+
 .navitem {
 	background-image : url("etoil/puce.png");
 	background-repeat : no-repeat;
 	display : block;
-	padding : 3px 10px 1px 25px;
+	padding : 3px 5px 1px 25px;
 	margin : 0 0 3px 3px;
 }
 .adminlink {

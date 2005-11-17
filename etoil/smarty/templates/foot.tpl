@@ -8,7 +8,6 @@
 <a href="admin-users.php" class="adminlink">Users</a>
 <a href="admin-conf.php" class="adminlink">Conf</a>
 <a href="admin-purge.php?from={$smarty.server.PHP_SELF}" class="adminlink">Purge</a>
-<a href="admin-import.php" class="adminlink">Imports</a>
 <a href="techdata.php" class="adminlink">Tech Data</a>
 {else}
 &nbsp;

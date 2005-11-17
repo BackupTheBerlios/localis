@@ -8,8 +8,8 @@
 </div>
 <br /><br />
 
-<div>Vous êtes : randonneur à pied ou randonneur à cheval ou randonneur à VTT ou randonneur en canoë kayak, et vous souhaitez découvrir ou redécouvrir le
-Limousin. Vous trouverez un outil de création en temps réel de chemins de randonnées quel que soit votre mode de locomotion.</div>
+<div>Vous êtes randonneur à pied, à cheval, en vélo, à VTT ou en canoë kayak, et vous souhaitez découvrir ou redécouvrir le Limousin. <br/><br/>
+E-toil va vous permettre de sélectionner la randonnée de votre choix, et vous donner toutes les informations connexes..</div>
 <br /><br />
 
 {if $bool_map_disp}

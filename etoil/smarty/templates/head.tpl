@@ -5,7 +5,7 @@
 <link rel="StyleSheet" type="text/css" href="etoil.css" />
 <script>
 function toggletool(id) {literal}{{/literal}
-{if $smarty.session.admin && !($smarty.session.pid)}
+{if $smarty.session.admin}
 	document.getElementById('tool_edit').style.border='0';
 	document.getElementById('tool_edit').style.backgroundColor='#fff';
 {/if}
@@ -18,56 +18,16 @@ function toggletool(id) {literal}{{/literal}
 	document.getElementById(id).style.border='1px solid #000';
 	document.getElementById(id).style.backgroundColor='#dff1d3';
 {literal}}{/literal}
-{literal}
-var oPopupWin; // stockage du handle de la popup
-function popup(page, width, height) {
-    NavVer=navigator.appVersion;
-    var defwidth='400';
-    var defheight='500';
-    if (NavVer.indexOf("MSIE 5.5",0) == -1 && NavVer.indexOf("MSIE 6.",0) == -1) {
-        var undefined;
-        undefined='';
-        }
-
-    var tmp;
-    if (oPopupWin) {
-        // Make sure oPopupWin is empty before
-        // calling .close() or we could throw an
-        // exception and never set it to null.
-        tmp = oPopupWin;
-        oPopupWin = null;
-        // Only works in IE...  Netscape crashes
-        // if you have previously closed it by hand
-        if (navigator.appName != "Netscape") tmp.close();
-      }
-  if (width==undefined)
-  width=defwidth;
-  if (height==undefined)
-  height=defheight;
-    oPopupWin = window.open(page, "IntlPopup", "alwaysRaised=1,dependent=1,height=" + height + ",location=0,menubar=0,personalbar=0,scrollbars=1,status=0,toolbar=0,width=" + width + ",resizable=1");
-	oPopupWin.focus();
-	// valeur de retour différente suivant navigateur (merdique a souhait) !!!
-	var bAgent = window.navigator.userAgent;
-	var bAppName = window.navigator.appName;
-	if ((bAppName.indexOf("Explorer") >= 0) && (bAgent.indexOf("Mozilla/3") >= 0) && (bAgent.indexOf("Mac") >= 0))
-		return true; // dont follow link
-	else return false; // dont follow link
-	//return !oPopupWin;
-
-}
-
-{/literal}
-
 </script>
 </head>
 <body>
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
-<tr><td width="145">
+<tr><td width="125">
 {include file="nav.tpl"}
 </td>
 <td colspan="2">
 <div class="headbar{if $title==Cartographie}WI{/if}">
-{* les images de fond sont dans la classe, et il n'y a en pas pour la carto (WI=without images) *}
+
 </div>
 
 <div class="title">{if $langs}
@@ -81,9 +41,8 @@ function popup(page, width, height) {
 </span>
 {/if}
 {if $title}
-{tr}{$title}{/tr}
-{/if}
-</div>
+<a href="{$url}">{tr}{$title}{/tr}</a>
+{/if}</div>
 
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" style="clear:both;">
