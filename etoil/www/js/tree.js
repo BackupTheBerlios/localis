@@ -41,17 +41,17 @@ function HasLegend(node)
 // Loads all icons that are used in the tree
 function preloadIcons() {
     icons[0] = new Image();
-    icons[0].src = "gfx/tree/plus.png";
+    icons[0].src = "img/jstree/plus.gif";
     icons[1] = new Image();
-    icons[1].src = "gfx/tree/plusbottom.gif";
+    icons[1].src = "img/jstree/plusbottom.gif";
     icons[2] = new Image();
-    icons[2].src = "gfx/tree/minus.png";
+    icons[2].src = "img/jstree/minus.gif";
     icons[3] = new Image();
-    icons[3].src = "gfx/tree/minusbottom.gif";
+    icons[3].src = "img/jstree/minusbottom.gif";
     icons[4] = new Image();
-    icons[4].src = "gfx/tree/folder.gif";
+    icons[4].src = "img/jstree/folder.gif";
     icons[5] = new Image();
-    icons[5].src = "gfx/tree/folderopen.gif";
+    icons[5].src = "img/jstree/folderopen.gif";
 }
 // Create the tree
 function createTree(arrName, startNode, openNode) {
@@ -61,18 +61,19 @@ function createTree(arrName, startNode, openNode) {
         if (startNode == null) startNode = 0;
         if (openNode != 0 || openNode != null) setOpenNodes(openNode);
         
-        if (startNode !=0) {
+        /*if (startNode !=0) {
             var nodeValues = nodes[getArrayId(startNode)].split("|");
             document.write("<a href=\"" + nodeValues[3] + 
                            "\" onmouseover=\"window.status='" + nodeValues[2] + 
                            "';return true;\" onmouseout=\"window.status=' ';" 
-                           + "return true;\"><img src=\"gfx/tree/folderopen.gif\" " +
+                           + "return true;\"><img src=\"img/jstree/folderopen.gif\" " +
                            "align=\"absbottom\" alt=\"\" />" + 
                            nodeValues[2] + "</a><br />");
-        } else document.write("<img src=\"gfx/tree/icon_eye.png\" " +
+        } else document.write("<img src=\"img/jstree/folderopen.gif\" " +
                               "align=\"absbottom\" alt=\"\" /> Légende<br />");
         
-        var recursedNodes = new Array();
+        */
+	var recursedNodes = new Array();
         
         addNode(startNode, recursedNodes);
     }
@@ -155,13 +156,15 @@ function addNode(parentNode, recursedNodes) {
             var isLegend = nodeValues[7];
             var isOutOfScale = nodeValues[8];   	    
 
+	    if (nodeIcon == "") nodeIcon = "img/jstree/folder.gif";
+	    
             // Write out line & empty icons
             for (g=0; g<recursedNodes.length; g++) {
                 if (recursedNodes[g] == 1) 
-                    document.write("<td background=\"gfx/tree/line.gif\" valign=top><img src=\"gfx/tree/line.gif\" " +
+                    document.write("<td background=\"img/jstree/line.gif\" valign=top><img src=\"img/jstree/line.gif\" " +
                                    "align=\"absbottom\" alt=\"\" />");
                 else  
-                    document.write("<td><img src=\"gfx/tree/empty.gif\" " +
+                    document.write("<td><img src=\"img/jstree/empty.gif\" " +
                                    "align=\"absbottom\" alt=\"\" />");
             }
             document.write("</td>")
@@ -175,24 +178,24 @@ function addNode(parentNode, recursedNodes) {
                 if (ls) {
                     document.write("<td valign=top><a href=\"javascript: oc('" + nodeId + 
                                    "', 1);\"><img id=\"join" + nodeId + 
-                                   "\" src=\"gfx/tree/");
+                                   "\" src=\"img/jstree/");
                     if (ino) document.write("minus");
                     else document.write("plus");
                     document.write("bottom.gif\" border=0 align=\"absbottom\" " +
                                    "alt=\"Open/Close node\" /></a>");
                 } else {
-                    document.write("<td background=\"gfx/tree/line.gif\" valign=top ><a href=\"javascript: oc('" + nodeId + 
+                    document.write("<td background=\"img/jstree/line.gif\" valign=top ><a href=\"javascript: oc('" + nodeId + 
                                    "', 0);\"><img id=\"join" + nodeId + 
-                                   "\" src=\"gfx/tree/");
+                                   "\" src=\"img/jstree/");
                     if (ino) document.write("minus");
                     else document.write("plus");
-                    document.write(".png\" border=0 align=\"absbottom\" " + 
+                    document.write(".gif\" border=0 align=\"absbottom\" " + 
                                    "alt=\"Open/Close node\" /></a>");
                 }
             } else {
-                if (ls) document.write("<td valign=top><img src=\"gfx/tree/join.gif\" " + 
+                if (ls) document.write("<td valign=top><img src=\"img/jstree/join.gif\" " + 
                                        "align=\"absbottom\" alt=\"\" />");
-                else document.write("<td background=\"gfx/tree/line.gif\" valign=top><img src=\"gfx/tree/joinbottom.gif\" " + 
+                else document.write("<td background=\"img/jstree/line.gif\" valign=top><img src=\"img/jstree/joinbottom.gif\" " + 
                                     "align=\"absbottom\" alt=\"\" />");
             }
             document.write("</td>")

@@ -2,6 +2,30 @@
 {popup_init src="js/overlib.js"}
 
 {literal}
+<script language="Javascript" type="text/javascript" src="js/tree.js"></script>
+<script language="Javascript" type="text/javascript">
+
+   var Tree = new Array;
+   
+   {/literal}
+   {$tree_lei}
+   {literal}
+
+   
+   // nodeId | parentNodeId | nodeName | nodeUrl
+
+/*Tree[0] = "RP||Renseignements pratiques||/etoil/p_services.gif||closed||";
+Tree[1] = "service|RP|Services||img/jstree/folder.gif|img/jstree/folderopen.gof|closed||";
+Tree[2] = "st|service|station es||img/jstree/folder.gif|1|closed||";
+Tree[3] = "stg|service|station gpl|||1|closed||";
+Tree[16] = "lfrance-dep|lfrance-adm|Limites départementales||http://cartoserver.ifn.fr/cartogfx/ifn87_dep_0.png|checked|closed||";
+Tree[17] = "lfrance-reg|lfrance-adm|Régions||http://cartoserver.ifn.fr/cartogfx/ifn87_reg_0.png|checked|closed||";
+*/
+
+</script>
+
+
+
 <script language="JavaScript">
 
 // cette fonction est appelée quand on vuet télécharger (uploader) un fichier
@@ -77,7 +101,7 @@ document.f.method="POST";
 {/foreach}
 </tr></table>
 {* aff. echelle *}
-<div class="foot" style="margin-left:10px;" id="light">Echelle: {$scale} 
+<div class="foot" style="margin-left:10px;" id="light">{tr}Scale{/tr}: 1 / {$scale} 
 {if $booldisplegscan100}
 &nbsp;&nbsp;&nbsp;<a href="#legend">->{tr}LLegenscan100{/tr}</a>
 {/if}
@@ -95,7 +119,7 @@ document.f.method="POST";
 <div class="bar">{tr}Affichage{/tr}</div>
 
 <table border="0" cellpadding="1" cellspacing="0" id="map">
-<tr><td style="width: 40px; padding-right : 20px;" valign="middle">
+<tr><td valign="middle">
 {* zooms et déplacement *}
 <table border="0" cellpadding="2" cellspacing="1" class="navbar">
 <td valign="middle" align="center" class="tool{$focus.zoomout}" id='tool_zoomout'>
@@ -117,6 +141,7 @@ document.f.method="POST";
 <select name="size" class="submit" id="100" onchange="document.f.resize.value='y' ; document.f.submit();" {popup text="{tr}ImgSize{/tr}"}>
 <option value="240x240"{$sizecheck.240x240}>240x240</option>
 <option value="400x400"{$sizecheck.400x400}>400x400</option>
+<option value="500x500"{$sizecheck.500x500}>500x500</option>
 <option value="600x600"{$sizecheck.600x600}>600x600</option>
 <option value="800x800"{$sizecheck.800x800}>800x800</option>
 </select>
@@ -130,7 +155,7 @@ document.f.method="POST";
 
 {* recherche par commune *}
 <div class="smbar">{tr}Localiser une commune{/tr}</div>
-<input type="text" name="ville" value="" style="width:100%;" /><br />
+<input type="text" name="ville" value="" style="width:80%;" /><br />
 {if $cities}
 <div class="found">
 {section name=o loop=$cities}
@@ -296,10 +321,17 @@ document.f.method="POST";
 {* bloc de sélection points du LEI *}
 <img src="img/dot0.png" height="{$blockspc}">
 <div class="smbar"  {popup text="{tr}LEIPointsInfo{/tr}"}>{tr}LEIPointsSel{/tr}</div>
-<div class="ldlei">
-{$LD_filt_pts_LEI}</div>
-<small>{tr}LEIComment{/tr}</small>
-<input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />
+{* ancienne liste déroulante <div class="ldlei">
+{$LD_filt_pts_LEI}</div>*}
+
+<div class="dtree" id="tree">
+                  <script type="text/javascript">
+                    <!--
+                    createTree(Tree, 0, null);
+                    //-->
+                  </script>
+
+<br/><input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}"/>
 
 
 </td></tr></table> {* fin du grand tableau général de colonnes *}

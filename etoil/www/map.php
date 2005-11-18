@@ -2,6 +2,7 @@
 $title = "Cartographie";
 $db = true;
 include("setup.php");
+include_once(PROOT."/libs/lei_fct.inc"); // fonctions php
 //debug ("_REQUEST");
 //debug ("_SESSION");
 
@@ -51,6 +52,16 @@ if ($_SESSION['pid']) {
 $discp_c=$_SESSION['discp_c'];
 
 
+$lei_obj=new lei_acc;
+/* !!!! C'EST LA  QU'ON INITIALISEE
+le tableau $tb_lei_selidcat
+*/
+ 
+$smarty->assign('tree_lei',$lei_obj->ret_tb_cat_lei());
+
+$tb_lei_selidcat=$lei_obj->tbselcats;
+
+print_r ($tb_lei_selidcat);
 
 if (isset($_REQUEST['rq_lei_f_idcat'])) {
 	$_SESSION['rq_lei_f_idcat'] = $_REQUEST['rq_lei_f_idcat'];
@@ -400,12 +411,12 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 $bool_lei=true;
 $where_lei_f="";
 	$where_lei_f='';
-	foreach ($_REQUEST['rq_lei_f_idcat'] as $idcat) {
+	foreach ($tb_lei_selidcat as $idcat) {
 		if ($idcat==0) $bool_lei=false;
 		$where_lei_f.= "lei_f_idcat=$idcat OR ";
 	}
 	if ($where_lei_f!='') $where_lei_f=substr($where_lei_f,0, strlen($where_lei_f) -4); // enlève le dernier " OR "
-
+print_r($where_lei_f);
 if ($bool_lei && $where_lei_f!="") {
 	$lei_lay = ms_newLayerObj($e_map);
 	$lei_lay->set('name','lei_fiche');
@@ -422,11 +433,13 @@ if ($bool_lei && $where_lei_f!="") {
 	$lei_lay->set('classitem','lei_f_idcat');
 	
 	$i=0;	
-	foreach ($_REQUEST['rq_lei_f_idcat'] as $idcat) {
+	foreach ($tb_lei_selidcat as $idcat) {
 		$lei_cla[$i] = ms_newClassObj($lei_lay);
 		$lei_cla[$i]->setExpression($idcat);
 		$lei_sty[$i] = ms_newStyleObj($lei_cla[$i]);
-		$lei_sty[$i]->set("symbolname",RecupLib("lei_categ","lei_cat_id", "lei_cat_symb", $idcat));
+		$lei_sty[$i]->set("symbolname","hotel_L");
+		
+		//$lei_sty[$i]->set("symbolname",RecupLib("lei_categ","lei_cat_id", "lei_cat_symb", $idcat));
 		
 		$lei_stylab[$i] = ms_newStyleObj($lei_cla[$i]);
 		if (isset($e_map->scale) &&  $e_map->scale < $minscaledisp_leilabs && $e_map->scale!=-1) {
@@ -552,6 +565,8 @@ if ($bool_lei && $where_lei_f!="") {
 }
 //debug("ppmplei");
 
+/* ANCIENNE METHODE SELECT LEI AVEC LISTE DEROULANTE A CHOIX MULTIPLES
+fait maintenant par ret_tb_cat_lei()
 // nouvel objet pour sélection liste déroulante points LEI
 $ObjSeLEI=new PYAobj();
 $ObjSeLEI->NmBase=$dbname;
@@ -568,7 +583,9 @@ if (is_array($_REQUEST['rq_lei_f_idcat'])) { // s'il y des valeurs sélectionnées
 }
 //$tabLD=array(0=>"Aucun")+$tabLD;
 $DispMsg=false; // n'affiche pas la mention en bas de la liste déroulante
-$smarty->assign('LD_filt_pts_LEI',DispLD($tabLD,"rq_lei_f_idcat","yes","",false));
+*/
+
+//$smarty->assign('LD_filt_pts_LEI',DispLD($tabLD,"rq_lei_f_idcat","yes","",false));
 
 // nbre max de traces affichées dans la liste
 $maxdisptracks=($_SESSION['admin'] ? 100 : 20);

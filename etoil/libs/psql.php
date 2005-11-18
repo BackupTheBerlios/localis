@@ -14,7 +14,6 @@ if (!$db->conn) {
 
 class db {
 
-
 	var $conn;
 	var $mes = array();
 	var $connstr;

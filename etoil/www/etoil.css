@@ -62,16 +62,16 @@ a:hover {
 .headbarWI {
 	height : 0px;
 	background-color : #dff1d3;
-	margin : 0;$PYAObj->EchoEdit
+	margin : 0;
 	border-left : 1px solid #000;
 	overflow : hidden;
 }
-.leftbar {
+/*.leftbar {
 	width : 139px;
 	background-image : url("etoil/bandeau_vert.jpg");
 	background-repeat : repeat-y;
 	border-bottom : 1px solid #000;
-}
+}*/
 .central {
 	padding : 5px;
 	border : 1px solid #008000;
@@ -122,9 +122,14 @@ a:hover {
 	background-image : url("etoil/puce.png");
 	background-repeat : no-repeat;
 	display : block;
-	padding : 3px 5px 1px 25px;
+	padding : 3px 5px 1px 22px;
 	margin : 0 0 3px 3px;
 }
+
+.noroll a:hover 
+	{background-color : red;
+}
+
 .adminlink {
 	background-color : #fff;
 	padding : 0px 5px;
@@ -181,8 +186,8 @@ a:hover {
 }
 .table {
 	border-spacing : 0;
-/*	border-left : 1px solid #000;
-	border-right : 1px solid #000; */
+/*	border-left : 5px solid #000;
+	border-right : 5px solid #000; */
 }
 .table th {
 	background-color : #242;
@@ -244,8 +249,7 @@ a:hover {
 	width : 100%;
 }
 .navbar td {
-	width : 150px;
-	height : 40px;
+	width : 20px;
 	border : 2px solid #dff1d3;
 	border-spacing : 0;
 }
@@ -281,6 +285,42 @@ a:hover {
 
 .ldlei select, .ldlei small{
 	font-size : 11px;
-	width : 250px;
+	width : 230px;
 	height : 240px;
+}
+
+/*--------------------------------------------------|
+| dTree 2.05 | www.destroydrop.com/javascript/tree/ |
+|---------------------------------------------------|
+| Copyright (c) 2002-2003 Geir Landrö               |
+|--------------------------------------------------*/
+
+.dtree, .dtree table, .dtree tbody, .dtree td{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #008000;
+	white-space: nowrap;
+}
+.dtree img {
+	border: 0px;
+	vertical-align: middle;
+}
+.dtree a, .dtree a:hover {
+	color: #333;
+	text-decoration: none;
+}
+
+.dtree a.node, .dtree a.nodeSel {
+	white-space: nowrap;
+	padding: 1px 2px 1px 2px;
+}
+.dtree a.node:hover, .dtree a.nodeSel:hover {
+	color: #333;
+	text-decoration: underline;
+}
+.dtree a.nodeSel {
+	background-color: #c0d2ec;
+}
+.dtree .clip {
+	overflow: hidden;
 }

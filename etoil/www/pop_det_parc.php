@@ -16,7 +16,7 @@ $tbValChp=db_fetch_array($req);
 // maintenant ces infos sont stockées en base, plutot qu ede les recalculer à chaque fois ...
 $smarty->assign('parc_name',$tbValChp['parcours_name']);
 $smarty->assign('parc_length',$tbValChp['parcours_length']);
-$smarty->assign('parc_time',($tbValChp['parcours_time']>0 ? $tbValChp['parcours_time'] : floor($tbValChp['parcours_length']/$_SESSION['vit_moy']/100)/10));
+$smarty->assign('parc_time',($tbValChp['parcours_time']>0 ? $tbValChp['parcours_time'] : floor($tbValChp['parcours_length']/$_SESSION['vitmoy']/100)/10));
 $smarty->assign('denivtot',$tbValChp['parcours_deniv']);
 
 // on ne refait les req geomatiques qu'n édition du parcours

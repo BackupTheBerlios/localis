@@ -11,6 +11,7 @@
 <input type="password" name="pass" value="" onfocus="this.select()" /><br />
 <input type="submit" name="act" value="{tr}Login{/tr}" />
 </form>
+<br/><br/><a href="register.php" class="">{tr}Nouveau compte{/tr}</a>
 </div>
 <script type="text/javascript" language="javascript">
 {literal}

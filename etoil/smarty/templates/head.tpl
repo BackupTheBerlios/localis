@@ -61,33 +61,36 @@ function popup(page, width, height) {
 </script>
 </head>
 <body>
-<table cellpadding="0" cellspacing="0" border="0" width="100%">
-<tr><td width="145">
+<table cellpadding="0" cellspacing="0" border="0" width="98%">
+<tr><td width="120">
 {include file="nav.tpl"}
 </td>
-<td colspan="2">
+<td>
 <div class="headbar{if $title==Cartographie}WI{/if}">
 {* les images de fond sont dans la classe, et il n'y a en pas pour la carto (WI=without images) *}
 </div>
 
-<div class="title">{if $langs}
+<div class="title">
 <span style="float:right;padding-top:2px;font-size:7pt;">
-{foreach item=l from=$langs}{if $language eq $l}
-<a href="{$phpself}?lang={$l}"><img src="img/{$l}.png" width="18" height="12" vspace="0" hspace="0" alt="{$l}" border="3" /></a>
-{else}
-<a href="{$phpself}?lang={$l}"><img src="img/{$l}.png" width="18" height="12" vspace="2" hspace="2" alt="{$l}" border="1" /></a>
+{if $smarty.session.me}
+<small>{tr}IdConn{/tr}: <b>{$smarty.session.me}</b></small>&nbsp;&nbsp;&nbsp;
 {/if}
-{/foreach}
+{if $langs}
+	{foreach item=l from=$langs}
+		{if $language eq $l}
+			<a href="{$phpself}?lang={$l}"><img src="img/{$l}.png" width="18" height="12" vspace="0" hspace="0" alt="{$l}" border="3" /></a>
+		{else}
+			<a href="{$phpself}?lang={$l}"><img src="img/{$l}.png" width="18" height="12" vspace="2" hspace="2" alt="{$l}" border="1" /></a>
+		{/if}
+	{/foreach}
+{/if}
 </span>
-{/if}
 {if $title}
 {tr}{$title}{/tr}
 {/if}
+
 </div>
 
-
-<table width="100%" border="0" cellpadding="0" cellspacing="0" style="clear:both;">
-<tr><td>
 
 {if count($feedback)}{include file="inc.feedback.tpl"}{/if}
 

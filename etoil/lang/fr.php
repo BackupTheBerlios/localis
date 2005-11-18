@@ -1,10 +1,14 @@
 <?php
 $lang = array(
+"Accueil"=>"Retour à la page d'accueil",
 "titre" => "",
 "Aide" => "",
+"FAQ" => "FAQ",
+"FAQol" => "Foire aux questions",
 "Votre login" => "",
 "Contact" => "",
 "utilisateur" => "",
+"IdConn" => "Vous êtes connecté avec l'Id ",
 "Det_parcours" => "Détails sur le parcours",
 "TomuchLparc" =>"Il y a trop de parcours correspondants à vos critères. Veuillez zoomer ou choisir des critères plus restrictifs pour en afficher la liste...",
 "Nom" => "Nom",
@@ -28,9 +32,9 @@ $lang = array(
 "Legenscan100" => "Legende du fond de carte (IGN scan 100)",
 "LLegenscan100" => "Legende du fond de carte",
 "LEIPointsSel" => "Infos pratiques, hébergements, patrimoine...",
-"LEIComment" => "Sélectionner une (ou plusieurs en maintenant la touche Ctrl enfoncée) catégorie(s) pour afficher les pictos correspondants sur la carte; cliquer sur un des pictos ouvrira une fenêtre avec une fiche détaillée",
 "LEIPointsInfo" => "Affiche des points correspondant aux services, hébergements, restaurants... Informations en provenance du LEI, la base de données du Comité régional du Tourisme du Limousin",
 "ptime" => "Le temps de parcours estimé est de ",
+"Scale" => "Echelle ",
 "###end###" => "###end###"
 );
 ?>
