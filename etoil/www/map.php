@@ -5,13 +5,15 @@ include("setup.php");
 include_once(PROOT."/libs/lei_fct.inc"); // fonctions php
 //debug ("_REQUEST");
 //debug ("_SESSION");
-
 checkfontlist(PROOT."/maps");
 //include_once(PROOT."/libs/conf.php"); fait ds le setup
 
 // sur le proto, on n'affiche la carte que si on est loggé avec un profil >=1 et que le code profil
 $bool_map_disp=(!empty($_SESSION['me']) && $_SESSION['profile']>=1 ) || $anonym_disp_maps;
 $smarty->assign('bool_map_disp',$bool_map_disp);
+$smarty->assign('bool_lei_stat',RecupLib("conf","name","value","lei_stat"));
+$smarty->assign('url_lei_stat',RecupLib("conf","name","value","url_lei_stat"));
+
 
 if (isset($_REQUEST['x'])) {
 	$click_x = $_REQUEST['x'];
@@ -61,13 +63,14 @@ $smarty->assign('tree_lei',$lei_obj->ret_tb_cat_lei());
 
 $tb_lei_selidcat=$lei_obj->tbselcats;
 
-print_r ($tb_lei_selidcat);
+//print_r ($tb_lei_selidcat);
 
-if (isset($_REQUEST['rq_lei_f_idcat'])) {
+/*if (isset($_REQUEST['rq_lei_f_idcat'])) {
 	$_SESSION['rq_lei_f_idcat'] = $_REQUEST['rq_lei_f_idcat'];
 } elseif (isset($_SESSION['rq_lei_f_idcat'])) {
 	 $_REQUEST['rq_lei_f_idcat']=$_SESSION['rq_lei_f_idcat'];
-}
+}*/
+
 // ========================================================================
 // special hack: si paramètre spécial spcsc25=tux129 passé en get (par l'url)
 // utilise un fichier map specifique limousinhck.map)
@@ -416,7 +419,7 @@ $where_lei_f="";
 		$where_lei_f.= "lei_f_idcat=$idcat OR ";
 	}
 	if ($where_lei_f!='') $where_lei_f=substr($where_lei_f,0, strlen($where_lei_f) -4); // enlève le dernier " OR "
-print_r($where_lei_f);
+//print_r($where_lei_f);
 if ($bool_lei && $where_lei_f!="") {
 	$lei_lay = ms_newLayerObj($e_map);
 	$lei_lay->set('name','lei_fiche');

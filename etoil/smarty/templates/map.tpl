@@ -61,7 +61,11 @@ document.f.method="POST";
 {*definit des area cliquables sur les pictos des points LEI*}
 {if count($ppmplei)}
 {section name=i loop=$ppmplei}
+{if $bool_lei_stat eq "true"}
+<area href="fiche lei" onclick="return(popup('{$url_lei_stat}'));" name="{$ppmplei[i].lei_f_libelle}" id="{$ppmplei[i].lei_f_id}" shape="rect" coords="{$ppmplei[i].rect}" {popup text=$ppmplei[i].lei_f_libelle|default:" "} />
+{else}
 <area href="fiche lei" onclick="return(popup('{$lei_f_url}{$ppmplei[i].lei_f_id}'));" name="{$ppmplei[i].lei_f_libelle}" id="{$ppmplei[i].lei_f_id}" shape="rect" coords="{$ppmplei[i].rect}" {popup text=$ppmplei[i].lei_f_libelle|default:" "} />
+{/if}
 {/section}
 {/if}
 

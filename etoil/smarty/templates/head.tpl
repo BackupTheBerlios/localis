@@ -61,7 +61,7 @@ function popup(page, width, height) {
 </script>
 </head>
 <body>
-<table cellpadding="0" cellspacing="0" border="0" width="98%">
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
 <tr><td width="120">
 {include file="nav.tpl"}
 </td>
