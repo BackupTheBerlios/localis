@@ -191,6 +191,7 @@ document.f.method="POST";
 	</tr>
 	<tr><TD>&nbsp;</TD><TD colspan="2"><input {popup text="{tr}pas de visu préalable ni de choix de nom{/tr}"} type="checkbox" name="tf_dir_import" value="yes">{tr}Import direct{/tr}</TD></tr>
 	</table>
+	Facteur de zoom :<input type="text" name="zoomc" value="" /><br />
 	
 	{* bloc d'enregistrement/modification de tracé (conditionnel, si user non blaireau) *}
 	<img src="img/dot0.png" height="{$blockspc}">

@@ -23,6 +23,7 @@ if (isset($_REQUEST['x'])) {
 }
 
 if (!isset($_REQUEST['action']))  $_REQUEST['action'] = "travel";
+
 $zoom_factor=1; // défaut
 
 if (isset($_REQUEST['purge']) and $_REQUEST['purge'] == 'all') {
@@ -54,15 +55,16 @@ if ($_SESSION['pid']) {
 $discp_c=$_SESSION['discp_c'];
 
 
-$lei_obj=new lei_acc;
-/* !!!! C'EST LA  QU'ON INITIALISEE
-le tableau $tb_lei_selidcat
-*/
- 
-$smarty->assign('tree_lei',$lei_obj->ret_tb_cat_lei());
-
-$tb_lei_selidcat=$lei_obj->tbselcats;
-
+if ($bool_disp_lay_LEI) {
+	$lei_obj=new lei_acc;
+	/* !!!! C'EST LA  QU'ON INITIALISEE
+	le tableau $tb_lei_selidcat
+	*/
+	
+	$smarty->assign('tree_lei',$lei_obj->ret_tb_cat_lei());
+	
+	$tb_lei_selidcat=$lei_obj->tbselcats;
+}
 //print_r ($tb_lei_selidcat);
 
 /*if (isset($_REQUEST['rq_lei_f_idcat'])) {
@@ -85,6 +87,8 @@ if (!empty($_REQUEST['spcsc25'])) {
 $mapfile=(!empty($_SESSION['spcsc25']) ? PROOT. "/maps/limousinhck.map" : $mapfile);
 
 $e_map = ms_newMapObj($mapfile);
+
+
 // ces paramètres sont récupérés par défaut dans le mapfile static
 // ils seront maj si la variable extent est définie
 // celle-ci est passée en hidden
@@ -133,7 +137,9 @@ $sizecheck["{$sizex}x{$sizey}"] = " selected=\"selected\"";
 $e_map->set('width',$sizex);
 $e_map->set('height',$sizey);
 
-$e_click = ms_newPointObj();
+
+
+$e_click = ms_newPointObj(); // objet de pointage
 $e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par défaut, comme un clic au centre
 
 //print_r($_REQUEST);
@@ -172,6 +178,7 @@ if (isset($_REQUEST['focusville'])) {
 		$m[1] += 1.33 * $sf ; //8100;
 		$m[2] -=  1.33 * $sf; //8000;
 		$e_extent->setextent(floor($m[1] - $sf),floor($m[2] - $sf),floor($m[1] + $sf),floor($m[2] + $sf));
+		$_SESSION['zooml']=$zlfv; // facteur de zoom prédéfini autour d'un focus ville (2)
 	}
 } elseif (isset($_REQUEST['pid'])) {
 	$parcours_info = $db->get_parcours_info($_REQUEST['pid']);
@@ -182,7 +189,7 @@ if (isset($_REQUEST['focusville'])) {
 } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == "zoomout") { // si zoom out, on zoome out sans attendre le click sur la carte, on fait comme si on avait cliqué au centre
 	$click_x=floor($sizex/2);
 	$click_y=floor($sizey/2);
-	$zoom_factor=-2;
+	$zoom_factor=0 - $zoom2x;
 } 
 
 if ($click_x and $click_y) { // click "normal" dans la carte 
@@ -203,16 +210,17 @@ if (isset($_REQUEST['dir_cb_x'])) {$dx= 0;$dy= 1;}
 if (isset($_REQUEST['dir_rb_x'])) {$dx= 1;$dy= 1;}
 
 if ($dx!=0 || $dy!=0) { // clic sur les fleches de dir autour: on simule un clic..
+	$zoom_factor=1;
 	$e_click->setXY(floor(($sizex/2)+($dx*$sizex/$coef_fd)),floor(($sizey/2)+($dy*$sizey/$coef_fd)),0);
 }
 
 $focus = array();
 if (isset($_REQUEST['action'])) {
 	if ($_REQUEST['action'] == "zoomin") {
-		if (isset($map_click)) $zoom_factor=2;
+		if (isset($map_click)) $zoom_factor=$zoom2x;
 		$focus['zoomin'] = "focus";
 	} elseif ($_REQUEST['action'] == "zoomout") {
-		if (isset($map_click)) $zoom_factor=-2;
+		if (isset($map_click)) $zoom_factor=0 - $zoom2x;
 		$focus['zoomout'] = "focus";
 	} elseif ($_REQUEST['action'] == "travel") {
 		$focus['travel'] = "focus";
@@ -250,16 +258,36 @@ if (isset($_REQUEST['ref_x']) or isset($_REQUEST['ref.x'])) {
 	$e_extent->setextent($extminxmf+$refx/$refwidth*($extmaxxmf-$extminxmf)-$wx,$extminymf+(1-$refy/$refheight)*($extmaxymf-$extminymf)-$wy,$extminxmf+$refx/$refwidth*($extmaxxmf-$extminxmf)+$wx,$extminymf+(1-$refy/$refheight)*($extmaxymf-$extminymf)+$wy);
 	}
 // ************************************************************************
-$e_map->zoompoint($zoom_factor,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 
+if ($bool_disp_zoomp) { // choix ancienne méthode de zoom / nouvelle
+	if (empty($_REQUEST['extent']) && empty($_REQUEST['idfocusville'])) {
+		// ancienne méthode, conservée quand recadrage uniquement
+		$e_map->zoompoint($zoom_factor,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+	} else  {
+	// maintenant on se cale sur les niveaux de zoom prédéfinis
+	//void zoomscale(double nScale, pointObj oPixelPos, int nImageWidth, int nImageHeight, rectObj oGeorefExt)
+	
+	$zooml=($_SESSION['zooml']!="" ?  $_SESSION['zooml'] : 0);
+	$zooml=r_zoompref($zooml,$zoom_factor);
+	//debug ("zooml");
+	//debug ("zoom_factor");
+	$_SESSION['zooml']=$zooml;
+	$zoomc=($_REQUEST['zoomc']>0 ? $_REQUEST['zoomc'] : $tbzoomd[$zooml]); // en admin (uniqt) on peut entrer en facteur de zoom
+	$e_map->zoomscale($zoomc,$e_click,$sizex,$sizey,$e_extent);
+	}
+} else $e_map->zoompoint($zoom_factor,$e_click,$sizex,$sizey,$e_extent,$e_limit);
+
+//recalcul du facteur de zoom le plus proche au cas où il ai été zappé
+$_SESSION['zooml']=recalczl($e_map->scale);
+//echo "zooml: ".$_SESSION['zooml'];
+
+// passage de l'extent au map.tpl
 $extminx = floor($e_map->extent->minx);
 $extminy = floor($e_map->extent->miny);
 $extmaxx = floor($e_map->extent->maxx);
 $extmaxy = floor($e_map->extent->maxy);
 // l'extent est ensuite passé par une variable cachée ds map.tpl
 $smarty->assign('extent',urlencode("$extminx $extminy $extmaxx $extmaxy"));
-// affichage légende du scan100
-
 
 
 // affichage des parcours
@@ -524,7 +552,6 @@ if (!empty($_SESSION['track'])) {
 	$e_style3 = ms_newStyleObj($e_class3);
 	$e_style3->set("symbolname",'flag2');
 }
-
 
 $e_image = $e_map->draw();
 $image = $e_image->saveWebImage();

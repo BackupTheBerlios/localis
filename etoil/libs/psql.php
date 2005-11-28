@@ -243,7 +243,7 @@ class db {
 /* ======== info methods  ======= */
 	function get_cities($name,$list_dpts="") { // passer la liste des depts de la région en tre () ep par des ,
 		$name = strtolower(addslashes(trim($name)));
-		$query = "select nom,code_postal,id from communes where (lower(nom) like '$name%' or lower(maj) like '$name%') ".($list_dpts ? " AND floor(code_postal/1000) IN $list_dpts" : "");
+		$query = "select nom,code_postal,id from communes where (lower(nom) like '%$name%' or lower(maj) like '%$name%') ".($list_dpts ? " AND floor(code_postal/1000) IN $list_dpts" : "");
 		return $this->query($query,true);
 	}
 	

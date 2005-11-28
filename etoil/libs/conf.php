@@ -4,7 +4,47 @@ $coef_fd=1.5; // coefficient de déplacement lors du clic sur les flèches de dire
 $mapmargin = 11; // taille de la bordure clicable de navigation perpendiculaire
 $blockspc=7; // espaces entre les blocks de droite
 
+$bool_disp_zoomp=true; // affichage par zoom prédéfinis
 
+$tbzoomd[]=1500000; // rien
+$tbzoomd[]=450000; // jyj
+$tbzoomd[]=300000; // scan 1000
+$tbzoomd[]=180000; // georr 250K
+$tbzoomd[]=70000; // georr 100 K
+$tbzoomd[]=35000; // georr 50K
+$tbzoomd[]=14000; //georr 20K
+$tbzoomd[]=4000; // georr 5K
+
+$nblzoom=count($tbzoomd) - 1;
+$sf = 6000; // distance autour d'une ville lors d'un focus ville
+$zlfv=3; // type de zoom (indice ds tbdzoom) lors d'un focus ville
+
+function recalczl($zoomc) {
+global $tbzoomd;
+$zoomc=round($zoomc,-3);
+for ($i=count($tbzoomd) - 1;$i>=0;$i--) {
+	if ($zoomc <= $tbzoomd[$i]) return ($i);
+	}
+return (0); // au cas où
+}
+
+function r_zoompref($zooml,$zoom_factor) {
+global $nblzoom;
+if ($zoom_factor==1) {
+	$vret= $zooml;
+} elseif ($zoom_factor > 1) {
+	$zooml++;
+	$vret =min($zooml, $nblzoom);
+} elseif ($zoom_factor<0) {
+	$zooml --;
+ 	$vret=max($zooml, 0);
+}
+return($vret);
+}
+
+$zoom2x=2; 
+
+$bool_disp_lay_LEI=true; // affichage de la couche LEI
 $chem_abs_genimgtmp="/usr/local/etoil/www/temp/";
 $chem_web_genimgtmp="/temp/";
 // trucs pour utilisation PYA
@@ -57,7 +97,7 @@ $levels[3] = "3";
 $levels[4] = "4";
 $levels[5] = "5";
 $mapfile = "limousin.map";
-$sf = 6000; // distance autour d'une ville lors d'un focus ville
+
 $deptsregion="(19,23,87)";
 $pcarpc=7; // pourcentage de marge autour d'un parcours lors d'un zoom
 $refwidth=100; //largeur de la carte de reference
