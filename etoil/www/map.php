@@ -3,12 +3,14 @@ $title = "Cartographie";
 $db = true;
 include("setup.php");
 include_once(PROOT."/libs/lei_fct.inc"); // fonctions php
+require_once("dl3tree.inc"); // fichier partagï¿½contenant l'objet permettant de gï¿½ï¿½er des arboresences
+
 //debug ("_REQUEST");
 //debug ("_SESSION");
 checkfontlist(PROOT."/maps");
 //include_once(PROOT."/libs/conf.php"); fait ds le setup
 
-// sur le proto, on n'affiche la carte que si on est loggé avec un profil >=1 et que le code profil
+// sur le proto, on n'affiche la carte que si on est logg? avec un profil >=1 et que le code profil
 $bool_map_disp=(!empty($_SESSION['me']) && $_SESSION['profile']>=1 ) || $anonym_disp_maps;
 $smarty->assign('bool_map_disp',$bool_map_disp);
 $smarty->assign('bool_lei_stat',RecupLib("conf","name","value","lei_stat"));
@@ -24,7 +26,7 @@ if (isset($_REQUEST['x'])) {
 
 if (!isset($_REQUEST['action']))  $_REQUEST['action'] = "travel";
 
-$zoom_factor=1; // défaut
+$zoom_factor=1; // d?faut
 
 if (isset($_REQUEST['purge']) and $_REQUEST['purge'] == 'all') {
 	$_SESSION['track'] = array();
@@ -33,7 +35,7 @@ if (isset($_REQUEST['filtre'])) {
 	$filtre = $_REQUEST['filtre'];
 	$_SESSION['filtre'] = array();
 	foreach ($filtre as $f=>$v) {
-		$_SESSION['filtre'][$f] = $v; // ex: SESSION[filtre][discp]="1" (pédestre)
+		$_SESSION['filtre'][$f] = $v; // ex: SESSION[filtre][discp]="1" (p?destre)
 	}
 	$_SESSION['discp_c']=$_SESSION['filtre']['discp'];
 } elseif (isset($_SESSION['filtre'])) {
@@ -48,7 +50,7 @@ elseif ($_REQUEST['notunique']=="true") unset($_SESSION['pid']);
 
 // mode affichage parcours unique
 if ($_SESSION['pid']) {
-	// inclus ce qui était au départ la popup
+	// inclus ce qui ?tait au d?part la popup
 	include ("pop_det_parc.php");
 }
 
@@ -56,14 +58,27 @@ $discp_c=$_SESSION['discp_c'];
 
 
 if ($bool_disp_lay_LEI) {
-	$lei_obj=new lei_acc;
-	/* !!!! C'EST LA  QU'ON INITIALISEE
-	le tableau $tb_lei_selidcat
-	*/
-	
-	$smarty->assign('tree_lei',$lei_obj->ret_tb_cat_lei());
-	
-	$tb_lei_selidcat=$lei_obj->tbselcats;
+		$LEI_Tree=new dltreeObj;
+		$ChemImgTree="img/jstree/";
+		$LEI_Tree->dispckbox=true;
+		$LEI_Tree->imgfopen=$ChemImgTree.'folderOpen.gif'; // nom des fichiers images symoles
+		$LEI_Tree->imgfcloseplus =$ChemImgTree.'folderClosedplus.gif';
+		$LEI_Tree->imgfclose =$ChemImgTree.'folderClosed.gif';
+
+		//$GLOBALS["TSFE"]->setJS("toto","alert('coucoui')");
+		// d?claration des variables JS
+		
+		$smarty->assign('DL3TJSVarsInit',$LEI_Tree->echDL3TJSVarsInit(true));
+		// d?claration des fonctions JS
+		$smarty->assign('DL3TJSFunctions',$LEI_Tree->echDL3TJSFunctions(true));
+		// d?claration des styles CSS
+		$smarty->assign('DL3TStyles',$LEI_Tree->echDL3TStyles(true));
+
+		$lei_obj=new lei_acc; // nouvel objet d'acces LEI
+		$lei_obj->GenLeiCatTree(&$LEI_Tree);
+		
+		$smarty->assign('DL3TJStbChilds',$LEI_Tree->echDL3TJStbChilds(true));
+		$smarty->assign('tree_lei',$lei_obj->strTree);
 }
 //print_r ($tb_lei_selidcat);
 
@@ -74,7 +89,7 @@ if ($bool_disp_lay_LEI) {
 }*/
 
 // ========================================================================
-// special hack: si paramètre spécial spcsc25=tux129 passé en get (par l'url)
+// special hack: si param?tre sp?cial spcsc25=tux129 pass? en get (par l'url)
 // utilise un fichier map specifique limousinhck.map)
 $mapfile = PROOT. "/maps/$mapfile";
 
@@ -89,15 +104,15 @@ $mapfile=(!empty($_SESSION['spcsc25']) ? PROOT. "/maps/limousinhck.map" : $mapfi
 $e_map = ms_newMapObj($mapfile);
 
 
-// ces paramètres sont récupérés par défaut dans le mapfile static
-// ils seront maj si la variable extent est définie
-// celle-ci est passée en hidden
+// ces param?tres sont r?cup?r?s par d?faut dans le mapfile static
+// ils seront maj si la variable extent est d?finie
+// celle-ci est pass?e en hidden
 $extminx = $extminxmf = $e_map->extent->minx;
 $extminy = $extminymf = $e_map->extent->miny;
 $extmaxx = $extmaxxmf = $e_map->extent->maxx;
 $extmaxy = $extmaxymf = $e_map->extent->maxy;
 
-// fonction qui désactivait dans le mapfile toutes les couches qui
+// fonction qui d?sactivait dans le mapfile toutes les couches qui
 // ne font pas partie du groupe "fond"
 // Pourquoi ?????
 /*$lay = array("fond");
@@ -140,21 +155,21 @@ $e_map->set('height',$sizey);
 
 
 $e_click = ms_newPointObj(); // objet de pointage
-$e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par défaut, comme un clic au centre
+$e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par d?faut, comme un clic au centre
 
 //print_r($_REQUEST);
 if (!empty($_FILES['trackfileimp']['name'])) {
 //debug("_FILES");
 echo (import_track($_FILES['trackfileimp']['tmp_name'],"trk","wgs84"));
 
-unlink($_FILES['trackfileimp']['tmp_name']); // efface le fichier téléchargé
+unlink($_FILES['trackfileimp']['tmp_name']); // efface le fichier t?l?charg?
 }
 
-// recherche des villes correspondant aux critères
+// recherche des villes correspondant aux crit?res
 if (!empty($_REQUEST['ville'])) {
-	$cities = $db->get_cities($_REQUEST['ville'],$deptsregion); // filtre rajouté pour les depts de la région
+	$cities = $db->get_cities($_REQUEST['ville'],$deptsregion); // filtre rajout? pour les depts de la r?gion
 	if (!$cities or count($cities) == 0) {
-		$feedback[] = array('num'=>-1,'msg'=>sprintf(tra('Désolé, aucun nom de ville en Limousin ne commence par %s.'),$_REQUEST['ville']));
+		$feedback[] = array('num'=>-1,'msg'=>sprintf(tra('D?sol?, aucun nom de ville en Limousin ne commence par %s.'),$_REQUEST['ville']));
 	} elseif (count($cities) == 1) {
 		$_REQUEST['focusville'] = $cities[0]['nom'];
 		$_REQUEST['idfocusville'] = $cities[0]['id'];
@@ -163,22 +178,22 @@ if (!empty($_REQUEST['ville'])) {
 		$smarty->assign('cities',$cities);
 	}
 }
-$action_OK=false; // par défaut, l'action(zoom, travel) qui a le focus n'est PAS appliquée
+$action_OK=false; // par d?faut, l'action(zoom, travel) qui a le focus n'est PAS appliqu?e
 // il peut y avoir plein d'autres actions (recherche, resize, etc ..)
 
 if (isset($_REQUEST['focusville'])) {
 	$city_info = $db->get_city_info($_REQUEST['idfocusville']);
 	if (!$city_info) {
-		$feedback[] = array('num'=>-1,'msg'=>sprintf(tra('Désolé, aucun nom de ville en Limousin ne correspond à %s.'),$_REQUEST['focusville']));
+		$feedback[] = array('num'=>-1,'msg'=>sprintf(tra('D?sol?, aucun nom de ville en Limousin ne correspond ? %s.'),$_REQUEST['focusville']));
 	} else {
 		$smarty->assign('city_info',$city_info);
 		//debug ("city_info");
 		preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$city_info[0]['xy'],$m);
-		// ce coef de 1.33 est déterminé par empirisme; sinon ça décale la carte.
+		// ce coef de 1.33 est d?termin? par empirisme; sinon ?a d?cale la carte.
 		$m[1] += 1.33 * $sf ; //8100;
 		$m[2] -=  1.33 * $sf; //8000;
 		$e_extent->setextent(floor($m[1] - $sf),floor($m[2] - $sf),floor($m[1] + $sf),floor($m[2] + $sf));
-		$_SESSION['zooml']=$zlfv; // facteur de zoom prédéfini autour d'un focus ville (2)
+		$_SESSION['zooml']=$zlfv; // facteur de zoom pr?d?fini autour d'un focus ville (2)
 	}
 } elseif (isset($_REQUEST['pid'])) {
 	$parcours_info = $db->get_parcours_info($_REQUEST['pid']);
@@ -186,7 +201,7 @@ if (isset($_REQUEST['focusville'])) {
 	$d = (($m[4] - $m[1]) / $pcarpc); //$pcarpc=% autour du parcours
 	$b = (($m[3] - $m[2]) / $pcarpc);
 	$e_extent->setextent($m[1] - $d,$m[2] - $d,$m[4] + $b,$m[3] + $d);
-} elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == "zoomout") { // si zoom out, on zoome out sans attendre le click sur la carte, on fait comme si on avait cliqué au centre
+} elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == "zoomout") { // si zoom out, on zoome out sans attendre le click sur la carte, on fait comme si on avait cliqu? au centre
 	$click_x=floor($sizex/2);
 	$click_y=floor($sizey/2);
 	$zoom_factor=0 - $zoom2x;
@@ -197,8 +212,8 @@ if ($click_x and $click_y) { // click "normal" dans la carte
 	$map_click['y'] = floor($extmaxy - pix2geo($click_y,$extminy,$extmaxy,$sizey));
 	$e_click->setXY($click_x,$click_y,0);
 }
-// cause soucis avec IE, change la façon de traiter les clics sur les flèches de dir
-// lors d'un clic sur une input type=img name=dir value="titi", IE n'envoie que les variables dir_x et dir_y (coord en pixels du clic sur l'immage, et (contrairement à firefox) PAS le couple variable=valeur dir=titi
+// cause soucis avec IE, change la fa?on de traiter les clics sur les fl?ches de dir
+// lors d'un clic sur une input type=img name=dir value="titi", IE n'envoie que les variables dir_x et dir_y (coord en pixels du clic sur l'immage, et (contrairement ? firefox) PAS le couple variable=valeur dir=titi
 $dx=$dy=0;
 if (isset($_REQUEST['dir_lt_x'])) {$dx=-1;$dy=-1;}
 if (isset($_REQUEST['dir_ct_x'])) {$dx= 0;$dy=-1;}
@@ -230,12 +245,12 @@ if (isset($_REQUEST['action'])) {
 	}
 }
 
-if (!empty($_REQUEST['p_name']) and $_SESSION['me']) { // enregistrement d'une track tracée en bdd
+if (!empty($_REQUEST['p_name']) and $_SESSION['me']) { // enregistrement d'une track trac?e en bdd
 	
 	if (!$db->add_parcours($_REQUEST['p_name'],$_SESSION['me'],$_REQUEST['p_discp'],$_SESSION['track'],$_REQUEST['p_level'],$_REQUEST['p_time'])) {
 		$feedback[] = array('num'=>-1,'msg'=>$db->mes[0]);
 	} else {
-		$_SESSION['track'] = array(); // vide tableau tracé
+		$_SESSION['track'] = array(); // vide tableau trac?
 	}
 } elseif (isset($_REQUEST['do']) and $_REQUEST['do'] == tra('Enregistrer')) {
 	$focus['edit'] = "focus";
@@ -253,18 +268,18 @@ elseif (isset($_REQUEST['do']) and $_REQUEST['do'] == tra('Undo')) {
 if (isset($_REQUEST['ref_x']) or isset($_REQUEST['ref.x'])) {
 	$refx = ($_REQUEST['ref_x']) ? $_REQUEST['ref_x'] : $_REQUEST['ref.x'];
 	$refy = ($_REQUEST['ref_y']) ? $_REQUEST['ref_y'] : $_REQUEST['ref.y'];
-	$wx=($ext[2]-$ext[0])/2; // demi-largeur en échelle carte
-	$wy=($ext[3]-$ext[1])/2; // demi-hauteur en échelle carte
+	$wx=($ext[2]-$ext[0])/2; // demi-largeur en ?chelle carte
+	$wy=($ext[3]-$ext[1])/2; // demi-hauteur en ?chelle carte
 	$e_extent->setextent($extminxmf+$refx/$refwidth*($extmaxxmf-$extminxmf)-$wx,$extminymf+(1-$refy/$refheight)*($extmaxymf-$extminymf)-$wy,$extminxmf+$refx/$refwidth*($extmaxxmf-$extminxmf)+$wx,$extminymf+(1-$refy/$refheight)*($extmaxymf-$extminymf)+$wy);
 	}
 // ************************************************************************
 
-if ($bool_disp_zoomp) { // choix ancienne méthode de zoom / nouvelle
+if ($bool_disp_zoomp) { // choix ancienne m?thode de zoom / nouvelle
 	if (empty($_REQUEST['extent']) && empty($_REQUEST['idfocusville'])) {
-		// ancienne méthode, conservée quand recadrage uniquement
+		// ancienne m?thode, conserv?e quand recadrage uniquement
 		$e_map->zoompoint($zoom_factor,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 	} else  {
-	// maintenant on se cale sur les niveaux de zoom prédéfinis
+	// maintenant on se cale sur les niveaux de zoom pr?d?finis
 	//void zoomscale(double nScale, pointObj oPixelPos, int nImageWidth, int nImageHeight, rectObj oGeorefExt)
 	
 	$zooml=($_SESSION['zooml']!="" ?  $_SESSION['zooml'] : 0);
@@ -277,7 +292,7 @@ if ($bool_disp_zoomp) { // choix ancienne méthode de zoom / nouvelle
 	}
 } else $e_map->zoompoint($zoom_factor,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 
-//recalcul du facteur de zoom le plus proche au cas où il ai été zappé
+//recalcul du facteur de zoom le plus proche au cas o? il ai ?t? zapp?
 $_SESSION['zooml']=recalczl($e_map->scale);
 //echo "zooml: ".$_SESSION['zooml'];
 
@@ -286,7 +301,7 @@ $extminx = floor($e_map->extent->minx);
 $extminy = floor($e_map->extent->miny);
 $extmaxx = floor($e_map->extent->maxx);
 $extmaxy = floor($e_map->extent->maxy);
-// l'extent est ensuite passé par une variable cachée ds map.tpl
+// l'extent est ensuite pass? par une variable cach?e ds map.tpl
 $smarty->assign('extent',urlencode("$extminx $extminy $extmaxx $extmaxy"));
 
 
@@ -294,8 +309,8 @@ $smarty->assign('extent',urlencode("$extminx $extminy $extmaxx $extmaxy"));
 if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]!="none") {
 	$smarty->assign('filtre',$filtre);
 	
-	/* calcule la liste des parcours correspondant aux critères de requête 
-	et se trouvant dans la zone affichée */
+	/* calcule la liste des parcours correspondant aux crit?res de requ?te 
+	et se trouvant dans la zone affich?e */
 	
 	// c'est dans cette fonction qu'en MAJ $_SESSION[where_parc] 
 	$tracks = $db->get_parcours(array($extminx,$extminy,$extmaxx,$extmaxy),$filtre);
@@ -303,7 +318,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 
 	if ($e_map->scale < $minscaledispictos) {
 	/*calcule les coord xy (pix) des rectangles correspondant aux pictos
-	définissant les zones cliquables dans la maparea
+	d?finissant les zones cliquables dans la maparea
 	*/
 		for ($i=0;$i<count($tracks);$i++) {
 			if (preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$tracks[$i]['coord'],$m)) {
@@ -334,7 +349,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 	}
 	
 	// affichage des contours en noir de tous les parcours qqsoit la discipline
-	// ce uniquement si échelle assez faible
+	// ce uniquement si ?chelle assez faible
 	
 	if ($e_map->scale < $minscaledispextparc) {
 		$e_lay = ms_newLayerObj($e_map);
@@ -353,7 +368,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 		$e_sty->color->setRGB(0,0,0);
 		
 		$e_lay->set('labelitem','parcours_id');
-		$e_lay->set('labelcache',MS_ON); // par défaut
+		$e_lay->set('labelcache',MS_ON); // par d?faut
 
 		// label
 		$e_labl=$e_cla->label;
@@ -363,7 +378,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 		//$e_labl->set("mindistance",50);
 		$e_labl->set("minfeaturesize",50);
 		
-		// $e_labl->set("buffer",3); sert à rien
+		// $e_labl->set("buffer",3); sert ? rien
 		$e_labl->set("force",MS_TRUE);
 		$e_labl->set("type","truetype");
 		$e_labl->set("font",$parclabelfont);
@@ -376,7 +391,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 //		echo $e_labl->color;
 	} // fin si echelle assez grande pour afficher contours noirs
 
-	// autre couche utilisée pour l'intérieur de la ligne, dont la couleur varie suivant la discipline	
+	// autre couche utilis?e pour l'int?rieur de la ligne, dont la couleur varie suivant la discipline	
 	$e_lay2 = ms_newLayerObj($e_map);
 	$e_lay2->set('name','parcourslineover');
 	$e_lay2->set('status',MS_ON);
@@ -388,7 +403,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 	$e_lay2->set('type',MS_LAYER_LINE);
 	$e_lay2->set('classitem','parcours_discp');
 
-	// boucle inutile car 	on n'affiche qu'une discipline à la fois, on le laisse au cas où
+	// boucle inutile car 	on n'affiche qu'une discipline ? la fois, on le laisse au cas o?
 	for ($i_disc=1;$i_disc<=count($discps);$i_disc++) {
 		$e_cla2[$i_disc] = ms_newClassObj($e_lay2);
 		$e_cla2[$i_disc]->setExpression($i_disc);
@@ -399,13 +414,13 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 	} // fin boucle sur discp
 
 	 
-// affichage des pictos, sur le point de départ du parcours
+// affichage des pictos, sur le point de d?part du parcours
 	if ($e_map->scale < $minscaledispictos ) {
-		// couches de labels/pictos avec des couleurs différentes suivant les types
+		// couches de labels/pictos avec des couleurs diff?rentes suivant les types
 		$e_lay = ms_newLayerObj($e_map);
 		$e_lay->set('name','parcours');
 		$e_lay->set('status',MS_ON);
-		$e_lay->set('labelcache',MS_ON); // par défaut
+		$e_lay->set('labelcache',MS_ON); // par d?faut
 	
 		$e_lay->set('connectiontype',MS_POSTGIS);
 		$e_lay->set('connection',$db->connstr);
@@ -421,7 +436,7 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 			$e_cla3[$i_disc]->set('name',$name[$i_disc]);
 			$e_cla3[$i_disc]->setExpression($i_disc);
 			$e_sty3[$i_disc] = ms_newStyleObj($e_cla3[$i_disc]);
-			// affichagage des labels slt en dessous d'une certaine échelle
+			// affichagage des labels slt en dessous d'une certaine ?chelle
 			if (isset($e_map->scale) &&  $e_map->scale < $minscaledisplabels && $e_map->scale!=-1) {
 				$e_lab[$i_disc] = $e_cla3[$i_disc]->label;
 				$e_lab[$i_disc]->set("position",MS_AUTO);
@@ -436,23 +451,25 @@ if (isset($filtre) and is_array($filtre) and count($filtre) and $filtre["discp"]
 			$e_sty3[$i_disc]->set("symbolname",$name[$i_disc]);
 		} // fin boucle sur les types de parcours
 	} // fin si echelle suffisante pour afficher les pictos..
-} // fin si il y des parcours à afficher
+} // fin si il y des parcours ? afficher
 
 // couches de labels/pictos des objets LEI
-$bool_lei=true;
 $where_lei_f="";
 	$where_lei_f='';
-	foreach ($tb_lei_selidcat as $idcat) {
-		if ($idcat==0) $bool_lei=false;
-		$where_lei_f.= "lei_f_idcat=$idcat OR ";
+	foreach ($_REQUEST as $cle=>$val) { // passe en revue tte les var get
+		// la clÃ© est de la forme "c3kGnnnnnnnCnnnnnnnnTnnnnnnnn"
+		if (substr($cle,0,3)=="c3k" && $val!="" && strstr($cle,"T")) {
+			$where_lei_f.= " lei_f_idcat=".substr(strrchr($cle,"T"),1)." OR ";
+		}
 	}
-	if ($where_lei_f!='') $where_lei_f=substr($where_lei_f,0, strlen($where_lei_f) -4); // enlève le dernier " OR "
-//print_r($where_lei_f);
-if ($bool_lei && $where_lei_f!="") {
+	if ($where_lei_f!='') $where_lei_f=vdc($where_lei_f,4); // enleve les 4 derniers car cad le dernier " OR "
+
+print_r($where_lei_f);
+if ($bool_disp_lay_LEI && $where_lei_f!="") {
 	$lei_lay = ms_newLayerObj($e_map);
 	$lei_lay->set('name','lei_fiche');
 	$lei_lay->set('status',MS_ON);
-	$lei_lay->set('labelcache',MS_ON); // par défaut
+	$lei_lay->set('labelcache',MS_ON); // par d?faut
 
 	$lei_lay->set('connectiontype',MS_POSTGIS);
 	$lei_lay->set('connection',$db->connstr);
@@ -463,12 +480,13 @@ if ($bool_lei && $where_lei_f!="") {
 	$lei_lay->set('labelitem','lei_f_libelle');
 	$lei_lay->set('classitem','lei_f_idcat');
 	
-	$i=0;	
-	foreach ($tb_lei_selidcat as $idcat) {
+	$i=i;	
+	// faudrait fair eune boucle sur les categ de pts pour avoir des pictos diffÃ©rents..
+	//foreach ($tb_lei_selidcat as $idcat) {
 		$lei_cla[$i] = ms_newClassObj($lei_lay);
 		$lei_cla[$i]->setExpression($idcat);
 		$lei_sty[$i] = ms_newStyleObj($lei_cla[$i]);
-		$lei_sty[$i]->set("symbolname","hotel_L");
+		$lei_sty[$i]->set("symbolname","tux_L");
 		
 		//$lei_sty[$i]->set("symbolname",RecupLib("lei_categ","lei_cat_id", "lei_cat_symb", $idcat));
 		
@@ -486,12 +504,12 @@ if ($bool_lei && $where_lei_f!="") {
 		}
 		$i++;
 			
-	}
+	//} // fin boucle sur les categ
 	
 	
 	$lei_clalab = ms_newClassObj($lei_lay);
 	$lei_stylab = ms_newStyleObj($lei_clalab);
-	//if (isset($e_map->scale) &&  $e_map->scale < $minscaledisplabels && $e_map->scale!=-1) {
+	if (isset($e_map->scale) &&  $e_map->scale < $minscaledisplabels && $e_map->scale!=-1) {
 		$i_disc=1;
 		$lei_lab[$i_disc] = $lei_clalab->label;
 		$lei_lab[$i_disc]->set("position",MS_AUTO);
@@ -502,10 +520,10 @@ if ($bool_lei && $where_lei_f!="") {
 		$lei_lab[$i_disc]->set("font",$leilabelfont);
 		$lei_lab[$i_disc]->color->setRGB(255,0,0);
 		$lei_lab[$i_disc]->backgroundcolor->setRGB(200,200,200);
-	//} // fin si echelle assez grande pour afficher les labels LEI */
+	} // fin si echelle assez grande pour afficher les labels LEI */
 }
 
-// trace dessinée en temps réel en ligne
+// trace dessin?e en temps r?el en ligne
 if (!empty($_SESSION['track'])) {
 	$e_shape = ms_newShapeObj(MS_SHAPE_LINE);
 	$e_line = ms_newLineObj();
@@ -558,12 +576,12 @@ $image = $e_image->saveWebImage();
 $e_ref = $e_map->drawreferencemap();
 $refsrc = $e_ref->saveWebImage('MS_PNG',0,0,-1);
 
-// affichage légende
+// affichage l?gende
 if ($e_map->scale < $minscaledispscan100legend) $smarty->assign('booldisplegscan100',true);
-// outil zoom + séléectionné par défaut au dela d'une certaine échelle
+// outil zoom + s?l?ectionn? par d?faut au dela d'une certaine ?chelle
 if ($e_map->scale > $minscaledispzoomp) $focus['zoomin'] = "focus";
 
-// reconstitue la légende avec les pictos
+// reconstitue la l?gende avec les pictos
 $legends = array();
 for ($i=0; $i<$e_map->numlayers; $i++) {
 	$layer = $e_map->getLayer($i);
@@ -581,7 +599,7 @@ $smarty->assign('legends',$legends);
 
 
 // idem pour les pictos LEI: calcul des coords pour l'image pap
-if ($bool_lei && $where_lei_f!="") {
+if ($where_lei_f!="") {
 	$ppmplei = $db->get_lei_pts(array($extminx,$extminy,$extmaxx,$extmaxy,$where_lei_f));
 	for ($i=0;$i<count($ppmplei);$i++) {
 		if (preg_match("/POINT\(([\.0-9]*) ([\.0-9]*)\)/",$ppmplei[$i]['coord'],$m)) {
@@ -591,13 +609,13 @@ if ($bool_lei && $where_lei_f!="") {
 		}
 	}
 	$smarty->assign('ppmplei',$ppmplei);
-	$smarty->assign('lei_f_url',$lei_f_url);// Assigne l'url  à rallonge du skel (cf conf.php), ou un exemple statique
+	$smarty->assign('lei_f_url',$lei_f_url);// Assigne l'url  ? rallonge du skel (cf conf.php), ou un exemple statique
 }
 //debug("ppmplei");
 
 /* ANCIENNE METHODE SELECT LEI AVEC LISTE DEROULANTE A CHOIX MULTIPLES
 fait maintenant par ret_tb_cat_lei()
-// nouvel objet pour sélection liste déroulante points LEI
+// nouvel objet pour s?lection liste d?roulante points LEI
 $ObjSeLEI=new PYAobj();
 $ObjSeLEI->NmBase=$dbname;
 $ObjSeLEI->NmTable="lei_fiches";
@@ -605,19 +623,19 @@ $ObjSeLEI->NmChamp="lei_f_idcat";
 $ObjSeLEI->InitPO();
 $tabLD=ttChpLink($ObjSeLEI->Valeurs);
 
-if (is_array($_REQUEST['rq_lei_f_idcat'])) { // s'il y des valeurs sélectionnées
-// recherche des valeurs précédemment selectionnnée pour les remettre en sélection
+if (is_array($_REQUEST['rq_lei_f_idcat'])) { // s'il y des valeurs s?lectionn?es
+// recherche des valeurs pr?c?demment selectionnn?e pour les remettre en s?lection
 	foreach($tabLD as $k=>$v) {
 		if (in_array($k,$_REQUEST['rq_lei_f_idcat'])) $tabLD[$k]=$VSLD.$v;
 	}
 }
 //$tabLD=array(0=>"Aucun")+$tabLD;
-$DispMsg=false; // n'affiche pas la mention en bas de la liste déroulante
+$DispMsg=false; // n'affiche pas la mention en bas de la liste d?roulante
 */
 
 //$smarty->assign('LD_filt_pts_LEI',DispLD($tabLD,"rq_lei_f_idcat","yes","",false));
 
-// nbre max de traces affichées dans la liste
+// nbre max de traces affich?es dans la liste
 $maxdisptracks=($_SESSION['admin'] ? 100 : 20);
 $smarty->assign('maxdisptracks',$maxdisptracks);
 

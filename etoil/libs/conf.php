@@ -1,10 +1,10 @@
 <?
-$anonym_disp_maps=false; // affichage carte aux anonymes (pour le proto, on n'affiche les cartes que si on est identifié)
-$coef_fd=1.5; // coefficient de déplacement lors du clic sur les flèches de direction
+$anonym_disp_maps=false; // affichage carte aux anonymes (pour le proto, on n'affiche les cartes que si on est identifiï¿½
+$coef_fd=1.5; // coefficient de dï¿½lacement lors du clic sur les flï¿½hes de direction
 $mapmargin = 11; // taille de la bordure clicable de navigation perpendiculaire
 $blockspc=7; // espaces entre les blocks de droite
 
-$bool_disp_zoomp=true; // affichage par zoom prédéfinis
+$bool_disp_zoomp=true; // affichage par zoom prï¿½ï¿½inis
 
 $tbzoomd[]=1500000; // rien
 $tbzoomd[]=450000; // jyj
@@ -25,7 +25,7 @@ $zoomc=round($zoomc,-3);
 for ($i=count($tbzoomd) - 1;$i>=0;$i--) {
 	if ($zoomc <= $tbzoomd[$i]) return ($i);
 	}
-return (0); // au cas où
+return (0); // au cas o
 }
 
 function r_zoompref($zooml,$zoom_factor) {
@@ -106,8 +106,8 @@ $refheight=100; //largeur de la carte de reference
 // paramÃ¨tres des tracÃ©s de couches postgis
 // concernant les parcours
 $intparcwdth=3; // Ã©paisseur interne des traits de tracÃ©s
-$minscaledispzoomp=600000; // echelele au dessus de laquelel l'outil zoom + est sélectionné par défaut
-$minscaledispscan100legend=100000; // echelle min a partir de laquelle on affiche la légende de carte scan100
+$minscaledispzoomp=600000; // echelele au dessus de laquelel l'outil zoom + est sï¿½ectionnï¿½par dï¿½aut
+$minscaledispscan100legend=100000; // echelle min a partir de laquelle on affiche la lï¿½ende de carte scan100
 $minscaledispextparc=100000; // echelle min a partir de laquelle on affiche les contours en noir des traces de parcours
 $minscaledisplabels=100000; // echelle min a partir de laquelle on affiche les labels des parcours 
 $minscaledispictos=250000; // echelle min a partir de laquelle on affiche les pictos des parcours 
@@ -115,7 +115,7 @@ $minscaledispictos=250000; // echelle min a partir de laquelle on affiche les pi
 $extparcwdth=7; // Ã©paisseur externe des traits de tracÃ©s
 $parclabelsize=10;
 $parclabelfont="Verdana";
-$xd2pp=10; // dimension x picto parcours div par 2: sert pour les maparea définissant les zones cliquables sur les pictos des parcours
+$xd2pp=10; // dimension x picto parcours div par 2: sert pour les maparea dï¿½inissant les zones cliquables sur les pictos des parcours
 $yd2pp=10; // id y
 
 // parametres couche LEI

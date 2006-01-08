@@ -1,0 +1,50 @@
+G|30000001|Renseignements pratiques
+C|30000002|Infrastructures culturelles
+T|30000105|Centres d'art
+G|30000002|Hébergements
+C|30000003|Hôtellerie
+T|30000011|Hôtels
+T|30000013|Hôtels non classés
+C|30000004|Locations
+T|30000014|Gîtes ruraux
+T|30000015|Meublés
+T|30000018|Gîtes d'étape ou de séjour
+T|30000153|Clévacances
+C|30000011|Hébergement de plein air
+T|30000025|Hôtellerie de plein air
+T|30000026|Campings à la ferme
+T|30000027|Aires naturelles de camping
+T|30000124|Aires d'accueil de camping-car
+C|30000027|Hébergements collectifs
+T|30000018|Gîtes d'étape ou de séjour
+T|30000021|Structures polyvalentes d'hébergement
+T|30000022|Villages de vacances
+G|30000003|Restauration
+C|30000012|Restauration traditionnelle
+T|30000029|Restaurants
+C|30000013|Restauration rapide
+T|30000033|Brasseries
+G|30000004|Patrimoine et visites
+C|30000015|Patrimoine bâti
+T|30000035|Expositions et collections permanentes
+T|30000036|Châteaux
+T|30000037|Musées
+T|30000038|Monuments
+T|30000039|Edifices religieux
+T|30000105|Centres d'art
+T|30000118|Les plus beaux villages de France
+T|30000123|Architecture urbaine
+T|30000133|Vestiges archéologiques
+T|30000134|Ponts et ouvrages d'art
+C|30000017|Tourisme technique
+T|30000137|Savoir faire
+C|30000018|Visites
+T|30000048|Visites guidées de villes et villages
+G|30000005|Activités de plein air
+G|30000006|Manifestations
+C|30000022|Manifestations artistiques et culturelles
+T|30000048|Visites guidées de villes et villages
+T|30000063|Expositions
+C|30000028|Manifestations commerciales
+T|30000071|Marchés aux puces, brocantes & antiquités
+G|30000007|Emploi - Formation - Cadre juridique
