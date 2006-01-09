@@ -46,7 +46,7 @@ function GenLeiCatTree(&$TreeObj) { // argument transmis par r?f?rence
 
 			case "T":
 			$CurType=$CurCateg."T".$tbl[1];
-			if ($_REQUEST['c3k'.$CurType]!="") echo 'c3k'.$CurType."=".$_REQUEST['c3k'.$CurType]."|";
+			//if ($_REQUEST['c3k'.$CurType]!="") echo 'c3k'.$CurType."=".$_REQUEST['c3k'.$CurType]."|";
 			$this->strTree.=$TreeObj->echDL3T1line ($CurType,$CurCateg,$tbl[2],3,"","","",($_REQUEST['n3o'.$CurCateg]=="true" ? true : false),$this->leaf_img,false,($_REQUEST['c3k'.$CurType]!="" ? true : false))."\n";
 			break;
 			}

@@ -464,7 +464,8 @@ $where_lei_f="";
 	}
 	if ($where_lei_f!='') $where_lei_f=vdc($where_lei_f,4); // enleve les 4 derniers car cad le dernier " OR "
 
-print_r($where_lei_f);
+//print_r($where_lei_f);
+
 if ($bool_disp_lay_LEI && $where_lei_f!="") {
 	$lei_lay = ms_newLayerObj($e_map);
 	$lei_lay->set('name','lei_fiche');

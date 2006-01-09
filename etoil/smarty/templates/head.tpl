@@ -1,7 +1,9 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <title>{tr}E-Toil{/tr}</title>
 <meta http-equiv="Content-Language" content="{$language}">
+<!--<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">-->
 <link rel="StyleSheet" type="text/css" href="etoil.css" />
 <script>
 function toggletool(id) {literal}{{/literal}
@@ -59,6 +61,13 @@ function popup(page, width, height) {
 {/literal}
 
 </script>
+
+{ * appel du code pour l'arbre dans le map*}
+{$DL3TJSVarsInit}
+{$DL3TJSFunctions}
+{$DL3TStyles}
+
+
 </head>
 <body>
 <table cellpadding="0" cellspacing="0" border="0" width="100%">

@@ -1,33 +1,14 @@
 {include file="head.tpl"}
 {popup_init src="js/overlib.js"}
 
+{* le code d'init de l'arbre DL3Tree, $DL3TJSVarsInit et $DL3TJSVarsFunctions est appel? dans head.tpl*}
+
 {literal}
+<!-- avant on appelait cet arbre 
 <script language="Javascript" type="text/javascript" src="js/tree.js"></script>
-<script language="Javascript" type="text/javascript">
-
-   var Tree = new Array;
-   
-   {/literal}
-   {$tree_lei}
-   {literal}
-
-   
-   // nodeId | parentNodeId | nodeName | nodeUrl
-
-/*Tree[0] = "RP||Renseignements pratiques||/etoil/p_services.gif||closed||";
-Tree[1] = "service|RP|Services||img/jstree/folder.gif|img/jstree/folderopen.gof|closed||";
-Tree[2] = "st|service|station es||img/jstree/folder.gif|1|closed||";
-Tree[3] = "stg|service|station gpl|||1|closed||";
-Tree[16] = "lfrance-dep|lfrance-adm|Limites départementales||http://cartoserver.ifn.fr/cartogfx/ifn87_dep_0.png|checked|closed||";
-Tree[17] = "lfrance-reg|lfrance-adm|Régions||http://cartoserver.ifn.fr/cartogfx/ifn87_reg_0.png|checked|closed||";
-*/
-
-</script>
-
-
+-->
 
 <script language="JavaScript">
-
 // cette fonction est appelée quand on vuet télécharger (uploader) un fichier
 // en effet, les upload ne marchent correctement qu'en méthode POST
 function ChgMeth() {
@@ -329,13 +310,9 @@ document.f.method="POST";
 {* ancienne liste déroulante <div class="ldlei">
 {$LD_filt_pts_LEI}</div>*}
 
-<div class="dtree" id="tree">
-                  <script type="text/javascript">
-                    <!--
-                    createTree(Tree, 0, null);
-                    //-->
-                  </script>
-
+{$DL3TJStbChilds}
+<div class="leitree" id="tree">{$tree_lei}</div>
+ 
 <br/><input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}"/>
 
 
