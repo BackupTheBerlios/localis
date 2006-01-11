@@ -1,50 +1,194 @@
-G|30000001|Renseignements pratiques
+G|30000001|Renseignements pratiques</PRE>
+C|30000001|Services
+T|30000001|Stations services
+T|30000003|Banques (distributeurs)
+T|30000103|Locations de véhicules
+T|30000106|Associations culturelles
+T|30000107|Associations sportives
+T|30000108|Associations (prestations de tourisme)
+T|30000109|Adhérents
+T|30000116|Santé
+T|30000121|Points Publics Multimédia
+T|30000144|Points information
+T|30000150|Excursions, voyages
+T|30000004|Transports touristiques et saisonniers
+T|30000006|Ressources humaines (personnes ressources)
+T|30000007|Organismes de tourisme
+T|30000094|Cafés tabac presse
+T|30000095|Agences immobilières
+T|30000096|Traiteurs organisations de réceptions
+T|30000101|Associations
+T|30000102|Services de loisirs
 C|30000002|Infrastructures culturelles
+T|30000010|Salles polyvalentes
+T|30000089|Bibliothèques
+T|30000091|Salles de spectacles
+T|30000098|Théâtres
+T|30000099|Cinémas
 T|30000105|Centres d'art
-G|30000002|HÃ©bergements
-C|30000003|HÃ´tellerie
-T|30000011|HÃ´tels
-T|30000013|HÃ´tels non classÃ©s
+T|30000143|Divertissements
+C|30000032|Infrastructures d'activités sportives
+T|30000100|Installations diverses
+T|30000052|Golf
+T|30000053|Tennis
+T|30000087|Piscines et centres aquarécréatifs
+C|30000033|Infrastructures sociales
+T|30000090|Crèches et garderies d'enfants
+T|30000092|Accueil des handicapés
+T|30000139|Accueil social
+C|30000036|Commerce
+T|30000142|Antiquaires et brocanteurs
+T|30000145|Commerces alimentaire
+T|30000147|Habillement et esthétique
+T|30000148|Entretien de véhicules
+T|30000149|Autres commerces
+G|30000002|Hébergements</PRE>
+C|30000003|Hôtellerie
+T|30000011|Hôtels
+T|30000013|Hôtels non classés
 C|30000004|Locations
-T|30000014|GÃ®tes ruraux
-T|30000015|MeublÃ©s
-T|30000018|GÃ®tes d'Ã©tape ou de sÃ©jour
-T|30000153|ClÃ©vacances
-C|30000011|HÃ©bergement de plein air
-T|30000025|HÃ´tellerie de plein air
-T|30000026|Campings Ã  la ferme
+T|30000014|Gîtes ruraux
+T|30000015|Meublés
+T|30000018|Gîtes d'étape ou de séjour
+T|30000023|Hameaux de gîtes
+T|30000153|Clévacances
+C|30000005|Chambres d'hôtes
+T|30000019|Chambres d'hôtes
+C|30000007|Hébergements pour jeunes
+T|30000016|Gîtes d'enfants
+T|30000017|Auberges de jeunesse
+C|30000011|Hébergement de plein air
+T|30000025|Hôtellerie de plein air
+T|30000026|Campings à la ferme
 T|30000027|Aires naturelles de camping
 T|30000124|Aires d'accueil de camping-car
-C|30000027|HÃ©bergements collectifs
-T|30000018|GÃ®tes d'Ã©tape ou de sÃ©jour
-T|30000021|Structures polyvalentes d'hÃ©bergement
+C|30000027|Hébergements collectifs
+T|30000017|Auberges de jeunesse
+T|30000018|Gîtes d'étape ou de séjour
+T|30000021|Structures polyvalentes d'hébergement
 T|30000022|Villages de vacances
-G|30000003|Restauration
+C|30000030|Propriétaires
+T|30000088|Propriétaires
+C|156000001|Propriétaires BAF
+T|156000001|Propriétaires BAF
+C|179000001|Suivi qualité
+T|179000001|Suivi qualité
+G|30000003|Restauration</PRE>
 C|30000012|Restauration traditionnelle
 T|30000029|Restaurants
+T|30000030|Fermes auberges
+T|30000115|Goûters à la Ferme
+T|30000132|Bistrots de pays
 C|30000013|Restauration rapide
+T|30000031|Fast food
+T|30000032|Cafétéria
 T|30000033|Brasseries
-G|30000004|Patrimoine et visites
-C|30000015|Patrimoine bÃ¢ti
+T|30000117|Salons de thé
+C|30000034|Restauration thématique
+T|30000034|Restaurants spécialisés
+G|30000004|Patrimoine et visites</PRE>
+C|30000015|Patrimoine bâti
 T|30000035|Expositions et collections permanentes
-T|30000036|ChÃ¢teaux
-T|30000037|MusÃ©es
+T|30000036|Châteaux
+T|30000037|Musées
 T|30000038|Monuments
 T|30000039|Edifices religieux
 T|30000105|Centres d'art
 T|30000118|Les plus beaux villages de France
 T|30000123|Architecture urbaine
-T|30000133|Vestiges archÃ©ologiques
+T|30000133|Vestiges archéologiques
 T|30000134|Ponts et ouvrages d'art
+C|30000016|Patrimoine naturel
+T|30000041|Sites naturels
+T|30000042|Lacs et plans d'eau
+T|30000043|Parcs et jardins
+T|30000119|Routes historiques et itinéraires
+T|30000135|Points de vue aménagés et table d'orientation
+T|30000136|Villes et villages fleuris
+T|30000151|Sentiers d'interprétation
 C|30000017|Tourisme technique
+T|30000045|Visites d'entreprises
 T|30000137|Savoir faire
+T|30000138|Visites d'exploitations agricoles
 C|30000018|Visites
-T|30000048|Visites guidÃ©es de villes et villages
-G|30000005|ActivitÃ©s de plein air
-G|30000006|Manifestations
+T|30000047|Parcs animaliers, aquarium
+T|30000048|Visites guidées de villes et villages
+T|30000152|Sorties découverte de la nature
+C|30000035|Spécialités régionales
+T|30000046|Produits régionaux
+T|30000131|Produits du terroir
+G|30000005|Activités de plein air</PRE>
+C|30000019|Activités terrestres
+T|30000040|Sentiers de randonnée
+T|30000049|Equitation
+T|30000141|Parcs de loisirs et parcours aventures
+T|30000051|VTT - Vélo
+T|30000052|Golf
+T|30000053|Tennis
+T|30000081|Tir et tir à l'arc
+T|30000082|Sports mécaniques
+T|30000083|Ski de fond
+T|30000084|Chasses privées
+T|30000085|Escalade
+C|30000020|Activités aquatiques
+T|30000042|Lacs et plans d'eau
+T|30000054|Pêche
+T|30000056|Voile et planche à voile
+T|30000057|Bateaux, ski nautique
+T|30000080|Canoë-kayak, aviron et rafting
+T|30000087|Piscines et centres aquarécréatifs
+C|30000021|Activités aériennes
+T|30000058|Vol à voile - ULM - parachutisme
+T|30000059|Montgolfière
+T|30000079|Balades aériennes
+G|30000006|Manifestations</PRE>
 C|30000022|Manifestations artistiques et culturelles
-T|30000048|Visites guidÃ©es de villes et villages
+T|30000048|Visites guidées de villes et villages
 T|30000063|Expositions
+T|30000129|Journée du patrimoine
+T|30000130|Stages à thèmes
+T|30000152|Sorties découverte de la nature
+T|30000163|Animations artistiques
+T|30000064|Sons et Lumières
+T|30000066|Festivals
+T|30000067|Fêtes votives
+T|30000068|Concerts
+T|30000113|Conférences
+T|30000114|Animations enfants
+T|30000122|Spectacles vivants
+T|30000125|Salons du livre
+C|30000024|Manifestations sportives
+T|30000050|Randonnées organisées
+T|30000073|Manifestations équestres
+T|30000112|Multi-activités
+T|30000120|Activités nautiques
+T|30000074|Courses motorisées
+T|30000075|Régates
+T|30000076|Courses pédestres
+T|30000077|Courses cyclistes
+T|30000078|Concours de pêche
+T|30000086|Concours de boules
+T|30000110|Tournois sportifs
+T|30000111|Rallyes touristiques
+C|30000025|Manifestations traditionnelles et populaires
+T|30000067|Fêtes votives
+T|30000069|Fêtes locales
+T|30000070|Foires et marchés
+T|30000114|Animations enfants
+T|30000127|Folklore
 C|30000028|Manifestations commerciales
-T|30000071|MarchÃ©s aux puces, brocantes & antiquitÃ©s
-G|30000007|Emploi - Formation - Cadre juridique
+T|30000070|Foires et marchés
+T|30000071|Marchés aux puces, brocantes & antiquités
+T|30000140|Marchés des producteurs de pays
+T|30000154|Marchés de Noël
+G|30000007|Emploi - Formation - Cadre juridique</PRE>
+C|30000037|Emplois
+T|30000156|Demandes d'emploi
+C|30000038|Stages
+T|30000158|Demandes de stage
+C|30000039|Formations
+T|30000159|Accueil
+T|30000160|Informatique
+T|30000161|Langues
+C|30000040|Infos juridiques
+T|30000162|Infos juridiques

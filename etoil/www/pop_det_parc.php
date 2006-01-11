@@ -202,6 +202,8 @@ if ($_REQUEST['editpc']) { // on est en edition, on peut valider)
 	$tb_infparc.=echochphid("key","parcours_id=".$_SESSION['pid'],false); // clé pour modif
 	$tb_infparc.=echochphid("adrr_majt",$_SERVER["PHP_SELF"],false);
 	$tb_infparc.=echochphid("NM_TABLE","parcours",false);
+	// bouton supprimer pour l'admin seult 
+	if ($_SESSION['admin']) $tb_infparc.='<br/><span class="redbutton"><br/><input type="checkbox" name="delete" value="on">!!! Supprimer ce parcours !!!<br/></span><br/>';
 	
 	$tb_infparc.='<input type="reset" value="ANNULER LES MODIFICATIONS" class="redbutton"> &nbsp; &nbsp; <input type="submit" onclick="ChgMeth(); document.f.action=\'maj_table.php\'; document.f.submit()" class="redbutton" name="toto" value="!! ENREGISTRER LES MODIFICATION D\'ATTRIBUTS DE CE PARCOURS !!"/>&nbsp;';
 }	

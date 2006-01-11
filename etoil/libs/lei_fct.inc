@@ -32,7 +32,7 @@ function GenLeiCatTree(&$TreeObj) { // argument transmis par r?f?rence
 	while (!feof ($fd)) {
   		$buffer = fgets($fd, 4096);
 		$tbl=explode("|",$buffer);
-		$tbl[2]=utf8_decode($tbl[2]);
+		//$tbl[2]=utf8_decode($tbl[2]);
 		switch ($tbl[0]) {
 			case "G":
 			$CurGenre="G".$tbl[1];

@@ -220,10 +220,11 @@ class db {
 
 	/* ======== parcours methods  ======= */
 
-	function add_parcours($name,$user,$discp,$geom,$level=0,$time=0) {
+	function add_parcours($name,$user,$discp,$geom,$level=0,$time=0,$marqimp="toto") {
+		if ($marqimp=="toto") $marqimp=date('d-m-y');
 		$line = implode(",",$geom);
-		$query = "insert into parcours (parcours_name,parcours_user,parcours_discp,parcours_geom,parcours_level,parcours_time) values ";
-		$query.= "('". addslashes($name)."','". addslashes($user)."','". addslashes($discp). "',GeomFromEWKT('SRID=-1;LINESTRING($line)'),'". addslashes($level)."',$time);";
+		$query = "insert into parcours (parcours_name,parcours_user,parcours_discp,parcours_geom,parcours_level,parcours_time,parcours_dtcrea,parcours_marqimp) values ";
+		$query.= "('". addslashes($name)."','". addslashes($user)."','". addslashes($discp). "',GeomFromEWKT('SRID=-1;LINESTRING($line)'),'". addslashes($level)."',$time, '".date('Y-m-d')."', '$marqimp');";
 		$resins=$this->s_query($query);
 		if (!$resins) {
 			$this->mes[] = "Requete: $query \n error: ". pg_last_error();
@@ -231,7 +232,7 @@ class db {
 		} else {
 			if ($_SESSION['vitmoy']==0 || $_SESSION['vitmoy']=="") $_SESSION['vitmoy']=80; // 80=~ 5km/h
 			$last_oid=pg_last_oid($resins);
-			$query = "update parcours set parcours_length=Length2D(parcours_geom), parcours_start=StartPoint(parcours_geom),parcours_time=ceil(Length2D(parcours_geom)/".($_SESSION['vitmoy']*1000/60).") where parcours.oid=".pg_last_oid($resins).";";
+			$query = "update parcours set parcours_length=Length2D(parcours_geom), parcours_start=StartPoint(parcours_geom),parcours_time=ceil(Length2D(parcours_geom)/".($_SESSION['vitmoy']*1000).") where parcours.oid=".pg_last_oid($resins).";";
 			//echo $query;
 			$resup=$this->s_query($query);
 			if (!$resup) {
@@ -256,6 +257,7 @@ class db {
 		$query = "select parcours_id,parcours_name,parcours_discp,AsText(parcours_start) as coord from parcours";
 		//$query.= " where parcours_start && GeomFromText('POLYGON(($ex[0] $ex[1],$ex[0] $ex[3],$ex[2] $ex[3],$ex[0] $ex[1]))',-1)";
 		$query.= " where parcours_geom && GeomFromText('POLYGON(($ex[0] $ex[1],$ex[0] $ex[3],$ex[2] $ex[3],$ex[0] $ex[1]))',-1)";
+		
 		if (isset($_SESSION['filtre'])) {
 			$wh = array();
 			foreach ($_SESSION['filtre'] as $k=>$v) {

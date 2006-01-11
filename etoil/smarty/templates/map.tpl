@@ -168,7 +168,10 @@ document.f.method="POST";
 	<td valign="top" width="30%" align="center" class="tool{$focus.edit}" id='tool_edit'>
 	<div {popup text="{tr}Ajouter{/tr} [ Alt-a ]"}><label for="edit" accesskey="a"><img src="img/edit.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Edit" valign="top"></label>
 	<input type="radio" id="edit" name="action" value="edit"{if $focus.edit eq 'focus'} checked="checked"{/if} onchange="toggletool('tool_edit');"/></div></td>
-	<td colspan="2" width="70%"><input {popup text="{tr}Importer{/tr}"} type="file" size="10" name="trackfileimp" Onchange="ChgMeth()"/></td>
+	<td colspan="2" width="70%"><input {popup text="{tr}Importer{/tr}"} type="file" size="10" name="trackfileimp" Onchange="ChgMeth()"/>
+	<br>Code user a affecter : <input type="text" name="usertrck">
+	<br>Code marqimp a affecter : <input type="text" name="marqimp" value="toto">
+	</td>
 	</tr>
 	<tr><TD>&nbsp;</TD><TD colspan="2"><input {popup text="{tr}pas de visu préalable ni de choix de nom{/tr}"} type="checkbox" name="tf_dir_import" value="yes">{tr}Import direct{/tr}</TD></tr>
 	</table>
@@ -270,7 +273,7 @@ document.f.method="POST";
 	<ul style="font-size:9pt;">
 	{section name=t loop=$tracks}
 	{assign var=v value=$tracks[t].parcours_discp}
-	<li style="color:#{$discpcolor.$v}"><a style="color:#{$discpcolor.$v}" href="{$url}?pid={$tracks[t].parcours_id}" {popup text="{tr}ParcZoom{/tr}"}>#{$tracks[t].parcours_id}: {$tracks[t].parcours_name}</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}" target="_blank" {popup text="{tr}CE3Down{/tr}"}>[->CE3]</a></li>
+	<li style="color:#{$discpcolor.$v}"><a style="color:#{$discpcolor.$v}" href="{$url}?pid={$tracks[t].parcours_id}" {popup text="{tr}ParcZoom{/tr}"}>#{$tracks[t].parcours_id}: {$tracks[t].parcours_name}</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}" target="_blank" {popup text="{tr}CE3Down{/tr}"}>[->CE3]</a> </li>
 	{/section}
 	</ul>
 	{else}

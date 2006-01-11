@@ -155,7 +155,7 @@ parcours_id serial NOT NULL,
 				//echo $req_ins;
 				$resins=$db->s_query($req_ins) or die("req ins $req_ins INVALIDE");
 				
-				$querup="update parcours set parcours_length=Length2D(parcours_geom), parcours_start=StartPoint(parcours_geom),parcours_time=ceil(Length2D(parcours_geom)/".($vitmoy*1000/60).") where parcours.oid=".pg_last_oid($resins).";";
+				$querup="update parcours set parcours_length=Length2D(parcours_geom), parcours_start=StartPoint(parcours_geom),parcours_time=ceil(Length2D(parcours_geom)/".($vitmoy*1000).") where parcours.oid=".pg_last_oid($resins).";";
 				$resup=$db->s_query($querup) or die("req up $querup INVALIDE");
 				
 				echo "Parcours". $row[parcours]." ajouté en base <BR/>";
@@ -256,7 +256,7 @@ parcours_id serial NOT NULL,
 		)";
 		$resins=$db->s_query($req_ins) or die("req ins $req_ins INVALIDE");
 		
-		$querup="update parcours set parcours_length=Length2D(parcours_geom), parcours_start=StartPoint(parcours_geom),parcours_time=ceil(Length2D(parcours_geom)/".($_SESSION['vitmoy']*1000/60).") where parcours.oid=".pg_last_oid($resins).";";
+		$querup="update parcours set parcours_length=Length2D(parcours_geom), parcours_start=StartPoint(parcours_geom),parcours_time=ceil(Length2D(parcours_geom)/".($_SESSION['vitmoy']*1000).") where parcours.oid=".pg_last_oid($resins).";";
 		$resup=$db->s_query($querup) or die("req up $querup INVALIDE");
 		
 		echo "Parcours". $row[identifian]." ajouté en base <BR/>";
@@ -346,7 +346,7 @@ echo "vitmoy: $vitmoy <br/>";
 		)";
 		$resins=$db->s_query($req_ins) or die("req ins $req_ins INVALIDE");
 		
-		$querup="update parcours set parcours_length=Length2D(parcours_geom), parcours_start=StartPoint(parcours_geom),parcours_time=ceil(Length2D(parcours_geom)/".($vitmoy*1000/60).") where parcours.oid=".pg_last_oid($resins).";";
+		$querup="update parcours set parcours_length=Length2D(parcours_geom), parcours_start=StartPoint(parcours_geom),parcours_time=ceil(Length2D(parcours_geom)/".($vitmoy*1000).") where parcours.oid=".pg_last_oid($resins).";";
 		$resup=$db->s_query($querup) or die("req up $querup INVALIDE");
 		
 		echo "Parcours". $parcours_name ." ajouté en base <BR/>";

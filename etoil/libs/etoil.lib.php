@@ -15,14 +15,16 @@ function import_track($file,$format,$cs="wgs84") {
 		}
 	}
 	while (!feof($handle) && $bool_ok) {
-		$tb=explode(" ",fgets($handle));
+		$line=fgets($handle);
+		$tb=explode(" ",$line);
 		$zprec="-9999";
-		if ($tb[0]=="T") { // ligne de coordonnées
-			$tb[2]=substr($tb[2],1); // enlève le car E
-			$tb[3]=substr($tb[3],1); // enlève le car N
+		if ($tb[0]=="T" || $tb[0]=="W") { // ligne de coordonnées (W est pour les routes)
+			if ($tb[0]=="W") $ofsi=1; // dans le cas des routes on a un champ en plus au début
+			$tb[2]=substr($tb[2 + $ofsi],1); // enlève le car E
+			$tb[3]=substr($tb[3 + $ofsi],1); // enlève le car N
 			//echo "N=$tb[2], E=$tb[3], Z=$tb[6] => "; //" ".$tb[6].
 			// on gère l'ffset d'altitude, je ne sais pas si c'est judicieux...
-			$zorig=$tb[6];
+			$zorig=$tb[6 + $ofsi];
 			$cmd="cs2cs +proj=latlong +datum=WGS84 +to +init=lambfr:27585 <<EOF\n".$tb[3]." ".$tb[2]."\nEOF\n";
 			$out=shell_exec($cmd);
 			//echo "cmd out# ".$out."<br />";
@@ -34,9 +36,11 @@ function import_track($file,$format,$cs="wgs84") {
 				$zprec=$zorig + $tb[2];
 			}
 			$_SESSION['track'][]=floor($tb[0])." ".floor($tb[1])." ".$zprec;
+		} elseif ($tb[0]=="R") { // dans les fichiers rte "routes" on a le nom de la route
+			if (substr($line,6) != "") $p_name=substr($line,6);
 		} elseif ($_REQUEST['tf_dir_import']=="yes" && count($_SESSION['track'])>0)  {
 			// si import direct, enregistre LES morceaux avec des indices _$i
-			$addp=$db->add_parcours($p_name."_".$i,$_SESSION['me'],$_SESSION['filtre']['discp'],$_SESSION['track']);
+			$addp=$db->add_parcours($p_name."_".$i,($_REQUEST['usertrck']!="" ? $_REQUEST['usertrck'] : $_SESSION['me']),$_SESSION['filtre']['discp'],$_SESSION['track'],0,0,$_REQUEST['marqimp']);
 			if (!$addp) $msg.="Insertion ne fonctionne pas pour le parcours d'indice $i\n";
 			$_SESSION['track']=array();
 			$i++;

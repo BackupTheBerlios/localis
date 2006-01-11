@@ -16,6 +16,8 @@ include("setup.php");
 $debug=false;
 if ($debug) echovar("_FILES");
 
+if ($_REQUEST["delete"]!="") $modif="-1"; // suppression
+
 // s'il existe au moins 1 champ fichier-photo,
 // on calcule la CLE POUR LE NOM DE STOCKAGE DES FICHIERS ATTACHES EVENTUELS
 // uniquement en cas autre que modif: ds ce cas c'est pas la peine, $keycopy=$key
