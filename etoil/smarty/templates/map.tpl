@@ -273,7 +273,7 @@ document.f.method="POST";
 	<ul style="font-size:9pt;">
 	{section name=t loop=$tracks}
 	{assign var=v value=$tracks[t].parcours_discp}
-	<li style="color:#{$discpcolor.$v}"><a style="color:#{$discpcolor.$v}" href="{$url}?pid={$tracks[t].parcours_id}" {popup text="{tr}ParcZoom{/tr}"}>#{$tracks[t].parcours_id}: {$tracks[t].parcours_name}</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}" target="_blank" {popup text="{tr}CE3Down{/tr}"}>[->CE3]</a> </li>
+	<li style="color:#{$discpcolor.$v}"><a style="color:#{$discpcolor.$v}" href="{$url}?pid={$tracks[t].parcours_id}" {popup text="{tr}ParcZoom{/tr}"}>#{$tracks[t].parcours_id}: {$tracks[t].parcours_name}</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}" target="_blank" {popup text="{tr}CE3Down{/tr}"}>[->CE3]</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}&fexpf=shp" target="_blank" {popup text="{tr}SHPDown{/tr}"}>[->SHP]</a></li>
 	{/section}
 	</ul>
 	{else}
@@ -299,6 +299,7 @@ document.f.method="POST";
 	{/if}
 	
 	<LI>{tr}CE3Down{/tr}:<a href="file_export.php?parcours_id={$pid}" target="_blank" {popup text="{tr}CE3Down2{/tr}"}><img src="img/ce3_ico.jpg" border="0"></a></LI>
+	<LI>{tr}SHPDown{/tr}:<a href="file_export.php?parcours_id={$pid}&fexpf=shp" target="_blank" {popup text="{tr}SHPDown2{/tr}"}>[->SHP]</a></LI>
 	<li><a href="#mdet" {popup text="{tr}MoreDet2{/tr}"}>{tr}MoreDet{/tr}</a></li>
 	</ul>
 	<!-- <img src="imgpostgraph.php" align="middle"><br/>-->
