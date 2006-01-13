@@ -105,6 +105,9 @@ if ($_REQUEST['editpc']) { // on ne refait des calculs et requete sur la base qu
 		
 		}
 	$tb_infparc.="<br/<br/><small>les valeurs recalculées par le SIG peuvent différer ce ces mesurées sur le terrain. C'est pourquoi il est possible de les ressaisir manuellement ci-dessous</small>";
+	
+	$tb_infparc.='<br/<br/><input type="reset" value="ANNULER LES MODIFICATIONS" class="redbutton"> <br/><input type="submit" onclick="ChgMeth(); document.f.action=\'maj_table.php\'; document.f.submit()" class="redbutton" name="toto" value="!! ENREGISTRER LES MODIFICATIONS D\'ATTRIBUTS DE CE PARCOURS !!"/>&nbsp;';
+	
 	$tb_infparc.="</td><tr></table>";
 
 	//
@@ -205,7 +208,7 @@ if ($_REQUEST['editpc']) { // on est en edition, on peut valider)
 	// bouton supprimer pour l'admin seult 
 	if ($_SESSION['admin']) $tb_infparc.='<br/><span class="redbutton"><br/><input type="checkbox" name="delete" value="on">!!! Supprimer ce parcours !!!<br/></span><br/>';
 	
-	$tb_infparc.='<input type="reset" value="ANNULER LES MODIFICATIONS" class="redbutton"> &nbsp; &nbsp; <input type="submit" onclick="ChgMeth(); document.f.action=\'maj_table.php\'; document.f.submit()" class="redbutton" name="toto" value="!! ENREGISTRER LES MODIFICATION D\'ATTRIBUTS DE CE PARCOURS !!"/>&nbsp;';
+	$tb_infparc.='<input type="reset" value="ANNULER LES MODIFICATIONS" class="redbutton"> &nbsp; &nbsp; <input type="submit" onclick="ChgMeth(); document.f.action=\'maj_table.php\'; document.f.submit()" class="redbutton" name="toto" value="!! ENREGISTRER LES MODIFICATION SD\'ATTRIBUTS DE CE PARCOURS !!"/>&nbsp;';
 }	
 $smarty->assign('tb_infparc',$tb_infparc);
 
