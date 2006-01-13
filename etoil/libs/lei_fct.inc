@@ -20,15 +20,14 @@ rem: la table lei_categ ne sert plus
 
 class lei_acc {
 	var $tbselcats=array() ;
-	var $nomenc_fn="/usr/local/etoil/libs/nomenc_lei.txt";
+	var $nomenc_fn="libs/nomenc_lei.txt";
 	var $leaf_img="img/p_tux_L.gif";
 	var $strTree; // le code 
 	
 
-function GenLeiCatTree(&$TreeObj) { // argument transmis par r?f?rence
+function GenLeiCatTree(&$TreeObj) { // argument transmis par r?f?rence pour mise à jour du tableaau tbChilds
 //echDL3T1line ($id,$pid,$label,$cur_depth,$title="",$href="",$onclickJSAction="",$disp=true,$leafimg="",$dispfoldplus=false,$ckbcheked=false,$nodeopen,$cdckbox=true)
-
-	$fd=fopen($this->nomenc_fn,"r") or die ("impossible d'ouvrir le fichier de nomenclature LEI $nomenc_fn");
+	$fd=fopen(PROOT.$this->nomenc_fn,"r") or die ("impossible d'ouvrir le fichier de nomenclature LEI $nomenc_fn");
 	while (!feof ($fd)) {
   		$buffer = fgets($fd, 4096);
 		$tbl=explode("|",$buffer);

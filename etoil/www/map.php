@@ -16,7 +16,6 @@ $smarty->assign('bool_map_disp',$bool_map_disp);
 $smarty->assign('bool_lei_stat',RecupLib("conf","name","value","lei_stat"));
 $smarty->assign('url_lei_stat',RecupLib("conf","name","value","url_lei_stat"));
 
-
 if (isset($_REQUEST['x'])) {
 	$click_x = $_REQUEST['x'];
 	$click_y = $_REQUEST['y'];

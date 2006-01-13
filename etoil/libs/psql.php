@@ -1,12 +1,14 @@
 <?php
 
-if (!is_file(PROOT."/db/local.php")) {
+
+if (!is_file(PROOT."db/local.php")) {
 	header('Location: install.php');
 	exit;
 }
 
-include PROOT."/db/local.php";
-$db = new db($dbhost,$dbport,$dbname,$dbuser,$dbpass);
+include PROOT."db/local.php";
+
+$db = new db($dbhost,$dbport,$dbname,$dbuser,$dbpass) or die("pb a la creation de l'objet db !");;
 
 if (!$db->conn) {
 	$feedback[] = array('num'=>-1,'msg'=>$db->mes[0]);
@@ -19,6 +21,7 @@ class db {
 	var $connstr;
 
 	function db($host='',$port='',$name='',$user='',$pass='') {
+
 		$str = array();
 		if ($host) $str[] = "host=$host";
 		if ($port) $str[] = "port=$port";
@@ -26,7 +29,8 @@ class db {
 		if ($user) $str[] = "user=$user";
 		if ($pass) $str[] = "password=$pass";
 		$this->connstr = implode(' ',$str);
-		$this->conn = @ pg_connect($this->connstr);
+//		echo $this->connstr;
+		$this->conn =  pg_connect($this->connstr);
 		if (!$this->conn) {
 			$this->mes[] = tra("Connection à la base impossible.");
 		}
@@ -223,8 +227,10 @@ class db {
 	function add_parcours($name,$user,$discp,$geom,$level=0,$time=0,$marqimp="toto") {
 		if ($marqimp=="toto") $marqimp=date('d-m-y');
 		$line = implode(",",$geom);
-		$query = "insert into parcours (parcours_name,parcours_user,parcours_discp,parcours_geom,parcours_level,parcours_time,parcours_dtcrea,parcours_marqimp) values ";
-		$query.= "('". addslashes($name)."','". addslashes($user)."','". addslashes($discp). "',GeomFromEWKT('SRID=-1;LINESTRING($line)'),'". addslashes($level)."',$time, '".date('Y-m-d')."', '$marqimp');";
+		$user_id=RecupLib("users","login","user_id",$user);
+		if (!$user_id) $user_id=1;
+		$query = "insert into parcours (parcours_name,parcours_user,parcours_uscrea,parcours_discp,parcours_geom,parcours_level,parcours_time,parcours_dtcrea,parcours_marqimp) values ";
+		$query.= "('". addslashes($name)."','". addslashes($user)."' , $user_id , '". addslashes($discp). "',GeomFromEWKT('SRID=-1;LINESTRING($line)'),'". addslashes($level)."',$time, '".date('Y-m-d')."', '$marqimp');";
 		$resins=$this->s_query($query);
 		if (!$resins) {
 			$this->mes[] = "Requete: $query \n error: ". pg_last_error();

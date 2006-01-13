@@ -3,6 +3,7 @@
 define('TIMER_START', microtime());
 define('PWWW', dirname(__FILE__).'/');
 define('PROOT', dirname(dirname(__FILE__)).'/');
+
 session_start();
 /* --------------------------------------------------------------- */
 //error_reporting(E_ALL);
@@ -53,6 +54,6 @@ $smarty->assign('title', $title);
 
 if (!empty($db)) {
 	include_once (PROOT.'libs/psql.php');
-	include_once(PROOT."/libs/conf.php");
+	include_once(PROOT."libs/conf.php");
 }
 ?>

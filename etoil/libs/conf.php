@@ -45,8 +45,8 @@ return($vret);
 $zoom2x=2; 
 
 $bool_disp_lay_LEI=true; // affichage de la couche LEI
-$chem_abs_genimgtmp="/usr/local/etoil/www/temp/";
-$chem_web_genimgtmp="/temp/";
+$chem_abs_genimgtmp=PWWW."temp/";
+$chem_web_genimgtmp="temp/";
 // trucs pour utilisation PYA
 $TBDname="DESC_TABLES";
 $NmChDT="TABLE0COMM";
@@ -122,6 +122,6 @@ $yd2pp=10; // id y
 $minscaledisp_leilabs=50000;
 $leilabelsize=8;
 $leilabelfont="arial_italic";
-$lei_f_url="http://193.108.140.161/etoil/cgi/interface.pyt?page=gab-produit.sk&boucle=p,prest2,p2,plink,crdp,crdp,hor,desext,listass2&critselect1=1900178&critselect2=1900067&produit=";
+$lei_f_url="http://lei.crt-limousin.fr/etoil/cgi/interface.pyt?page=gab-produit.sk&boucle=p,prest2,p2,plink,crdp,crdp,hor,desext,listass2&critselect1=1900178&critselect2=1900067&produit=";
 //$lei_f_url="interface.htm?idbid=";
 ?>
