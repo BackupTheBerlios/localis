@@ -10,10 +10,11 @@ $tbzoomd[]=929764; // rien
 $tbzoomd[]=450000; // jyj
 $tbzoomd[]=300000; // scan 1000
 $tbzoomd[]=180000; // georr 250K
-$tbzoomd[]=70000; // georr 100 K
-$tbzoomd[]=35000; // georr 50K
-$tbzoomd[]=14000; //georr 20K
-$tbzoomd[]=4000; // georr 5K
+//$tbzoomd[]=70000; // georr 100 K
+$tbzoomd[]=50000; // scan 100
+$tbzoomd[]=25000; // scan 100
+//$tbzoomd[]=14000; //georr 20K
+//$tbzoomd[]=4000; // georr 5K
 
 $nblzoom=count($tbzoomd) - 1;
 $sf = 6000; // distance autour d'une ville lors d'un focus ville
