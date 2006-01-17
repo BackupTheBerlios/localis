@@ -6,10 +6,10 @@ $blockspc=7; // espaces entre les blocks de droite
 
 $bool_disp_zoomp=true; // affichage par zoom prï¿½ï¿½inis
 
-$tbzoomd[]=929764; // rien
+$tbzoomd[]=1113619; // carte hélène
 $tbzoomd[]=450000; // jyj
 $tbzoomd[]=300000; // scan 1000
-$tbzoomd[]=180000; // georr 250K
+$tbzoomd[]=180000; // scan régional
 //$tbzoomd[]=70000; // georr 100 K
 $tbzoomd[]=50000; // scan 100
 $tbzoomd[]=25000; // scan 100

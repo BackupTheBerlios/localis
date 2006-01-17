@@ -25,7 +25,7 @@ if (isset($_REQUEST['x'])) {
 
 if (!isset($_REQUEST['action']))  $_REQUEST['action'] = "travel";
 
-$zoom_factor=1; // d?faut
+$zoom_factor=1; // défaut
 
 if (isset($_REQUEST['purge']) and $_REQUEST['purge'] == 'all') {
 	$_SESSION['track'] = array();
@@ -34,7 +34,7 @@ if (isset($_REQUEST['filtre'])) {
 	$filtre = $_REQUEST['filtre'];
 	$_SESSION['filtre'] = array();
 	foreach ($filtre as $f=>$v) {
-		$_SESSION['filtre'][$f] = $v; // ex: SESSION[filtre][discp]="1" (p?destre)
+		$_SESSION['filtre'][$f] = $v; // ex: SESSION[filtre][discp]="1" (pédestre)
 	}
 	$_SESSION['discp_c']=$_SESSION['filtre']['discp'];
 } elseif (isset($_SESSION['filtre'])) {
@@ -49,7 +49,7 @@ elseif ($_REQUEST['notunique']=="true") unset($_SESSION['pid']);
 
 // mode affichage parcours unique
 if ($_SESSION['pid']) {
-	// inclus ce qui ?tait au d?part la popup
+	// inclus ce qui était au départ la popup
 	include ("pop_det_parc.php");
 }
 
@@ -66,12 +66,12 @@ if ($bool_disp_lay_LEI) {
 			$LEI_Tree->imgfclose =$ChemImgTree.'folderClosed.gif';
 			
 			//$GLOBALS["TSFE"]->setJS("toto","alert('coucoui')");
-			// d?claration des variables JS
+			// déclaration des variables JS
 			
 			$smarty->assign('DL3TJSVarsInit',$LEI_Tree->echDL3TJSVarsInit(true));
-			// d?claration des fonctions JS
+			// declaration des fonctions JS
 			$smarty->assign('DL3TJSFunctions',$LEI_Tree->echDL3TJSFunctions(true));
-			// d?claration des styles CSS
+			// declaration des styles CSS
 			$smarty->assign('DL3TStyles',$LEI_Tree->echDL3TStyles(true));
 			
 			$lei_obj=new lei_acc; // nouvel objet d'acces LEI
@@ -90,7 +90,7 @@ if ($bool_disp_lay_LEI) {
 }*/
 
 // ========================================================================
-// special hack: si param?tre sp?cial spcsc25=tux129 pass? en get (par l'url)
+// special hack: si paramètre spécial spcsc25=tux129 pass? en get (par l'url)
 // utilise un fichier map specifique limousinhck.map)
 $mapfile = PROOT. "/maps/$mapfile";
 
@@ -170,7 +170,7 @@ unlink($_FILES['trackfileimp']['tmp_name']); // efface le fichier t?l?charg?
 if (!empty($_REQUEST['ville'])) {
 	$cities = $db->get_cities($_REQUEST['ville'],$deptsregion); // filtre rajout? pour les depts de la r?gion
 	if (!$cities or count($cities) == 0) {
-		$feedback[] = array('num'=>-1,'msg'=>sprintf(tra('D?sol?, aucun nom de ville en Limousin ne commence par %s.'),$_REQUEST['ville']));
+		$feedback[] = array('num'=>-1,'msg'=>sprintf(tra('Désolé, aucun nom de ville en Limousin ne contient %s.'),$_REQUEST['ville']));
 	} elseif (count($cities) == 1) {
 		$_REQUEST['focusville'] = $cities[0]['nom'];
 		$_REQUEST['idfocusville'] = $cities[0]['id'];
@@ -185,7 +185,7 @@ $action_OK=false; // par d?faut, l'action(zoom, travel) qui a le focus n'est PAS
 if (isset($_REQUEST['focusville'])) {
 	$city_info = $db->get_city_info($_REQUEST['idfocusville']);
 	if (!$city_info) {
-		$feedback[] = array('num'=>-1,'msg'=>sprintf(tra('D?sol?, aucun nom de ville en Limousin ne correspond ? %s.'),$_REQUEST['focusville']));
+		$feedback[] = array('num'=>-1,'msg'=>sprintf(tra('Désolé, aucun nom de ville en Limousin ne correspond à %s.'),$_REQUEST['focusville']));
 	} else {
 		$smarty->assign('city_info',$city_info);
 		//debug ("city_info");
@@ -277,6 +277,7 @@ if (isset($_REQUEST['ref_x']) or isset($_REQUEST['ref.x'])) {
 
 if ($bool_disp_zoomp) { // choix ancienne m?thode de zoom / nouvelle
 	if (empty($_REQUEST['extent']) && empty($_REQUEST['idfocusville'])) {
+
 		// ancienne m?thode, conserv?e quand recadrage uniquement
 		$e_map->zoompoint($zoom_factor,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 	} else  {
@@ -288,8 +289,17 @@ if ($bool_disp_zoomp) { // choix ancienne m?thode de zoom / nouvelle
 	//debug ("zooml");
 	//debug ("zoom_factor");
 	$_SESSION['zooml']=$zooml;
+	
 	$zoomc=($_REQUEST['zoomc']>0 ? $_REQUEST['zoomc'] : $tbzoomd[$zooml]); // en admin (uniqt) on peut entrer en facteur de zoom
+	
+	if ($e_map->scale >= ($tbzoomd[0]-50) || $zoomc>= ($tbzoomd[0]-50)) { // si zoom mini, on recadre automatiquement 
+		unset($focus);
+		$focus['zoomin'] = "focus";
+		$e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par d?faut, comme un clic au centre
+		$e_extent->setextent($extminxmf,$extminymf,$extmaxxmf,$extmaxymf);
+	}
 	$e_map->zoomscale($zoomc,$e_click,$sizex,$sizey,$e_extent);
+		
 	}
 } else $e_map->zoompoint($zoom_factor,$e_click,$sizex,$sizey,$e_extent,$e_limit);
 
