@@ -80,6 +80,18 @@ function popup(page, width, height) {
 <div class="headbar{if $title==Cartographie}WI{/if}">
 {* les images de fond sont dans la classe, et il n'y a en pas pour la carto (WI=without images) *}
 </div>
+
+{if $avertTEST_SRV}
+<div class="negative">
+<span style="font-size:16px; line-height:20px; border-width:2px">
+<br/><br/>
+<B>Attention:</B>cette adresse (e-toil.net) est désormais exclusivement un site de développement. Aucunes données ne doivent y être saisies sauf pour tests, elles seront systématiquement effacées.<br/>
+Le site contenant les données (à mettre) à jour est désormais hébergé à l'adresse définitive sur <a href="http://www.e-toil.com">www.e-toil.com</a>; jusqu'à ouverture officielle du site, l'accès à la cartographie est toujours protégé par les mêmes mots de passe.
+<br/></br/>
+</span>
+</div>
+{/if}
+
 {if $avertMSIE && $title!=Cartographie}
 <div class="negative">
 Vous utilisez le navigateur Micro$oft Internet Explorer, qui n'est pas conforme aux spécifications du W3C. Certaines parties de ce site pourront donc ne pas fonctionner correctement. Nous vous recommandons d'utiliser <a href="http://www.mozilla-europe.org/fr/products/firefox/">Mozilla Firefox</a> (gratuit et librement téléchargeable), ou encore <a href="http://www.opera.com">Opera</a>, navigateurs qui en plus d'être conformes, possèdent bien d'autres avantages : immunité aux chevaux de troie et autres hoax, blocage des popups non sollicitées, multi-fenêtres.

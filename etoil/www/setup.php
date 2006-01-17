@@ -5,6 +5,8 @@ define('PWWW', dirname(__FILE__).'/');
 define('PROOT', dirname(dirname(__FILE__)).'/');
 define ("MSIE",strstr($_SERVER["HTTP_USER_AGENT"],"MSIE")); // si MSIE on affiche un message d'alerte
 session_start();
+define ("TEST_SRV",strstr($_ENV["SERVER_ADDR"],"192.168.0.")); // si MSIE on affiche un message d'alerte
+
 /* --------------------------------------------------------------- */
 //error_reporting(E_ALL);
 ini_set('register_globals','off');
@@ -54,7 +56,10 @@ $smarty->assign('title', $title);
 
 if (MSIE) {
 	$smarty->assign('avertMSIE',true);
+}
 
+if (TEST_SRV) {
+	$smarty->assign('avertTEST_SRV',true);
 }
 
 if (!empty($db)) {
