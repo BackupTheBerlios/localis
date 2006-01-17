@@ -6,7 +6,7 @@ $blockspc=7; // espaces entre les blocks de droite
 
 $bool_disp_zoomp=true; // affichage par zoom pr��inis
 
-$tbzoomd[]=1500000; // rien
+$tbzoomd[]=929764; // rien
 $tbzoomd[]=450000; // jyj
 $tbzoomd[]=300000; // scan 1000
 $tbzoomd[]=180000; // georr 250K

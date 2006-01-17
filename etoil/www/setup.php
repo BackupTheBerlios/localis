@@ -3,7 +3,7 @@
 define('TIMER_START', microtime());
 define('PWWW', dirname(__FILE__).'/');
 define('PROOT', dirname(dirname(__FILE__)).'/');
-
+define ("MSIE",strstr($_SERVER["HTTP_USER_AGENT"],"MSIE")); // si MSIE on affiche un message d'alerte
 session_start();
 /* --------------------------------------------------------------- */
 //error_reporting(E_ALL);
@@ -51,6 +51,11 @@ $smarty->assign('language', $language);
 $smarty->assign('langs', $langs);
 $smarty->assign('url', basename($_SERVER['PHP_SELF']));
 $smarty->assign('title', $title);
+
+if (MSIE) {
+	$smarty->assign('avertMSIE',true);
+
+}
 
 if (!empty($db)) {
 	include_once (PROOT.'libs/psql.php');

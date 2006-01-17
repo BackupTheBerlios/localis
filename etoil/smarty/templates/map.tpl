@@ -11,6 +11,7 @@
 <script language="JavaScript">
 // cette fonction est appelée quand on vuet télécharger (uploader) un fichier
 // en effet, les upload ne marchent correctement qu'en méthode POST
+//alert ('IE est une grosse merde');
 function ChgMeth() {
 document.f.method="POST";
 }
@@ -60,7 +61,9 @@ document.f.method="POST";
 </tr><tr>
 <td class="navmap" onclick="document.getElementById('lc').click();" {popup text="{tr}Vers l'Ouest{/tr}"}
 ><input id="lc" type="image" src="img/flecheG.gif" border="0" name="dir_lc" value="lc" /></td>
-<td><input type="image" src="{$mapimage}" width="{$sizex}" height="{$sizey}" alt="" border="1" hspace="0" vspace="0" class="map" usemap="#localisation" valign="top"></td>
+<td><input type="image" src="{$mapimage}" width="{$sizex}" height="{$sizey}" alt="" border="1" hspace="0" vspace="0" class="map" valign="top">
+<!--<input type="image" src="{$mapimage}" width="{$sizex}" height="{$sizey}" alt="" border="1" hspace="0" vspace="0" class="map" usemap="#localisation" valign="top">-->
+</td>
 <td class="navmap" onclick="document.getElementById('rc').click();" {popup text="{tr}Vers l'Est{/tr}"} 
 ><input id="rc" type="image" src="img/flecheD.gif" border="0" name="dir_rc" value="rc" /></td>
 </tr><tr>
@@ -311,14 +314,18 @@ document.f.method="POST";
 {* bloc de sélection points du LEI *}
 <img src="img/dot0.png" height="{$blockspc}">
 <div class="smbar"  {popup text="{tr}LEIPointsInfo{/tr}"}>{tr}LEIPointsSel{/tr}</div>
-{* ancienne liste déroulante <div class="ldlei">
-{$LD_filt_pts_LEI}</div>*}
-
+{if !$avertMSIE}
 {$DL3TJStbChilds}
 <div class="leitree" id="tree">{$tree_lei}</div>
  
 <br/><input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}"/>
-
+{else}
+<div class="negative">
+Vous utilisez le navigateur Micro$oft Internet Explorer, qui n'est pas conforme aux spécifications du W3C.<br/>
+<b>Nous ne sommes de ce fait pas en mesure d'afficher les fiches "<em>{tr}LEIPointsSel{/tr}</em>" avec ce navigateur</b><br>
+Nous vous recommandons d'utiliser <a href="http://www.mozilla-europe.org/fr/products/firefox/">Mozilla Firefox</a> (gratuit et librement téléchargeable).
+</div>
+{/if}
 
 </td></tr></table> {* fin du grand tableau général de colonnes *}
 {if $pid ne "" }

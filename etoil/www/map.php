@@ -57,27 +57,29 @@ $discp_c=$_SESSION['discp_c'];
 
 
 if ($bool_disp_lay_LEI) {
-		$LEI_Tree=new dltreeObj;
-		$ChemImgTree="img/jstree/";
-		$LEI_Tree->dispckbox=true;
-		$LEI_Tree->imgfopen=$ChemImgTree.'folderOpen.gif'; // nom des fichiers images symoles
-		$LEI_Tree->imgfcloseplus =$ChemImgTree.'folderClosedplus.gif';
-		$LEI_Tree->imgfclose =$ChemImgTree.'folderClosed.gif';
-
-		//$GLOBALS["TSFE"]->setJS("toto","alert('coucoui')");
-		// d?claration des variables JS
-		
-		$smarty->assign('DL3TJSVarsInit',$LEI_Tree->echDL3TJSVarsInit(true));
-		// d?claration des fonctions JS
-		$smarty->assign('DL3TJSFunctions',$LEI_Tree->echDL3TJSFunctions(true));
-		// d?claration des styles CSS
-		$smarty->assign('DL3TStyles',$LEI_Tree->echDL3TStyles(true));
-
-		$lei_obj=new lei_acc; // nouvel objet d'acces LEI
-		$lei_obj->GenLeiCatTree(&$LEI_Tree);
-		
-		$smarty->assign('DL3TJStbChilds',$LEI_Tree->echDL3TJStbChilds(true));
-		$smarty->assign('tree_lei',$lei_obj->strTree);
+		if (!MSIE) {
+			$LEI_Tree=new dltreeObj;
+			$ChemImgTree="img/jstree/";
+			$LEI_Tree->dispckbox=true;
+			$LEI_Tree->imgfopen=$ChemImgTree.'folderOpen.gif'; // nom des fichiers images symoles
+			$LEI_Tree->imgfcloseplus =$ChemImgTree.'folderClosedplus.gif';
+			$LEI_Tree->imgfclose =$ChemImgTree.'folderClosed.gif';
+			
+			//$GLOBALS["TSFE"]->setJS("toto","alert('coucoui')");
+			// d?claration des variables JS
+			
+			$smarty->assign('DL3TJSVarsInit',$LEI_Tree->echDL3TJSVarsInit(true));
+			// d?claration des fonctions JS
+			$smarty->assign('DL3TJSFunctions',$LEI_Tree->echDL3TJSFunctions(true));
+			// d?claration des styles CSS
+			$smarty->assign('DL3TStyles',$LEI_Tree->echDL3TStyles(true));
+			
+			$lei_obj=new lei_acc; // nouvel objet d'acces LEI
+			$lei_obj->GenLeiCatTree(&$LEI_Tree);
+			
+			$smarty->assign('DL3TJStbChilds',$LEI_Tree->echDL3TJStbChilds(true));
+			$smarty->assign('tree_lei',$lei_obj->strTree);
+		} 
 }
 //print_r ($tb_lei_selidcat);
 
