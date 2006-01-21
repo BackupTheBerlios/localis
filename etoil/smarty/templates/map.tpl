@@ -91,7 +91,7 @@ document.f.method="POST";
 {* aff. echelle *}
 <div class="foot" style="margin-left:10px;" id="light">{tr}Scale{/tr}: 1 / {$scale} (72dpi)
 {if $booldisplegscan100}
-&nbsp;&nbsp;&nbsp;<a href="#legend">->{tr}LLegenscan100{/tr}</a>
+&nbsp;&nbsp;&nbsp;<a href="img/Legende_SCAN100.gif" target="_blank">->{tr}LLegenscan100{/tr}</a>
 {/if}
 
 {if $smarty.session.admin and $map_click}[x {$map_click.x} - y {$map_click.y} ]{/if}
@@ -103,28 +103,34 @@ document.f.method="POST";
 {* colonne de droite tableau principal*}
 
 <td style="padding-left : 10px;">
-
+{tr}CommentNav{/tr}
 <div class="bar">{tr}Affichage{/tr}</div>
 
 <table border="0" cellpadding="1" cellspacing="0" id="map">
 <tr><td valign="middle">
 {* zooms et déplacement *}
 <table border="0" cellpadding="2" cellspacing="1" class="navbar">
-<td valign="middle" align="center" class="tool{$focus.zoomout}" id='tool_zoomout'>
-<div {popup text="{tr}Eloigner{/tr} [ Alt-e ]"}><label for="zoomout" accesskey="e"><img src="img/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top"></label>
-<input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked" {/if} onchange="toggletool('tool_zoomout'); if (this.checked) document.f.submit();"/></div></td></tr><tr>
-<td valign="middle" width="25%"  align="center" class="tool{$focus.travel}" id='tool_travel'>
-<div {popup text="{tr}Déplacer{/tr} [ Alt-d ]"}><label for="travel" accesskey="d"><img src="img/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top"></label>
-<input type="radio" id="travel" name="action" value="travel"{if $focus.travel eq 'focus'} checked="checked" {/if} onchange="toggletool('tool_travel')" /></div></td><tr></tr>
-<td valign="middle" align="center" class="tool{$focus.zoomin}" id='tool_zoomin'>
-<div {popup text="{tr}Rapprocher{/tr} [ Alt-r ]"}><label for="zoomin" accesskey="r"><img src="img/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom avant" valign="top"></label>
-<input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked" {/if} onchange="toggletool('tool_zoomin')" /></div></td>
-</td></tr></table></td>
-
+<tr><td class="tool{$focus.zoomout}" id='tool_zoomout'>
+<div {popup text="{tr}Eloigner{/tr} [ Alt-e ]"}><label for="zoomout" accesskey="e"><img src="img/zoomout2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom Arrière" valign="top">Eloigner</label>
+<input type="radio" id="zoomout" name="action" value="zoomout"{if $focus.zoomout eq 'focus'} checked="checked" {/if} onchange="toggletool('tool_zoomout'); if (this.checked) document.f.submit();"/></div></td>
+<td class="tool{$focus.travel}" id='tool_travel'>
+<div {popup text="{tr}Déplacer{/tr} [ Alt-d ]"}><label for="travel" accesskey="d"><img src="img/travel.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Déplacement" valign="top">Déplacer</label>
+<input type="radio" id="travel" name="action" value="travel"{if $focus.travel eq 'focus'} checked="checked" {/if} onchange="toggletool('tool_travel')" /></div></td>
+<td class="tool{$focus.zoomin}" id='tool_zoomin'>
+<div {popup text="{tr}Rapprocher{/tr} [ Alt-r ]"}><label for="zoomin" accesskey="r"><img src="img/zoomin2.png" width="20" height="20" hspace="0" vspace="0" border="0" alt="Zoom avant" valign="top">Rapprocher</label>
+<input type="radio" id="zoomin" name="action" value="zoomin"{if $focus.zoomin eq 'focus'} checked="checked" {/if} onchange="toggletool('tool_zoomin')" />
+</div></td>
+<td class="tool">
+<div {popup text="{tr}Recadrer{/tr} [ Alt-c ]"}><label for="resize"><img src="img/expand.png">Recadrer sur le Limousin</label>
+<input id="resize" type="radio" name="fit" value="{tr}Recadrer{/tr}" onclick="toggletool('tool_zoomin'); document.f.extent.value=''; document.f.submit();"
+ accesskey="c" /></div></TD></tr>
+</table>
+</td></tr>
+<tr>
 {* carte de localisation *}
 <td valign="top" align="left">
 <input type="image" src="{$refsrc}" width="{$refwidth}" height="{$refheight}" name="ref" alt="{$name}" hspace="0" vspace="0" border="0"><img src="img/francepti.jpg" width="100" height="100" border="0" />
-{* choix de la taille*}
+{* choix de la taille : !!! on la dégage  !!!
 <br/>
 <select name="size" class="submit" id="100" onchange="document.f.resize.value='y' ; document.f.submit();" {popup text="{tr}ImgSize{/tr}"}>
 <option value="240x240"{$sizecheck.240x240}>240x240</option>
@@ -133,13 +139,15 @@ document.f.method="POST";
 <option value="600x600"{$sizecheck.600x600}>600x600</option>
 <option value="800x800"{$sizecheck.800x800}>800x800</option>
 </select>
-&nbsp;&nbsp;&nbsp;
-<input type="image" src="img/expand.png" width="16" height="11" name="fit" value="{tr}Recadrer{/tr}" class="submit" onclick="document.f.extent.value=''; document.f.submit();"
-{popup text="{tr}Recadrer{/tr} [ Alt-c ]"} accesskey="c" /></td>
+&nbsp;&nbsp;&nbsp;*}
+{* plus de choix de la taille : !!! *}
+<input type="hidden"  value="500x500">
+</td>
 </tr>
 </table>
 
 <input type="hidden" name="resize" value="n" />
+<img src="img/dot0.png" height="{$blockspc}">
 
 {* recherche par commune *}
 <div class="smbar">{tr}Localiser une commune{/tr}</div>
@@ -238,6 +246,7 @@ document.f.method="POST";
 	{/foreach}
 	</select></td></tr>
 	
+	{if $filtre.discp}
 	
 	<tr><td>{tr}Nom{/tr}</td><td>
 	<input type="text" name="filtre[name]" value="{$filtre.name}">
@@ -264,6 +273,7 @@ document.f.method="POST";
 	<option value="{$k}"{if $filtre.level eq $k} selected="selected"{/if}>{$i}</option>
 	{/foreach}
 	</select></td></tr>
+	{/if}
 	<tr><td>&nbsp;</td><td>
 	<input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />
 	</td></tr></table>
@@ -342,13 +352,6 @@ Sur ce site prototype de test, il est nécessaire de s'identifier et d'être habil
 <br/>
 Veuillez contacter {mailto address="artec.vm@nerim.net" encode="javascript" subject="Activer un compte sur e-toil.net"} pour créer ou activer un compte.
 Merci.
-{/if}
-{if $booldisplegscan100}
-<a name="legend" />
-<div class="bar">{tr}Legenscan100{/tr}</div>
-<IMG src="../img/legend1_scan100.jpg" alt="Legende 1" border="0">
-<br/>
-<IMG src="../img/legend2_scan100.jpg" alt="Legende 1" border="0">
 {/if}
 </div>
 {include file="foot.tpl"}

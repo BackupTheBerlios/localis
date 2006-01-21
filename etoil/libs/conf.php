@@ -18,7 +18,7 @@ $tbzoomd[]=25000; // scan 100
 
 $nblzoom=count($tbzoomd) - 1;
 $sf = 6000; // distance autour d'une ville lors d'un focus ville
-$zlfv=3; // type de zoom (indice ds tbdzoom) lors d'un focus ville
+$zlfv=4; // type de zoom (indice ds tbdzoom) lors d'un focus ville
 
 function recalczl($zoomc) {
 global $tbzoomd;

@@ -36,6 +36,7 @@ a {
 	font-weight : bold;
 	text-decoration : none;
 }
+
 a:hover {
 	color : #FF0000;
 	background-color : #dff1d3;
@@ -218,14 +219,32 @@ a:hover {
 .colattribut {background-color : #fe7;
 	font-weight : bold;}
 
-.toolfocus {
-	background-color : #dff1d3;
-	border : 1px solid #000;
+/* navigation zooms, etc */
+
+.navbar input[type=radio] {
+	display : none;
+}
+.navbar td {
+	border: solid #dff1d3 1px;
+}
+
+.tool, .toolfocus {
+	width : 50px;
+	font-size:9px;
+	text-align:center;
+	vertical-align:middle;
+
 }
 .tool {
 	background-color : #fff;
 	border : 1px solid #fff;
 }
+.toolfocus {
+	background-color : #dff1d3;
+	border : 1px solid #000;
+}
+
+
 .bar {
 	padding : 1px 5px;
 	background-color : #dff1d3;
@@ -248,14 +267,7 @@ a:hover {
 .selection select,.selection input[type=submit] {
 	width : 100%;
 }
-.navbar td {
-	width : 20px;
-	border : 2px solid #dff1d3;
-	border-spacing : 0;
-}
-.navbar input[type=radio] {
-	display : none;
-}
+
 .found {
 	padding : 3px 10px;
 	background-color : #dff1d3;
@@ -287,40 +299,4 @@ a:hover {
 	font-size : 11px;
 	width : 230px;
 	height : 240px;
-}
-
-/*--------------------------------------------------|
-| dTree 2.05 | www.destroydrop.com/javascript/tree/ |
-|---------------------------------------------------|
-| Copyright (c) 2002-2003 Geir Landrö               |
-|--------------------------------------------------*/
-
-.dtree, .dtree table, .dtree tbody, .dtree td{
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	color: #008000;
-	white-space: nowrap;
-}
-.dtree img {
-	border: 0px;
-	vertical-align: middle;
-}
-.dtree a, .dtree a:hover {
-	color: #333;
-	text-decoration: none;
-}
-
-.dtree a.node, .dtree a.nodeSel {
-	white-space: nowrap;
-	padding: 1px 2px 1px 2px;
-}
-.dtree a.node:hover, .dtree a.nodeSel:hover {
-	color: #333;
-	text-decoration: underline;
-}
-.dtree a.nodeSel {
-	background-color: #c0d2ec;
-}
-.dtree .clip {
-	overflow: hidden;
 }

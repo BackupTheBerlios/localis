@@ -16,6 +16,7 @@ $smarty->assign('bool_map_disp',$bool_map_disp);
 $smarty->assign('bool_lei_stat',RecupLib("conf","name","value","lei_stat"));
 $smarty->assign('url_lei_stat',RecupLib("conf","name","value","url_lei_stat"));
 
+
 if (isset($_REQUEST['x'])) {
 	$click_x = $_REQUEST['x'];
 	$click_y = $_REQUEST['y'];
@@ -23,7 +24,9 @@ if (isset($_REQUEST['x'])) {
 	$click_x = $click_y = false;
 }
 
-if (!isset($_REQUEST['action']))  $_REQUEST['action'] = "travel";
+// enlevé: ne servait que quand on arrivait sur la carto pour la première fois
+// maintenant c'est le zoom pardéfaut qui est sélectionné
+//if (!isset($_REQUEST['action']))  $_REQUEST['action'] = "travel";
 
 $zoom_factor=1; // défaut
 
@@ -134,9 +137,15 @@ foreach ($layers as $l) {
 $e_limit = ms_newRectObj();
 $e_limit->setextent($extminx,$extminy,$extmaxx,$extmaxy);
 
-if (!empty($_REQUEST['extent'])) {
+if (!empty($_REQUEST['extent'])) { // extent est une var passée en input hidden 
 	list($extminx,$extminy,$extmaxx,$extmaxy) = split(' ',trim(urldecode($_REQUEST['extent'])));
+} else {
+	unset($_SESSION['pid']);
+	unset($_REQUEST['pid']);
+	$focus = array();
+	$focus["zoomin"]="focus";
 }
+
 $ext = array($extminx,$extminy,$extmaxx,$extmaxy);
 
 $e_extent = ms_newRectObj();
@@ -158,7 +167,7 @@ $e_map->set('height',$sizey);
 $e_click = ms_newPointObj(); // objet de pointage
 $e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par d?faut, comme un clic au centre
 
-//print_r($_REQUEST);
+// au cas ou fichier trk téléchargé
 if (!empty($_FILES['trackfileimp']['name'])) {
 //debug("_FILES");
 echo (import_track($_FILES['trackfileimp']['tmp_name'],"trk","wgs84"));
@@ -179,6 +188,7 @@ if (!empty($_REQUEST['ville'])) {
 		$smarty->assign('cities',$cities);
 	}
 }
+// ne sert à rien pour l'instant
 $action_OK=false; // par d?faut, l'action(zoom, travel) qui a le focus n'est PAS appliqu?e
 // il peut y avoir plein d'autres actions (recherche, resize, etc ..)
 
@@ -195,6 +205,7 @@ if (isset($_REQUEST['focusville'])) {
 		$m[2] -=  1.33 * $sf; //8000;
 		$e_extent->setextent(floor($m[1] - $sf),floor($m[2] - $sf),floor($m[1] + $sf),floor($m[2] + $sf));
 		$_SESSION['zooml']=$zlfv; // facteur de zoom pr?d?fini autour d'un focus ville (2)
+		$zoom_factor=1;
 	}
 } elseif (isset($_REQUEST['pid'])) {
 	$parcours_info = $db->get_parcours_info($_REQUEST['pid']);
@@ -276,7 +287,8 @@ if (isset($_REQUEST['ref_x']) or isset($_REQUEST['ref.x'])) {
 // ************************************************************************
 
 if ($bool_disp_zoomp) { // choix ancienne m?thode de zoom / nouvelle
-	if (empty($_REQUEST['extent']) && empty($_REQUEST['idfocusville'])) {
+	//if (empty($_REQUEST['extent']) && empty($_REQUEST['idfocusville'])) {
+	if (empty($_REQUEST['extent'])) {
 
 		// ancienne m?thode, conserv?e quand recadrage uniquement
 		$e_map->zoompoint($zoom_factor,$e_click,$sizex,$sizey,$e_extent,$e_limit);
@@ -295,6 +307,7 @@ if ($bool_disp_zoomp) { // choix ancienne m?thode de zoom / nouvelle
 	if ($e_map->scale >= ($tbzoomd[0]-50) || $zoomc>= ($tbzoomd[0]-50)) { // si zoom mini, on recadre automatiquement 
 		unset($focus);
 		$focus['zoomin'] = "focus";
+		print_r($focus);
 		$e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par d?faut, comme un clic au centre
 		$e_extent->setextent($extminxmf,$extminymf,$extmaxxmf,$extmaxymf);
 	}

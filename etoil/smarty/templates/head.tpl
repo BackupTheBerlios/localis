@@ -8,18 +8,14 @@
 <script>
 function toggletool(id) {literal}{{/literal}
 {if $smarty.session.admin && !($smarty.session.pid)}
-	document.getElementById('tool_edit').style.border='0';
-	document.getElementById('tool_edit').style.backgroundColor='#fff';
+	document.getElementById('tool_edit').className='tool';
 {/if}
-	document.getElementById('tool_zoomin').style.border='0';
-	document.getElementById('tool_travel').style.border='0';
-	document.getElementById('tool_zoomout').style.border='0';
-	document.getElementById('tool_zoomin').style.backgroundColor='#fff';
-	document.getElementById('tool_travel').style.backgroundColor='#fff';
-	document.getElementById('tool_zoomout').style.backgroundColor='#fff';
-	document.getElementById(id).style.border='1px solid #000';
-	document.getElementById(id).style.backgroundColor='#dff1d3';
+	document.getElementById('tool_zoomin').className='tool';
+	document.getElementById('tool_travel').className='tool';
+	document.getElementById('tool_zoomout').className='tool';
+	document.getElementById(id).className='toolfocus';
 {literal}}{/literal}
+
 {literal}
 var oPopupWin; // stockage du handle de la popup
 function popup(page, width, height) {
