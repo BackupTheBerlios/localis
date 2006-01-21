@@ -307,7 +307,6 @@ if ($bool_disp_zoomp) { // choix ancienne m?thode de zoom / nouvelle
 	if ($e_map->scale >= ($tbzoomd[0]-50) || $zoomc>= ($tbzoomd[0]-50)) { // si zoom mini, on recadre automatiquement 
 		unset($focus);
 		$focus['zoomin'] = "focus";
-		print_r($focus);
 		$e_click->setXY(floor($sizex/2),floor($sizey/2),0); // par d?faut, comme un clic au centre
 		$e_extent->setextent($extminxmf,$extminymf,$extmaxxmf,$extmaxymf);
 	}
