@@ -286,7 +286,7 @@ if (isset($_REQUEST['ref_x']) or isset($_REQUEST['ref.x'])) {
 	}
 // ************************************************************************
 
-if ($bool_disp_zoomp) { // choix ancienne m?thode de zoom / nouvelle
+if ($bool_disp_zoomp && $_REQUEST['pid']=="") { // choix ancienne m?thode de zoom / nouvelle
 	//if (empty($_REQUEST['extent']) && empty($_REQUEST['idfocusville'])) {
 	if (empty($_REQUEST['extent'])) {
 
