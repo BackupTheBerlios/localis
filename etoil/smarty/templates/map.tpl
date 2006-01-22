@@ -36,8 +36,8 @@ document.f.method="POST";
 <map name="localisation" id="localisation">
 {if count($tracks)}
 {*definit des area cliquables sur les pictos des parcours*}
-{section name=i loop=$tracks}
-<area href="{$url}?pid={$tracks[i].parcours_id}" name="{$tracks[i].parcours_id}" id="{$tracks[i].parcours_id}" shape="rect" coords="{$tracks[i].rect}" {popup text=$tracks[i].parcours_name|default:" "} />
+{section name=i loop=$tracks} 
+<area href="#" onclick="document.f.pid.value={$tracks[i].parcours_id}; document.f.submit()" name="{$tracks[i].parcours_id}" id="{$tracks[i].parcours_id}" shape="rect" coords="{$tracks[i].rect}" {popup text=$tracks[i].parcours_name|default:" "} />
 {/section}
 {/if}
 {*definit des area cliquables sur les pictos des points LEI*}
@@ -165,9 +165,9 @@ document.f.method="POST";
 {$city_info[0].nom}
 </div>
 {/if}
+<input type="hidden" name="pid" value=""> 
 {if $pid ne "" }
  <input type="submit" class="button" name="search" value="{tr}Rechercher{/tr}" />{/if}
- 
 
 {if $pid eq "" }
 	{* bloc d'outils d'edition, import de tracés(conditionnel, si user non blaireau) *}
@@ -286,7 +286,7 @@ document.f.method="POST";
 	<ul style="font-size:9pt;">
 	{section name=t loop=$tracks}
 	{assign var=v value=$tracks[t].parcours_discp}
-	<li style="color:#{$discpcolor.$v}"><a style="color:#{$discpcolor.$v}" href="{$url}?pid={$tracks[t].parcours_id}" {popup text="{tr}ParcZoom{/tr}"}>#{$tracks[t].parcours_id}: {$tracks[t].parcours_name}</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}"  {popup text="{tr}CE3Down{/tr}"}>[->CE3]</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}&fexpf=shp" {popup text="{tr}SHPDown{/tr}"}>[->SHP]</a></li>
+	<li style="color:#{$discpcolor.$v}"><a style="color:#{$discpcolor.$v}" href="#" onclick="document.f.pid.value={$tracks[t].parcours_id}; document.f.submit()" {popup text="{tr}ParcZoom{/tr}"}>#{$tracks[t].parcours_id}: {$tracks[t].parcours_name}</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}"  {popup text="{tr}CE3Down{/tr}"}>[->CE3]</a> <a href="file_export.php?parcours_id={$tracks[t].parcours_id}&fexpf=shp" {popup text="{tr}SHPDown{/tr}"}>[->SHP]</a></li>
 	{/section}
 	</ul>
 	{else}

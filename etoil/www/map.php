@@ -207,7 +207,7 @@ if (isset($_REQUEST['focusville'])) {
 		$_SESSION['zooml']=$zlfv; // facteur de zoom pr?d?fini autour d'un focus ville (2)
 		$zoom_factor=1;
 	}
-} elseif (isset($_REQUEST['pid'])) {
+} elseif ($_REQUEST['pid']!="") {
 	$parcours_info = $db->get_parcours_info($_REQUEST['pid']);
 	preg_match("/POLYGON\(\(([\.0-9]*) ([\.0-9]*),[\.0-9]* ([\.0-9]*),([\.0-9]*) [\.0-9]*,[\.0-9]* [\.0-9]*,[\.0-9]* [\.0-9]*\)\)/",$parcours_info['ext'],$m);
 	$d = (($m[4] - $m[1]) / $pcarpc); //$pcarpc=% autour du parcours
