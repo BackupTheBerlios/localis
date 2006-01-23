@@ -12,15 +12,18 @@ $parc_name_fn=$_REQUEST["parcours_id"]."_".strtr($parc_name_fn," éèêàâ","_eeeaa"
 
 if ($_REQUEST['fexpf']=='shp') {
 	$parc_name_fn_wpath=PWWW."/temp/".$parc_name_fn;
-	// commande testée pgsql2shp -g parcours_geom -f toto etoil 'select parcours_geom,parcours_name from parcours where parcours_id=2147'
+	// commande testée sur test :pgsql2shp -g parcours_geom -f toto etoil 'select parcours_geom,parcours_name from parcours where parcours_id=2147'
+	// commande testée PROD : /usr/lib/postgresql/8.0/bin/pgsql2shp -h localhost -u www-data -P w3c -g parcours_geom -f  /var/www/etoilcom/www//temp/2474_cattey_11 etoil 'select parcours_geom,parcours_name from parcours where parcours_id=2474'
+
 	if (file_exists(PATH2SHP2PGSQL_TEST)) {
 		$PATH2SHP2PGSQL=PATH2SHP2PGSQL_TEST;
 	} elseif (file_exists(PATH2SHP2PGSQL_PROD)) {
 		$PATH2SHP2PGSQL=PATH2SHP2PGSQL_PROD;
+		$argoptions=" -h localhost -u www-data -P w3c ";
 		}
 	else die("Export en shp impossible: ne trouve pas l'utilitaire SHP2PGSQL; vérifier la config avec les constantes PATH2SHP2PGSQL_TEST ou PATH2SHP2PGSQL_PROD dans le fichier setup.php");
 	
-	$cmd=$PATH2SHP2PGSQL." -g parcours_geom -f $parc_name_fn_wpath $dbname 'select parcours_geom,parcours_name from parcours where parcours_id=".$_REQUEST["parcours_id"]."'";
+	$cmd=$PATH2SHP2PGSQL.$argoptions." -g parcours_geom -f $parc_name_fn_wpath $dbname 'select parcours_geom,parcours_name from parcours where parcours_id=".$_REQUEST["parcours_id"]."'";
 //	echo $cmd."\n";
 	$out=shell_exec($cmd);
 //	echo "sortie:\n".$out."\n";
