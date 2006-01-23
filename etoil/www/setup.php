@@ -4,8 +4,12 @@ define('TIMER_START', microtime());
 define('PWWW', dirname(__FILE__).'/');
 define('PROOT', dirname(dirname(__FILE__)).'/');
 define ("MSIE",strstr($_SERVER["HTTP_USER_AGENT"],"MSIE")); // si MSIE on affiche un message d'alerte
+define ("TEST_SRV",strstr($_ENV["SERVER_ADDR"],"192.168.0.")); // si serveur de dev/TEST local, affiche un message d'alerte
+define('PATH2SHP2PGSQL_TEST', "/usr/local/pgsql/bin/pgsql2shp");
+define('PATH2SHP2PGSQL_PROD', "/usr/lib/postgresql/8.0/bin/pgsql2shp");
+
+/* --------------------------------------------------------------- */
 session_start();
-define ("TEST_SRV",strstr($_ENV["SERVER_ADDR"],"192.168.0.")); // si MSIE on affiche un message d'alerte
 
 /* --------------------------------------------------------------- */
 //error_reporting(E_ALL);
