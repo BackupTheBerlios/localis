@@ -16,7 +16,7 @@ if ($_REQUEST['fexpf']=='shp') {
 	if (file_exists(PATH2SHP2PGSQL_TEST)) {
 		$PATH2SHP2PGSQL=PATH2SHP2PGSQL_TEST;
 	} elseif (file_exists(PATH2SHP2PGSQL_PROD)) {
-		$PATH2SHP2PGSQL=PATH2SHP2PGSQL_TEST;
+		$PATH2SHP2PGSQL=PATH2SHP2PGSQL_PROD;
 		}
 	else die("Export en shp impossible: ne trouve pas l'utilitaire SHP2PGSQL; vérifier la config avec les constantes PATH2SHP2PGSQL_TEST ou PATH2SHP2PGSQL_PROD dans le fichier setup.php");
 	
