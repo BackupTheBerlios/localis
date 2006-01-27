@@ -280,7 +280,7 @@ class db {
 			}
 			
 		}
-		if (!$_SESSION['admin']) $where.=" AND parcours_ouvert=true";
+		if (!($_SESSION['admin'] || $_SESSION['profile']=="1")) $where.=" AND parcours_ouvert=true";
 		$_SESSION['where_parc']=substr($where,5);
 		$query.= $where;
 		return $this->query($query,true);
