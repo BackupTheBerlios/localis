@@ -23,7 +23,7 @@ if (get_magic_quotes_gpc()) {
   } 
 }
 require_once (PROOT.'libs/etoil.lib.php');
-//include_once(PROOT."/libs/conf.php");  deplacé à la fin après la connexion db et la création de l'objet $db
+//include_once(PROOT."/libs/conf.php");  deplacï¿½ï¿½la fin aprï¿½ la connexion db et la crï¿½tion de l'objet $db
 include_once("fonctions.php");
 include_once PROOT."/db/local.php";
 $_SESSION['db_type']="pgsql";

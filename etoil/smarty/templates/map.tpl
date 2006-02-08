@@ -76,6 +76,7 @@ document.f.method="POST";
 </tr>
 </table>
 
+<div id="leg_ign"><a href="pop_leg_ign.php" target="_blank">&#169; IGN - Paris - Tous droits r&#233;serv&#233;s</a></div>
 {* legende sous la carte avec les icônes de disciplines*}
 <table cellpadding="0" cellspacing="0" border="0"><tr>
 {foreach name=leg key=k item=i from=$legends}

@@ -1,18 +1,19 @@
 <?
-$anonym_disp_maps=false; // affichage carte aux anonymes (pour le proto, on n'affiche les cartes que si on est identifiï¿½
+$anonym_disp_maps=true; // affichage carte aux anonymes (pour le proto, on n'affiche les cartes que si on est identifiï¿½
 $coef_fd=1.5; // coefficient de dï¿½lacement lors du clic sur les flï¿½hes de direction
 $mapmargin = 11; // taille de la bordure clicable de navigation perpendiculaire
 $blockspc=7; // espaces entre les blocks de droite
 
 $bool_disp_zoomp=true; // affichage par zoom prï¿½ï¿½inis
 
-$tbzoomd[]=1113619; // carte hélène
+$tbzoomd[]=1113619; // carte hï¿½ï¿½e
 $tbzoomd[]=450000; // jyj
-$tbzoomd[]=300000; // scan 1000
-$tbzoomd[]=180000; // scan régional
+//$tbzoomd[]=300000; // scan 1000
+$tbzoomd[]=280000; // scan 1000
+$tbzoomd[]=75000; // scan rï¿½ional
 //$tbzoomd[]=70000; // georr 100 K
-$tbzoomd[]=50000; // scan 100
-$tbzoomd[]=25000; // scan 100
+$tbzoomd[]=30000; // scan 100
+//$tbzoomd[]=25000; // scan 100
 //$tbzoomd[]=14000; //georr 20K
 //$tbzoomd[]=4000; // georr 5K
 

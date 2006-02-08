@@ -5,15 +5,15 @@ $title = "Export";
 $db = true;
 include("setup.php");
 $parc_name_fn=RecupLib("parcours","parcours_id","parcours_name",$_REQUEST["parcours_id"]);
-// PWWW est défini dans setup.php
+// PWWW est dï¿½ini dans setup.php
 
-$parc_name_fn=$_REQUEST["parcours_id"]."_".strtr($parc_name_fn," éèêàâ","_eeeaa"); // nom du fichier sans caractères à la con
+$parc_name_fn=$_REQUEST["parcours_id"]."_".strtr($parc_name_fn," Ã©Ã¨ÃªÃ Ã¤","_eeeaa"); // nom du fichier sans caractï¿½es ï¿½la con
 
 
 if ($_REQUEST['fexpf']=='shp') {
 	$parc_name_fn_wpath=PWWW."/temp/".$parc_name_fn;
-	// commande testée sur test :pgsql2shp -g parcours_geom -f toto etoil 'select parcours_geom,parcours_name from parcours where parcours_id=2147'
-	// commande testée PROD : /usr/lib/postgresql/8.0/bin/pgsql2shp -h localhost -u www-data -P w3c -g parcours_geom -f  /var/www/etoilcom/www//temp/2474_cattey_11 etoil 'select parcours_geom,parcours_name from parcours where parcours_id=2474'
+	// commande testï¿½ sur test :pgsql2shp -g parcours_geom -f toto etoil 'select parcours_geom,parcours_name from parcours where parcours_id=2147'
+	// commande testï¿½ PROD : /usr/lib/postgresql/8.0/bin/pgsql2shp -h localhost -u www-data -P w3c -g parcours_geom -f  /var/www/etoilcom/www//temp/2474_cattey_11 etoil 'select parcours_geom,parcours_name from parcours where parcours_id=2474'
 
 	if (file_exists(PATH2SHP2PGSQL_TEST)) {
 		$PATH2SHP2PGSQL=PATH2SHP2PGSQL_TEST;
@@ -21,7 +21,7 @@ if ($_REQUEST['fexpf']=='shp') {
 		$PATH2SHP2PGSQL=PATH2SHP2PGSQL_PROD;
 		$argoptions=" -h localhost -u www-data -P w3c ";
 		}
-	else die("Export en shp impossible: ne trouve pas l'utilitaire SHP2PGSQL; vérifier la config avec les constantes PATH2SHP2PGSQL_TEST ou PATH2SHP2PGSQL_PROD dans le fichier setup.php");
+	else die("Export en shp impossible: ne trouve pas l'utilitaire SHP2PGSQL; vï¿½ifier la config avec les constantes PATH2SHP2PGSQL_TEST ou PATH2SHP2PGSQL_PROD dans le fichier setup.php");
 	
 	$cmd=$PATH2SHP2PGSQL.$argoptions." -g parcours_geom -f $parc_name_fn_wpath $dbname 'select parcours_geom,parcours_name from parcours where parcours_id=".$_REQUEST["parcours_id"]."'";
 //	echo $cmd."\n";
@@ -41,25 +41,24 @@ if ($_REQUEST['fexpf']=='shp') {
 //	echo "sortie:\n".$out."\n";
 	echo '<script language="javascript">self.close();</script>';
 	
-} else { // par défaut c'est du CE3 -> TRK
+} else { // par dï¿½aut c'est du CE3 -> TRK
 	
 	$head_pcx5='
+
+H  SOFTWARE NAME & VERSION
+I  PCX5 2.09
+
+H  R DATUM                IDX DA             DF             DX             DY             DZ
+M  G WGS 84               121 +0.000000e+000 +0.000000e+000 +0.000000e+000 +0.000000e+000 +0.000000e+000
+
+H  COORDINATE SYSTEM
+U  LAT LON DEG
+
+H  LATITUDE    LONGITUDE    DATE      TIME     ALT   ;track	
+';
 	
-	H  SOFTWARE NAME & VERSION
-	I  PCX5 2.09
 	
-	H  R DATUM                IDX DA             DF             DX             DY             DZ
-	M  G WGS 84               121 +0.000000e+000 +0.000000e+000 +0.000000e+000 +0.000000e+000 +0.000000e+000
-	
-	H  COORDINATE SYSTEM
-	U  LAT LON DEG
-	
-	H  LATITUDE    LONGITUDE    DATE      TIME     ALT   ;track
-	
-	';
-	
-	
-	// entetes http pour téléchargement
+	// entetes http pour tï¿½ï¿½hargement
 	if (!$disp) {
 	header('Content-disposition: filename='.$parc_name_fn.'.trk');
 	header('Content-type: application/octetstream');
@@ -91,7 +90,7 @@ if ($_REQUEST['fexpf']=='shp') {
 		$yppc=$Cpoint[y];
 		
 	//	print_r($Cpoint);
-		//debug contrôle
+		//debug contrï¿½e
 		//echo $i." ".$Cpoint[x]." ".$Cpoint[y]." ".$Cpoint[z]." "."\n";
 		$cmd="cs2cs +init=lambfr:27585 +to +proj=latlong +datum=WGS84 -f %2.7f <<EOF\n".$Cpoint[x]." ".$Cpoint[y]."\nEOF\n";
 		$out=shell_exec($cmd);
