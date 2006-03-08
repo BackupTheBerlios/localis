@@ -86,6 +86,7 @@ a:hover {
 }
 .cartouche {
 	margin : 10px 5px;
+	text-align:center;
 }
 .button {
 	color : #fff;
