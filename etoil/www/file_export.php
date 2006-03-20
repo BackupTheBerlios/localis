@@ -54,7 +54,7 @@ M  G WGS 84               121 +0.000000e+000 +0.000000e+000 +0.000000e+000 +0.00
 H  COORDINATE SYSTEM
 U  LAT LON DEG
 
-H  LATITUDE    LONGITUDE    DATE      TIME     ALT   ;track	
+H  LATITUDE    LONGITUDE    DATE      TIME     ALT   ;track
 ';
 	
 	

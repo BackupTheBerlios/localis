@@ -7,6 +7,8 @@ if (isset($_REQUEST['loggedok'])) {
 }
 // sur le proto, on n'affiche la carte que si on est loggéavec un profil >=1 et que le code profil
 $bool_map_disp=((!empty($_SESSION['me']) && $_SESSION['profile']>=1 ) || $anonym_disp_maps);
+$bool_pya_link=(!empty($_SESSION['me']) && $_SESSION['profile']==1 );
+$smarty->assign('bool_pya_link',$bool_pya_link);
 $smarty->assign('bool_map_disp',$bool_map_disp);
 $smarty->display("home.tpl");
 echo elapsed_time();
